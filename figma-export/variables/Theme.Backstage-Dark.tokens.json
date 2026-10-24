@@ -1,0 +1,535 @@
+{
+  "surface": {
+    "background": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.049,
+          0.0546,
+          0.091
+        ],
+        "alpha": 1.0,
+        "hex": "#0c0e17"
+      },
+      "$description": "Page colour, painted on <html> so the accent glows show through. Ground for `foreground` and `muted-foreground`."
+    },
+    "foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9468,
+          0.9521,
+          0.9732
+        ],
+        "alpha": 1.0,
+        "hex": "#f1f3f8"
+      },
+      "$description": "Body text and headings on `background`, `card` and `muted`."
+    },
+    "card": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0825,
+          0.0898,
+          0.1375
+        ],
+        "alpha": 1.0,
+        "hex": "#151723"
+      },
+      "$description": "Solid surfaces: form fields, the tint of glass-surface panels and cards."
+    },
+    "card-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9468,
+          0.9521,
+          0.9732
+        ],
+        "alpha": 1.0,
+        "hex": "#f1f3f8"
+      },
+      "$description": "Text on `card` and inside `surface-card`."
+    },
+    "popover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0825,
+          0.0898,
+          0.1375
+        ],
+        "alpha": 1.0,
+        "hex": "#151723"
+      },
+      "$description": "Solid floating surfaces (popovers, select menus)."
+    },
+    "popover-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9468,
+          0.9521,
+          0.9732
+        ],
+        "alpha": 1.0,
+        "hex": "#f1f3f8"
+      },
+      "$description": "Text on `popover`."
+    },
+    "muted": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.117,
+          0.1258,
+          0.183
+        ],
+        "alpha": 1.0,
+        "hex": "#1e202f"
+      },
+      "$description": "Subtle fills: toolbars (at 50%), neutral status pills, hover rows."
+    },
+    "muted-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6435,
+          0.6621,
+          0.7365
+        ],
+        "alpha": 1.0,
+        "hex": "#a4a9bc"
+      },
+      "$description": "Secondary text: descriptions, labels, inactive nav links. On `background`, `card` and `muted`."
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1326,
+          0.1426,
+          0.2074
+        ],
+        "alpha": 1.0,
+        "hex": "#222435"
+      },
+      "$description": "Secondary fills (shadcn/FlyonUI secondary variant)."
+    },
+    "secondary-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9468,
+          0.9521,
+          0.9732
+        ],
+        "alpha": 1.0,
+        "hex": "#f1f3f8"
+      },
+      "$description": "Text on `secondary`."
+    },
+    "accent": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1248,
+          0.1342,
+          0.1952
+        ],
+        "alpha": 1.0,
+        "hex": "#202232"
+      },
+      "$description": "Hover and highlighted fills in menus and lists."
+    },
+    "accent-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9468,
+          0.9521,
+          0.9732
+        ],
+        "alpha": 1.0,
+        "hex": "#f1f3f8"
+      },
+      "$description": "Text on `accent`."
+    }
+  },
+  "lines": {
+    "border": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.16,
+          0.1707,
+          0.24
+        ],
+        "alpha": 1.0,
+        "hex": "#292c3d"
+      },
+      "$description": "Default hairline on every element; panel and table dividers."
+    },
+    "input": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2,
+          0.2133,
+          0.3
+        ],
+        "alpha": 1.0,
+        "hex": "#33364c"
+      },
+      "$description": "Text-field borders (`form-input`, `form-textarea`)."
+    }
+  },
+  "accent": {
+    "primary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7217,
+          0.563,
+          0.977
+        ],
+        "alpha": 1.0,
+        "hex": "#b890f9"
+      },
+      "$description": "The app's accent (Furlab blue): primary-button fill, links, active nav, eyebrows, timeline markers. Tinted at 10\u201312% for active chips and nav."
+    },
+    "primary-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.049,
+          0.0546,
+          0.091
+        ],
+        "alpha": 1.0,
+        "hex": "#0c0e17"
+      },
+      "$description": "Text and icons on a `primary` fill."
+    },
+    "ring": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7217,
+          0.563,
+          0.977
+        ],
+        "alpha": 1.0,
+        "hex": "#b890f9"
+      },
+      "$description": "Focus outline: 2px solid, 2px offset; at 30\u201340% as the 4px ring on buttons and fields."
+    }
+  },
+  "feedback": {
+    "destructive": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9424,
+          0.3376,
+          0.3376
+        ],
+        "alpha": 1.0,
+        "hex": "#f05656"
+      },
+      "$description": "danger-button fill: the final confirm of an irreversible action."
+    },
+    "destructive-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.049,
+          0.0546,
+          0.091
+        ],
+        "alpha": 1.0,
+        "hex": "#0c0e17"
+      },
+      "$description": "Text on `destructive`."
+    },
+    "success": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.52,
+          0.88,
+          0.67
+        ],
+        "alpha": 1.0,
+        "hex": "#85e0ab"
+      },
+      "$description": "Solid success fill."
+    },
+    "success-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.049,
+          0.0546,
+          0.091
+        ],
+        "alpha": 1.0,
+        "hex": "#0c0e17"
+      },
+      "$description": "Text on `success`."
+    },
+    "warning": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.97,
+          0.808,
+          0.43
+        ],
+        "alpha": 1.0,
+        "hex": "#f7ce6e"
+      },
+      "$description": "Solid warning fill."
+    },
+    "warning-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.049,
+          0.0546,
+          0.091
+        ],
+        "alpha": 1.0,
+        "hex": "#0c0e17"
+      },
+      "$description": "Text on `warning`."
+    },
+    "info": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.43,
+          0.88,
+          0.97
+        ],
+        "alpha": 1.0,
+        "hex": "#6ee0f7"
+      },
+      "$description": "Solid info fill."
+    },
+    "info-foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.049,
+          0.0546,
+          0.091
+        ],
+        "alpha": 1.0,
+        "hex": "#0c0e17"
+      },
+      "$description": "Text on `info`."
+    }
+  },
+  "status": {
+    "status-success-ink": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.552,
+          0.888,
+          0.692
+        ],
+        "alpha": 1.0,
+        "hex": "#8de2b0"
+      },
+      "$description": "Success text: on `status-success-bg` in pills and notices, or alone as status-text."
+    },
+    "status-success-bg": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0825,
+          0.2175,
+          0.1613
+        ],
+        "alpha": 1.0,
+        "hex": "#153729"
+      },
+      "$description": "Success pill and notice fill."
+    },
+    "status-warning-ink": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.972,
+          0.8208,
+          0.468
+        ],
+        "alpha": 1.0,
+        "hex": "#f8d177"
+      },
+      "$description": "Warning text on `status-warning-bg` (In review)."
+    },
+    "status-warning-bg": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.248,
+          0.16,
+          0.072
+        ],
+        "alpha": 1.0,
+        "hex": "#3f2912"
+      },
+      "$description": "Warning pill and notice fill."
+    },
+    "status-danger-ink": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.976,
+          0.544,
+          0.544
+        ],
+        "alpha": 1.0,
+        "hex": "#f98b8b"
+      },
+      "$description": "Danger text on `status-danger-bg`; danger-outline-button text and border (40%)."
+    },
+    "status-danger-bg": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.255,
+          0.085,
+          0.085
+        ],
+        "alpha": 1.0,
+        "hex": "#411616"
+      },
+      "$description": "Danger pill and notice fill; danger-outline-button hover."
+    }
+  },
+  "effects": {
+    "glow-a": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5147,
+          0.28,
+          0.92
+        ],
+        "alpha": 1.0,
+        "hex": "#8347eb"
+      },
+      "$description": "Top-right background glow (56rem \u00d7 40rem radial at `glow-strength`)."
+    },
+    "glow-b": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.202,
+          0.391,
+          0.958
+        ],
+        "alpha": 1.0,
+        "hex": "#3464f4"
+      },
+      "$description": "Bottom-left background glow (48rem \u00d7 36rem radial)."
+    },
+    "glass": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.09,
+          0.098,
+          0.15
+        ],
+        "alpha": 1.0,
+        "hex": "#171926"
+      },
+      "$description": "Tint of glass-chrome (bars, menus, dialogs), mixed at `glass-alpha`."
+    },
+    "glass-border": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.888,
+          0.9008,
+          0.952
+        ],
+        "alpha": 0.09,
+        "hex": "#e2e6f3"
+      },
+      "$description": "Hairline around glass-chrome and glass-surface; filter chips and toolbars."
+    },
+    "glass-highlight": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "alpha": 0.06,
+        "hex": "#ffffff"
+      },
+      "$description": "1px inset top highlight on glass surfaces."
+    }
+  },
+  "opacity": {
+    "glass-alpha": {
+      "$type": "number",
+      "$value": 0.6,
+      "$description": "glass-chrome tint opacity in light; 0.6 in dark."
+    },
+    "surface-alpha": {
+      "$type": "number",
+      "$value": 0.66,
+      "$description": "glass-surface card opacity in light; 0.66 in dark."
+    },
+    "glow-strength": {
+      "$type": "number",
+      "$value": 0.2,
+      "$description": "Background glow opacity in light; 0.2 in dark."
+    }
+  }
+}
