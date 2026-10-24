@@ -50,7 +50,7 @@ export function UserMenu({
       trigger={
         <button type="button" className={cn('ui-user-menu-trigger', compact && 'px-1')} aria-label={`Account menu for ${name}`}>
           <ProfileAvatar initials={resolvedInitials} src={avatarSrc} size="sm" className="ui-user-avatar" />
-          {!compact && <span className="hidden text-sm font-semibold sm:inline">{name}</span>}
+          {!compact && <span className="hidden whitespace-nowrap text-sm font-semibold lg:inline">{name}</span>}
           <ChevronDown className="size-3.5 opacity-70" aria-hidden />
         </button>
       }>

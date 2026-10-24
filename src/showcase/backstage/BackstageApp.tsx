@@ -53,6 +53,7 @@ import {
   TableRow,
   TextField,
   ThemeToggle,
+  AppearanceSettings,
   Tooltip,
   WorkflowTimeline,
   WorkflowTimelineItem,
@@ -202,6 +203,7 @@ export function BackstageApp() {
                 </div>
                 <div className="ui-nav-text flex items-center gap-1">
                   <ThemeToggle variant="ghost" />
+                  <AppearanceSettings side="top" align="start" />
                   <Tooltip content="Sign out" side="top">
                     <IconButton
                       aria-label="Sign out"
@@ -739,6 +741,7 @@ function EditDialog({
   const [status, setStatus] = useState(record.status)
   const [rating, setRating] = useState(record.rating)
   const [comments, setComments] = useState(record.comments === 'open')
+  const { navigate } = useShowcase()
 
   return (
     <Dialog
@@ -748,6 +751,9 @@ function EditDialog({
       description={`${TYPE_LABELS[record.type]} by ${record.creator}`}
       footer={
         <>
+          <Button variant="ghost" className="mr-auto" onClick={() => navigate(`lab/edit/${record.id}`)}>
+            Open full editor
+          </Button>
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>

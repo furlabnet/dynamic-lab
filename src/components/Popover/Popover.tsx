@@ -1,4 +1,5 @@
-import React, { useId, useRef } from 'react'
+import React, { useCallback, useId, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { cn } from '../../lib/utils'
 import { useControllableState, useDismiss } from '../../lib/hooks'
 
@@ -13,6 +14,7 @@ export interface PopoverProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  /** Preferred side; flips to the other one when there isn't room. */
   side?: 'top' | 'bottom'
   align?: 'start' | 'center' | 'end'
   /** ARIA role of the floating panel. */
@@ -25,17 +27,14 @@ export interface PopoverProps {
   onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>
 }
 
-const sideClasses = {
-  bottom: 'top-full mt-2',
-  top: 'bottom-full mb-2',
-}
+const GAP = 8
+const VIEWPORT_MARGIN = 8
 
-const alignClasses = {
-  start: 'left-0',
-  center: 'left-1/2 -translate-x-1/2',
-  end: 'right-0',
-}
-
+/**
+ * A floating panel anchored to its trigger. The panel renders in a portal on document.body with
+ * fixed positioning, so it's never clipped or covered by ancestors with overflow, transforms,
+ * backdrop-filter or sticky positioning (which all create their own stacking contexts).
+ */
 export function Popover({
   trigger,
   children,
@@ -53,7 +52,9 @@ export function Popover({
 }: PopoverProps) {
   const [open, setOpen] = useControllableState(openProp, defaultOpen, onOpenChange)
   const containerRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
   const panelId = useId()
+  const [position, setPosition] = useState<{ top: number; left: number; side: 'top' | 'bottom' } | null>(null)
 
   const close = (restoreFocus = false) => {
     setOpen(false)
@@ -62,7 +63,46 @@ export function Popover({
     }
   }
 
-  useDismiss(containerRef, open, (reason) => close(reason === 'escape'))
+  useDismiss([containerRef, panelRef], open, (reason) => close(reason === 'escape'))
+
+  const place = useCallback(() => {
+    const anchor = containerRef.current?.querySelector<HTMLElement>('[data-popover-trigger]') ?? containerRef.current
+    const panel = panelRef.current
+    if (!anchor || !panel) return
+    const rect = anchor.getBoundingClientRect()
+    const { offsetWidth: w, offsetHeight: h } = panel
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+
+    const roomBelow = vh - rect.bottom - GAP
+    const roomAbove = rect.top - GAP
+    const resolvedSide = side === 'bottom' ? (h > roomBelow && roomAbove > roomBelow ? 'top' : 'bottom') : h > roomAbove && roomBelow > roomAbove ? 'bottom' : 'top'
+    let top = resolvedSide === 'bottom' ? rect.bottom + GAP : rect.top - GAP - h
+    top = Math.max(VIEWPORT_MARGIN, Math.min(top, vh - h - VIEWPORT_MARGIN))
+
+    let left = align === 'start' ? rect.left : align === 'end' ? rect.right - w : rect.left + rect.width / 2 - w / 2
+    left = Math.max(VIEWPORT_MARGIN, Math.min(left, vw - w - VIEWPORT_MARGIN))
+
+    setPosition((prev) => (prev && prev.top === top && prev.left === left && prev.side === resolvedSide ? prev : { top, left, side: resolvedSide }))
+  }, [side, align])
+
+  useLayoutEffect(() => {
+    if (!open) {
+      setPosition(null)
+      return
+    }
+    place()
+    // Follow the trigger while the page or any scroll container moves, and when the panel resizes.
+    window.addEventListener('scroll', place, true)
+    window.addEventListener('resize', place)
+    const observer = new ResizeObserver(place)
+    if (panelRef.current) observer.observe(panelRef.current)
+    return () => {
+      window.removeEventListener('scroll', place, true)
+      window.removeEventListener('resize', place)
+      observer.disconnect()
+    }
+  }, [open, place])
 
   const triggerProps = trigger.props
   const clonedTrigger = React.cloneElement(trigger, {
@@ -79,27 +119,33 @@ export function Popover({
   return (
     <div ref={containerRef} className={cn('relative inline-flex', containerClassName)}>
       {clonedTrigger}
-      {open && (
-        <div
-          id={panelId}
-          role={role}
-          aria-label={props['aria-label']}
-          ref={(el) => {
-            if (el && onOpenAutoFocus && !el.dataset.focused) {
-              el.dataset.focused = 'true'
-              onOpenAutoFocus(el)
-            }
-          }}
-          onKeyDown={onKeyDown}
-          className={cn(
-            'ui-popover dl-animate-pop absolute z-50',
-            sideClasses[side],
-            alignClasses[align],
-            className
-          )}>
-          {typeof children === 'function' ? children({ close: () => close(true) }) : children}
-        </div>
-      )}
+      {open &&
+        createPortal(
+          <div
+            id={panelId}
+            role={role}
+            aria-label={props['aria-label']}
+            ref={(el) => {
+              panelRef.current = el
+              if (el && onOpenAutoFocus && !el.dataset.focused) {
+                el.dataset.focused = 'true'
+                onOpenAutoFocus(el)
+              }
+            }}
+            onKeyDown={onKeyDown}
+            data-side={position?.side ?? side}
+            style={{
+              position: 'fixed',
+              top: position?.top ?? 0,
+              left: position?.left ?? 0,
+              // Hidden until measured, so it doesn't flash at the corner.
+              visibility: position ? 'visible' : 'hidden',
+            }}
+            className={cn('ui-popover z-[80]', position && 'dl-animate-pop', className)}>
+            {typeof children === 'function' ? children({ close: () => close(true) }) : children}
+          </div>,
+          document.body
+        )}
     </div>
   )
 }

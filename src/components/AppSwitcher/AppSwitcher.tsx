@@ -74,7 +74,7 @@ export function AppSwitcher({
       trigger={
         <button type="button" className="ui-app-switcher-trigger" aria-label={`Switch app, current: ${currentApp?.name}`}>
           <GridIcon />
-          <span className="hidden sm:inline">{currentApp?.name}</span>
+          <span className="hidden whitespace-nowrap lg:inline">{currentApp?.name}</span>
           <ChevronDown className="size-3.5 opacity-70" aria-hidden />
         </button>
       }>

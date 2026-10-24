@@ -231,11 +231,14 @@ export interface ContentDetails {
   views: number
   // page
   sections?: PageSection[]
+  /** Markdown body; when set it replaces `sections` (pages written in the editor). */
+  body?: string
   // artwork
   images?: MediaItem[]
   artInfo?: DescriptionItem[]
   // comic
   comicChapters?: Array<{ id: string; title: string; pages: ComicPage[] }>
+  comicSettings?: { direction: 'ltr' | 'rtl'; defaultMode: 'book' | 'scroll'; spread: boolean }
   // story
   chapters?: Chapter[]
   // visual novel

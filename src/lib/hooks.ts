@@ -27,23 +27,26 @@ export function useControllableState<T>(
 }
 
 /**
- * Calls `onDismiss` on a pointer press outside `ref` or when Escape is pressed.
+ * Calls `onDismiss` on a pointer press outside every element in `refs`, or when Escape is pressed.
+ * Pass several refs when part of the UI is portaled elsewhere (e.g. a trigger and its panel).
  */
 export function useDismiss(
-  ref: React.RefObject<HTMLElement | null>,
+  refs: React.RefObject<HTMLElement | null> | Array<React.RefObject<HTMLElement | null>>,
   active: boolean,
   onDismiss: (reason: 'outside' | 'escape') => void
 ) {
   const onDismissRef = useRef(onDismiss)
   onDismissRef.current = onDismiss
+  const refsRef = useRef(refs)
+  refsRef.current = refs
 
   useEffect(() => {
     if (!active) return
 
     function handlePointer(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        onDismissRef.current('outside')
-      }
+      const list = Array.isArray(refsRef.current) ? refsRef.current : [refsRef.current]
+      const inside = list.some((r) => r.current?.contains(e.target as Node))
+      if (!inside) onDismissRef.current('outside')
     }
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onDismissRef.current('escape')
@@ -55,7 +58,7 @@ export function useDismiss(
       document.removeEventListener('mousedown', handlePointer)
       document.removeEventListener('keydown', handleKey)
     }
-  }, [ref, active])
+  }, [active])
 }
 
 /**

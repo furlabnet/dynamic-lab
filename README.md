@@ -60,6 +60,25 @@ Component classes sit in Tailwind's `components` layer, so utilities passed via 
 - `LinkHub`: A link-in-bio page.
 - Dialog, Drawer, CommandPalette and Lightbox now render in a portal, so sticky ancestors can't trap them under the header.
 
+### Editing (new)
+- `TagInput`: Booru-style tag entry. Enter, comma or Tab commits a tag, and pasted comma lists split into several. Category prefixes (`artist:`, `character:`, `species:`, `copyright:`, `lore:`, `meta:`) file tags under that category, with autocomplete from `suggestions` and a `minTags` reminder.
+- `SortableList`, `DragHandle`: Reorder by dragging the handle, or focus the handle and use the arrow keys. Moves are announced to screen readers.
+- `ImageUploader`: Drop or browse multiple images, with previews, numbered pages, a "Cover"/"Main" badge, reordering and removal (`aspect`: page / portrait / square / video).
+- `MarkdownEditor`, `renderMarkdown`, `countWords`: A textarea with a formatting toolbar (⌘/Ctrl B, I, K), Write/Preview tabs and a word count. The renderer outputs React nodes, never raw HTML.
+- `FormSection`, `EditorActionBar`: Two-column form sections, plus a sticky bottom bar showing save status.
+
+### Transparency (accessibility)
+`ThemeProvider` now takes `defaultTransparency` and exposes `transparency`, `resolvedTransparency` and `setTransparency` from `useTheme()`:
+
+| Setting | Effect |
+| --- | --- |
+| `system` (default) | Follows the OS `prefers-reduced-transparency` setting |
+| `full` | Frosted glass as designed |
+| `reduced` | Surfaces 94–97% opaque, lighter blur, fainter glows |
+| `off` | Solid surfaces, no `backdrop-filter` anywhere, no background glows, an opaque overlay scrim |
+
+The setting is stored in localStorage and applied as `html[data-transparency]`. Use `AppearanceSettings` (a popover with theme and transparency) or `TransparencyControl` (just the picker) to let people change it.
+
 ### New primitives
 - `Popover`, `DropdownMenu`, `MenuLabel`: Floating panels with outside-click / Esc dismissal and arrow-key menus. `MenuItem` now supports `href`, `selected`, `trailing` and auto-closes its menu.
 - `Badge`, `Kbd`, `Spinner`, `Progress` (determinate and indeterminate), `Separator`.
@@ -218,7 +237,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 The showcase is two working apps built from the library, sharing one in-memory state:
 
-- **Dynamic Lab** (`#/lab/…`): Home, Browse (live search and filters), Library (dashboard) and Components (the full gallery). There is one example of each content type: page `#/lab/view/c5`, artwork `c3` (mature example: `c13`), comic `c8`, multi-chapter story `c10` and visual novel `c4`. Creator profiles live at `#/lab/u/<handle>`, Lab portfolios at `#/lab/labs/<slug>` and link-in-bio pages at `#/lab/links/<handle-or-slug>`. Sample images come from [Lorem Picsum](https://picsum.photos) and avatars from [pravatar.cc](https://pravatar.cc).
+- **Dynamic Lab** (`#/lab/…`): Home, Browse (live search and filters), Library (dashboard) and Components (the full gallery). There is one example of each content type: page `#/lab/view/c5`, artwork `c3` (mature example: `c13`), comic `c8`, multi-chapter story `c10` and visual novel `c4`. Editors are at `#/lab/new` (type picker), `#/lab/new/<type>` and `#/lab/edit/<id>`. Creator profiles live at `#/lab/u/<handle>`, Lab portfolios at `#/lab/labs/<slug>` and link-in-bio pages at `#/lab/links/<handle-or-slug>`. Sample images come from [Lorem Picsum](https://picsum.photos) and avatars from [pravatar.cc](https://pravatar.cc).
 - **Backstage** (`#/backstage/…`): Overview, Content (selection, bulk actions, edit / view / delete), Trash, Users, Moderation, Tags, Audit, Site settings, plus the gallery under *Design system*.
 
 The app switcher moves between them and sets the theme brand. Changes carry across apps: turn maintenance mode off in Backstage and the Lab's banner goes away; create a draft in the Lab and it shows up in Backstage → Content.

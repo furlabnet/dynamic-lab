@@ -628,3 +628,232 @@
   width: 1.125rem;
   height: 1.125rem;
 }
+
+/* ========================================================================
+ * Editor
+ * ===================================================================== */
+.ui-tag-input {
+  display: flex;
+  min-height: var(--touch-target);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  padding: 0.375rem 0.625rem;
+  cursor: text;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.ui-tag-input:focus-within {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 25%, transparent);
+}
+
+.ui-tag-input + * code,
+.ui-tag-input ~ p code {
+  font-size: 0.6875rem;
+}
+
+.ui-sortable-item {
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.ui-sortable-dragging {
+  opacity: 0.45;
+}
+
+.ui-drag-handle {
+  display: inline-grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--muted-foreground);
+  cursor: grab;
+  touch-action: none;
+}
+
+.ui-drag-handle:hover {
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+  color: var(--foreground);
+}
+
+.ui-drag-handle:active {
+  cursor: grabbing;
+}
+
+.ui-drag-handle:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.ui-upload-tile {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--muted);
+}
+
+.ui-upload-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ui-upload-tile-top,
+.ui-upload-tile-bottom {
+  position: absolute;
+  inset-inline: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem;
+}
+
+.ui-upload-tile-top {
+  top: 0;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 0.55), transparent);
+}
+
+.ui-upload-tile-bottom {
+  bottom: 0;
+  justify-content: space-between;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.ui-upload-tile:hover .ui-upload-tile-bottom,
+.ui-upload-tile:focus-within .ui-upload-tile-bottom {
+  opacity: 1;
+}
+
+.ui-upload-tile-button {
+  display: inline-grid;
+  width: 1.625rem;
+  height: 1.625rem;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: rgb(0 0 0 / 0.45);
+  color: white;
+  cursor: pointer;
+}
+
+.ui-upload-tile-button:hover {
+  background: rgb(0 0 0 / 0.7);
+}
+
+.ui-upload-tile-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.ui-md-editor {
+  overflow: hidden;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.ui-md-editor:focus-within {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 25%, transparent);
+}
+
+.ui-md-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.125rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--muted) 50%, transparent);
+  padding: 0.375rem;
+}
+
+.ui-md-tool {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+
+.ui-md-tool:hover {
+  background: color-mix(in srgb, var(--foreground) 7%, transparent);
+  color: var(--foreground);
+}
+
+.ui-md-tool:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.ui-md-tool > svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.ui-md-textarea {
+  display: block;
+  width: 100%;
+  resize: vertical;
+  border: 0;
+  background: transparent;
+  padding: var(--space-12) var(--space-16);
+  color: var(--foreground);
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  outline: none;
+}
+
+.ui-md-preview {
+  min-height: 12rem;
+  padding: var(--space-16) var(--space-20);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* The drop cap is for the reader, not the editor preview. */
+.ui-md-preview p:first-of-type::first-letter {
+  float: none;
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.ui-form-section {
+  display: grid;
+  gap: var(--space-16);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-28);
+}
+
+.ui-form-section:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+@media (min-width: 1024px) {
+  .ui-form-section {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--space-40);
+  }
+}
+
+.ui-editor-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  border-width: 1px 0 0;
+}

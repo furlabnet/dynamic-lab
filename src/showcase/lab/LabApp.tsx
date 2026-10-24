@@ -38,6 +38,8 @@ import {
   TableRow,
   TextField,
   ThemeToggle,
+  AppearanceSettings,
+  TransparencyControl,
   UserMenu,
   DynamicLabMark,
   useToast,
@@ -79,6 +81,7 @@ import { ComponentGallery } from '../gallery/ComponentGallery'
 import { DETAILS, LABS, PROFILES, getDetails } from '../details'
 import { ContentView } from './ContentView'
 import { LabPage, LinksPage, ProfilePage } from './CreatorPages'
+import { ContentEditor, NewContentPicker } from './Editor'
 
 export const TYPE_ICONS: Record<ContentType, React.ReactNode> = {
   page: <FileText />,
@@ -133,8 +136,9 @@ export function LabApp() {
         actions={
           <>
             <ThemeToggle variant="ghost" />
+            <AppearanceSettings />
             <AppSwitcher apps={APPS} value="lab" onValueChange={(id) => navigate(`${id}/`)} />
-            <UserMenu name={CURRENT_USER.name} email={CURRENT_USER.email}>
+            <UserMenu name={CURRENT_USER.name} email={CURRENT_USER.email} avatarSrc={CURRENT_USER.avatar}>
               <MenuItem icon={<LayoutDashboard />} onClick={() => navigate('lab/library/overview')}>
                 Dashboard
               </MenuItem>
@@ -168,12 +172,14 @@ export function LabApp() {
         {section === 'view' && <ContentView key={param} id={param} />}
         {section === 'u' && <ProfilePage key={param} handle={param} />}
         {section === 'labs' && <LabPage key={param} slug={param} />}
+        {section === 'new' && (param ? <ContentEditor key={param} type={param as ContentType} /> : <NewContentPicker />)}
+        {section === 'edit' && <ContentEditor key={param} id={param} />}
         {section === 'components' && (
           <div className="mx-auto max-w-[var(--container-max)] px-4 py-10 sm:px-8">
             <ComponentGallery />
           </div>
         )}
-        {!['home', 'browse', 'library', 'components', 'view', 'u', 'labs'].includes(section) && <HomePage />}
+        {!['home', 'browse', 'library', 'components', 'view', 'u', 'labs', 'new', 'edit'].includes(section) && <HomePage />}
       </main>
 
       <SiteFooter
@@ -217,6 +223,9 @@ function HomePage() {
           </Button>
           <Button size="lg" variant="secondary" onClick={() => navigate('lab/components')}>
             See the component library
+          </Button>
+          <Button size="lg" variant="secondary" leftIcon={<FilePlus2 className="size-4" />} onClick={() => navigate('lab/new')}>
+            Create something
           </Button>
         </div>
       </section>
@@ -513,7 +522,7 @@ function LibraryOverview() {
 }
 
 function MyContent() {
-  const { content, addContent, updateContent, log } = useShowcase()
+  const { content, updateContent, log, navigate } = useShowcase()
   const { toast } = useToast()
   const [type, setType] = useState<ContentType | 'all'>('all')
   const [draftStatus, setDraftStatus] = useState('all')
@@ -521,24 +530,6 @@ function MyContent() {
 
   const mine = content.filter((c) => c.creator === CURRENT_USER.name && !c.trashed)
   const rows = mine.filter((c) => (type === 'all' || c.type === type) && (status === 'all' || c.status === status))
-
-  const create = (t: ContentType) => {
-    const record: ContentRecord = {
-      id: Math.random().toString(36).slice(2),
-      title: `Untitled ${TYPE_LABELS[t].toLowerCase()}`,
-      type: t,
-      creator: CURRENT_USER.name,
-      lab: 'Moonlit Studio',
-      rating: 'general',
-      status: 'draft',
-      updated: new Date().toISOString(),
-      tags: [],
-      comments: 'open',
-    }
-    addContent(record)
-    log(`${CURRENT_USER.name} started a new ${TYPE_LABELS[t].toLowerCase()}`, 'neutral')
-    toast({ title: 'Draft created', description: `“${record.title}” is in your drafts. It also shows in Backstage → Content.`, tone: 'success' })
-  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -554,7 +545,7 @@ function MyContent() {
             }>
             <MenuLabel>Create</MenuLabel>
             {TYPES.map((t) => (
-              <MenuItem key={t} icon={TYPE_ICONS[t]} onClick={() => create(t)}>
+              <MenuItem key={t} icon={TYPE_ICONS[t]} onClick={() => navigate(`lab/new/${t}`)}>
                 {TYPE_LABELS[t]}
               </MenuItem>
             ))}
@@ -631,6 +622,9 @@ function MyContent() {
                 <TableCell className="text-[var(--muted-foreground)]">{formatDate(row.updated)}</TableCell>
                 <TableCell className="text-right">
                   <div className="inline-flex gap-2">
+                    <Button size="sm" variant="secondary" leftIcon={<Pencil className="size-3.5" />} onClick={() => navigate(`lab/edit/${row.id}`)}>
+                      Edit
+                    </Button>
                     {row.status === 'draft' && (
                       <Button
                         size="sm"
@@ -772,7 +766,7 @@ function ProfileForm() {
 function Preferences() {
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Content preferences" description="Choose what shows up when you browse." />
+      <PageHeader title="Content & display preferences" description="Choose what shows up when you browse, and how the site looks." />
       <div className="ui-panel flex max-w-xl flex-col gap-6">
         <RadioGroup label="Ratings to show" defaultValue="teen" variant="card">
           <RadioGroupItem value="general" label="General only" description="Suitable for everyone." />
@@ -781,6 +775,13 @@ function Preferences() {
         </RadioGroup>
         <Switch defaultChecked label="Blur mature covers" description="Click a cover to reveal it." />
         <Switch label="Autoplay visual novel music" />
+        <div className="flex flex-col gap-1.5 border-t border-[var(--border)] pt-5">
+          <span className="button-sm">Transparency</span>
+          <p className="body-sm text-[var(--muted-foreground)]">
+            Glass surfaces can make text harder to read. Reduce or turn off transparency here; it applies everywhere, including Backstage.
+          </p>
+          <TransparencyControl className="mt-1" />
+        </div>
       </div>
     </div>
   )

@@ -31,12 +31,13 @@ import {
   TagList,
   detectPlatform,
   readerStyle,
+  renderMarkdown,
   useReaderPrefs,
   useReadingProgress,
   useToast,
   type TagItem,
 } from '../../index'
-import { AlertTriangle, Calendar, Clock, Cpu, Eye, Gamepad2, Globe, History, Languages, Package, Sparkles } from 'lucide-react'
+import { AlertTriangle, Calendar, Clock, Cpu, Eye, Gamepad2, Globe, History, Languages, Package, Pencil, Sparkles } from 'lucide-react'
 import { CURRENT_USER, TYPE_LABELS, TYPE_PLURALS, type ContentRecord } from '../data'
 import { getDetails, labByName, profileByName, wordCount, type ContentDetails } from '../details'
 import { formatDate, useShowcase } from '../state'
@@ -176,6 +177,15 @@ function Comments({ record }: { record: ContentRecord }) {
   )
 }
 
+function EditButton({ id }: { id: string }) {
+  const { navigate } = useShowcase()
+  return (
+    <Button variant="secondary" leftIcon={<Pencil className="size-4" />} onClick={() => navigate(`lab/edit/${id}`)}>
+      Edit
+    </Button>
+  )
+}
+
 function Actions({ record, details, children }: { record: ContentRecord; details: ContentDetails; children?: React.ReactNode }) {
   const h = useContentHandlers(record)
   return (
@@ -185,6 +195,7 @@ function Actions({ record, details, children }: { record: ContentRecord; details
       saveCount={details.saves}
       onReport={h.onReport}
       shareUrl={`${window.location.origin}/#/lab/view/${record.id}`}>
+      <EditButton id={record.id} />
       {children}
     </ContentActions>
   )
@@ -239,11 +250,14 @@ function PageView({ record, details, notice }: ViewProps) {
       <div className="flex flex-col gap-4">
         <span className="page-eyebrow">Page</span>
         <h1 className="page-title">{record.title}</h1>
-        <Byline record={record} />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Byline record={record} />
+          <EditButton id={record.id} />
+        </div>
       </div>
       <img src={details.cover} alt="" className="aspect-[16/7] w-full rounded-[var(--radius-3xl)] object-cover" />
       <div className="ui-prose flex flex-col text-[17px] leading-relaxed">
-        {details.sections?.map((s, i) => (
+        {details.body ? renderMarkdown(details.body) : details.sections?.map((s, i) => (
           <React.Fragment key={i}>
             {s.heading && <h2>{s.heading}</h2>}
             {s.paragraphs.map((p, j) => (
@@ -339,7 +353,13 @@ function ComicView({ record, details, notice }: ViewProps) {
       {current && (
         <AgeGate rating={record.rating}>
           {/* key resets the reader to page 1 when the chapter changes */}
-          <ComicReader key={current.id} pages={current.pages} defaultMode="book" defaultSpread />
+          <ComicReader
+            key={current.id}
+            pages={current.pages}
+            defaultMode={details.comicSettings?.defaultMode ?? 'book'}
+            defaultSpread={details.comicSettings?.spread ?? true}
+            direction={details.comicSettings?.direction ?? 'ltr'}
+          />
         </AgeGate>
       )}
 
@@ -419,9 +439,7 @@ function StoryView({ record, details, notice }: ViewProps) {
               </span>
             </header>
             <div className="ui-prose">
-              {current?.paragraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
+              {renderMarkdown(current?.paragraphs.join('\n\n') ?? '')}
               <hr />
             </div>
           </article>
@@ -487,7 +505,7 @@ function VisualNovelView({ record, details, notice }: ViewProps) {
 
           {section === 'about' ? (
             <div className="flex flex-col gap-6">
-              <p className="whitespace-pre-line text-[15px] leading-relaxed">{details.description}</p>
+              <div className="ui-prose ui-md-preview p-0! text-[15px]">{renderMarkdown(details.description)}</div>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <Panel title="Features">
                   <ul className="flex flex-col gap-2 text-sm">

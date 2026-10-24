@@ -81,3 +81,6 @@ export * from './components/Downloads'
 export * from './components/DescriptionList'
 export * from './components/ProfileHeader'
 export * from './components/LinkHub'
+
+// Editing
+export * from './components/Editor'
