@@ -59,6 +59,8 @@ export const CURRENT_USER = {
   name: 'Alex Rivera',
   email: 'alex@dynamiclab.dev',
   role: 'Administrator',
+  handle: 'alexrivera',
+  avatar: 'https://i.pravatar.cc/300?u=alexrivera',
 }
 
 const day = 24 * 60 * 60 * 1000
@@ -76,6 +78,7 @@ export const seedContent: ContentRecord[] = [
   { id: 'c9', title: 'Signal Lost', type: 'visual-novel', creator: 'Priya Natarajan', lab: 'Night Shift Comics', rating: 'mature', status: 'archived', updated: ago(12), tags: ['sci-fi', 'horror'], comments: 'closed' },
   { id: 'c10', title: 'Saltwater Letters', type: 'story', creator: 'Sam Okafor', lab: 'Moonlit Studio', rating: 'general', status: 'published', updated: ago(14), tags: ['coastal', 'romance'], comments: 'open' },
   { id: 'c11', title: 'Clockwork Orchard', type: 'artwork', creator: 'Alex Rivera', lab: 'Moonlit Studio', rating: 'general', status: 'draft', updated: ago(15), tags: ['nature'], comments: 'open' },
+  { id: 'c13', title: 'Ember Wolves', type: 'artwork', creator: 'Priya Natarajan', lab: 'Ink & Ember', rating: 'mature', status: 'published', updated: ago(1), tags: ['horror', 'nature'], comments: 'open' },
   { id: 'c12', title: 'Community Guidelines', type: 'page', creator: 'Staff', lab: 'Dynamic Lab', rating: 'general', status: 'published', updated: ago(20), tags: [], comments: 'closed' },
 ]
 

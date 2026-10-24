@@ -46,6 +46,20 @@ Component classes sit in Tailwind's `components` layer, so utilities passed via 
 - `UserMenu`: Avatar + name trigger for the account menu.
 - `CommandPalette`, `CommandTrigger`: ⌘K / Ctrl K quick-jump with grouped, filterable commands.
 
+### Content & creators (new)
+- `Tag`, `TagList` (`grouped`): e621-style tags in categories (artist, copyright, character, species, general, lore, meta), each with its own colour.
+- `AgeRating`, `AgeGate`: General / Teen / Mature badges, plus a blur gate that hides content above the viewer's allowed rating.
+- `ContentActions`: Save (with count), Share (copies the link) and Report (a dialog with reasons).
+- `CommentThread`, `CommentComposer`: Comments with likes, one level of replies, and a closed state.
+- `ReadingProgress`, `useReadingProgress`, `ReaderSettings`, `useReaderPrefs`, `readerStyle`, `ChapterNav`: The story reader. A sticky progress bar with time left; font size, family, line spacing and width controls saved to localStorage; chapter navigation.
+- `ComicReader`: Multi-page comics. `book` mode supports arrow keys, swiping, tapping either half, two-page spreads, thumbnails, full screen and `rtl`; `scroll` mode is a vertical strip.
+- `MediaGallery`, `Lightbox`: Screenshot or image grids with a keyboard-navigable viewer.
+- `DownloadList`, `PlatformBadge`, `detectPlatform`: Builds of a downloadable work, one per platform, with the visitor's platform marked.
+- `DescriptionList`: Label / value metadata (engine, version, size…).
+- `ProfileHeader` (`user` or `lab` variant): Banner, avatar, name, bio, stats and actions.
+- `LinkHub`: A link-in-bio page.
+- Dialog, Drawer, CommandPalette and Lightbox now render in a portal, so sticky ancestors can't trap them under the header.
+
 ### New primitives
 - `Popover`, `DropdownMenu`, `MenuLabel`: Floating panels with outside-click / Esc dismissal and arrow-key menus. `MenuItem` now supports `href`, `selected`, `trailing` and auto-closes its menu.
 - `Badge`, `Kbd`, `Spinner`, `Progress` (determinate and indeterminate), `Separator`.
@@ -204,7 +218,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 The showcase is two working apps built from the library, sharing one in-memory state:
 
-- **Dynamic Lab** (`#/lab/…`): Home, Browse (live search and filters), Library (dashboard) and Components (the full gallery).
+- **Dynamic Lab** (`#/lab/…`): Home, Browse (live search and filters), Library (dashboard) and Components (the full gallery). There is one example of each content type: page `#/lab/view/c5`, artwork `c3` (mature example: `c13`), comic `c8`, multi-chapter story `c10` and visual novel `c4`. Creator profiles live at `#/lab/u/<handle>`, Lab portfolios at `#/lab/labs/<slug>` and link-in-bio pages at `#/lab/links/<handle-or-slug>`. Sample images come from [Lorem Picsum](https://picsum.photos) and avatars from [pravatar.cc](https://pravatar.cc).
 - **Backstage** (`#/backstage/…`): Overview, Content (selection, bulk actions, edit / view / delete), Trash, Users, Moderation, Tags, Audit, Site settings, plus the gallery under *Design system*.
 
 The app switcher moves between them and sets the theme brand. Changes carry across apps: turn maintenance mode off in Backstage and the Lab's banner goes away; create a draft in the Lab and it shows up in Backstage → Content.

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useScrollLock } from '../../lib/hooks'
 import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
@@ -47,7 +48,7 @@ export function Drawer({
     bottom: 'inset-x-0 bottom-0 w-full max-h-[80vh] border-t border-[var(--glass-border)] rounded-t-[var(--radius-3xl)] dl-animate-slide-bottom',
   }
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
@@ -87,5 +88,7 @@ export function Drawer({
         )}
       </div>
     </div>
+    ,
+    document.body
   )
 }

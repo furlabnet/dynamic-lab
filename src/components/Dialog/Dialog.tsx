@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useScrollLock } from '../../lib/hooks'
 import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
@@ -47,7 +48,7 @@ export function Dialog({
     xl: 'max-w-xl',
   }
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
@@ -85,5 +86,7 @@ export function Dialog({
         )}
       </div>
     </div>
+    ,
+    document.body
   )
 }

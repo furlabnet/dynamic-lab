@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import type { StatusTone } from '../index'
+import type { CommentData, StatusTone } from '../index'
+import { SEED_COMMENTS } from './details'
 import {
   seedContent,
   seedReports,
@@ -36,6 +37,13 @@ interface ShowcaseState {
   setMaintenance: (on: boolean) => void
   activity: ActivityEntry[]
   log: (text: string, tone?: StatusTone) => void
+  saved: string[]
+  setSaved: (id: string, saved: boolean) => void
+  comments: Record<string, CommentData[]>
+  addComment: (contentId: string, comment: CommentData, parentId?: string) => void
+  likeComment: (contentId: string, commentId: string) => void
+  /** Files a report; it shows up in Backstage → Moderation. */
+  report: (contentId: string, reason: string, reporter: string) => void
 }
 
 const ShowcaseContext = createContext<ShowcaseState | null>(null)
@@ -97,6 +105,38 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
     []
   )
 
+  const [saved, setSavedList] = useState<string[]>(['c8'])
+  const setSaved = useCallback(
+    (id: string, on: boolean) => setSavedList((prev) => (on ? Array.from(new Set([...prev, id])) : prev.filter((x) => x !== id))),
+    []
+  )
+
+  const [comments, setComments] = useState<Record<string, CommentData[]>>(SEED_COMMENTS)
+  const addComment = useCallback((contentId: string, comment: CommentData, parentId?: string) => {
+    setComments((prev) => {
+      const list = prev[contentId] ?? []
+      const next = parentId
+        ? list.map((c) => (c.id === parentId ? { ...c, replies: [...(c.replies ?? []), comment] } : c))
+        : [comment, ...list]
+      return { ...prev, [contentId]: next }
+    })
+  }, [])
+  const likeComment = useCallback((contentId: string, commentId: string) => {
+    const toggle = (c: CommentData): CommentData =>
+      c.id === commentId
+        ? { ...c, liked: !c.liked, likes: (c.likes ?? 0) + (c.liked ? -1 : 1) }
+        : { ...c, replies: c.replies?.map(toggle) }
+    setComments((prev) => ({ ...prev, [contentId]: (prev[contentId] ?? []).map(toggle) }))
+  }, [])
+
+  const report = useCallback(
+    (contentId: string, reason: string, reporter: string) => {
+      setReports((prev) => [...prev, { id: Math.random().toString(36).slice(2), contentId, reason, reporter, at: new Date().toISOString() }])
+      log(`New report: ${reason}`, 'danger')
+    },
+    [log]
+  )
+
   const handleMaintenance = useCallback(
     (on: boolean) => {
       setMaintenance(on)
@@ -123,8 +163,14 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
       setMaintenance: handleMaintenance,
       activity,
       log,
+      saved,
+      setSaved,
+      comments,
+      addComment,
+      likeComment,
+      report,
     }),
-    [path, app, page, navigate, content, updateContent, addContent, removeContent, users, reports, maintenance, handleMaintenance, activity, log]
+    [path, app, page, navigate, content, updateContent, addContent, removeContent, users, reports, maintenance, handleMaintenance, activity, log, saved, setSaved, comments, addComment, likeComment, report]
   )
 
   return <ShowcaseContext.Provider value={value}>{children}</ShowcaseContext.Provider>

@@ -16,6 +16,7 @@ import {
   PageHeader,
   PageHeading,
   Panel,
+  ProfileAvatar,
   RadioGroup,
   RadioGroupItem,
   Select,
@@ -50,6 +51,7 @@ import {
   Gamepad2,
   LayoutDashboard,
   Library,
+  Link2,
   LogOut,
   Palette,
   Pencil,
@@ -74,6 +76,9 @@ import {
 } from '../data'
 import { APPS, formatDate, useShowcase } from '../state'
 import { ComponentGallery } from '../gallery/ComponentGallery'
+import { DETAILS, LABS, PROFILES, getDetails } from '../details'
+import { ContentView } from './ContentView'
+import { LabPage, LinksPage, ProfilePage } from './CreatorPages'
 
 export const TYPE_ICONS: Record<ContentType, React.ReactNode> = {
   page: <FileText />,
@@ -88,7 +93,11 @@ const TYPES = Object.keys(TYPE_LABELS) as ContentType[]
 export function LabApp() {
   const { page, navigate, maintenance } = useShowcase()
   const { toast } = useToast()
-  const section = page.split('/')[0]
+  const section = page.split(/[/?]/)[0]
+  const param = page.split('/')[1] ?? ''
+
+  // Link-in-bio pages stand alone, without the site chrome.
+  if (section === 'links') return <LinksPage handle={param} />
 
   const nav = (
     <SiteNav>
@@ -132,8 +141,11 @@ export function LabApp() {
               <MenuItem icon={<FileText />} onClick={() => navigate('lab/library')}>
                 My content
               </MenuItem>
-              <MenuItem icon={<User />} onClick={() => navigate('lab/library/profile')}>
-                Profile
+              <MenuItem icon={<User />} onClick={() => navigate(`lab/u/${CURRENT_USER.handle}`)}>
+                Your profile
+              </MenuItem>
+              <MenuItem icon={<Link2 />} onClick={() => navigate(`lab/links/${CURRENT_USER.handle}`)}>
+                Your links page
               </MenuItem>
               <MenuItem icon={<ShieldCheck />} subtitle="Staff administration" onClick={() => navigate('backstage/')}>
                 Backstage
@@ -152,13 +164,16 @@ export function LabApp() {
       <main className="flex-1">
         {section === 'home' && <HomePage />}
         {section === 'browse' && <BrowsePage />}
-        {section === 'library' && <LibraryPage sub={page.split('/')[1] ?? 'content'} />}
+        {section === 'library' && <LibraryPage sub={param || 'content'} />}
+        {section === 'view' && <ContentView key={param} id={param} />}
+        {section === 'u' && <ProfilePage key={param} handle={param} />}
+        {section === 'labs' && <LabPage key={param} slug={param} />}
         {section === 'components' && (
           <div className="mx-auto max-w-[var(--container-max)] px-4 py-10 sm:px-8">
             <ComponentGallery />
           </div>
         )}
-        {!['home', 'browse', 'library', 'components'].includes(section) && <HomePage />}
+        {!['home', 'browse', 'library', 'components', 'view', 'u', 'labs'].includes(section) && <HomePage />}
       </main>
 
       <SiteFooter
@@ -176,9 +191,17 @@ export function LabApp() {
 
 /* ---------------------------------------------------------------- Home */
 
+const EXAMPLES = [
+  { id: 'c5', hint: 'A static page' },
+  { id: 'c3', hint: 'Zoom, tags, comments' },
+  { id: 'c8', hint: 'Book or scroll reader' },
+  { id: 'c10', hint: 'Chapters, progress, font controls' },
+  { id: 'c4', hint: 'Downloads and platforms' },
+]
+
 function HomePage() {
   const { content, navigate } = useShowcase()
-  const published = content.filter((c) => c.status === 'published' && !c.trashed && c.type !== 'page')
+  const published = content.filter((c) => c.status === 'published' && !c.trashed && c.type !== 'page' && c.rating !== 'mature')
 
   return (
     <div className="mx-auto flex max-w-[var(--container-max)] flex-col gap-14 px-4 py-14 sm:px-8">
@@ -199,6 +222,65 @@ function HomePage() {
       </section>
 
       <section className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1">
+          <h2 className="section-title">One of each</h2>
+          <p className="page-description">Every content type has its own page. Open one to see it.</p>
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          {EXAMPLES.map(({ id, hint }) => {
+            const item = content.find((c) => c.id === id)
+            if (!item) return null
+            return (
+              <ContentCard
+                key={id}
+                type={TYPE_LABELS[item.type]}
+                title={item.title}
+                byline={hint}
+                cover={getDetails(item).cover}
+                aspect="portrait"
+                onClick={() => navigate(`lab/view/${id}`)}
+              />
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <h2 className="section-title">Creators</h2>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {PROFILES.slice(0, 4).map((p) => (
+              <div key={p.handle} className="ui-panel flex items-center gap-3 p-4!">
+                <ProfileAvatar src={p.avatar} initials={p.name.slice(0, 2)} size="lg" />
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <a href={`#/lab/u/${p.handle}`} className="truncate font-semibold hover:underline">
+                    {p.name}
+                  </a>
+                  <a href={`#/lab/links/${p.handle}`} className="truncate text-xs text-[var(--primary)] hover:underline">
+                    Links page
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col gap-4">
+          <h2 className="section-title">Creator Labs</h2>
+          <div className="flex flex-col gap-3">
+            {LABS.map((lab) => (
+              <a key={lab.slug} href={`#/lab/labs/${lab.slug}`} className="ui-panel flex items-center gap-4 p-4! transition-colors hover:border-[var(--primary)]">
+                <ProfileAvatar src={lab.avatar} initials={lab.name.slice(0, 2)} size="lg" shape="square" />
+                <div className="flex min-w-0 flex-col">
+                  <span className="font-semibold">{lab.name}</span>
+                  <span className="truncate text-sm text-[var(--muted-foreground)]">{lab.tagline}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-5">
         <div className="flex items-end justify-between gap-4">
           <h2 className="section-title">Fresh from the community</h2>
           <Button variant="ghost" onClick={() => navigate('lab/browse')}>
@@ -212,8 +294,8 @@ function HomePage() {
               type={TYPE_LABELS[item.type]}
               title={item.title}
               byline={`By ${item.creator}`}
-              icon={TYPE_ICONS[item.type]}
-              onClick={() => navigate('lab/browse')}
+              cover={getDetails(item).cover}
+              onClick={() => navigate(`lab/view/${item.id}`)}
             />
           ))}
         </div>
@@ -224,20 +306,27 @@ function HomePage() {
 
 /* -------------------------------------------------------------- Browse */
 
+const tagNames = (c: ContentRecord) => Array.from(new Set([...c.tags, ...getDetails(c).tags.map((t) => t.name)]))
+
 function BrowsePage() {
-  const { content } = useShowcase()
+  const { content, navigate, path } = useShowcase()
+  const tagFromUrl = decodeURIComponent(path.split('?tag=')[1] ?? '')
   const [draftQuery, setDraftQuery] = useState('')
   const [query, setQuery] = useState('')
   const [type, setType] = useState<ContentType | 'all'>('all')
-  const [tag, setTag] = useState('all')
-  const [rating, setRating] = useState('allowed')
+  const [tag, setTag] = useState(tagFromUrl || 'all')
+  const [rating, setRating] = useState(tagFromUrl ? 'any' : 'allowed')
+  const allTags = useMemo(
+    () => Array.from(new Set([...ALL_TAGS, ...Object.values(DETAILS).flatMap((d) => d.tags.map((t) => t.name))])).sort(),
+    []
+  )
 
   const results = useMemo(
     () =>
       content.filter((c) => {
         if (c.status !== 'published' || c.trashed) return false
         if (type !== 'all' && c.type !== type) return false
-        if (tag !== 'all' && !c.tags.includes(tag)) return false
+        if (tag !== 'all' && !tagNames(c).includes(tag)) return false
         if (rating === 'allowed' && c.rating === 'mature') return false
         if (rating !== 'allowed' && rating !== 'any' && c.rating !== rating) return false
         if (query && !`${c.title} ${c.creator} ${c.tags.join(' ')}`.toLowerCase().includes(query.toLowerCase())) return false
@@ -285,7 +374,7 @@ function BrowsePage() {
             label="Tag"
             value={tag}
             onChange={(e) => setTag(e.target.value)}
-            options={[{ value: 'all', label: 'All tags' }, ...ALL_TAGS.map((t) => ({ value: t, label: t }))]}
+            options={[{ value: 'all', label: 'All tags' }, ...allTags.map((t) => ({ value: t, label: t.replace(/_/g, ' ') }))]}
           />
           <Select
             label="Rating"
@@ -341,9 +430,10 @@ function BrowsePage() {
               type={TYPE_LABELS[item.type]}
               title={item.title}
               byline={`By ${item.creator}`}
+              cover={item.type === 'page' ? undefined : getDetails(item).cover}
               icon={TYPE_ICONS[item.type]}
-              coverBadge={item.rating !== 'general' ? <Badge variant="neutral" size="sm">{RATING_LABELS[item.rating]}</Badge> : undefined}
-              onClick={() => {}}
+              coverBadge={item.rating !== 'general' ? <Badge variant={item.rating === 'mature' ? 'danger' : 'warning'} size="sm">{RATING_LABELS[item.rating]}</Badge> : undefined}
+              onClick={() => navigate(`lab/view/${item.id}`)}
             />
           ))}
         </div>
@@ -392,9 +482,7 @@ function LibraryPage({ sub }: { sub: string }) {
       <div className="min-w-0">
         {sub === 'overview' && <LibraryOverview />}
         {sub === 'content' && <MyContent />}
-        {sub === 'saved' && (
-          <LibraryPlaceholder title="Library" description="Creations you've saved to read later." />
-        )}
+        {sub === 'saved' && <SavedLibrary />}
         {sub === 'notifications' && <Notifications />}
         {sub === 'profile' && <ProfileForm />}
         {sub === 'account' && (
@@ -575,6 +663,45 @@ function MyContent() {
             ))}
           </TableBody>
         </Table>
+      )}
+    </div>
+  )
+}
+
+function SavedLibrary() {
+  const { content, saved, setSaved, navigate } = useShowcase()
+  const items = content.filter((c) => saved.includes(c.id) && !c.trashed)
+  return (
+    <div className="flex flex-col gap-6">
+      <PageHeader title="Library" description="Creations you've saved. Use Save on any creation to add it here." />
+      {items.length === 0 ? (
+        <EmptyState
+          icon={<Library className="size-7" />}
+          title="Nothing saved yet"
+          description="Open any creation and press Save."
+          action={
+            <Button variant="secondary" onClick={() => navigate('lab/browse')}>
+              Browse creations
+            </Button>
+          }
+        />
+      ) : (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {items.map((item) => (
+            <div key={item.id} className="relative">
+              <ContentCard
+                type={TYPE_LABELS[item.type]}
+                title={item.title}
+                byline={`By ${item.creator}`}
+                cover={getDetails(item).cover}
+                onClick={() => navigate(`lab/view/${item.id}`)}
+              />
+              <Button size="sm" variant="secondary" className="absolute right-3 top-3" onClick={() => setSaved(item.id, false)}>
+                Remove
+              </Button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   )

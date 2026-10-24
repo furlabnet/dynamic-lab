@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { CornerDownLeft, Search, SearchX } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { isMacPlatform, useScrollLock } from '../../lib/hooks'
@@ -127,7 +128,7 @@ export function CommandPalette({
 
   let index = -1
 
-  return (
+  return createPortal(
     <div
       className="ui-overlay dl-animate-fade fixed inset-0 z-[60] flex items-start justify-center px-4 pt-[12vh]"
       onMouseDown={(e) => {
@@ -213,6 +214,8 @@ export function CommandPalette({
         </div>
       </div>
     </div>
+    ,
+    document.body
   )
 }
 
