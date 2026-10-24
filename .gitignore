@@ -19,3 +19,6 @@ node_modules
 dist
 .DS_Store
 *.local
+
+# Documentation build (GitLab Pages artifact)
+public

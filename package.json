@@ -1,7 +1,25 @@
 {
   "name": "@furlab/dynamic-lab",
   "version": "0.1.0",
-  "description": "Dynamic Lab - React UI Component Library in TypeScript with Tailwind CSS",
+  "description": "Dynamic Lab: the React component library for The Furlab Project. TypeScript, Tailwind CSS v4, two brands (Dynamic and Backstage), named colour themes, light and dark modes.",
+  "keywords": [
+    "react",
+    "components",
+    "design-system",
+    "tailwindcss",
+    "typescript",
+    "furlab"
+  ],
+  "author": "Vedla Creative <code@vedla.ca>",
+  "license": "MIT",
+  "homepage": "https://furlab.gitlab.io/dynamic-lab/",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/furlab/dynamic-lab"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/furlab/dynamic-lab/-/issues"
+  },
   "type": "module",
   "exports": {
     ".": {
@@ -9,7 +27,8 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./styles.css": "./dist/dynamic_lab.css"
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -17,42 +36,60 @@
   "files": [
     "dist"
   ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "build": "vite build",
-    "build:lib": "tsc -p tsconfig.lib.json && vite build --config vite.config.lib.ts",
     "dev": "vite",
-    "format": "prettier --write --ignore-unknown  .",
-    "format:check": "prettier --check .",
+    "build": "yarn build:js && yarn build:types && yarn build:css",
+    "build:js": "tsdown",
+    "build:types": "tsc -p tsconfig.lib.json",
+    "build:css": "tailwindcss -i src/styles/dynamic-lab.css -o dist/styles.css --minify",
+    "build:showcase": "vite build",
+    "docs:dev": "vite --config vite.config.docs.ts",
+    "docs:build": "vite build --config vite.config.docs.ts",
+    "docs:preview": "vite preview --config vite.config.docs.ts",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write --ignore-unknown  .",
+    "format:check": "prettier --check .",
+    "release": "node scripts/release.mjs",
+    "prepack": "yarn build",
     "prepare": "husky"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
   },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
   "dependencies": {
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.61.0",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "autoprefixer": "^10.6.1",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.61.0",
     "postcss": "^8.5.31",
     "prettier": "^3.9.10",
-    "tailwind-merge": "^3.7.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "tailwindcss": "^4.3.3",
-    "tsdown": "^0.23.2",
+    "tsdown": "0.23.2",
     "typescript": "^7.0.2",
     "updates": "^19.3.0",
-    "vite": "^8.3.5",
-    "vite-plugin-dts": "^5.1.2"
+    "vite": "^8.3.5"
   },
   "packageManager": "yarn@4.18.1"
 }

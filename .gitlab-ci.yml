@@ -1,0 +1,76 @@
+# Dynamic Lab pipeline
+#
+# - every push and merge request: install, typecheck, build the library
+# - tags like v1.2.3:              publish @furlab/dynamic-lab to this project's package registry
+# - the default branch:            build the documentation site and deploy it to GitLab Pages
+#
+# Releasing: bump "version" in package.json, commit, then
+#   git tag v0.2.0 && git push origin v0.2.0
+
+default:
+  image: node:24
+  before_script:
+    - corepack enable
+    - yarn install --immutable
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/cache
+
+variables:
+  # Keep Yarn's cache inside the project so the CI cache above can save it.
+  YARN_ENABLE_GLOBAL_CACHE: 'false'
+
+stages:
+  - check
+  - build
+  - publish
+  - deploy
+
+typecheck:
+  stage: check
+  script:
+    - yarn typecheck
+
+format:
+  stage: check
+  script:
+    - yarn format:check
+  allow_failure: true
+
+build:
+  stage: build
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+publish:
+  stage: publish
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
+  script:
+    # Pre-releases (v1.0.0-beta.1) go out under the "next" dist-tag.
+    - if echo "$CI_COMMIT_TAG" | grep -q -- '-'; then yarn release --tag next; else yarn release; fi
+
+pages:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  variables:
+    # Docs are served from https://<group>.gitlab.io/<project>/
+    DOCS_BASE: '/$CI_PROJECT_NAME/'
+    VITE_REGISTRY_URL: '$CI_API_V4_URL/packages/npm/'
+    VITE_REPOSITORY_URL: '$CI_PROJECT_URL'
+  script:
+    - yarn docs:build
+  artifacts:
+    paths:
+      - public
+  environment:
+    name: docs
+    url: $CI_PAGES_URL

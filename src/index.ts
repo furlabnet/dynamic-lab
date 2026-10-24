@@ -1,7 +1,3 @@
-// Styles
-import './styles/tokens.css'
-import './styles/dynamic-lab.css'
-
 // Theme & Tokens
 export * from './theme/tokens'
 export * from './theme/palettes'

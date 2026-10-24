@@ -19,9 +19,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@furlab/dynamic-lab": ["./src/index.ts"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "docs"],
   "exclude": ["node_modules", "dist"]
 }
