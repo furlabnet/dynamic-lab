@@ -5,7 +5,9 @@ export interface ProfileAvatarProps extends React.HTMLAttributes<HTMLSpanElement
   src?: string
   alt?: string
   initials?: string
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  /** `square` suits Labs and other organisations. */
+  shape?: 'circle' | 'square'
   status?: 'online' | 'offline' | 'busy' | 'away'
 }
 
@@ -14,6 +16,7 @@ const sizeClasses = {
   md: 'size-9 text-xs',
   lg: 'size-12 text-sm',
   xl: 'size-16 text-base',
+  '2xl': 'size-28 text-3xl',
 }
 
 const statusClasses = {
@@ -29,6 +32,7 @@ export function ProfileAvatar({
   alt = 'Avatar',
   initials = 'DL',
   size = 'md',
+  shape = 'circle',
   status,
   ...props
 }: ProfileAvatarProps) {
@@ -36,13 +40,14 @@ export function ProfileAvatar({
     <span className="relative inline-flex shrink-0">
       <span
         className={cn(
-          'inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)] font-bold overflow-hidden select-none shadow-xs',
+          'inline-flex items-center justify-center border border-[var(--border)] bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)] font-bold overflow-hidden select-none shadow-xs',
+          shape === 'square' ? 'rounded-[var(--radius-xl)]' : 'rounded-full',
           sizeClasses[size],
           className
         )}
         {...props}>
         {src ? (
-          <img src={src} alt={alt} className="w-full h-full object-cover" />
+          <img src={src} alt={alt} loading="lazy" className="w-full h-full object-cover" />
         ) : (
           <span>{initials}</span>
         )}

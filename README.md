@@ -20,9 +20,38 @@ Each theme supports:
 - **Panel Glass Blur**: `14px` background blur for cards and content panels
 - **Soft Ambient Glows**: Radial accent gradients behind surfaces
 
+### Dynamic vs Backstage
+
+The two brands are meant for different products, so they differ in more than the accent colour:
+
+| | Dynamic (public site) | Backstage (staff console) |
+| --- | --- | --- |
+| Neutrals | Blue-grey (hue ~228) | Violet-tinted (hue ~252) |
+| Corners | Roomy (`--radius-3xl` 20px) | Tight (`--radius-3xl` 14px) |
+| Controls | 44px touch targets | Dense, 40px / 32px compact |
+| Background | Two soft glows | Fainter glow over a dot grid |
+| Shell | `SiteHeader` top navigation | `AdminShell` with a solid sidebar (`--sidebar` tokens) |
+
+Component classes sit in Tailwind's `components` layer, so utilities passed via `className` always win.
+
 ---
 
-## 📦 Component Catalog (33 Components)
+## 📦 Component Catalog (50 Components)
+
+### 0. App Shells (new)
+- `SiteHeader`, `SiteNav`, `SiteNavLink`, `SiteFooter`: Public-site chrome, with a mobile menu below `md`.
+- `SiteBanner`: Full-width announcement strip (e.g. "Maintenance mode is on").
+- `AdminShell`, `AdminSidebar`, `useAdminShell`: Backstage console layout, with a collapsible sidebar on desktop and an off-canvas one on mobile.
+- `AppSwitcher`: Controlled (`value` / `onValueChange`) or uncontrolled; it switches apps, with keyboard navigation.
+- `UserMenu`: Avatar + name trigger for the account menu.
+- `CommandPalette`, `CommandTrigger`: ⌘K / Ctrl K quick-jump with grouped, filterable commands.
+
+### New primitives
+- `Popover`, `DropdownMenu`, `MenuLabel`: Floating panels with outside-click / Esc dismissal and arrow-key menus. `MenuItem` now supports `href`, `selected`, `trailing` and auto-closes its menu.
+- `Badge`, `Kbd`, `Spinner`, `Progress` (determinate and indeterminate), `Separator`.
+- `RadioGroup` / `RadioGroupItem` (default and `card` variants), `SegmentedControl`, `FileInput` (`inline` and `dropzone`).
+- `ContentCard`: Cover, type, title and byline card for browse grids.
+- `Switch` and `Checkbox` now work uncontrolled (`defaultChecked`); `Checkbox` adds `indeterminate` and `onCheckedChange`.
 
 ### 1. Actions & Controls
 - `Button`: Primary, secondary, danger, danger-outline, ghost, outline; sizes (`sm`, `md`, `lg`); loading spinner; icon slots.
@@ -172,6 +201,13 @@ yarn dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+The showcase is two working apps built from the library, sharing one in-memory state:
+
+- **Dynamic Lab** (`#/lab/…`): Home, Browse (live search and filters), Library (dashboard) and Components (the full gallery).
+- **Backstage** (`#/backstage/…`): Overview, Content (selection, bulk actions, edit / view / delete), Trash, Users, Moderation, Tags, Audit, Site settings, plus the gallery under *Design system*.
+
+The app switcher moves between them and sets the theme brand. Changes carry across apps: turn maintenance mode off in Backstage and the Lab's banner goes away; create a draft in the Lab and it shows up in Backstage → Content.
 
 To compile the library bundle for distribution (ESM + CJS + `.d.ts`):
 

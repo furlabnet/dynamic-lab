@@ -33,19 +33,30 @@ export interface BrandLockupProps extends React.HTMLAttributes<HTMLDivElement> {
   product?: string
   name?: string
   markSize?: number | string
+  /** `sm` fits narrow chrome such as a sidebar header. */
+  size?: 'sm' | 'md'
 }
 
 export function BrandLockup({
   name = 'Dynamic Lab',
   product,
-  markSize = 26,
+  markSize,
+  size = 'md',
   className,
   ...props
 }: BrandLockupProps) {
   return (
-    <div className={cn('ui-brand inline-flex items-center gap-2.5 select-none', className)} {...props}>
-      <DynamicLabMark size={markSize} className="text-[var(--primary)]" />
-      <span className="font-extrabold tracking-tight text-lg text-[var(--foreground)]">{name}</span>
+    <div
+      className={cn('ui-brand inline-flex items-center select-none', size === 'sm' ? 'gap-2' : 'gap-2.5', className)}
+      {...props}>
+      <DynamicLabMark size={markSize ?? (size === 'sm' ? 20 : 26)} className="text-[var(--primary)]" />
+      <span
+        className={cn(
+          'font-extrabold tracking-tight whitespace-nowrap text-[var(--foreground)]',
+          size === 'sm' ? 'text-base' : 'text-lg'
+        )}>
+        {name}
+      </span>
       {product && <span className="ui-brand-product">{product}</span>}
     </div>
   )

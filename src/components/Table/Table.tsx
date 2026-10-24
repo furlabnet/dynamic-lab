@@ -9,7 +9,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, containerClassName, ...props }, ref) => (
     <div
       className={cn(
-        'relative w-full overflow-x-auto rounded-[var(--radius-2xl)] border border-[var(--border)] surface-card',
+        'ui-table relative w-full overflow-x-auto rounded-[var(--radius-2xl)] border border-[var(--border)] surface-card',
         containerClassName
       )}>
       <table
@@ -29,7 +29,7 @@ export const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      'border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--card)_90%,transparent)] backdrop-blur-md text-[var(--muted-foreground)] font-semibold text-xs uppercase tracking-wider',
+      'ui-table-header border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--muted)_45%,transparent)] text-[var(--muted-foreground)] font-semibold text-[13px]',
       className
     )}
     {...props}

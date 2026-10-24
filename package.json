@@ -13,7 +13,7 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./styles.css": "./dist/style.css"
+    "./styles.css": "./dist/dynamic_lab.css"
   },
   "files": [
     "dist"

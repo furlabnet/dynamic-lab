@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useScrollLock } from '../../lib/hooks'
 import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
@@ -23,16 +24,16 @@ export function Drawer({
   footer,
   className,
 }: DrawerProps) {
+  useScrollLock(open)
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
     }
     if (open) {
-      document.body.style.overflow = 'hidden'
       window.addEventListener('keydown', handleKeyDown)
     }
     return () => {
-      document.body.style.overflow = 'unset'
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [open, onClose])
@@ -40,10 +41,10 @@ export function Drawer({
   if (!open) return null
 
   const sideClasses = {
-    right: 'inset-y-0 right-0 h-full w-full max-w-md border-l border-[var(--glass-border)] animate-in slide-in-from-right duration-200',
-    left: 'inset-y-0 left-0 h-full w-full max-w-md border-r border-[var(--glass-border)] animate-in slide-in-from-left duration-200',
-    top: 'inset-x-0 top-0 w-full max-h-[80vh] border-b border-[var(--glass-border)] animate-in slide-in-from-top duration-200',
-    bottom: 'inset-x-0 bottom-0 w-full max-h-[80vh] border-t border-[var(--glass-border)] rounded-t-[var(--radius-3xl)] animate-in slide-in-from-bottom duration-200',
+    right: 'inset-y-0 right-0 h-full w-full max-w-md border-l border-[var(--glass-border)] dl-animate-slide-right',
+    left: 'inset-y-0 left-0 h-full w-full max-w-md border-r border-[var(--glass-border)] dl-animate-slide-left',
+    top: 'inset-x-0 top-0 w-full max-h-[80vh] border-b border-[var(--glass-border)] dl-animate-slide-top',
+    bottom: 'inset-x-0 bottom-0 w-full max-h-[80vh] border-t border-[var(--glass-border)] rounded-t-[var(--radius-3xl)] dl-animate-slide-bottom',
   }
 
   return (
@@ -51,7 +52,7 @@ export function Drawer({
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-[color-mix(in_srgb,var(--background)_70%,transparent)] backdrop-blur-md transition-opacity duration-200"
+        className="fixed inset-0 ui-overlay dl-animate-fade"
       />
 
       {/* Drawer Panel */}
@@ -59,7 +60,7 @@ export function Drawer({
         role="dialog"
         aria-modal="true"
         className={cn(
-          'fixed z-50 flex flex-col bg-[color-mix(in_srgb,var(--card)_92%,transparent)] backdrop-blur-[var(--blur-chrome)] shadow-2xl p-6 overflow-y-auto',
+          'ui-drawer fixed z-50 flex flex-col p-6 overflow-y-auto',
           sideClasses[side],
           className
         )}>

@@ -64,7 +64,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             key={t.id}
             role="status"
             className={cn(
-              'pointer-events-auto flex items-start justify-between gap-3 p-4 rounded-[var(--radius-xl)] border border-[var(--glass-border)] bg-[color-mix(in_srgb,var(--card)_92%,transparent)] backdrop-blur-[var(--blur-chrome)] shadow-2xl animate-in slide-in-from-bottom-2 duration-200 select-none'
+              'pointer-events-auto flex items-start justify-between gap-3 p-4 rounded-[var(--radius-xl)] border border-[var(--glass-border)] bg-[color-mix(in_srgb,var(--card)_92%,transparent)] backdrop-blur-[var(--blur-chrome)] shadow-2xl dl-animate-toast select-none'
             )}>
             <div className="flex items-start gap-3 flex-1 min-w-0">
               {t.tone && toneIcons[t.tone]}

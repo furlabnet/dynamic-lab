@@ -9,6 +9,7 @@ export * from './theme/useTheme'
 
 // Utilities
 export * from './lib/utils'
+export * from './lib/hooks'
 
 // Core Components
 export * from './components/Button'
@@ -44,3 +45,26 @@ export * from './components/NotFoundState'
 export * from './components/Drawer'
 export * from './components/Toast'
 export * from './components/Pagination'
+
+// Overlays & Menus
+export * from './components/Popover'
+export * from './components/CommandPalette'
+export * from './components/UserMenu'
+
+// Primitives
+export * from './components/Badge'
+export * from './components/Kbd'
+export * from './components/Spinner'
+export * from './components/Progress'
+export * from './components/Separator'
+
+// Form Controls
+export * from './components/RadioGroup'
+export * from './components/SegmentedControl'
+export * from './components/FileInput'
+
+// App Shells & Layout
+export * from './components/SiteHeader'
+export * from './components/SiteBanner'
+export * from './components/AdminShell'
+export * from './components/ContentCard'

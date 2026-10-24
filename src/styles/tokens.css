@@ -44,6 +44,11 @@
   --glass-alpha: 0.68;
   --surface-alpha: 0.76;
   --glow-strength: 0.22;
+
+  --sidebar: hsl(0 0% 100% / 0.6);
+  --sidebar-border: hsl(228 22% 87%);
+  --sidebar-accent: hsl(225 80% 96%);
+  --grid-dot: transparent;
   color-scheme: light;
 }
 
@@ -92,24 +97,36 @@
   --glass-alpha: 0.6;
   --surface-alpha: 0.66;
   --glow-strength: 0.2;
+
+  --sidebar: hsl(232 25% 10% / 0.6);
+  --sidebar-border: hsl(232 20% 20%);
+  --sidebar-accent: hsl(225 40% 18%);
+  --grid-dot: transparent;
   color-scheme: dark;
 }
 
+/*
+ * Backstage is the staff console, so it is deliberately not a recolour of Dynamic:
+ * - neutrals are tinted violet (hue ~252) instead of blue-grey (hue ~228)
+ * - the sidebar is a solid, slightly deeper surface rather than floating glass
+ * - radii are tighter and controls denser (see the dimension overrides below)
+ * - the ambient glow sits top-left and is fainter, over a faint dot grid
+ */
 [data-theme='backstage-light'] {
-  --background: hsl(228 33% 97%);
-  --foreground: hsl(230 32% 12%);
+  --background: hsl(250 28% 97%);
+  --foreground: hsl(252 30% 12%);
   --card: hsl(0 0% 100%);
-  --card-foreground: hsl(230 32% 12%);
+  --card-foreground: hsl(252 30% 12%);
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(230 32% 12%);
-  --muted: hsl(228 26% 93.5%);
-  --muted-foreground: hsl(228 13% 40%);
-  --secondary: hsl(228 26% 93.5%);
-  --secondary-foreground: hsl(230 22% 24%);
-  --accent: hsl(228 26% 93.5%);
-  --accent-foreground: hsl(230 32% 12%);
-  --border: hsl(228 22% 87%);
-  --input: hsl(228 20% 83%);
+  --popover-foreground: hsl(252 30% 12%);
+  --muted: hsl(250 24% 94%);
+  --muted-foreground: hsl(252 12% 42%);
+  --secondary: hsl(250 24% 94%);
+  --secondary-foreground: hsl(252 22% 24%);
+  --accent: hsl(258 60% 95%);
+  --accent-foreground: hsl(262 60% 38%);
+  --border: hsl(250 20% 88%);
+  --input: hsl(250 18% 82%);
   --primary: hsl(262 67% 55%);
   --primary-foreground: hsl(0 0% 100%);
   --ring: hsl(262 67% 55%);
@@ -130,44 +147,49 @@
   --status-danger-bg: hsl(0 100% 96%);
 
   --glow-a: hsl(262 80% 64%);
-  --glow-b: hsl(225 90% 60%);
+  --glow-b: hsl(292 70% 62%);
   --glass: hsl(0 0% 100%);
-  --glass-border: hsl(228 30% 40% / 0.14);
+  --glass-border: hsl(252 30% 40% / 0.14);
   --glass-highlight: hsl(0 0% 100% / 0.75);
-  --glass-shadow: 0 1px 2px hsl(230 30% 20% / 0.04), 0 10px 30px -12px hsl(230 30% 20% / 0.14);
+  --glass-shadow: 0 1px 2px hsl(252 30% 20% / 0.05), 0 10px 30px -12px hsl(252 30% 20% / 0.16);
 
-  --glass-alpha: 0.68;
-  --surface-alpha: 0.76;
-  --glow-strength: 0.22;
+  --sidebar: hsl(250 30% 99%);
+  --sidebar-border: hsl(250 20% 89%);
+  --sidebar-accent: hsl(258 70% 96%);
+  --grid-dot: hsl(252 20% 50% / 0.12);
+
+  --glass-alpha: 0.72;
+  --surface-alpha: 0.82;
+  --glow-strength: 0.16;
   color-scheme: light;
 }
 
 [data-theme='backstage-dark'] {
-  --background: hsl(232 30% 7%);
-  --foreground: hsl(228 33% 96%);
-  --card: hsl(232 25% 11%);
-  --card-foreground: hsl(228 33% 96%);
-  --popover: hsl(232 25% 11%);
-  --popover-foreground: hsl(228 33% 96%);
-  --muted: hsl(232 22% 15%);
-  --muted-foreground: hsl(228 15% 69%);
-  --secondary: hsl(232 22% 17%);
-  --secondary-foreground: hsl(228 33% 96%);
-  --accent: hsl(232 22% 16%);
-  --accent-foreground: hsl(228 33% 96%);
-  --border: hsl(232 20% 20%);
-  --input: hsl(232 20% 25%);
+  --background: hsl(252 28% 6%);
+  --foreground: hsl(250 30% 96%);
+  --card: hsl(252 24% 10%);
+  --card-foreground: hsl(250 30% 96%);
+  --popover: hsl(252 24% 10%);
+  --popover-foreground: hsl(250 30% 96%);
+  --muted: hsl(252 20% 14%);
+  --muted-foreground: hsl(250 14% 68%);
+  --secondary: hsl(252 20% 16%);
+  --secondary-foreground: hsl(250 30% 96%);
+  --accent: hsl(262 30% 18%);
+  --accent-foreground: hsl(265 89% 85%);
+  --border: hsl(252 18% 19%);
+  --input: hsl(252 18% 24%);
   --primary: hsl(265 89% 77%);
-  --primary-foreground: hsl(232 30% 7%);
+  --primary-foreground: hsl(252 30% 7%);
   --ring: hsl(265 89% 77%);
   --destructive: hsl(0 84% 64%);
-  --destructive-foreground: hsl(232 30% 7%);
+  --destructive-foreground: hsl(252 30% 7%);
   --success: hsl(145 60% 70%);
-  --success-foreground: hsl(232 30% 7%);
+  --success-foreground: hsl(252 30% 7%);
   --warning: hsl(42 90% 70%);
-  --warning-foreground: hsl(232 30% 7%);
+  --warning-foreground: hsl(252 30% 7%);
   --info: hsl(190 90% 70%);
-  --info-foreground: hsl(232 30% 7%);
+  --info-foreground: hsl(252 30% 7%);
 
   --status-success-ink: hsl(145 60% 72%);
   --status-success-bg: hsl(155 45% 15%);
@@ -177,15 +199,20 @@
   --status-danger-bg: hsl(0 50% 17%);
 
   --glow-a: hsl(265 80% 60%);
-  --glow-b: hsl(225 90% 58%);
-  --glass: hsl(232 25% 12%);
-  --glass-border: hsl(228 40% 92% / 0.09);
-  --glass-highlight: hsl(0 0% 100% / 0.06);
+  --glow-b: hsl(292 70% 52%);
+  --glass: hsl(252 24% 11%);
+  --glass-border: hsl(250 40% 92% / 0.09);
+  --glass-highlight: hsl(0 0% 100% / 0.05);
   --glass-shadow: 0 1px 2px hsl(0 0% 0% / 0.3), 0 16px 40px -16px hsl(0 0% 0% / 0.6);
 
-  --glass-alpha: 0.6;
-  --surface-alpha: 0.66;
-  --glow-strength: 0.2;
+  --sidebar: hsl(252 30% 8%);
+  --sidebar-border: hsl(252 18% 16%);
+  --sidebar-accent: hsl(262 35% 17%);
+  --grid-dot: hsl(250 40% 90% / 0.06);
+
+  --glass-alpha: 0.66;
+  --surface-alpha: 0.72;
+  --glow-strength: 0.18;
   color-scheme: dark;
 }
 
@@ -219,10 +246,25 @@
   /* Target Dimensions */
   --touch-target: 44px;
   --control-compact: 36px;
-  --container-max: 1280px;
+  --container-max: 1216px;
+  --measure: 68ch;
   --sidebar-width: 248px;
 
   /* Glass Blur */
   --blur-chrome: 20px;
   --blur-panel: 14px;
+}
+
+/* Backstage is a dense desktop console: tighter corners and compact controls. */
+[data-theme^='backstage'] {
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-3xl: 14px;
+
+  --touch-target: 40px;
+  --control-compact: 32px;
+  --sidebar-width: 256px;
 }

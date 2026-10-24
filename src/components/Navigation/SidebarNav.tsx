@@ -3,13 +3,16 @@ import { cn } from '../../lib/utils'
 
 export interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode
+  /** `card` is the floating glass panel used in dashboards; `plain` sits inside an AdminSidebar. */
+  variant?: 'card' | 'plain'
 }
 
-export function SidebarNav({ className, children, ...props }: SidebarNavProps) {
+export function SidebarNav({ className, children, variant = 'card', ...props }: SidebarNavProps) {
   return (
     <nav
       className={cn(
-        'ui-nav glass-chrome flex flex-col gap-1 w-64 p-3 rounded-[var(--radius-2xl)] border border-[var(--glass-border)]',
+        'ui-nav flex flex-col gap-1',
+        variant === 'card' && 'glass-chrome w-64 rounded-[var(--radius-2xl)] border border-[var(--glass-border)] p-3',
         className
       )}
       {...props}>
@@ -26,48 +29,54 @@ export interface SidebarNavGroupProps {
 
 export function SidebarNavGroup({ label, children, className }: SidebarNavGroupProps) {
   return (
-    <div className={cn('flex flex-col gap-1 mb-2', className)}>
-      {label && (
-        <span className="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-[color-mix(in_srgb,var(--muted-foreground)_85%,transparent)]">
-          {label}
-        </span>
-      )}
+    <div className={cn('ui-nav-group mb-2 flex flex-col gap-0.5', className)}>
+      {label && <span className="ui-nav-label">{label}</span>}
       {children}
     </div>
   )
 }
 
-export interface SidebarNavItemProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export type SidebarNavItemProps = {
   active?: boolean
   icon?: React.ReactNode
   badge?: string | number
-}
+} & (
+  | (React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string })
+  | (React.ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined })
+)
 
-export function SidebarNavItem({
-  className,
-  active,
-  icon,
-  badge,
-  children,
-  ...props
-}: SidebarNavItemProps) {
+/** A sidebar link. Renders an anchor with `href`, otherwise a button (for client-side routing). */
+export function SidebarNavItem({ className, active, icon, badge, children, ...props }: SidebarNavItemProps) {
+  const classes = cn('ui-nav-link w-full text-left cursor-pointer', className)
+  const label = typeof children === 'string' ? children : undefined
+  const inner = (
+    <>
+      {icon && <span className="inline-flex size-[18px] shrink-0 items-center [&>svg]:size-[18px]">{icon}</span>}
+      <span className="ui-nav-text flex-1 truncate">{children}</span>
+      {badge !== undefined && <span className="ui-nav-badge ui-nav-text">{badge}</span>}
+    </>
+  )
+
+  if (props.href !== undefined) {
+    return (
+      <a
+        aria-current={active ? 'page' : undefined}
+        title={label}
+        className={classes}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+        {inner}
+      </a>
+    )
+  }
+
   return (
-    <a
+    <button
+      type="button"
       aria-current={active ? 'page' : undefined}
-      className={cn(
-        'ui-nav-link flex items-center justify-between px-3 py-2 text-sm font-medium rounded-[var(--radius-md)] transition-colors cursor-pointer',
-        className
-      )}
-      {...props}>
-      <div className="flex items-center gap-2.5">
-        {icon && <span className="inline-flex shrink-0 size-4">{icon}</span>}
-        <span>{children}</span>
-      </div>
-      {badge !== undefined && (
-        <span className="px-1.5 py-0.2 rounded-full text-xs font-semibold bg-[var(--muted)] text-[var(--muted-foreground)]">
-          {badge}
-        </span>
-      )}
-    </a>
+      title={label}
+      className={classes}
+      {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
+      {inner}
+    </button>
   )
 }

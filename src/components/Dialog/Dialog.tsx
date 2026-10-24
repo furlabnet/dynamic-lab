@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useScrollLock } from '../../lib/hooks'
 import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
@@ -23,16 +24,16 @@ export function Dialog({
   maxWidth = 'md',
   className,
 }: DialogProps) {
+  useScrollLock(open)
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
     }
     if (open) {
-      document.body.style.overflow = 'hidden'
       window.addEventListener('keydown', handleKeyDown)
     }
     return () => {
-      document.body.style.overflow = 'unset'
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [open, onClose])
@@ -50,11 +51,14 @@ export function Dialog({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 ui-overlay bg-[color-mix(in_srgb,var(--background)_70%,transparent)] backdrop-blur-md animate-in fade-in duration-200">
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 ui-overlay dl-animate-fade">
       <div
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          'surface-card ui-dialog relative flex flex-col gap-4 w-full p-6 sm:p-7 rounded-[var(--radius-3xl)] shadow-2xl border border-[var(--border)] animate-in zoom-in-95 duration-200',
+          'ui-dialog dl-animate-pop relative flex flex-col gap-4 w-full sm:p-7',
           maxWidthClasses[maxWidth],
           className
         )}>
