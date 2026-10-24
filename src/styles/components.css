@@ -811,3 +811,104 @@ html[data-transparency='off'] .ui-overlay {
 html[data-transparency='off'][data-mode='dark'] .ui-overlay {
   background: rgb(0 0 0 / 0.82);
 }
+
+/* Collapsible SidebarNav: a disclosure button below lg, always open from lg up. */
+.ui-nav-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ui-nav-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  border-radius: var(--radius-md);
+  padding: var(--space-6) var(--space-10);
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.ui-nav-toggle:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.ui-nav-toggle-icon {
+  transition: transform 180ms ease;
+}
+
+nav[data-open] .ui-nav-toggle-icon {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1023.98px) {
+  .ui-nav-body-collapsible {
+    display: none;
+  }
+
+  nav[data-open] > .ui-nav-body-collapsible {
+    display: flex;
+    animation: dl-pop-in 140ms ease-out;
+  }
+
+  nav[data-collapsible]:not([data-open]) {
+    padding-block: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ui-nav-toggle {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+/* Content card overlays */
+.ui-content-card-rating {
+  border-color: transparent;
+  background: rgb(255 255 255 / 0.92);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+}
+
+[data-mode='dark'] .ui-content-card-rating {
+  background: rgb(0 0 0 / 0.65);
+}
+
+.ui-content-card-saved {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+}
+
+.ui-content-card-meta {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: rgb(0 0 0 / 0.6);
+  padding: 0.125rem 0.5rem;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ui-content-card-tag {
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  padding: 0.0625rem 0.375rem;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 600;
+}

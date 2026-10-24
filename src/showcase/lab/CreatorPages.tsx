@@ -52,6 +52,7 @@ import {
 import { CURRENT_USER, STATUS_LABELS, STATUS_TONES, TYPE_LABELS, TYPE_PLURALS, type ContentRecord, type ContentType } from '../data'
 import { getDetails, labBySlug, profileByHandle, type ProfileLink } from '../details'
 import { formatDate, useShowcase } from '../state'
+import { RecordCard } from './RecordCard'
 
 const LINK_ICONS: Record<ProfileLink['kind'], React.ReactNode> = {
   shop: <ShoppingBag />,
@@ -113,15 +114,7 @@ function WorksGrid({ works, emptyText }: { works: ContentRecord[]; emptyText: st
       {view === 'grid' ? (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((w) => (
-            <ContentCard
-              key={w.id}
-              type={TYPE_LABELS[w.type]}
-              title={w.title}
-              byline={`By ${w.creator}`}
-              cover={getDetails(w).cover}
-              coverBadge={w.rating !== 'general' ? <Badge variant={w.rating === 'mature' ? 'danger' : 'warning'} size="sm">{w.rating}</Badge> : undefined}
-              onClick={() => navigate(`lab/view/${w.id}`)}
-            />
+            <RecordCard key={w.id} record={w} />
           ))}
         </div>
       ) : (
@@ -402,7 +395,7 @@ export function LabPage({ slug }: { slug: string }) {
             </button>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
               {rest.map((w) => (
-                <ContentCard key={w.id} type={TYPE_LABELS[w.type]} title={w.title} byline={`By ${w.creator}`} cover={getDetails(w).cover} aspect="landscape" onClick={() => navigate(`lab/view/${w.id}`)} />
+                <RecordCard key={w.id} record={w} />
               ))}
             </div>
           </div>

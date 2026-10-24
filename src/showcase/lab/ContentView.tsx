@@ -41,6 +41,7 @@ import { AlertTriangle, Calendar, Clock, Cpu, Eye, Gamepad2, Globe, History, Lan
 import { CURRENT_USER, TYPE_LABELS, TYPE_PLURALS, type ContentRecord } from '../data'
 import { getDetails, labByName, profileByName, wordCount, type ContentDetails } from '../details'
 import { formatDate, useShowcase } from '../state'
+import { RecordCard } from './RecordCard'
 
 /* ------------------------------------------------------------- Shared */
 
@@ -157,7 +158,7 @@ function MoreFrom({ record }: { record: ContentRecord }) {
       <h2 className="section-title">More from {record.creator}</h2>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         {more.map((m) => (
-          <ContentCard key={m.id} type={TYPE_LABELS[m.type]} title={m.title} byline={m.lab} cover={getDetails(m).cover} onClick={() => navigate(`lab/view/${m.id}`)} />
+          <RecordCard key={m.id} record={m} byline={m.lab} />
         ))}
       </div>
     </section>

@@ -84,6 +84,7 @@ import { ContentView } from './ContentView'
 import { LabPage, LinksPage, ProfilePage } from './CreatorPages'
 import { ContentEditor, NewContentPicker } from './Editor'
 import { ThemesPage } from './ThemesPage'
+import { RecordCard } from './RecordCard'
 
 export const TYPE_ICONS: Record<ContentType, React.ReactNode> = {
   page: <FileText />,
@@ -140,7 +141,9 @@ export function LabApp() {
         nav={nav}
         actions={
           <>
-            <ThemeToggle variant="ghost" />
+            <span className="hidden sm:contents">
+              <ThemeToggle variant="ghost" />
+            </span>
             <AppearanceSettings themesHref="#/lab/themes" />
             <AppSwitcher apps={APPS} value="lab" onValueChange={(id) => navigate(`${id}/`)} />
             <UserMenu name={CURRENT_USER.name} email={CURRENT_USER.email} avatarSrc={CURRENT_USER.avatar}>
@@ -172,7 +175,7 @@ export function LabApp() {
 
       <main className="flex-1">
         {section === 'home' && <HomePage />}
-        {section === 'browse' && <BrowsePage />}
+        {section === 'browse' && <BrowsePage key={page} />}
         {section === 'library' && <LibraryPage sub={param || 'content'} />}
         {section === 'view' && <ContentView key={param} id={param} />}
         {section === 'u' && <ProfilePage key={param} handle={param} />}
@@ -246,15 +249,7 @@ function HomePage() {
             const item = content.find((c) => c.id === id)
             if (!item) return null
             return (
-              <ContentCard
-                key={id}
-                type={TYPE_LABELS[item.type]}
-                title={item.title}
-                byline={hint}
-                cover={getDetails(item).cover}
-                aspect="portrait"
-                onClick={() => navigate(`lab/view/${id}`)}
-              />
+              <RecordCard key={id} record={item} aspect="portrait" byline={hint} bylineAvatar={undefined} />
             )
           })}
         </div>
@@ -304,14 +299,7 @@ function HomePage() {
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {published.slice(0, 4).map((item) => (
-            <ContentCard
-              key={item.id}
-              type={TYPE_LABELS[item.type]}
-              title={item.title}
-              byline={`By ${item.creator}`}
-              cover={getDetails(item).cover}
-              onClick={() => navigate(`lab/view/${item.id}`)}
-            />
+            <RecordCard key={item.id} record={item} />
           ))}
         </div>
       </section>
@@ -440,16 +428,7 @@ function BrowsePage() {
       ) : (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {results.map((item) => (
-            <ContentCard
-              key={item.id}
-              type={TYPE_LABELS[item.type]}
-              title={item.title}
-              byline={`By ${item.creator}`}
-              cover={item.type === 'page' ? undefined : getDetails(item).cover}
-              icon={TYPE_ICONS[item.type]}
-              coverBadge={item.rating !== 'general' ? <Badge variant={item.rating === 'mature' ? 'danger' : 'warning'} size="sm">{RATING_LABELS[item.rating]}</Badge> : undefined}
-              onClick={() => navigate(`lab/view/${item.id}`)}
-            />
+            <RecordCard key={item.id} record={item} />
           ))}
         </div>
       )}
@@ -459,14 +438,28 @@ function BrowsePage() {
 
 /* ------------------------------------------------------------- Library */
 
+const LIBRARY_LABELS: Record<string, string> = {
+  overview: 'Overview',
+  content: 'My content',
+  saved: 'Library',
+  notifications: 'Notifications',
+  profile: 'Profile',
+  account: 'My account',
+  preferences: 'Content & display preferences',
+}
+
 function LibraryPage({ sub }: { sub: string }) {
   const { navigate } = useShowcase()
   const go = (s: string) => navigate(`lab/library/${s}`)
 
   return (
     <div className="mx-auto grid max-w-[var(--container-max)] grid-cols-1 gap-8 px-4 py-10 sm:px-8 lg:grid-cols-[248px_minmax(0,1fr)]">
-      <SidebarNav className="h-fit w-full" aria-label="Your Dynamic Lab">
-        <div className="px-2.5 pb-1 pt-1 text-base font-bold">Your Dynamic Lab</div>
+      <SidebarNav
+        className="h-fit w-full lg:sticky lg:top-24"
+        aria-label="Your Dynamic Lab"
+        title="Your Dynamic Lab"
+        collapsible
+        currentLabel={LIBRARY_LABELS[sub] ?? 'My content'}>
         <SidebarNavGroup label="Your space">
           <SidebarNavItem icon={<LayoutDashboard />} active={sub === 'overview'} onClick={() => go('overview')}>
             Overview
@@ -689,13 +682,7 @@ function SavedLibrary() {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {items.map((item) => (
             <div key={item.id} className="relative">
-              <ContentCard
-                type={TYPE_LABELS[item.type]}
-                title={item.title}
-                byline={`By ${item.creator}`}
-                cover={getDetails(item).cover}
-                onClick={() => navigate(`lab/view/${item.id}`)}
-              />
+              <RecordCard record={item} saved={false} />
               <Button size="sm" variant="secondary" className="absolute right-3 top-3" onClick={() => setSaved(item.id, false)}>
                 Remove
               </Button>
