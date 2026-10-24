@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react'
 import type { ThemeBrand, ThemeMode, FullTheme } from './tokens'
+import { DEFAULT_PALETTE_ID, PALETTES, paletteTokens, type Palette } from './palettes'
 
 /**
  * How see-through glass surfaces are. `system` follows the OS "reduce transparency" setting.
@@ -23,6 +24,13 @@ interface ThemeContextValue {
   /** What's applied after resolving `system`. */
   resolvedTransparency: TransparencyLevel
   setTransparency: (transparency: TransparencyPreference) => void
+  /** Id of the chosen colour theme, e.g. "fiery-fox". */
+  palette: string
+  setPalette: (id: string) => void
+  /** Every theme on offer (built-ins plus any passed to the provider). */
+  palettes: Palette[]
+  /** True when the current brand uses palettes (see `paletteBrands`). */
+  paletteActive: boolean
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
@@ -32,8 +40,19 @@ export interface ThemeProviderProps {
   defaultBrand?: ThemeBrand
   defaultMode?: ThemeMode
   defaultTransparency?: TransparencyPreference
+  /** Initial colour theme id. Defaults to Midnight Wolf. */
+  defaultPalette?: string
+  /** Replace the built-in themes (spread PALETTES to extend them instead). */
+  palettes?: Palette[]
+  /**
+   * Brands that colour themes apply to. Defaults to the public "dynamic" brand only, so Backstage
+   * keeps its fixed console look.
+   */
+  paletteBrands?: ThemeBrand[]
   storageKey?: string
 }
+
+const PALETTE_KEYS = Object.keys(paletteTokens(PALETTES[0], 'light'))
 
 function readStorage(key: string) {
   try {
@@ -58,8 +77,19 @@ export function ThemeProvider({
   defaultBrand = 'dynamic',
   defaultMode = 'light',
   defaultTransparency = 'system',
+  defaultPalette = DEFAULT_PALETTE_ID,
+  palettes = PALETTES,
+  paletteBrands = ['dynamic'],
   storageKey = 'dynamic-lab-theme',
 }: ThemeProviderProps) {
+  const [palette, setPaletteState] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = readStorage(`${storageKey}-palette`)
+      if (saved && palettes.some((p) => p.id === saved)) return saved
+    }
+    return defaultPalette
+  })
+
   const [brand, setBrandState] = useState<ThemeBrand>(() => {
     if (typeof window !== 'undefined') {
       const saved = readStorage(`${storageKey}-brand`)
@@ -113,6 +143,25 @@ export function ThemeProvider({
     writeStorage(`${storageKey}-transparency`, transparency)
   }, [theme, brand, mode, transparency, resolvedTransparency, storageKey])
 
+  const paletteActive = paletteBrands.includes(brand)
+
+  // Palettes are applied as inline custom properties on <html>, so they outrank the theme CSS.
+  // Outside `paletteBrands` they're removed and the brand's own tokens show through.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const root = document.documentElement
+    const selected = palettes.find((p) => p.id === palette) ?? palettes[0]
+    if (paletteActive && selected) {
+      const tokens = paletteTokens(selected, mode)
+      PALETTE_KEYS.forEach((key) => root.style.setProperty(key, tokens[key]))
+      root.setAttribute('data-palette', selected.id)
+    } else {
+      PALETTE_KEYS.forEach((key) => root.style.removeProperty(key))
+      root.removeAttribute('data-palette')
+    }
+    writeStorage(`${storageKey}-palette`, palette)
+  }, [palette, palettes, paletteActive, mode, storageKey])
+
   const setBrand = (newBrand: ThemeBrand) => setBrandState(newBrand)
   const setMode = (newMode: ThemeMode) => setModeState(newMode)
   const toggleMode = () => setModeState((prev) => (prev === 'light' ? 'dark' : 'light'))
@@ -131,6 +180,10 @@ export function ThemeProvider({
         transparency,
         resolvedTransparency,
         setTransparency: setTransparencyState,
+        palette,
+        setPalette: setPaletteState,
+        palettes,
+        paletteActive,
       }}>
       {children}
     </ThemeContext.Provider>

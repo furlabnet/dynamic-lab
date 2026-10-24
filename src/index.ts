@@ -4,6 +4,7 @@ import './styles/dynamic-lab.css'
 
 // Theme & Tokens
 export * from './theme/tokens'
+export * from './theme/palettes'
 export * from './theme/ThemeProvider'
 export * from './theme/useTheme'
 

@@ -98,7 +98,7 @@
   --surface-alpha: 0.66;
   --glow-strength: 0.2;
 
-  --sidebar: hsl(232 25% 10% / 0.6);
+  --sidebar: color-mix(in srgb, var(--card) 60%, transparent);
   --sidebar-border: hsl(232 20% 20%);
   --sidebar-accent: hsl(225 40% 18%);
   --grid-dot: transparent;

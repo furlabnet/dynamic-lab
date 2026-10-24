@@ -77,6 +77,8 @@ import {
   TabsTrigger,
   TextField,
   ThemeToggle,
+  AppearanceSettings,
+  PalettePicker,
   Toolbar,
   Tooltip,
   UserMenu,
@@ -113,6 +115,7 @@ import {
 import { APPS, useShowcase } from '../state'
 
 const SECTIONS = [
+  { id: 'themes', label: 'Themes' },
   { id: 'actions', label: 'Actions' },
   { id: 'menus', label: 'Menus & overlays' },
   { id: 'navigation', label: 'Navigation' },
@@ -169,6 +172,7 @@ export function ComponentGallery() {
         </nav>
       </div>
 
+      <ThemesSection />
       <ActionsSection />
       <MenusSection />
       <NavigationSection />
@@ -177,6 +181,18 @@ export function ComponentGallery() {
       <DataSection />
       <LayoutSection onToast={(title) => toast({ title, description: 'Fired from the gallery.', tone: 'info' })} />
     </div>
+  )
+}
+
+/* -------------------------------------------------------------- Themes */
+
+function ThemesSection() {
+  return (
+    <Section id="themes" title="Colour themes" hint="PalettePicker, PalettePreview, AppearanceSettings, TransparencyControl">
+      <Panel title="PalettePicker" description="Named themes, each with a light and a dark version. Picking one recolours the public site." actions={<AppearanceSettings themesHref="#/lab/themes" />}>
+        <PalettePicker showBothModes />
+      </Panel>
+    </Section>
   )
 }
 

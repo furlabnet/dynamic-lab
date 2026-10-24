@@ -4,6 +4,7 @@ import { cn } from '../../lib/utils'
 import { useTheme, type TransparencyPreference } from '../../theme/ThemeProvider'
 import { Popover } from '../Popover'
 import { SegmentedControl } from '../SegmentedControl'
+import { PalettePicker } from './PalettePicker'
 
 const TRANSPARENCY_HELP: Record<TransparencyPreference, string> = {
   system: 'Follows your device’s “reduce transparency” setting.',
@@ -52,19 +53,21 @@ export interface AppearanceSettingsProps {
   side?: 'top' | 'bottom'
   /** `icon` is a compact square trigger; `button` adds the "Appearance" label. */
   variant?: 'icon' | 'button'
+  /** Link to a page with all the themes, shown under the picker. */
+  themesHref?: string
   className?: string
 }
 
 /** Popover with colour mode and transparency, for headers and sidebars. */
-export function AppearanceSettings({ align = 'end', side = 'bottom', variant = 'icon', className }: AppearanceSettingsProps) {
-  const { mode, setMode } = useTheme()
+export function AppearanceSettings({ align = 'end', side = 'bottom', variant = 'icon', themesHref, className }: AppearanceSettingsProps) {
+  const { mode, setMode, palette, palettes, paletteActive } = useTheme()
   return (
     <Popover
       align={align}
       side={side}
       aria-label="Appearance"
       containerClassName={className}
-      className="ui-menu w-80 p-4!"
+      className="ui-menu w-[22rem] max-w-[calc(100vw-1rem)] p-4!"
       trigger={
         <button
           type="button"
@@ -80,10 +83,22 @@ export function AppearanceSettings({ align = 'end', side = 'bottom', variant = '
       }>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <span className="button-sm">Theme</span>
+          <span className="flex items-baseline justify-between gap-2">
+            <span className="button-sm">Colour theme</span>
+            {paletteActive && <span className="text-xs text-[var(--muted-foreground)]">{palettes.find((p) => p.id === palette)?.name}</span>}
+          </span>
+          <PalettePicker variant="compact" />
+          {themesHref && (
+            <a href={themesHref} className="text-xs font-semibold text-[var(--primary)] hover:underline">
+              See all themes →
+            </a>
+          )}
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <span className="button-sm">Mode</span>
           <SegmentedControl
             fullWidth
-            aria-label="Theme"
+            aria-label="Mode"
             value={mode}
             onValueChange={(v) => setMode(v as 'light' | 'dark')}
             options={[

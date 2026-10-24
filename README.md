@@ -67,6 +67,33 @@ Component classes sit in Tailwind's `components` layer, so utilities passed via 
 - `MarkdownEditor`, `renderMarkdown`, `countWords`: A textarea with a formatting toolbar (⌘/Ctrl B, I, K), Write/Preview tabs and a word count. The renderer outputs React nodes, never raw HTML.
 - `FormSection`, `EditorActionBar`: Two-column form sections, plus a sticky bottom bar showing save status.
 
+### Colour themes
+Named palettes, each with a light and a dark version under the same name. A palette sets the accent, the tint of the neutrals and the background glows; layout, radii, status colours and glass opacity stay the same. The names are puns on fursona species:
+
+| Theme | Species | Look |
+| --- | --- | --- |
+| **Midnight Wolf** (default) | Wolf | Clear blue on cool blue-grey |
+| **Fiery Fox** | Fox | Burnt orange with an ember-pink glow |
+| **Blue Dog** | Dog | Friendly turquoise |
+| **Snow Leopard** | Snow leopard | Quiet steel and frost, almost monochrome |
+| **Deer Delight** | Deer | Rose and peach |
+| **Scalies** | Dragons and reptiles | Emerald with a lime shimmer |
+| **Otter Space** | Otter | Navy sky with golden starlight |
+| **Purrple Rain** | Cat | Royal purple with a magenta storm |
+
+```tsx
+const { palette, setPalette, palettes } = useTheme()
+setPalette('fiery-fox')
+
+// Add your own (or replace the list):
+<ThemeProvider palettes={[...PALETTES, { id: 'hyena-laughs', name: 'Hyena Laughs', species: 'Hyena', description: '…', neutralHue: 40, light: { primary: 'hsl(38 80% 35%)', glowA: '…', glowB: '…' }, dark: { primary: 'hsl(40 90% 62%)', glowA: '…', glowB: '…' } }]}>
+```
+
+- Palettes apply to the `dynamic` brand only by default, so Backstage keeps its own look. Pass `paletteBrands={['dynamic', 'backstage']}` to theme both.
+- The choice is saved in localStorage and applied as inline CSS variables on `<html>` (plus `data-palette`).
+- `PalettePicker` (`cards` or `compact`) picks a palette; `PalettePreview` renders one in isolation, with its variables scoped to the element. `paletteTokens(palette, mode)` and `paletteStyle(palette, mode)` give you the raw values.
+- `AppearanceSettings` now holds colour theme, mode and transparency in one popover.
+
 ### Transparency (accessibility)
 `ThemeProvider` now takes `defaultTransparency` and exposes `transparency`, `resolvedTransparency` and `setTransparency` from `useTheme()`:
 
@@ -237,7 +264,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 The showcase is two working apps built from the library, sharing one in-memory state:
 
-- **Dynamic Lab** (`#/lab/…`): Home, Browse (live search and filters), Library (dashboard) and Components (the full gallery). There is one example of each content type: page `#/lab/view/c5`, artwork `c3` (mature example: `c13`), comic `c8`, multi-chapter story `c10` and visual novel `c4`. Editors are at `#/lab/new` (type picker), `#/lab/new/<type>` and `#/lab/edit/<id>`. Creator profiles live at `#/lab/u/<handle>`, Lab portfolios at `#/lab/labs/<slug>` and link-in-bio pages at `#/lab/links/<handle-or-slug>`. Sample images come from [Lorem Picsum](https://picsum.photos) and avatars from [pravatar.cc](https://pravatar.cc).
+- **Dynamic Lab** (`#/lab/…`): Home, Browse (live search and filters), Library (dashboard) and Components (the full gallery). There is one example of each content type: page `#/lab/view/c5`, artwork `c3` (mature example: `c13`), comic `c8`, multi-chapter story `c10` and visual novel `c4`. Every colour theme, light and dark, is at `#/lab/themes`. Editors are at `#/lab/new` (type picker), `#/lab/new/<type>` and `#/lab/edit/<id>`. Creator profiles live at `#/lab/u/<handle>`, Lab portfolios at `#/lab/labs/<slug>` and link-in-bio pages at `#/lab/links/<handle-or-slug>`. Sample images come from [Lorem Picsum](https://picsum.photos) and avatars from [pravatar.cc](https://pravatar.cc).
 - **Backstage** (`#/backstage/…`): Overview, Content (selection, bulk actions, edit / view / delete), Trash, Users, Moderation, Tags, Audit, Site settings, plus the gallery under *Design system*.
 
 The app switcher moves between them and sets the theme brand. Changes carry across apps: turn maintenance mode off in Backstage and the Lab's banner goes away; create a draft in the Lab and it shows up in Backstage → Content.

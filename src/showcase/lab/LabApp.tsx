@@ -40,6 +40,7 @@ import {
   ThemeToggle,
   AppearanceSettings,
   TransparencyControl,
+  PalettePicker,
   UserMenu,
   DynamicLabMark,
   useToast,
@@ -82,6 +83,7 @@ import { DETAILS, LABS, PROFILES, getDetails } from '../details'
 import { ContentView } from './ContentView'
 import { LabPage, LinksPage, ProfilePage } from './CreatorPages'
 import { ContentEditor, NewContentPicker } from './Editor'
+import { ThemesPage } from './ThemesPage'
 
 export const TYPE_ICONS: Record<ContentType, React.ReactNode> = {
   page: <FileText />,
@@ -116,6 +118,9 @@ export function LabApp() {
       <SiteNavLink active={section === 'components'} onClick={() => navigate('lab/components')}>
         Components
       </SiteNavLink>
+      <SiteNavLink active={section === 'themes'} onClick={() => navigate('lab/themes')}>
+        Themes
+      </SiteNavLink>
     </SiteNav>
   )
 
@@ -136,7 +141,7 @@ export function LabApp() {
         actions={
           <>
             <ThemeToggle variant="ghost" />
-            <AppearanceSettings />
+            <AppearanceSettings themesHref="#/lab/themes" />
             <AppSwitcher apps={APPS} value="lab" onValueChange={(id) => navigate(`${id}/`)} />
             <UserMenu name={CURRENT_USER.name} email={CURRENT_USER.email} avatarSrc={CURRENT_USER.avatar}>
               <MenuItem icon={<LayoutDashboard />} onClick={() => navigate('lab/library/overview')}>
@@ -174,12 +179,13 @@ export function LabApp() {
         {section === 'labs' && <LabPage key={param} slug={param} />}
         {section === 'new' && (param ? <ContentEditor key={param} type={param as ContentType} /> : <NewContentPicker />)}
         {section === 'edit' && <ContentEditor key={param} id={param} />}
+        {section === 'themes' && <ThemesPage />}
         {section === 'components' && (
           <div className="mx-auto max-w-[var(--container-max)] px-4 py-10 sm:px-8">
             <ComponentGallery />
           </div>
         )}
-        {!['home', 'browse', 'library', 'components', 'view', 'u', 'labs', 'new', 'edit'].includes(section) && <HomePage />}
+        {!['home', 'browse', 'library', 'components', 'view', 'u', 'labs', 'new', 'edit', 'themes'].includes(section) && <HomePage />}
       </main>
 
       <SiteFooter
@@ -775,6 +781,15 @@ function Preferences() {
         </RadioGroup>
         <Switch defaultChecked label="Blur mature covers" description="Click a cover to reveal it." />
         <Switch label="Autoplay visual novel music" />
+        <div className="flex flex-col gap-1.5 border-t border-[var(--border)] pt-5">
+          <span className="flex items-baseline justify-between gap-2">
+            <span className="button-sm">Colour theme</span>
+            <a href="#/lab/themes" className="text-xs font-semibold text-[var(--primary)] hover:underline">
+              Compare all themes →
+            </a>
+          </span>
+          <PalettePicker variant="compact" className="mt-1" />
+        </div>
         <div className="flex flex-col gap-1.5 border-t border-[var(--border)] pt-5">
           <span className="button-sm">Transparency</span>
           <p className="body-sm text-[var(--muted-foreground)]">
