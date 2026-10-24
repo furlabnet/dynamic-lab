@@ -78,14 +78,14 @@ export const BreadcrumbSeparator = ({
 )
 BreadcrumbSeparator.displayName = 'BreadcrumbSeparator'
 
-export const BreadcrumbEllipsis = ({
-  className,
-  ...props
-}: React.ComponentProps<'span'>) => (
+export const BreadcrumbEllipsis = ({ className, ...props }: React.ComponentProps<'span'>) => (
   <span
     role="presentation"
     aria-hidden="true"
-    className={cn('flex size-7 items-center justify-center rounded-md hover:bg-[var(--muted)]', className)}
+    className={cn(
+      'flex size-7 items-center justify-center rounded-md hover:bg-[var(--muted)]',
+      className
+    )}
     {...props}>
     <MoreHorizontal className="size-4" />
     <span className="sr-only">More</span>

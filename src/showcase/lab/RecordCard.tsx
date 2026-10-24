@@ -5,7 +5,8 @@ import { TYPE_LABELS, type ContentRecord } from '../data'
 import { getDetails, profileByName, wordCount } from '../details'
 import { useShowcase } from '../state'
 
-const compact = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : String(n))
+const compact = (n: number) =>
+  n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : String(n)
 
 type RecordCardProps = { record: ContentRecord } & Partial<Omit<ContentCardProps, 'title'>>
 
@@ -18,12 +19,18 @@ export function RecordCard({ record, ...overrides }: RecordCardProps) {
   const { saved, comments, navigate } = useShowcase()
   const details = getDetails(record)
   const isSaved = saved.includes(record.id)
-  const commentCount = (comments[record.id] ?? []).reduce((n, c) => n + 1 + (c.replies?.length ?? 0), 0)
+  const commentCount = (comments[record.id] ?? []).reduce(
+    (n, c) => n + 1 + (c.replies?.length ?? 0),
+    0
+  )
 
   let coverMeta: React.ReactNode
   if (record.type === 'comic' && details.comicChapters) {
     const pages = details.comicChapters.reduce((n, c) => n + c.pages.length, 0)
-    coverMeta = details.comicChapters.length > 1 ? `${details.comicChapters.length} ch · ${pages} pages` : `${pages} pages`
+    coverMeta =
+      details.comicChapters.length > 1
+        ? `${details.comicChapters.length} ch · ${pages} pages`
+        : `${pages} pages`
   } else if (record.type === 'story' && details.chapters) {
     const minutes = Math.max(1, Math.round(wordCount(details.chapters) / 230))
     coverMeta = `${details.chapters.length} ch · ${minutes} min`
@@ -40,7 +47,9 @@ export function RecordCard({ record, ...overrides }: RecordCardProps) {
 
   const platforms =
     record.type === 'visual-novel' && details.vn ? (
-      <span className="inline-flex items-center gap-1 [&_svg]:size-3.5" aria-label={`Platforms: ${details.vn.platforms.map((p) => PLATFORM_INFO[p].label).join(', ')}`}>
+      <span
+        className="inline-flex items-center gap-1 [&_svg]:size-3.5"
+        aria-label={`Platforms: ${details.vn.platforms.map((p) => PLATFORM_INFO[p].label).join(', ')}`}>
         {details.vn.platforms.map((p) => (
           <span key={p} title={PLATFORM_INFO[p].label}>
             {PLATFORM_INFO[p].icon}
@@ -66,9 +75,15 @@ export function RecordCard({ record, ...overrides }: RecordCardProps) {
       stats={
         showStats
           ? [
-              { icon: <Bookmark />, value: compact(details.saves + (isSaved ? 1 : 0)), label: 'saves' },
+              {
+                icon: <Bookmark />,
+                value: compact(details.saves + (isSaved ? 1 : 0)),
+                label: 'saves',
+              },
               { icon: <Eye />, value: compact(details.views), label: 'views' },
-              ...(record.comments === 'open' || commentCount > 0 ? [{ icon: <MessageCircle />, value: commentCount, label: 'comments' }] : []),
+              ...(record.comments === 'open' || commentCount > 0
+                ? [{ icon: <MessageCircle />, value: commentCount, label: 'comments' }]
+                : []),
             ]
           : undefined
       }

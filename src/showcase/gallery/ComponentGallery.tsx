@@ -1,9 +1,36 @@
 import React, { useEffect, useState } from 'react'
+
+import {
+  Bell,
+  Bookmark,
+  BookOpen,
+  Copy,
+  FileCode,
+  Filter,
+  Grid3x3,
+  Home,
+  Layers,
+  LayoutDashboard,
+  List,
+  LogOut,
+  Palette,
+  Pencil,
+  Plus,
+  Search,
+  Settings,
+  Share2,
+  Sparkles,
+  Trash2,
+  User,
+  Wrench,
+} from 'lucide-react'
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  AppearanceSettings,
   AppSwitcher,
   AuthCard,
   Badge,
@@ -16,6 +43,7 @@ import {
   BreadcrumbSeparator,
   Button,
   Checkbox,
+  type CommandItem,
   CommandPalette,
   CommandTrigger,
   ContentCard,
@@ -44,6 +72,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  PalettePicker,
   Panel,
   PillNav,
   PillNavLink,
@@ -77,41 +106,14 @@ import {
   TabsTrigger,
   TextField,
   ThemeToggle,
-  AppearanceSettings,
-  PalettePicker,
   Toolbar,
   Tooltip,
   UserMenu,
-  WorkflowTimeline,
-  WorkflowTimelineItem,
   useTheme,
   useToast,
-  type CommandItem,
+  WorkflowTimeline,
+  WorkflowTimelineItem,
 } from '../../index'
-import {
-  Bell,
-  BookOpen,
-  Bookmark,
-  Copy,
-  FileCode,
-  Filter,
-  Grid3x3,
-  Home,
-  Layers,
-  LayoutDashboard,
-  List,
-  LogOut,
-  Palette,
-  Pencil,
-  Plus,
-  Search,
-  Settings,
-  Share2,
-  Sparkles,
-  Trash2,
-  User,
-  Wrench,
-} from 'lucide-react'
 import { APPS, useShowcase } from '../state'
 
 const SECTIONS = [
@@ -125,7 +127,17 @@ const SECTIONS = [
   { id: 'layout', label: 'Layout & pages' },
 ]
 
-function Section({ id, title, hint, children }: { id: string; title: string; hint?: string; children: React.ReactNode }) {
+function Section({
+  id,
+  title,
+  hint,
+  children,
+}: {
+  id: string
+  title: string
+  hint?: string
+  children: React.ReactNode
+}) {
   return (
     <section id={`gallery-${id}`} className="flex scroll-mt-24 flex-col gap-4">
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[var(--border)] pb-2">
@@ -165,7 +177,11 @@ export function ComponentGallery() {
           {SECTIONS.map((s) => (
             <FilterChip
               key={s.id}
-              onClick={() => document.getElementById(`gallery-${s.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+              onClick={() =>
+                document
+                  .getElementById(`gallery-${s.id}`)
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }>
               {s.label}
             </FilterChip>
           ))}
@@ -179,7 +195,9 @@ export function ComponentGallery() {
       <FormsSection />
       <FeedbackSection />
       <DataSection />
-      <LayoutSection onToast={(title) => toast({ title, description: 'Fired from the gallery.', tone: 'info' })} />
+      <LayoutSection
+        onToast={(title) => toast({ title, description: 'Fired from the gallery.', tone: 'info' })}
+      />
     </div>
   )
 }
@@ -188,8 +206,14 @@ export function ComponentGallery() {
 
 function ThemesSection() {
   return (
-    <Section id="themes" title="Colour themes" hint="PalettePicker, PalettePreview, AppearanceSettings, TransparencyControl">
-      <Panel title="PalettePicker" description="Named themes, each with a light and a dark version. Picking one recolours the public site." actions={<AppearanceSettings themesHref="#/lab/themes" />}>
+    <Section
+      id="themes"
+      title="Colour themes"
+      hint="PalettePicker, PalettePreview, AppearanceSettings, TransparencyControl">
+      <Panel
+        title="PalettePicker"
+        description="Named themes, each with a light and a dark version. Picking one recolours the public site."
+        actions={<AppearanceSettings themesHref="#/lab/themes" />}>
         <PalettePicker showBothModes />
       </Panel>
     </Section>
@@ -226,7 +250,11 @@ function ActionsSection() {
             </Button>
             <Button
               variant="secondary"
-              leftIcon={<Bookmark className={saved ? 'size-4 fill-current text-[var(--primary)]' : 'size-4'} />}
+              leftIcon={
+                <Bookmark
+                  className={saved ? 'size-4 fill-current text-[var(--primary)]' : 'size-4'}
+                />
+              }
               aria-pressed={saved}
               onClick={() => setSaved((v) => !v)}>
               {saved ? 'Saved' : 'Save'}
@@ -237,7 +265,9 @@ function ActionsSection() {
           </div>
         </Panel>
 
-        <Panel title="Sizes, icon buttons and tooltips" description="Hover or focus an icon button.">
+        <Panel
+          title="Sizes, icon buttons and tooltips"
+          description="Hover or focus an icon button.">
           <div className="flex flex-wrap items-center gap-3">
             <Button size="sm">Small</Button>
             <Button size="md">Medium</Button>
@@ -249,13 +279,25 @@ function ActionsSection() {
               <IconButton aria-label="Settings" icon={<Settings className="size-4" />} />
             </Tooltip>
             <Tooltip content="Add item">
-              <IconButton aria-label="Add item" variant="primary" icon={<Plus className="size-4" />} />
+              <IconButton
+                aria-label="Add item"
+                variant="primary"
+                icon={<Plus className="size-4" />}
+              />
             </Tooltip>
             <Tooltip content="Share" side="bottom">
-              <IconButton aria-label="Share" variant="outline" icon={<Share2 className="size-4" />} />
+              <IconButton
+                aria-label="Share"
+                variant="outline"
+                icon={<Share2 className="size-4" />}
+              />
             </Tooltip>
             <Tooltip content="Delete">
-              <IconButton aria-label="Delete" variant="danger-outline" icon={<Trash2 className="size-4" />} />
+              <IconButton
+                aria-label="Delete"
+                variant="danger-outline"
+                icon={<Trash2 className="size-4" />}
+              />
             </Tooltip>
             <Separator orientation="vertical" className="h-8" />
             <ThemeToggle />
@@ -279,29 +321,79 @@ function MenusSection() {
   const [demoApp, setDemoApp] = useState('lab')
 
   const commands: CommandItem[] = [
-    { id: 'new', label: 'New story', group: 'Create', icon: <Plus />, shortcut: ['N'], onSelect: () => toast({ title: 'New story', description: 'Picked from the palette.', tone: 'success' }) },
-    { id: 'dup', label: 'Duplicate', group: 'Create', icon: <Copy />, onSelect: () => toast({ title: 'Duplicated', description: 'Picked from the palette.' }) },
-    { id: 'home', label: 'Go home', group: 'Navigate', icon: <Home />, onSelect: () => navigate('lab/home') },
-    { id: 'settings', label: 'Open settings', group: 'Navigate', icon: <Settings />, keywords: ['preferences'], onSelect: () => navigate('backstage/settings') },
+    {
+      id: 'new',
+      label: 'New story',
+      group: 'Create',
+      icon: <Plus />,
+      shortcut: ['N'],
+      onSelect: () =>
+        toast({ title: 'New story', description: 'Picked from the palette.', tone: 'success' }),
+    },
+    {
+      id: 'dup',
+      label: 'Duplicate',
+      group: 'Create',
+      icon: <Copy />,
+      onSelect: () => toast({ title: 'Duplicated', description: 'Picked from the palette.' }),
+    },
+    {
+      id: 'home',
+      label: 'Go home',
+      group: 'Navigate',
+      icon: <Home />,
+      onSelect: () => navigate('lab/home'),
+    },
+    {
+      id: 'settings',
+      label: 'Open settings',
+      group: 'Navigate',
+      icon: <Settings />,
+      keywords: ['preferences'],
+      onSelect: () => navigate('backstage/settings'),
+    },
   ]
 
   return (
-    <Section id="menus" title="Menus & overlays" hint="DropdownMenu, AppSwitcher, UserMenu, Popover, Dialog, Drawer, CommandPalette, Toast">
+    <Section
+      id="menus"
+      title="Menus & overlays"
+      hint="DropdownMenu, AppSwitcher, UserMenu, Popover, Dialog, Drawer, CommandPalette, Toast">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel title="Dropdown menu" description="Arrow keys move, Esc closes.">
           <div className="flex flex-wrap items-center gap-3">
             <DropdownMenu align="start" trigger={<Button variant="secondary">Actions</Button>}>
-              <MenuItem icon={<Pencil />} trailing={<Kbd>E</Kbd>} onClick={() => toast({ title: 'Edit', description: 'Menu item chosen.' })}>
+              <MenuItem
+                icon={<Pencil />}
+                trailing={<Kbd>E</Kbd>}
+                onClick={() => toast({ title: 'Edit', description: 'Menu item chosen.' })}>
                 Edit
               </MenuItem>
-              <MenuItem icon={<Copy />} trailing={<Kbd>D</Kbd>} onClick={() => toast({ title: 'Duplicate', description: 'Menu item chosen.' })}>
+              <MenuItem
+                icon={<Copy />}
+                trailing={<Kbd>D</Kbd>}
+                onClick={() => toast({ title: 'Duplicate', description: 'Menu item chosen.' })}>
                 Duplicate
               </MenuItem>
-              <MenuItem icon={<Share2 />} subtitle="Anyone with the link" onClick={() => toast({ title: 'Link copied', description: 'Menu item chosen.', tone: 'success' })}>
+              <MenuItem
+                icon={<Share2 />}
+                subtitle="Anyone with the link"
+                onClick={() =>
+                  toast({ title: 'Link copied', description: 'Menu item chosen.', tone: 'success' })
+                }>
                 Share
               </MenuItem>
               <MenuSeparator />
-              <MenuItem danger icon={<Trash2 />} onClick={() => toast({ title: 'Moved to trash', description: 'Menu item chosen.', tone: 'destructive' })}>
+              <MenuItem
+                danger
+                icon={<Trash2 />}
+                onClick={() =>
+                  toast({
+                    title: 'Moved to trash',
+                    description: 'Menu item chosen.',
+                    tone: 'destructive',
+                  })
+                }>
                 Move to trash
               </MenuItem>
             </DropdownMenu>
@@ -326,11 +418,19 @@ function MenusSection() {
           </div>
         </Panel>
 
-        <Panel title="App switcher & user menu" description="The first one switches this showcase for real.">
+        <Panel
+          title="App switcher & user menu"
+          description="The first one switches this showcase for real.">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between gap-3">
               <span className="body-sm text-[var(--muted-foreground)]">Live</span>
-              <AppSwitcher apps={APPS} value={app} onValueChange={(id) => navigate(id === 'lab' ? 'lab/components' : 'backstage/design-system')} />
+              <AppSwitcher
+                apps={APPS}
+                value={app}
+                onValueChange={(id) =>
+                  navigate(id === 'lab' ? 'lab/components' : 'backstage/design-system')
+                }
+              />
             </div>
             <div className="flex items-center justify-between gap-3">
               <span className="body-sm text-[var(--muted-foreground)]">Local state: {demoApp}</span>
@@ -346,11 +446,16 @@ function MenusSection() {
             </div>
             <div className="flex items-center justify-between gap-3">
               <span className="body-sm text-[var(--muted-foreground)]">UserMenu</span>
-              <UserMenu name="Maya Lin" email="maya@example.com" meta={<Badge size="sm">Creator</Badge>}>
+              <UserMenu
+                name="Maya Lin"
+                email="maya@example.com"
+                meta={<Badge size="sm">Creator</Badge>}>
                 <MenuItem icon={<LayoutDashboard />}>Dashboard</MenuItem>
                 <MenuItem icon={<User />}>Profile</MenuItem>
                 <MenuSeparator />
-                <MenuItem icon={<LogOut />} onClick={() => toast({ title: 'Signed out', description: 'Demo only.' })}>
+                <MenuItem
+                  icon={<LogOut />}
+                  onClick={() => toast({ title: 'Signed out', description: 'Demo only.' })}>
                   Sign out
                 </MenuItem>
               </UserMenu>
@@ -381,7 +486,11 @@ function MenusSection() {
                     size="sm"
                     onClick={() => {
                       close()
-                      toast({ title: 'Preferences saved', description: 'From the popover.', tone: 'success' })
+                      toast({
+                        title: 'Preferences saved',
+                        description: 'From the popover.',
+                        tone: 'success',
+                      })
                     }}>
                     Save
                   </Button>
@@ -445,13 +554,24 @@ function MenusSection() {
         description="Narrow down what you see."
         footer={<Button onClick={() => setDrawerSide(null)}>Apply</Button>}>
         <div className="flex flex-col gap-4">
-          <Select label="Category" options={[{ value: 'all', label: 'All categories' }, { value: 'stories', label: 'Stories' }]} />
+          <Select
+            label="Category"
+            options={[
+              { value: 'all', label: 'All categories' },
+              { value: 'stories', label: 'Stories' },
+            ]}
+          />
           <Switch defaultChecked label="Only show work with open comments" />
           <Switch label="Hide mature content" />
         </div>
       </Drawer>
 
-      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} items={commands} hotkey={false} />
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        items={commands}
+        hotkey={false}
+      />
     </Section>
   )
 }
@@ -460,13 +580,36 @@ function ToastButtons() {
   const { toast } = useToast()
   return (
     <div className="flex flex-wrap gap-2">
-      <Button size="sm" variant="secondary" onClick={() => toast({ title: 'Saved', description: 'Your story is live.', tone: 'success' })}>
+      <Button
+        size="sm"
+        variant="secondary"
+        onClick={() =>
+          toast({ title: 'Saved', description: 'Your story is live.', tone: 'success' })
+        }>
         Success
       </Button>
-      <Button size="sm" variant="secondary" onClick={() => toast({ title: 'Heads up', description: 'This item is waiting for review.', tone: 'warning' })}>
+      <Button
+        size="sm"
+        variant="secondary"
+        onClick={() =>
+          toast({
+            title: 'Heads up',
+            description: 'This item is waiting for review.',
+            tone: 'warning',
+          })
+        }>
         Warning
       </Button>
-      <Button size="sm" variant="secondary" onClick={() => toast({ title: 'Upload failed', description: 'Files must be under 20 MB.', tone: 'destructive' })}>
+      <Button
+        size="sm"
+        variant="secondary"
+        onClick={() =>
+          toast({
+            title: 'Upload failed',
+            description: 'Files must be under 20 MB.',
+            tone: 'destructive',
+          })
+        }>
         Error
       </Button>
       <Button
@@ -476,7 +619,11 @@ function ToastButtons() {
           toast({
             title: 'Moved to trash',
             description: '“Paper Foxes” can be restored for 45 days.',
-            action: { label: 'Undo', onClick: () => toast({ title: 'Restored', description: 'Undo worked.', tone: 'success' }) },
+            action: {
+              label: 'Undo',
+              onClick: () =>
+                toast({ title: 'Restored', description: 'Undo worked.', tone: 'success' }),
+            },
           })
         }>
         With action
@@ -495,22 +642,38 @@ function NavigationSection() {
   const total = 5
 
   return (
-    <Section id="navigation" title="Navigation" hint="Tabs, PillNav, SidebarNav, Breadcrumbs, Pagination, SegmentedControl">
+    <Section
+      id="navigation"
+      title="Navigation"
+      hint="Tabs, PillNav, SidebarNav, Breadcrumbs, Pagination, SegmentedControl">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[264px_minmax(0,1fr)]">
         <SidebarNav className="h-fit w-full" aria-label="Demo sidebar">
           <SidebarNavGroup label="Creator Lab">
-            <SidebarNavItem icon={<Home />} active={side === 'overview'} onClick={() => setSide('overview')}>
+            <SidebarNavItem
+              icon={<Home />}
+              active={side === 'overview'}
+              onClick={() => setSide('overview')}>
               Overview
             </SidebarNavItem>
-            <SidebarNavItem icon={<BookOpen />} active={side === 'content'} badge={12} onClick={() => setSide('content')}>
+            <SidebarNavItem
+              icon={<BookOpen />}
+              active={side === 'content'}
+              badge={12}
+              onClick={() => setSide('content')}>
               Content
             </SidebarNavItem>
-            <SidebarNavItem icon={<Layers />} active={side === 'library'} onClick={() => setSide('library')}>
+            <SidebarNavItem
+              icon={<Layers />}
+              active={side === 'library'}
+              onClick={() => setSide('library')}>
               Library
             </SidebarNavItem>
           </SidebarNavGroup>
           <SidebarNavGroup label="Account">
-            <SidebarNavItem icon={<Settings />} active={side === 'settings'} onClick={() => setSide('settings')}>
+            <SidebarNavItem
+              icon={<Settings />}
+              active={side === 'settings'}
+              onClick={() => setSide('settings')}>
               Settings
             </SidebarNavItem>
           </SidebarNavGroup>
@@ -565,7 +728,11 @@ function NavigationSection() {
             <div className="flex flex-col gap-5">
               <PillNav aria-label="Lab sections">
                 {['overview', 'content', 'members', 'settings'].map((id) => (
-                  <PillNavLink key={id} active={pill === id} onClick={() => setPill(id)} className="capitalize">
+                  <PillNavLink
+                    key={id}
+                    active={pill === id}
+                    onClick={() => setPill(id)}
+                    className="capitalize">
                     {id}
                   </PillNavLink>
                 ))}
@@ -595,7 +762,16 @@ function NavigationSection() {
                     { value: 'list', label: 'List', icon: <List /> },
                   ]}
                 />
-                <SegmentedControl size="sm" aria-label="Range" defaultValue="7d" options={[{ value: '24h', label: '24h' }, { value: '7d', label: '7 days' }, { value: '30d', label: '30 days' }]} />
+                <SegmentedControl
+                  size="sm"
+                  aria-label="Range"
+                  defaultValue="7d"
+                  options={[
+                    { value: '24h', label: '24h' },
+                    { value: '7d', label: '7 days' },
+                    { value: '30d', label: '30 days' },
+                  ]}
+                />
                 <span className="body-sm text-[var(--muted-foreground)]">View: {view}</span>
               </div>
             </div>
@@ -635,12 +811,24 @@ function NavigationSection() {
 }
 
 function TokenSwatches() {
-  const tokens = ['--primary', '--background', '--card', '--muted', '--border', '--sidebar', '--glow-a', '--glow-b']
+  const tokens = [
+    '--primary',
+    '--background',
+    '--card',
+    '--muted',
+    '--border',
+    '--sidebar',
+    '--glow-a',
+    '--glow-b',
+  ]
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {tokens.map((t) => (
         <div key={t} className="flex flex-col gap-1.5">
-          <div className="h-10 rounded-[var(--radius-md)] border border-[var(--border)]" style={{ background: `var(${t})` }} />
+          <div
+            className="h-10 rounded-[var(--radius-md)] border border-[var(--border)]"
+            style={{ background: `var(${t})` }}
+          />
           <code className="text-xs text-[var(--muted-foreground)]">{t}</code>
         </div>
       ))}
@@ -661,7 +849,10 @@ function FormsSection() {
   const someChecked = rows.some((r) => r.checked)
 
   return (
-    <Section id="forms" title="Forms" hint="TextField, Select, Switch, Checkbox, RadioGroup, FileInput">
+    <Section
+      id="forms"
+      title="Forms"
+      hint="TextField, Select, Switch, Checkbox, RadioGroup, FileInput">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel title="Text inputs">
           <div className="flex flex-col gap-3">
@@ -673,8 +864,17 @@ function FormsSection() {
               helperText={`${title.length}/60 characters`}
               error={title.length > 60 ? 'Keep it under 60 characters' : undefined}
             />
-            <TextField label="Search" placeholder="Search tokens…" startIcon={<Search className="size-4" />} />
-            <TextField label="Summary" isTextarea rows={3} placeholder="A sentence or two for the card" />
+            <TextField
+              label="Search"
+              placeholder="Search tokens…"
+              startIcon={<Search className="size-4" />}
+            />
+            <TextField
+              label="Summary"
+              isTextarea
+              rows={3}
+              placeholder="A sentence or two for the card"
+            />
             <Select
               label="Visibility"
               defaultValue="public"
@@ -689,7 +889,11 @@ function FormsSection() {
 
         <Panel title="Toggles">
           <div className="flex flex-col gap-4">
-            <Switch defaultChecked label="Allow comments" description="Readers can reply to this story." />
+            <Switch
+              defaultChecked
+              label="Allow comments"
+              description="Readers can reply to this story."
+            />
             <Switch label="Mature content" />
             <Switch disabled label="Disabled switch" />
             <Separator />
@@ -697,7 +901,9 @@ function FormsSection() {
               label="Email me about everything"
               checked={allChecked}
               indeterminate={someChecked && !allChecked}
-              onCheckedChange={() => setRows((prev) => prev.map((r) => ({ ...r, checked: !allChecked })))}
+              onCheckedChange={() =>
+                setRows((prev) => prev.map((r) => ({ ...r, checked: !allChecked })))
+              }
             />
             <div className="flex flex-col gap-2.5 pl-7">
               {rows.map((r) => (
@@ -705,7 +911,9 @@ function FormsSection() {
                   key={r.id}
                   label={r.label}
                   checked={r.checked}
-                  onCheckedChange={(checked) => setRows((prev) => prev.map((x) => (x.id === r.id ? { ...x, checked } : x)))}
+                  onCheckedChange={(checked) =>
+                    setRows((prev) => prev.map((x) => (x.id === r.id ? { ...x, checked } : x)))
+                  }
                 />
               ))}
             </div>
@@ -717,7 +925,11 @@ function FormsSection() {
           <div className="flex flex-col gap-5">
             <RadioGroup label="Who can see this?" defaultValue="everyone">
               <RadioGroupItem value="everyone" label="Everyone" />
-              <RadioGroupItem value="followers" label="Followers" description="People who follow your Lab" />
+              <RadioGroupItem
+                value="followers"
+                label="Followers"
+                description="People who follow your Lab"
+              />
               <RadioGroupItem value="me" label="Only me" />
             </RadioGroup>
             <FileInput label="Cover image" accept="image/*" />
@@ -753,14 +965,37 @@ function FeedbackSection() {
   }, [uploading])
 
   const notices = [
-    { id: 'success', tone: 'success' as const, title: 'Changes published', text: 'Saved. Your story is live.' },
-    { id: 'warning', tone: 'warning' as const, title: 'Waiting for review', text: 'Edits will reset its place in the queue.' },
-    { id: 'danger', tone: 'destructive' as const, title: "Couldn't upload cover.png", text: 'Files must be under 20 MB.' },
-    { id: 'info', tone: 'info' as const, title: 'Tip', text: 'Press ⌘K in Backstage to jump anywhere.' },
+    {
+      id: 'success',
+      tone: 'success' as const,
+      title: 'Changes published',
+      text: 'Saved. Your story is live.',
+    },
+    {
+      id: 'warning',
+      tone: 'warning' as const,
+      title: 'Waiting for review',
+      text: 'Edits will reset its place in the queue.',
+    },
+    {
+      id: 'danger',
+      tone: 'destructive' as const,
+      title: "Couldn't upload cover.png",
+      text: 'Files must be under 20 MB.',
+    },
+    {
+      id: 'info',
+      tone: 'info' as const,
+      title: 'Tip',
+      text: 'Press ⌘K in Backstage to jump anywhere.',
+    },
   ]
 
   return (
-    <Section id="feedback" title="Status & feedback" hint="StatusBadge, Badge, NoticePanel, Progress, Spinner, Skeleton, Kbd">
+    <Section
+      id="feedback"
+      title="Status & feedback"
+      hint="StatusBadge, Badge, NoticePanel, Progress, Spinner, Skeleton, Kbd">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Panel title="Badges">
           <div className="flex flex-wrap items-center gap-2">
@@ -779,7 +1014,7 @@ function FeedbackSection() {
             <Badge variant="neutral">12</Badge>
             <Badge variant="outline">Outline</Badge>
             <Badge variant="success">Verified</Badge>
-            <Badge variant="warning">Teen</Badge>
+            <Badge variant="warning">Suggestive</Badge>
             <Badge variant="danger">Mature</Badge>
             <span className="inline-flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
               <Kbd keys={['⌘', 'K']} /> to search
@@ -789,7 +1024,12 @@ function FeedbackSection() {
 
         <Panel title="Progress & loading">
           <div className="flex flex-col gap-4">
-            <Progress label="Uploading chapter-3.pdf" value={progress} showValue tone={progress >= 100 ? 'success' : 'primary'} />
+            <Progress
+              label="Uploading chapter-3.pdf"
+              value={progress}
+              showValue
+              tone={progress >= 100 ? 'success' : 'primary'}
+            />
             <Progress label="Processing" size="sm" />
             <div className="flex flex-wrap items-center gap-3">
               <Button
@@ -811,12 +1051,20 @@ function FeedbackSection() {
           {notices
             .filter((n) => !dismissed.includes(n.id))
             .map((n) => (
-              <NoticePanel key={n.id} tone={n.tone} title={n.title} onDismiss={() => setDismissed((d) => [...d, n.id])}>
+              <NoticePanel
+                key={n.id}
+                tone={n.tone}
+                title={n.title}
+                onDismiss={() => setDismissed((d) => [...d, n.id])}>
                 {n.text}
               </NoticePanel>
             ))}
           {dismissed.length > 0 && (
-            <Button variant="ghost" size="sm" className="self-start" onClick={() => setDismissed([])}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="self-start"
+              onClick={() => setDismissed([])}>
               Show dismissed notices
             </Button>
           )}
@@ -848,7 +1096,8 @@ function FeedbackSection() {
                 </div>
               </div>
               <p className="body-sm text-[var(--muted-foreground)]">
-                Comics about the people who keep cities running after dark. Volume II is in review now.
+                Comics about the people who keep cities running after dark. Volume II is in review
+                now.
               </p>
             </div>
           )}
@@ -863,17 +1112,47 @@ function FeedbackSection() {
 function DataSection() {
   const [selected, setSelected] = useState<number[]>([1])
   const stories = [
-    { id: 1, title: 'The lighthouse keeper', author: 'Alex Rivera', tone: 'success' as const, status: 'Published' },
-    { id: 2, title: 'Neon Odyssey: Volume II', author: 'Maya Lin', tone: 'warning' as const, status: 'In review' },
-    { id: 3, title: 'Tidepool Sketchbook', author: 'Maya Lin', tone: 'neutral' as const, status: 'Draft' },
+    {
+      id: 1,
+      title: 'The lighthouse keeper',
+      author: 'Alex Rivera',
+      tone: 'success' as const,
+      status: 'Published',
+    },
+    {
+      id: 2,
+      title: 'Neon Odyssey: Volume II',
+      author: 'Maya Lin',
+      tone: 'warning' as const,
+      status: 'In review',
+    },
+    {
+      id: 3,
+      title: 'Tidepool Sketchbook',
+      author: 'Maya Lin',
+      tone: 'neutral' as const,
+      status: 'Draft',
+    },
   ]
 
   return (
-    <Section id="data" title="Data display" hint="Table, MetricCard, ContentCard, WorkflowTimeline, Accordion, Avatar, LocalDateTime">
+    <Section
+      id="data"
+      title="Data display"
+      hint="Table, MetricCard, ContentCard, WorkflowTimeline, Accordion, Avatar, LocalDateTime">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <MetricCard label="Waiting for review" value={12} href="#/backstage/content" />
-        <MetricCard label="Published this week" value={48} delta={{ value: '+12%', direction: 'up' }} />
-        <MetricCard label="Reports" value={3} delta={{ value: '-2', direction: 'down' }} subtext="vs last week" />
+        <MetricCard
+          label="Published this week"
+          value={48}
+          delta={{ value: '+12%', direction: 'up' }}
+        />
+        <MetricCard
+          label="Reports"
+          value={3}
+          delta={{ value: '-2', direction: 'down' }}
+          subtext="vs last week"
+        />
       </div>
 
       <Table>
@@ -884,7 +1163,9 @@ function DataSection() {
                 aria-label="Select all"
                 checked={selected.length === stories.length}
                 indeterminate={selected.length > 0 && selected.length < stories.length}
-                onCheckedChange={() => setSelected(selected.length === stories.length ? [] : stories.map((s) => s.id))}
+                onCheckedChange={() =>
+                  setSelected(selected.length === stories.length ? [] : stories.map((s) => s.id))
+                }
               />
             </TableHead>
             <TableHead>Title</TableHead>
@@ -899,7 +1180,11 @@ function DataSection() {
                 <Checkbox
                   aria-label={`Select ${s.title}`}
                   checked={selected.includes(s.id)}
-                  onCheckedChange={() => setSelected((prev) => (prev.includes(s.id) ? prev.filter((x) => x !== s.id) : [...prev, s.id]))}
+                  onCheckedChange={() =>
+                    setSelected((prev) =>
+                      prev.includes(s.id) ? prev.filter((x) => x !== s.id) : [...prev, s.id]
+                    )
+                  }
                 />
               </TableCell>
               <TableCell className="font-semibold">{s.title}</TableCell>
@@ -913,14 +1198,33 @@ function DataSection() {
       </Table>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <ContentCard type="Story" title="The lighthouse keeper" byline="By Alex Rivera" icon={<BookOpen />} onClick={() => {}} />
-        <ContentCard type="Artwork" title="Paper Foxes" byline="By Jordan Vance" icon={<Palette />} coverBadge={<Badge variant="solid" size="sm">New</Badge>} onClick={() => {}} />
+        <ContentCard
+          type="Story"
+          title="The lighthouse keeper"
+          byline="By Alex Rivera"
+          icon={<BookOpen />}
+          onClick={() => {}}
+        />
+        <ContentCard
+          type="Artwork"
+          title="Paper Foxes"
+          byline="By Jordan Vance"
+          icon={<Palette />}
+          coverBadge={
+            <Badge variant="solid" size="sm">
+              New
+            </Badge>
+          }
+          onClick={() => {}}
+        />
         <ContentCard type="Page" title="About the Lab" byline="By Alex Rivera" aspect="square" />
         <ContentCard
           type="Visual novel"
           title="Last Train to Hollow Creek"
           byline="By Sam Okafor"
-          cover={<span className="text-4xl font-black tracking-tight text-[var(--primary)]">LT</span>}
+          cover={
+            <span className="text-4xl font-black tracking-tight text-[var(--primary)]">LT</span>
+          }
           onClick={() => {}}
         />
       </div>
@@ -928,9 +1232,19 @@ function DataSection() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Panel title="Workflow timeline">
           <WorkflowTimeline>
-            <WorkflowTimelineItem title="Published" time="Oct 21" completed status={<StatusBadge tone="success">Published</StatusBadge>} />
+            <WorkflowTimelineItem
+              title="Published"
+              time="Oct 21"
+              completed
+              status={<StatusBadge tone="success">Published</StatusBadge>}
+            />
             <WorkflowTimelineItem title="Approved by Jordan" time="Oct 20" completed />
-            <WorkflowTimelineItem title="Sent for review" time="Oct 19" active status={<StatusBadge tone="warning">In review</StatusBadge>} />
+            <WorkflowTimelineItem
+              title="Sent for review"
+              time="Oct 19"
+              active
+              status={<StatusBadge tone="warning">In review</StatusBadge>}
+            />
           </WorkflowTimeline>
         </Panel>
         <Panel title="Accordion">
@@ -938,15 +1252,16 @@ function DataSection() {
             <AccordionItem value="a">
               <AccordionTrigger>How are Dynamic and Backstage different?</AccordionTrigger>
               <AccordionContent>
-                Dynamic is the public site: blue, roomy, top navigation. Backstage is the staff console: violet-tinted
-                neutrals, tighter corners, denser controls and a sidebar shell.
+                Dynamic is the public site: blue, roomy, top navigation. Backstage is the staff
+                console: violet-tinted neutrals, tighter corners, denser controls and a sidebar
+                shell.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="b">
               <AccordionTrigger>Can I control the theme?</AccordionTrigger>
               <AccordionContent>
-                Wrap your app in ThemeProvider and call setBrand / setMode from useTheme. It sets data-theme on the
-                html element.
+                Wrap your app in ThemeProvider and call setBrand / setMode from useTheme. It sets
+                data-theme on the html element.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -970,10 +1285,14 @@ function LayoutSection({ onToast }: { onToast: (title: string) => void }) {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [signingIn, setSigningIn] = useState(false)
-  const emailError = submitted && !/^\S+@\S+\.\S+$/.test(email) ? 'Enter a valid email address' : undefined
+  const emailError =
+    submitted && !/^\S+@\S+\.\S+$/.test(email) ? 'Enter a valid email address' : undefined
 
   return (
-    <Section id="layout" title="Layout & pages" hint="PageHeader, Toolbar, EmptyState, SiteBanner, AuthCard, NotFoundState, MaintenanceNotice">
+    <Section
+      id="layout"
+      title="Layout & pages"
+      hint="PageHeader, Toolbar, EmptyState, SiteBanner, AuthCard, NotFoundState, MaintenanceNotice">
       <div className="flex flex-col gap-6">
         <div className="ui-panel flex flex-col gap-5">
           <PageHeader
@@ -989,15 +1308,29 @@ function LayoutSection({ onToast }: { onToast: (title: string) => void }) {
             }
           />
           <Toolbar label="Filter">
-            <TextField placeholder="Search titles" aria-label="Search titles" className="min-w-48" />
-            <Button variant="secondary" leftIcon={<Search className="size-4" />} onClick={() => onToast('Search')}>
+            <TextField
+              placeholder="Search titles"
+              aria-label="Search titles"
+              className="min-w-48"
+            />
+            <Button
+              variant="secondary"
+              leftIcon={<Search className="size-4" />}
+              onClick={() => onToast('Search')}>
               Search
             </Button>
             <span className="body-sm text-[var(--muted-foreground)]">3 selected</span>
           </Toolbar>
         </div>
 
-        <SiteBanner tone="primary" icon={<Sparkles />} action={<Button size="sm" variant="secondary" onClick={() => onToast('Banner action')}>Try it</Button>}>
+        <SiteBanner
+          tone="primary"
+          icon={<Sparkles />}
+          action={
+            <Button size="sm" variant="secondary" onClick={() => onToast('Banner action')}>
+              Try it
+            </Button>
+          }>
           SiteBanner: a strip for site-wide announcements.
         </SiteBanner>
 
@@ -1012,7 +1345,10 @@ function LayoutSection({ onToast }: { onToast: (title: string) => void }) {
               </Button>
             }
           />
-          <AuthCard logo={<BrandLockup name="Dynamic Lab" />} title="Sign in" subtitle="Use your Dynamic Lab account.">
+          <AuthCard
+            logo={<BrandLockup name="Dynamic Lab" />}
+            title="Sign in"
+            subtitle="Use your Dynamic Lab account.">
             <form
               className="flex flex-col gap-4"
               onSubmit={(e) => {
@@ -1025,7 +1361,14 @@ function LayoutSection({ onToast }: { onToast: (title: string) => void }) {
                   onToast(`Signed in as ${email}`)
                 }, 900)
               }}>
-              <TextField label="Email" type="email" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} error={emailError} />
+              <TextField
+                label="Email"
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={emailError}
+              />
               <TextField label="Password" type="password" placeholder="••••••••" />
               <Button type="submit" className="w-full" loading={signingIn}>
                 Sign in

@@ -49,7 +49,15 @@ import {
   UserCheck,
   Globe,
 } from 'lucide-react'
-import { CURRENT_USER, STATUS_LABELS, STATUS_TONES, TYPE_LABELS, TYPE_PLURALS, type ContentRecord, type ContentType } from '../data'
+import {
+  CURRENT_USER,
+  STATUS_LABELS,
+  STATUS_TONES,
+  TYPE_LABELS,
+  TYPE_PLURALS,
+  type ContentRecord,
+  type ContentType,
+} from '../data'
 import { getDetails, labBySlug, profileByHandle, type ProfileLink } from '../details'
 import { formatDate, useShowcase } from '../state'
 import { RecordCard } from './RecordCard'
@@ -85,7 +93,8 @@ function WorksGrid({ works, emptyText }: { works: ContentRecord[]; emptyText: st
   const types = TYPES.filter((t) => works.some((w) => w.type === t))
   const shown = works.filter((w) => type === 'all' || w.type === type)
 
-  if (works.length === 0) return <EmptyState title="Nothing published yet" description={emptyText} />
+  if (works.length === 0)
+    return <EmptyState title="Nothing published yet" description={emptyText} />
 
   return (
     <div className="flex flex-col gap-5">
@@ -95,7 +104,11 @@ function WorksGrid({ works, emptyText }: { works: ContentRecord[]; emptyText: st
             All
           </FilterChip>
           {types.map((t) => (
-            <FilterChip key={t} active={type === t} count={works.filter((w) => w.type === t).length} onClick={() => setType(t)}>
+            <FilterChip
+              key={t}
+              active={type === t}
+              count={works.filter((w) => w.type === t).length}
+              onClick={() => setType(t)}>
               {TYPE_PLURALS[t]}
             </FilterChip>
           ))}
@@ -129,16 +142,28 @@ function WorksGrid({ works, emptyText }: { works: ContentRecord[]; emptyText: st
           </TableHeader>
           <TableBody>
             {shown.map((w) => (
-              <TableRow key={w.id} className="cursor-pointer" onClick={() => navigate(`lab/view/${w.id}`)}>
+              <TableRow
+                key={w.id}
+                className="cursor-pointer"
+                onClick={() => navigate(`lab/view/${w.id}`)}>
                 <TableCell className="font-semibold">
                   <div className="flex items-center gap-3">
-                    <img src={getDetails(w).cover} alt="" className="size-10 rounded-[var(--radius-md)] object-cover" loading="lazy" />
+                    <img
+                      src={getDetails(w).cover}
+                      alt=""
+                      className="size-10 rounded-[var(--radius-md)] object-cover"
+                      loading="lazy"
+                    />
                     {w.title}
                   </div>
                 </TableCell>
-                <TableCell className="text-[var(--muted-foreground)]">{TYPE_LABELS[w.type]}</TableCell>
+                <TableCell className="text-[var(--muted-foreground)]">
+                  {TYPE_LABELS[w.type]}
+                </TableCell>
                 <TableCell>{w.creator}</TableCell>
-                <TableCell className="text-[var(--muted-foreground)]">{formatDate(w.updated)}</TableCell>
+                <TableCell className="text-[var(--muted-foreground)]">
+                  {formatDate(w.updated)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -158,10 +183,17 @@ function FollowButton({ name, initialFollowers }: { name: string; initialFollowe
       leftIcon={following ? <UserCheck className="size-4" /> : <UserPlus className="size-4" />}
       onClick={() => {
         setFollowing(!following)
-        if (!following) toast({ title: `Following ${name}`, description: 'New work shows up in your notifications.', tone: 'success' })
+        if (!following)
+          toast({
+            title: `Following ${name}`,
+            description: 'New work shows up in your notifications.',
+            tone: 'success',
+          })
       }}>
       {following ? 'Following' : 'Follow'}
-      {initialFollowers !== undefined && <span className="ml-1 opacity-75">{compact(initialFollowers + (following ? 1 : 0))}</span>}
+      {initialFollowers !== undefined && (
+        <span className="ml-1 opacity-75">{compact(initialFollowers + (following ? 1 : 0))}</span>
+      )}
     </Button>
   )
 }
@@ -176,14 +208,22 @@ export function ProfilePage({ handle }: { handle: string }) {
   if (!profile) {
     return (
       <div className="mx-auto max-w-[var(--container-max)] px-4 py-10 sm:px-8">
-        <NotFoundState title="No one by that name" description={`We couldn't find @${handle}.`} onHomeClick={() => navigate('lab/browse')} />
+        <NotFoundState
+          title="No one by that name"
+          description={`We couldn't find @${handle}.`}
+          onHomeClick={() => navigate('lab/browse')}
+        />
       </div>
     )
   }
 
   const isMe = profile.handle === CURRENT_USER.handle
-  const works = content.filter((c) => c.creator === profile.name && c.status === 'published' && !c.trashed)
-  const drafts = content.filter((c) => c.creator === profile.name && c.status !== 'published' && !c.trashed)
+  const works = content.filter(
+    (c) => c.creator === profile.name && c.status === 'published' && !c.trashed
+  )
+  const drafts = content.filter(
+    (c) => c.creator === profile.name && c.status !== 'published' && !c.trashed
+  )
   const savedWorks = content.filter((c) => saved.includes(c.id) && !c.trashed)
   const labs = profile.labs.map(labBySlug).filter(Boolean)
 
@@ -225,16 +265,29 @@ export function ProfilePage({ handle }: { handle: string }) {
         ]}
         actions={
           <>
-            <Button variant="secondary" leftIcon={<Link2 className="size-4" />} onClick={() => navigate(`lab/links/${profile.handle}`)}>
+            <Button
+              variant="secondary"
+              leftIcon={<Link2 className="size-4" />}
+              onClick={() => navigate(`lab/links/${profile.handle}`)}>
               Links
             </Button>
             {isMe ? (
-              <Button leftIcon={<Pencil className="size-4" />} onClick={() => navigate('lab/library/profile')}>
+              <Button
+                leftIcon={<Pencil className="size-4" />}
+                onClick={() => navigate('lab/library/profile')}>
                 Edit profile
               </Button>
             ) : (
               <>
-                <Button variant="secondary" leftIcon={<MessageSquare className="size-4" />} onClick={() => toast({ title: 'Messages', description: 'Direct messages are not part of the demo.' })}>
+                <Button
+                  variant="secondary"
+                  leftIcon={<MessageSquare className="size-4" />}
+                  onClick={() =>
+                    toast({
+                      title: 'Messages',
+                      description: 'Direct messages are not part of the demo.',
+                    })
+                  }>
                   Message
                 </Button>
                 <FollowButton name={profile.name} />
@@ -265,10 +318,14 @@ export function ProfilePage({ handle }: { handle: string }) {
                     onClick={() => navigate(`lab/view/${d.id}`)}
                     className="ui-panel flex items-center justify-between gap-3 py-3! text-left hover:border-[var(--primary)]">
                     <span className="font-semibold">{d.title}</span>
-                    <StatusBadge tone={STATUS_TONES[d.status]}>{STATUS_LABELS[d.status]}</StatusBadge>
+                    <StatusBadge tone={STATUS_TONES[d.status]}>
+                      {STATUS_LABELS[d.status]}
+                    </StatusBadge>
                   </button>
                 ))}
-                {drafts.length === 0 && <p className="body-sm text-[var(--muted-foreground)]">No drafts.</p>}
+                {drafts.length === 0 && (
+                  <p className="body-sm text-[var(--muted-foreground)]">No drafts.</p>
+                )}
               </div>
             </TabsContent>
           )}
@@ -298,11 +355,20 @@ export function ProfilePage({ handle }: { handle: string }) {
               <ul className="flex flex-col gap-3">
                 {labs.map((lab) => (
                   <li key={lab!.slug}>
-                    <a href={`#/lab/labs/${lab!.slug}`} className="flex items-center gap-3 rounded-[var(--radius-lg)] p-1 hover:bg-[color-mix(in_srgb,var(--foreground)_5%,transparent)]">
-                      <ProfileAvatar src={lab!.avatar} initials={lab!.name.slice(0, 2)} size="lg" shape="square" />
+                    <a
+                      href={`#/lab/labs/${lab!.slug}`}
+                      className="flex items-center gap-3 rounded-[var(--radius-lg)] p-1 hover:bg-[color-mix(in_srgb,var(--foreground)_5%,transparent)]">
+                      <ProfileAvatar
+                        src={lab!.avatar}
+                        initials={lab!.name.slice(0, 2)}
+                        size="lg"
+                        shape="square"
+                      />
                       <span className="flex min-w-0 flex-col">
                         <span className="truncate font-semibold">{lab!.name}</span>
-                        <span className="truncate text-xs text-[var(--muted-foreground)]">{lab!.members.find((m) => m.handle === profile.handle)?.role}</span>
+                        <span className="truncate text-xs text-[var(--muted-foreground)]">
+                          {lab!.members.find((m) => m.handle === profile.handle)?.role}
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -313,14 +379,19 @@ export function ProfilePage({ handle }: { handle: string }) {
           <Panel
             title="Links"
             actions={
-              <Button size="sm" variant="ghost" onClick={() => navigate(`lab/links/${profile.handle}`)}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => navigate(`lab/links/${profile.handle}`)}>
                 Open page
               </Button>
             }>
             <ul className="flex flex-col gap-2 text-sm">
               {profile.links.map((l) => (
                 <li key={l.id}>
-                  <a href={l.href} className="flex items-center gap-2 font-medium hover:text-[var(--primary)] [&_svg]:size-4 [&_svg]:text-[var(--muted-foreground)]">
+                  <a
+                    href={l.href}
+                    className="flex items-center gap-2 font-medium hover:text-[var(--primary)] [&_svg]:size-4 [&_svg]:text-[var(--muted-foreground)]">
                     {LINK_ICONS[l.kind]} {l.label}
                   </a>
                 </li>
@@ -342,14 +413,24 @@ export function LabPage({ slug }: { slug: string }) {
   if (!lab) {
     return (
       <div className="mx-auto max-w-[var(--container-max)] px-4 py-10 sm:px-8">
-        <NotFoundState title="No Lab here" description={`We couldn't find a Creator Lab called “${slug}”.`} onHomeClick={() => navigate('lab/browse')} />
+        <NotFoundState
+          title="No Lab here"
+          description={`We couldn't find a Creator Lab called “${slug}”.`}
+          onHomeClick={() => navigate('lab/browse')}
+        />
       </div>
     )
   }
 
-  const works = content.filter((c) => c.lab === lab.name && c.status === 'published' && !c.trashed && c.type !== 'page')
-  const featured = lab.featured.map((id) => content.find((c) => c.id === id)).filter((c): c is ContentRecord => Boolean(c && !c.trashed))
-  const pages = content.filter((c) => c.lab === lab.name && c.type === 'page' && c.status === 'published')
+  const works = content.filter(
+    (c) => c.lab === lab.name && c.status === 'published' && !c.trashed && c.type !== 'page'
+  )
+  const featured = lab.featured
+    .map((id) => content.find((c) => c.id === id))
+    .filter((c): c is ContentRecord => Boolean(c && !c.trashed))
+  const pages = content.filter(
+    (c) => c.lab === lab.name && c.type === 'page' && c.status === 'published'
+  )
   const [hero, ...rest] = featured
 
   return (
@@ -369,7 +450,10 @@ export function LabPage({ slug }: { slug: string }) {
         ]}
         actions={
           <>
-            <Button variant="secondary" leftIcon={<Link2 className="size-4" />} onClick={() => navigate(`lab/links/${lab.slug}`)}>
+            <Button
+              variant="secondary"
+              leftIcon={<Link2 className="size-4" />}
+              onClick={() => navigate(`lab/links/${lab.slug}`)}>
               Links
             </Button>
             <FollowButton name={lab.name} />
@@ -385,12 +469,22 @@ export function LabPage({ slug }: { slug: string }) {
               type="button"
               onClick={() => navigate(`lab/view/${hero.id}`)}
               className="group relative overflow-hidden rounded-[var(--radius-3xl)] text-left focus-visible:outline-2 focus-visible:outline-[var(--ring)]">
-              <img src={getDetails(hero).cover} alt="" className="aspect-[16/10] size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+              <img
+                src={getDetails(hero).cover}
+                alt=""
+                className="aspect-[16/10] size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-6 text-white">
-                <span className="text-xs font-bold uppercase tracking-wider text-white/80">{TYPE_LABELS[hero.type]}</span>
-                <span className="text-2xl font-extrabold tracking-tight sm:text-3xl">{hero.title}</span>
-                <span className="max-w-lg text-sm text-white/85">{getDetails(hero).description.split('\n')[0]}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-white/80">
+                  {TYPE_LABELS[hero.type]}
+                </span>
+                <span className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+                  {hero.title}
+                </span>
+                <span className="max-w-lg text-sm text-white/85">
+                  {getDetails(hero).description.split('\n')[0]}
+                </span>
               </div>
             </button>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
@@ -414,7 +508,10 @@ export function LabPage({ slug }: { slug: string }) {
                 <p key={i}>{p}</p>
               ))}
               {pages.map((p) => (
-                <a key={p.id} href={`#/lab/view/${p.id}`} className="font-semibold text-[var(--primary)] hover:underline">
+                <a
+                  key={p.id}
+                  href={`#/lab/view/${p.id}`}
+                  className="font-semibold text-[var(--primary)] hover:underline">
                   {p.title} →
                 </a>
               ))}
@@ -426,11 +523,15 @@ export function LabPage({ slug }: { slug: string }) {
                 const p = profileByHandle(m.handle)
                 return (
                   <li key={m.handle}>
-                    <a href={`#/lab/u/${m.handle}`} className="flex items-center gap-3 rounded-[var(--radius-lg)] p-1 hover:bg-[color-mix(in_srgb,var(--foreground)_5%,transparent)]">
+                    <a
+                      href={`#/lab/u/${m.handle}`}
+                      className="flex items-center gap-3 rounded-[var(--radius-lg)] p-1 hover:bg-[color-mix(in_srgb,var(--foreground)_5%,transparent)]">
                       <ProfileAvatar src={p?.avatar} initials={m.handle.slice(0, 2)} size="lg" />
                       <span className="flex min-w-0 flex-col">
                         <span className="truncate font-semibold">{p?.name ?? m.handle}</span>
-                        <span className="truncate text-xs text-[var(--muted-foreground)]">{m.role}</span>
+                        <span className="truncate text-xs text-[var(--muted-foreground)]">
+                          {m.role}
+                        </span>
                       </span>
                     </a>
                   </li>
@@ -443,7 +544,9 @@ export function LabPage({ slug }: { slug: string }) {
               <ul className="flex flex-col gap-2 text-sm">
                 {lab.links.map((l) => (
                   <li key={l.id}>
-                    <a href={l.href} className="flex items-center gap-2 font-medium hover:text-[var(--primary)] [&_svg]:size-4 [&_svg]:text-[var(--muted-foreground)]">
+                    <a
+                      href={l.href}
+                      className="flex items-center gap-2 font-medium hover:text-[var(--primary)] [&_svg]:size-4 [&_svg]:text-[var(--muted-foreground)]">
                       {LINK_ICONS[l.kind]} {l.label}
                     </a>
                   </li>
@@ -470,7 +573,11 @@ export function LinksPage({ handle }: { handle: string }) {
   if (!owner) {
     return (
       <div className="grid min-h-screen place-items-center p-6">
-        <NotFoundState title="No links here" description={`Nothing is published at /links/${handle}.`} onHomeClick={() => navigate('lab/home')} />
+        <NotFoundState
+          title="No links here"
+          description={`Nothing is published at /links/${handle}.`}
+          onHomeClick={() => navigate('lab/home')}
+        />
       </div>
     )
   }
@@ -494,7 +601,11 @@ export function LinksPage({ handle }: { handle: string }) {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <img src={profile ? profile.banner : lab!.banner} alt="" className="absolute inset-0 -z-10 size-full scale-110 object-cover opacity-40 blur-2xl" />
+      <img
+        src={profile ? profile.banner : lab!.banner}
+        alt=""
+        className="absolute inset-0 -z-10 size-full scale-110 object-cover opacity-40 blur-2xl"
+      />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[color-mix(in_srgb,var(--background)_70%,transparent)] to-[var(--background)]" />
       <div className="absolute right-4 top-4">
         <ThemeToggle variant="ghost" />
@@ -507,9 +618,18 @@ export function LinksPage({ handle }: { handle: string }) {
           bio={profile ? profile.bio : lab!.tagline}
           links={[
             ...links,
-            { id: 'profile', label: profile ? 'Full portfolio on Dynamic Lab' : 'Visit the Lab', href: fullProfileHref, icon: <Globe /> },
+            {
+              id: 'profile',
+              label: profile ? 'Full portfolio on Dynamic Lab' : 'Visit the Lab',
+              href: fullProfileHref,
+              icon: <Globe />,
+            },
           ]}
-          socials={profile?.socials.map((s) => ({ label: s.label, href: s.href, icon: SOCIAL_ICONS[s.kind] }))}
+          socials={profile?.socials.map((s) => ({
+            label: s.label,
+            href: s.href,
+            icon: SOCIAL_ICONS[s.kind],
+          }))}
           footer={
             <a href="#/lab/home" className="hover:underline">
               Made with Dynamic Lab
@@ -520,4 +640,3 @@ export function LinksPage({ handle }: { handle: string }) {
     </div>
   )
 }
-

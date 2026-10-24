@@ -75,16 +75,32 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
 
   const [first, ...rest] = path.split('/')
   const app: AppId = first === 'backstage' ? 'backstage' : 'lab'
-  const page = (first === 'lab' || first === 'backstage' ? rest.join('/') : '') || DEFAULT_PAGES[app]
+  const page =
+    (first === 'lab' || first === 'backstage' ? rest.join('/') : '') || DEFAULT_PAGES[app]
 
   const [content, setContent] = useState(seedContent)
   const [users, setUsers] = useState(seedUsers)
   const [reports, setReports] = useState(seedReports)
   const [maintenance, setMaintenance] = useState(true)
   const [activity, setActivity] = useState<ActivityEntry[]>([
-    { id: 'a0', text: 'Maintenance mode turned on', at: new Date(Date.now() - 50 * 60 * 1000).toISOString(), tone: 'warning' },
-    { id: 'a1', text: '“The lighthouse keeper” was published', at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), tone: 'success' },
-    { id: 'a2', text: '“Neon Odyssey: Volume II” was sent for review', at: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(), tone: 'warning' },
+    {
+      id: 'a0',
+      text: 'Maintenance mode turned on',
+      at: new Date(Date.now() - 50 * 60 * 1000).toISOString(),
+      tone: 'warning',
+    },
+    {
+      id: 'a1',
+      text: '“The lighthouse keeper” was published',
+      at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+      tone: 'success',
+    },
+    {
+      id: 'a2',
+      text: '“Neon Odyssey: Volume II” was sent for review',
+      at: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
+      tone: 'warning',
+    },
   ])
 
   const log = useCallback((text: string, tone: StatusTone = 'info') => {
@@ -96,10 +112,15 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
 
   const updateContent = useCallback((ids: string[], patch: Partial<ContentRecord>) => {
     const now = new Date().toISOString()
-    setContent((prev) => prev.map((c) => (ids.includes(c.id) ? { ...c, ...patch, updated: now } : c)))
+    setContent((prev) =>
+      prev.map((c) => (ids.includes(c.id) ? { ...c, ...patch, updated: now } : c))
+    )
   }, [])
 
-  const addContent = useCallback((record: ContentRecord) => setContent((prev) => [record, ...prev]), [])
+  const addContent = useCallback(
+    (record: ContentRecord) => setContent((prev) => [record, ...prev]),
+    []
+  )
   const removeContent = useCallback(
     (ids: string[]) => setContent((prev) => prev.filter((c) => !ids.includes(c.id))),
     []
@@ -107,7 +128,10 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
 
   const [saved, setSavedList] = useState<string[]>(['c8'])
   const setSaved = useCallback(
-    (id: string, on: boolean) => setSavedList((prev) => (on ? Array.from(new Set([...prev, id])) : prev.filter((x) => x !== id))),
+    (id: string, on: boolean) =>
+      setSavedList((prev) =>
+        on ? Array.from(new Set([...prev, id])) : prev.filter((x) => x !== id)
+      ),
     []
   )
 
@@ -116,7 +140,9 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
     setComments((prev) => {
       const list = prev[contentId] ?? []
       const next = parentId
-        ? list.map((c) => (c.id === parentId ? { ...c, replies: [...(c.replies ?? []), comment] } : c))
+        ? list.map((c) =>
+            c.id === parentId ? { ...c, replies: [...(c.replies ?? []), comment] } : c
+          )
         : [comment, ...list]
       return { ...prev, [contentId]: next }
     })
@@ -131,7 +157,16 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
 
   const report = useCallback(
     (contentId: string, reason: string, reporter: string) => {
-      setReports((prev) => [...prev, { id: Math.random().toString(36).slice(2), contentId, reason, reporter, at: new Date().toISOString() }])
+      setReports((prev) => [
+        ...prev,
+        {
+          id: Math.random().toString(36).slice(2),
+          contentId,
+          reason,
+          reporter,
+          at: new Date().toISOString(),
+        },
+      ])
       log(`New report: ${reason}`, 'danger')
     },
     [log]
@@ -140,7 +175,10 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
   const handleMaintenance = useCallback(
     (on: boolean) => {
       setMaintenance(on)
-      log(on ? 'Maintenance mode turned on' : 'Maintenance mode turned off', on ? 'warning' : 'success')
+      log(
+        on ? 'Maintenance mode turned on' : 'Maintenance mode turned off',
+        on ? 'warning' : 'success'
+      )
     },
     [log]
   )
@@ -170,7 +208,28 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
       likeComment,
       report,
     }),
-    [path, app, page, navigate, content, updateContent, addContent, removeContent, users, reports, maintenance, handleMaintenance, activity, log, saved, setSaved, comments, addComment, likeComment, report]
+    [
+      path,
+      app,
+      page,
+      navigate,
+      content,
+      updateContent,
+      addContent,
+      removeContent,
+      users,
+      reports,
+      maintenance,
+      handleMaintenance,
+      activity,
+      log,
+      saved,
+      setSaved,
+      comments,
+      addComment,
+      likeComment,
+      report,
+    ]
   )
 
   return <ShowcaseContext.Provider value={value}>{children}</ShowcaseContext.Provider>
@@ -188,5 +247,9 @@ export const APPS = [
 ]
 
 export function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })
+  return new Date(iso).toLocaleDateString(undefined, {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
 }

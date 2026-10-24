@@ -46,7 +46,12 @@ export function LocalDateTime({
   const iso = d.toISOString()
 
   return (
-    <span className={cn('body-sm text-[var(--muted-foreground)] inline-flex items-center gap-1.5', className)} {...props}>
+    <span
+      className={cn(
+        'body-sm text-[var(--muted-foreground)] inline-flex items-center gap-1.5',
+        className
+      )}
+      {...props}>
       {label && <span>{label}</span>}
       <time dateTime={iso} className="font-medium text-[var(--foreground)]">
         {formatted}

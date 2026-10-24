@@ -42,7 +42,11 @@ export function AdminShell({
   children,
   ...props
 }: AdminShellProps) {
-  const [collapsed, setCollapsed] = useControllableState(collapsedProp, defaultCollapsed, onCollapsedChange)
+  const [collapsed, setCollapsed] = useControllableState(
+    collapsedProp,
+    defaultCollapsed,
+    onCollapsedChange
+  )
   const [mobileOpen, setMobileOpen] = useState(false)
   useScrollLock(mobileOpen)
 
@@ -61,7 +65,10 @@ export function AdminShell({
         className={cn('ui-admin-shell', className)}
         {...props}>
         {mobileOpen && (
-          <div className="ui-overlay dl-animate-fade fixed inset-0 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
+          <div
+            className="ui-overlay dl-animate-fade fixed inset-0 z-40 lg:hidden"
+            onClick={() => setMobileOpen(false)}
+          />
         )}
         {sidebar}
         <div className="ui-admin-main">
@@ -91,7 +98,14 @@ export interface AdminSidebarProps extends React.HTMLAttributes<HTMLElement> {
   footer?: React.ReactNode
 }
 
-export function AdminSidebar({ header, search, footer, className, children, ...props }: AdminSidebarProps) {
+export function AdminSidebar({
+  header,
+  search,
+  footer,
+  className,
+  children,
+  ...props
+}: AdminSidebarProps) {
   const { collapsed, setCollapsed, setMobileOpen } = useAdminShell()
 
   return (

@@ -74,8 +74,16 @@ export function ProfileHeader({
           </h1>
           {handle && <span className="text-sm text-[var(--muted-foreground)]">{handle}</span>}
         </div>
-        {bio && <div className="page-description max-w-2xl text-[15px] text-[var(--foreground)]">{bio}</div>}
-        {meta && <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--muted-foreground)] [&_svg]:size-4">{meta}</div>}
+        {bio && (
+          <div className="page-description max-w-2xl text-[15px] text-[var(--foreground)]">
+            {bio}
+          </div>
+        )}
+        {meta && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--muted-foreground)] [&_svg]:size-4">
+            {meta}
+          </div>
+        )}
         {stats && stats.length > 0 && (
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {stats.map((s) => {

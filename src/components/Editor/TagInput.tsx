@@ -14,7 +14,10 @@ export function parseTag(raw: string, defaultCategory: TagCategory = 'general'):
     category = match[1] as TagCategory
     text = match[2]
   }
-  const name = text.trim().replace(/\s+/g, '_').replace(/[^\p{L}\p{N}_()'\-.]/gu, '')
+  const name = text
+    .trim()
+    .replace(/\s+/g, '_')
+    .replace(/[^\p{L}\p{N}_()'\-.]/gu, '')
   return name ? { name, category } : null
 }
 
@@ -78,7 +81,9 @@ export function TagInput({
       if (maxTags !== undefined && list.length >= maxTags) return list
       const existing = list.findIndex((v) => v.name === tag.name)
       // Re-adding a tag with a different category moves it.
-      return existing >= 0 ? list.map((v, i) => (i === existing ? { ...v, category: tag.category } : v)) : [...list, tag]
+      return existing >= 0
+        ? list.map((v, i) => (i === existing ? { ...v, category: tag.category } : v))
+        : [...list, tag]
     }, current)
 
   const add = (tag: TagItem | null) => {
@@ -93,7 +98,9 @@ export function TagInput({
     if (/[,\n]/.test(next)) {
       const parts = next.split(/[,\n]/)
       const rest = parts.pop() ?? ''
-      const tags = parts.map((p) => parseTag(p, defaultCategory)).filter((t): t is TagItem => t !== null)
+      const tags = parts
+        .map((p) => parseTag(p, defaultCategory))
+        .filter((t): t is TagItem => t !== null)
       if (tags.length) onChange(merge(value, tags))
       setText(rest)
     } else {
@@ -160,7 +167,10 @@ export function TagInput({
           />
         </div>
         {open && matches.length > 0 && (
-          <ul id={listId} role="listbox" className="ui-menu dl-animate-pop absolute inset-x-0 top-full z-40 mt-1 max-h-64 overflow-y-auto">
+          <ul
+            id={listId}
+            role="listbox"
+            className="ui-menu dl-animate-pop absolute inset-x-0 top-full z-40 mt-1 max-h-64 overflow-y-auto">
             {matches.map((s, i) => (
               <li
                 key={`${s.category}-${s.name}`}
@@ -172,7 +182,10 @@ export function TagInput({
                   add(s)
                 }}
                 onMouseMove={() => setActive(i)}
-                className={cn('ui-menu-item justify-between', i === active && 'bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)]')}>
+                className={cn(
+                  'ui-menu-item justify-between',
+                  i === active && 'bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)]'
+                )}>
                 <span className="ui-tag border-0! bg-transparent! p-0!" data-category={s.category}>
                   {formatTagName(s.name)}
                 </span>
@@ -188,10 +201,15 @@ export function TagInput({
       {error ? (
         <p className="text-xs font-medium text-[var(--destructive)]">{error}</p>
       ) : (
-        <p className={cn('text-xs', needMore ? 'text-[var(--status-warning-ink)]' : 'text-[var(--muted-foreground)]')}>
+        <p
+          className={cn(
+            'text-xs',
+            needMore ? 'text-[var(--status-warning-ink)]' : 'text-[var(--muted-foreground)]'
+          )}>
           {value.length} {value.length === 1 ? 'tag' : 'tags'}
           {needMore && ` · add at least ${minTags} so people can find this`}
-          {' · '}prefix with <code>artist:</code>, <code>character:</code>, <code>species:</code>, <code>copyright:</code>, <code>lore:</code> or <code>meta:</code>
+          {' · '}prefix with <code>artist:</code>, <code>character:</code>, <code>species:</code>,{' '}
+          <code>copyright:</code>, <code>lore:</code> or <code>meta:</code>
         </p>
       )}
     </div>

@@ -97,13 +97,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {...(props as TextareaProps)}
           />
         ) : (
-          <Input
-            ref={ref}
-            id={inputId}
-            error={Boolean(error)}
-            className={className}
-            {...props}
-          />
+          <Input ref={ref} id={inputId} error={Boolean(error)} className={className} {...props} />
         )}
         {error ? (
           <p className="text-xs text-[var(--destructive)] font-medium">{error}</p>

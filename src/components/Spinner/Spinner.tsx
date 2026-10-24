@@ -27,7 +27,10 @@ export function Spinner({
       role="status"
       className={cn('inline-flex items-center gap-2 text-[var(--muted-foreground)]', className)}
       {...props}>
-      <Loader2 className={cn('animate-spin text-[var(--primary)]', sizeClasses[size])} aria-hidden />
+      <Loader2
+        className={cn('animate-spin text-[var(--primary)]', sizeClasses[size])}
+        aria-hidden
+      />
       <span className={showLabel ? 'text-sm' : 'sr-only'}>{label}</span>
     </span>
   )

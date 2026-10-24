@@ -11,7 +11,14 @@ export interface SiteHeaderProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 /** The top bar of the public site: brand, primary nav and actions on frosted chrome. */
-export function SiteHeader({ className, brand, nav, actions, sticky = true, ...props }: SiteHeaderProps) {
+export function SiteHeader({
+  className,
+  brand,
+  nav,
+  actions,
+  sticky = true,
+  ...props
+}: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -74,7 +81,10 @@ export function SiteNavLink({ className, active, icon, children, ...props }: Sit
 
   if (props.href !== undefined) {
     return (
-      <a aria-current={active ? 'page' : undefined} className={classes} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+      <a
+        aria-current={active ? 'page' : undefined}
+        className={classes}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
         {inner}
       </a>
     )

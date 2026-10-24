@@ -1,11 +1,20 @@
-import type { CommentData, ComicPage, DescriptionItem, DownloadFile, MediaItem, Platform, TagItem } from '../index'
+import type {
+  CommentData,
+  ComicPage,
+  DescriptionItem,
+  DownloadFile,
+  MediaItem,
+  Platform,
+  TagItem,
+} from '../index'
 import type { ContentRecord } from './data'
 
 /**
  * Placeholder media. Images come from Lorem Picsum (free, Unsplash-sourced, stable per seed) and
  * avatars from pravatar.cc. Swap these helpers for your CDN in a real app.
  */
-export const img = (seed: string, w = 1200, h = 800) => `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`
+export const img = (seed: string, w = 1200, h = 800) =>
+  `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`
 export const avatar = (id: string) => `https://i.pravatar.cc/300?u=${encodeURIComponent(id)}`
 
 /* ------------------------------------------------------------- People */
@@ -33,7 +42,11 @@ export interface Profile {
   following: number
   labs: string[]
   links: ProfileLink[]
-  socials: Array<{ label: string; href: string; kind: 'mastodon' | 'bluesky' | 'youtube' | 'mail' | 'rss' }>
+  socials: Array<{
+    label: string
+    href: string
+    kind: 'mastodon' | 'bluesky' | 'youtube' | 'mail' | 'rss'
+  }>
 }
 
 export const PROFILES: Profile[] = [
@@ -51,10 +64,35 @@ export const PROFILES: Profile[] = [
     following: 188,
     labs: ['moonlit-studio'],
     links: [
-      { id: 'l1', label: 'Read “The lighthouse keeper”', href: '#/lab/view/c1', description: 'New chapter every Friday', kind: 'site', featured: true },
-      { id: 'l2', label: 'Moonlit Studio', href: '#/lab/labs/moonlit-studio', description: 'Our Creator Lab', kind: 'lab' },
-      { id: 'l3', label: 'Support me on Patreon', href: 'https://www.patreon.com/', description: 'Early chapters and sketches', kind: 'patreon' },
-      { id: 'l4', label: 'Monthly letter', href: 'https://buttondown.com/', description: 'One email, first of the month', kind: 'newsletter' },
+      {
+        id: 'l1',
+        label: 'Read “The lighthouse keeper”',
+        href: '#/lab/view/c1',
+        description: 'New chapter every Friday',
+        kind: 'site',
+        featured: true,
+      },
+      {
+        id: 'l2',
+        label: 'Moonlit Studio',
+        href: '#/lab/labs/moonlit-studio',
+        description: 'Our Creator Lab',
+        kind: 'lab',
+      },
+      {
+        id: 'l3',
+        label: 'Support me on Patreon',
+        href: 'https://www.patreon.com/',
+        description: 'Early chapters and sketches',
+        kind: 'patreon',
+      },
+      {
+        id: 'l4',
+        label: 'Monthly letter',
+        href: 'https://buttondown.com/',
+        description: 'One email, first of the month',
+        kind: 'newsletter',
+      },
     ],
     socials: [
       { label: 'Mastodon', href: 'https://mastodon.social/', kind: 'mastodon' },
@@ -75,11 +113,36 @@ export const PROFILES: Profile[] = [
     following: 402,
     labs: ['ink-and-ember'],
     links: [
-      { id: 'j1', label: 'Commissions are OPEN', href: '#/lab/view/c3', description: '3 slots left · prices and terms', kind: 'commission', featured: true },
-      { id: 'j2', label: 'Moth & Lantern', href: '#/lab/view/c8', description: 'My comic, chapter 2 is out', kind: 'site' },
-      { id: 'j3', label: 'Print shop', href: 'https://www.inprnt.com/', description: 'Prints, stickers and zines', kind: 'shop' },
+      {
+        id: 'j1',
+        label: 'Commissions are OPEN',
+        href: '#/lab/view/c3',
+        description: '3 slots left · prices and terms',
+        kind: 'commission',
+        featured: true,
+      },
+      {
+        id: 'j2',
+        label: 'Moth & Lantern',
+        href: '#/lab/view/c8',
+        description: 'My comic, chapter 2 is out',
+        kind: 'site',
+      },
+      {
+        id: 'j3',
+        label: 'Print shop',
+        href: 'https://www.inprnt.com/',
+        description: 'Prints, stickers and zines',
+        kind: 'shop',
+      },
       { id: 'j4', label: 'Process videos', href: 'https://www.youtube.com/', kind: 'video' },
-      { id: 'j5', label: 'Ink & Ember', href: '#/lab/labs/ink-and-ember', description: 'The collective I draw with', kind: 'lab' },
+      {
+        id: 'j5',
+        label: 'Ink & Ember',
+        href: '#/lab/labs/ink-and-ember',
+        description: 'The collective I draw with',
+        kind: 'lab',
+      },
     ],
     socials: [
       { label: 'Bluesky', href: 'https://bsky.app/', kind: 'bluesky' },
@@ -99,8 +162,21 @@ export const PROFILES: Profile[] = [
     following: 96,
     labs: ['moonlit-studio'],
     links: [
-      { id: 's1', label: 'Download Last Train to Hollow Creek', href: '#/lab/view/c4', description: 'Free · Windows, macOS, Linux, Android', kind: 'site', featured: true },
-      { id: 's2', label: 'Saltwater Letters', href: '#/lab/view/c10', description: 'A story in letters', kind: 'site' },
+      {
+        id: 's1',
+        label: 'Download Last Train to Hollow Creek',
+        href: '#/lab/view/c4',
+        description: 'Free · Windows, macOS, Linux, Android',
+        kind: 'site',
+        featured: true,
+      },
+      {
+        id: 's2',
+        label: 'Saltwater Letters',
+        href: '#/lab/view/c10',
+        description: 'A story in letters',
+        kind: 'site',
+      },
       { id: 's3', label: 'Devlog', href: 'https://itch.io/', kind: 'site' },
     ],
     socials: [{ label: 'Mastodon', href: 'https://mastodon.social/', kind: 'mastodon' }],
@@ -115,7 +191,9 @@ export const PROFILES: Profile[] = [
     followers: 5120,
     following: 230,
     labs: ['night-shift-comics'],
-    links: [{ id: 'm1', label: 'Neon Odyssey', href: '#/lab/browse', kind: 'site', featured: true }],
+    links: [
+      { id: 'm1', label: 'Neon Odyssey', href: '#/lab/browse', kind: 'site', featured: true },
+    ],
     socials: [],
   },
   {
@@ -128,7 +206,9 @@ export const PROFILES: Profile[] = [
     followers: 1990,
     following: 75,
     labs: ['ink-and-ember', 'night-shift-comics'],
-    links: [{ id: 'p1', label: 'Ember Wolves', href: '#/lab/view/c13', kind: 'site', featured: true }],
+    links: [
+      { id: 'p1', label: 'Ember Wolves', href: '#/lab/view/c13', kind: 'site', featured: true },
+    ],
     socials: [],
   },
 ]
@@ -167,9 +247,21 @@ export const LABS: LabInfo[] = [
     ],
     featured: ['c4', 'c10', 'c1'],
     links: [
-      { id: 'ml1', label: 'Start with “Saltwater Letters”', href: '#/lab/view/c10', kind: 'site', featured: true },
+      {
+        id: 'ml1',
+        label: 'Start with “Saltwater Letters”',
+        href: '#/lab/view/c10',
+        kind: 'site',
+        featured: true,
+      },
       { id: 'ml2', label: 'About the Lab', href: '#/lab/view/c5', kind: 'site' },
-      { id: 'ml3', label: 'Support the studio', href: 'https://ko-fi.com/', description: 'Ko-fi', kind: 'patreon' },
+      {
+        id: 'ml3',
+        label: 'Support the studio',
+        href: 'https://ko-fi.com/',
+        description: 'Ko-fi',
+        kind: 'patreon',
+      },
     ],
   },
   {
@@ -188,7 +280,15 @@ export const LABS: LabInfo[] = [
       { handle: 'priya', role: 'Illustrator' },
     ],
     featured: ['c8', 'c3', 'c13'],
-    links: [{ id: 'ie1', label: 'Read Moth & Lantern', href: '#/lab/view/c8', kind: 'site', featured: true }],
+    links: [
+      {
+        id: 'ie1',
+        label: 'Read Moth & Lantern',
+        href: '#/lab/view/c8',
+        kind: 'site',
+        featured: true,
+      },
+    ],
   },
   {
     slug: 'night-shift-comics',
@@ -259,10 +359,17 @@ export interface ContentDetails {
   }
 }
 
-const t = (category: TagItem['category'], name: string, count?: number): TagItem => ({ category, name, count })
+const t = (category: TagItem['category'], name: string, count?: number): TagItem => ({
+  category,
+  name,
+  count,
+})
 
 const comicPages = (seed: string, count: number): ComicPage[] =>
-  Array.from({ length: count }, (_, i) => ({ src: img(`${seed}-${i + 1}`, 800, 1120), alt: `Page ${i + 1}` }))
+  Array.from({ length: count }, (_, i) => ({
+    src: img(`${seed}-${i + 1}`, 800, 1120),
+    alt: `Page ${i + 1}`,
+  }))
 
 const SALTWATER: Chapter[] = [
   {
@@ -354,9 +461,21 @@ export const DETAILS: Record<string, ContentDetails> = {
     saves: 1204,
     views: 18300,
     images: [
-      { src: img('paper-foxes', 1200, 1500), fullSrc: img('paper-foxes', 2000, 2500), alt: 'Paper Foxes, full piece' },
-      { src: img('paper-foxes-detail', 1200, 1500), fullSrc: img('paper-foxes-detail', 2000, 2500), alt: 'Detail of the lead fox' },
-      { src: img('paper-foxes-sketch', 1200, 1500), fullSrc: img('paper-foxes-sketch', 2000, 2500), alt: 'Pencil sketch' },
+      {
+        src: img('paper-foxes', 1200, 1500),
+        fullSrc: img('paper-foxes', 2000, 2500),
+        alt: 'Paper Foxes, full piece',
+      },
+      {
+        src: img('paper-foxes-detail', 1200, 1500),
+        fullSrc: img('paper-foxes-detail', 2000, 2500),
+        alt: 'Detail of the lead fox',
+      },
+      {
+        src: img('paper-foxes-sketch', 1200, 1500),
+        fullSrc: img('paper-foxes-sketch', 2000, 2500),
+        alt: 'Pencil sketch',
+      },
     ],
     artInfo: [
       { label: 'Medium', value: 'Gouache, digital finish' },
@@ -437,27 +556,70 @@ export const DETAILS: Record<string, ContentDetails> = {
       platforms: ['windows', 'mac', 'linux', 'android'],
       price: 'Free · pay what you want',
       files: [
-        { id: 'f1', name: 'HollowCreek-1.2.0-win.zip', platform: 'windows', size: '412 MB', version: '1.2.0' },
-        { id: 'f2', name: 'HollowCreek-1.2.0-mac.zip', platform: 'mac', size: '398 MB', version: '1.2.0', note: 'Universal (Apple silicon + Intel)' },
-        { id: 'f3', name: 'HollowCreek-1.2.0-linux.tar.bz2', platform: 'linux', size: '405 MB', version: '1.2.0' },
-        { id: 'f4', name: 'HollowCreek-1.2.0.apk', platform: 'android', size: '356 MB', version: '1.2.0', note: 'Android 8+' },
+        {
+          id: 'f1',
+          name: 'HollowCreek-1.2.0-win.zip',
+          platform: 'windows',
+          size: '412 MB',
+          version: '1.2.0',
+        },
+        {
+          id: 'f2',
+          name: 'HollowCreek-1.2.0-mac.zip',
+          platform: 'mac',
+          size: '398 MB',
+          version: '1.2.0',
+          note: 'Universal (Apple silicon + Intel)',
+        },
+        {
+          id: 'f3',
+          name: 'HollowCreek-1.2.0-linux.tar.bz2',
+          platform: 'linux',
+          size: '405 MB',
+          version: '1.2.0',
+        },
+        {
+          id: 'f4',
+          name: 'HollowCreek-1.2.0.apk',
+          platform: 'android',
+          size: '356 MB',
+          version: '1.2.0',
+          note: 'Android 8+',
+        },
       ],
-      screenshots: ['station', 'carriage', 'conductor', 'window', 'tunnel', 'platform'].map((s) => ({
-        src: img(`hollow-${s}`, 960, 540),
-        fullSrc: img(`hollow-${s}`, 1920, 1080),
-        alt: `Screenshot: ${s}`,
-      })),
-      features: ['Three endings', 'Fully voiced conductor', 'Hand-drawn backgrounds', 'Controller support', 'Dyslexia-friendly font option'],
+      screenshots: ['station', 'carriage', 'conductor', 'window', 'tunnel', 'platform'].map(
+        (s) => ({
+          src: img(`hollow-${s}`, 960, 540),
+          fullSrc: img(`hollow-${s}`, 1920, 1080),
+          alt: `Screenshot: ${s}`,
+        })
+      ),
+      features: [
+        'Three endings',
+        'Fully voiced conductor',
+        'Hand-drawn backgrounds',
+        'Controller support',
+        'Dyslexia-friendly font option',
+      ],
       contentWarnings: ['Death (off-screen)', 'Grief', 'Mild horror imagery'],
       changelog: [
-        { version: '1.2.0', date: '2026-10-02', notes: 'New “Night Shift” ending, Android build, Portuguese translation.' },
-        { version: '1.1.0', date: '2026-05-20', notes: 'Spanish translation, controller support, 40 typo fixes.' },
+        {
+          version: '1.2.0',
+          date: '2026-10-02',
+          notes: 'New “Night Shift” ending, Android build, Portuguese translation.',
+        },
+        {
+          version: '1.1.0',
+          date: '2026-05-20',
+          notes: 'Spanish translation, controller support, 40 typo fixes.',
+        },
         { version: '1.0.0', date: '2026-03-14', notes: 'First release.' },
       ],
     },
   },
   c13: {
-    description: 'Wolves made of embers circle a burnt-out radio tower. Painted for the “Static” zine.',
+    description:
+      'Wolves made of embers circle a burnt-out radio tower. Painted for the “Static” zine.',
     cover: img('ember-wolves', 1200, 1500),
     tags: [
       t('artist', 'priya_natarajan', 20),
@@ -471,7 +633,13 @@ export const DETAILS: Record<string, ContentDetails> = {
     ],
     saves: 410,
     views: 5200,
-    images: [{ src: img('ember-wolves', 1200, 1500), fullSrc: img('ember-wolves', 2000, 2500), alt: 'Ember Wolves' }],
+    images: [
+      {
+        src: img('ember-wolves', 1200, 1500),
+        fullSrc: img('ember-wolves', 2000, 2500),
+        alt: 'Ember Wolves',
+      },
+    ],
     artInfo: [
       { label: 'Medium', value: 'Digital painting' },
       { label: 'Size', value: '3600 × 4500 px' },
@@ -505,19 +673,46 @@ export function getDetails(record: ContentRecord): ContentDetails {
   }
   switch (record.type) {
     case 'artwork':
-      return { ...base, images: [{ src: img(record.id, 1200, 1500), fullSrc: img(record.id, 2000, 2500), alt: record.title }] }
+      return {
+        ...base,
+        images: [
+          {
+            src: img(record.id, 1200, 1500),
+            fullSrc: img(record.id, 2000, 2500),
+            alt: record.title,
+          },
+        ],
+      }
     case 'comic':
-      return { ...base, comicChapters: [{ id: 'c1', title: 'Chapter 1', pages: comicPages(record.id, 6) }] }
+      return {
+        ...base,
+        comicChapters: [{ id: 'c1', title: 'Chapter 1', pages: comicPages(record.id, 6) }],
+      }
     case 'story':
       return {
         ...base,
         chapters: [
-          { id: 'ch1', title: 'Arrival', paragraphs: GENERIC_PARAGRAPHS.slice(0, 3).concat(GENERIC_PARAGRAPHS.slice(0, 3)) },
-          { id: 'ch2', title: 'The logbook', paragraphs: GENERIC_PARAGRAPHS.slice(3).concat(GENERIC_PARAGRAPHS.slice(3)) },
+          {
+            id: 'ch1',
+            title: 'Arrival',
+            paragraphs: GENERIC_PARAGRAPHS.slice(0, 3).concat(GENERIC_PARAGRAPHS.slice(0, 3)),
+          },
+          {
+            id: 'ch2',
+            title: 'The logbook',
+            paragraphs: GENERIC_PARAGRAPHS.slice(3).concat(GENERIC_PARAGRAPHS.slice(3)),
+          },
         ],
       }
     case 'visual-novel':
-      return { ...base, vn: { ...DETAILS.c4.vn!, files: DETAILS.c4.vn!.files.slice(0, 2), changelog: DETAILS.c4.vn!.changelog.slice(-1) } }
+      return {
+        ...base,
+        vn: {
+          ...DETAILS.c4.vn!,
+          files: DETAILS.c4.vn!.files.slice(0, 2),
+          changelog: DETAILS.c4.vn!.changelog.slice(-1),
+        },
+      }
     default:
       return { ...base, sections: [{ paragraphs: [base.description] }] }
   }
@@ -532,7 +727,12 @@ export function wordCount(chapters: Chapter[]) {
 const hoursAgo = (h: number) => new Date(Date.now() - h * 3600 * 1000).toISOString()
 const who = (handle: string, badge?: string) => {
   const p = profileByHandle(handle)
-  return { name: p?.name ?? handle, avatarSrc: p ? p.avatar : avatar(handle), href: `#/lab/u/${handle}`, badge }
+  return {
+    name: p?.name ?? handle,
+    avatarSrc: p ? p.avatar : avatar(handle),
+    href: `#/lab/u/${handle}`,
+    badge,
+  }
 }
 
 export const SEED_COMMENTS: Record<string, CommentData[]> = {
@@ -543,13 +743,39 @@ export const SEED_COMMENTS: Record<string, CommentData[]> = {
       body: 'The way the map lines turn into the fur pattern on the lead fox. I keep zooming in.',
       createdAt: hoursAgo(5),
       likes: 24,
-      replies: [{ id: 'k1r', author: who('jvance'), body: 'Thank you! Those are real 1930s survey maps, scanned and cut up.', createdAt: hoursAgo(4), likes: 9 }],
+      replies: [
+        {
+          id: 'k1r',
+          author: who('jvance'),
+          body: 'Thank you! Those are real 1930s survey maps, scanned and cut up.',
+          createdAt: hoursAgo(4),
+          likes: 9,
+        },
+      ],
     },
-    { id: 'k2', author: who('samokafor'), body: 'Is “Folded Things” going to be a print set?', createdAt: hoursAgo(30), likes: 6 },
+    {
+      id: 'k2',
+      author: who('samokafor'),
+      body: 'Is “Folded Things” going to be a print set?',
+      createdAt: hoursAgo(30),
+      likes: 6,
+    },
   ],
   c8: [
-    { id: 'k3', author: who('alexrivera'), body: 'Page 7, when Wren finally looks straight at the lamp. I actually teared up.', createdAt: hoursAgo(12), likes: 41 },
-    { id: 'k4', author: { name: 'lantern_fan_88', avatarSrc: avatar('lanternfan') }, body: 'Reading this in book mode with two-page spreads is the way.', createdAt: hoursAgo(50), likes: 12 },
+    {
+      id: 'k3',
+      author: who('alexrivera'),
+      body: 'Page 7, when Wren finally looks straight at the lamp. I actually teared up.',
+      createdAt: hoursAgo(12),
+      likes: 41,
+    },
+    {
+      id: 'k4',
+      author: { name: 'lantern_fan_88', avatarSrc: avatar('lanternfan') },
+      body: 'Reading this in book mode with two-page spreads is the way.',
+      createdAt: hoursAgo(50),
+      likes: 12,
+    },
   ],
   c10: [
     {
@@ -558,11 +784,31 @@ export const SEED_COMMENTS: Record<string, CommentData[]> = {
       body: 'The chair with the rust stain shaped like Portugal. That detail is going to live in my head.',
       createdAt: hoursAgo(20),
       likes: 18,
-      replies: [{ id: 'k5r', author: who('samokafor', 'Creator'), body: 'It’s a real chair. It’s in my kitchen. It is very much shaped like Portugal.', createdAt: hoursAgo(19), likes: 30 }],
+      replies: [
+        {
+          id: 'k5r',
+          author: who('samokafor', 'Creator'),
+          body: 'It’s a real chair. It’s in my kitchen. It is very much shaped like Portugal.',
+          createdAt: hoursAgo(19),
+          likes: 30,
+        },
+      ],
     },
   ],
   c4: [
-    { id: 'k6', author: who('jvance'), body: 'Got the Night Shift ending on my second run. The cassette soundtrack is perfect.', createdAt: hoursAgo(8), likes: 15 },
-    { id: 'k7', author: { name: 'quietplayer', avatarSrc: avatar('quietplayer') }, body: 'Runs great on a Steam Deck through the Linux build, for anyone wondering.', createdAt: hoursAgo(72), likes: 27 },
+    {
+      id: 'k6',
+      author: who('jvance'),
+      body: 'Got the Night Shift ending on my second run. The cassette soundtrack is perfect.',
+      createdAt: hoursAgo(8),
+      likes: 15,
+    },
+    {
+      id: 'k7',
+      author: { name: 'quietplayer', avatarSrc: avatar('quietplayer') },
+      body: 'Runs great on a Steam Deck through the Linux build, for anyone wondering.',
+      createdAt: hoursAgo(72),
+      likes: 27,
+    },
   ],
 }

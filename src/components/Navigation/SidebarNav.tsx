@@ -37,7 +37,8 @@ export function SidebarNav({
       data-open={open || undefined}
       className={cn(
         'ui-nav flex flex-col gap-1',
-        variant === 'card' && 'glass-chrome w-64 rounded-[var(--radius-2xl)] border border-[var(--glass-border)] p-3',
+        variant === 'card' &&
+          'glass-chrome w-64 rounded-[var(--radius-2xl)] border border-[var(--glass-border)] p-3',
         className
       )}
       {...props}>
@@ -50,7 +51,11 @@ export function SidebarNav({
           className="ui-nav-toggle">
           <span className="flex min-w-0 flex-col text-left">
             {title && <span className="text-base font-bold">{title}</span>}
-            {currentLabel && <span className="truncate text-xs font-medium text-[var(--muted-foreground)] lg:hidden">{currentLabel}</span>}
+            {currentLabel && (
+              <span className="truncate text-xs font-medium text-[var(--muted-foreground)] lg:hidden">
+                {currentLabel}
+              </span>
+            )}
           </span>
           <ChevronDown className="ui-nav-toggle-icon size-4 shrink-0 lg:hidden" aria-hidden />
         </button>
@@ -94,12 +99,23 @@ export type SidebarNavItemProps = {
 )
 
 /** A sidebar link. Renders an anchor with `href`, otherwise a button (for client-side routing). */
-export function SidebarNavItem({ className, active, icon, badge, children, ...props }: SidebarNavItemProps) {
+export function SidebarNavItem({
+  className,
+  active,
+  icon,
+  badge,
+  children,
+  ...props
+}: SidebarNavItemProps) {
   const classes = cn('ui-nav-link w-full text-left cursor-pointer', className)
   const label = typeof children === 'string' ? children : undefined
   const inner = (
     <>
-      {icon && <span className="inline-flex size-[18px] shrink-0 items-center [&>svg]:size-[18px]">{icon}</span>}
+      {icon && (
+        <span className="inline-flex size-[18px] shrink-0 items-center [&>svg]:size-[18px]">
+          {icon}
+        </span>
+      )}
       <span className="ui-nav-text flex-1 truncate">{children}</span>
       {badge !== undefined && <span className="ui-nav-badge ui-nav-text">{badge}</span>}
     </>

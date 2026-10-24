@@ -41,8 +41,25 @@ import {
   type TagItem,
   type UploadedImage,
 } from '../../index'
-import { CheckCircle2, ChevronDown, ChevronUp, Circle, Eye, FileUp, Plus, Trash2 } from 'lucide-react'
-import { CURRENT_USER, STATUS_LABELS, STATUS_TONES, TYPE_LABELS, type ContentRecord, type ContentStatus, type ContentType } from '../data'
+import {
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Circle,
+  Eye,
+  FileUp,
+  Plus,
+  Trash2,
+} from 'lucide-react'
+import {
+  CURRENT_USER,
+  STATUS_LABELS,
+  STATUS_TONES,
+  TYPE_LABELS,
+  type ContentRecord,
+  type ContentStatus,
+  type ContentType,
+} from '../data'
 import { DETAILS, LABS, getDetails, img, type ContentDetails } from '../details'
 import { useShowcase } from '../state'
 import { TYPE_ICONS } from './LabApp'
@@ -144,12 +161,16 @@ function emptyDraft(type: ContentType): Draft {
 
 function sectionsToMarkdown(details: ContentDetails) {
   if (details.body) return details.body
-  return (details.sections ?? []).map((s) => [s.heading && `## ${s.heading}`, ...s.paragraphs].filter(Boolean).join('\n\n')).join('\n\n')
+  return (details.sections ?? [])
+    .map((s) => [s.heading && `## ${s.heading}`, ...s.paragraphs].filter(Boolean).join('\n\n'))
+    .join('\n\n')
 }
 
 function draftFromRecord(record: ContentRecord, details: ContentDetails): Draft {
   const base = emptyDraft(record.type)
-  const info = Object.fromEntries((details.artInfo ?? []).map((i) => [String(i.label), String(i.value)]))
+  const info = Object.fromEntries(
+    (details.artInfo ?? []).map((i) => [String(i.label), String(i.value)])
+  )
   const vn = details.vn
   return {
     ...base,
@@ -166,17 +187,34 @@ function draftFromRecord(record: ContentRecord, details: ContentDetails): Draft 
     medium: info.Medium ?? '',
     dimensions: info.Size ?? '',
     series: info.Series ?? '',
-    comicChapters: details.comicChapters?.map((c) => ({ id: c.id, title: c.title, pages: c.pages.map((p) => asUpload(p.src, p.alt)) })) ?? base.comicChapters,
+    comicChapters:
+      details.comicChapters?.map((c) => ({
+        id: c.id,
+        title: c.title,
+        pages: c.pages.map((p) => asUpload(p.src, p.alt)),
+      })) ?? base.comicChapters,
     direction: details.comicSettings?.direction ?? 'ltr',
     defaultMode: details.comicSettings?.defaultMode ?? 'book',
     spread: details.comicSettings?.spread ?? true,
-    chapters: details.chapters?.map((c) => ({ id: c.id, title: c.title, body: c.paragraphs.join('\n\n') })) ?? base.chapters,
+    chapters:
+      details.chapters?.map((c) => ({
+        id: c.id,
+        title: c.title,
+        body: c.paragraphs.join('\n\n'),
+      })) ?? base.chapters,
     engine: vn?.engine.replace(/\s[\d.]+$/, '') ?? base.engine,
     version: vn?.version ?? base.version,
     playtime: vn?.playtime ?? '',
     languages: vn?.languages.join(', ') ?? base.languages,
     price: vn?.price ?? base.price,
-    builds: vn?.files.map((f) => ({ id: f.id, platform: f.platform, fileName: f.name, size: f.size ?? '', note: f.note ?? '' })) ?? [],
+    builds:
+      vn?.files.map((f) => ({
+        id: f.id,
+        platform: f.platform,
+        fileName: f.name,
+        size: f.size ?? '',
+        note: f.note ?? '',
+      })) ?? [],
     screenshots: vn?.screenshots.map((s) => asUpload(s.src, s.alt)) ?? [],
     features: vn?.features.join('\n') ?? '',
     warnings: vn?.contentWarnings.join('\n') ?? '',
@@ -184,9 +222,25 @@ function draftFromRecord(record: ContentRecord, details: ContentDetails): Draft 
   }
 }
 
-function detailsFromDraft(type: ContentType, id: string, d: Draft, previous?: ContentDetails): ContentDetails {
-  const lines = (s: string) => s.split('\n').map((l) => l.trim()).filter(Boolean)
-  const cover = d.cover[0]?.src ?? (type === 'artwork' ? d.images[0]?.src : type === 'comic' ? d.comicChapters[0]?.pages[0]?.src : undefined) ?? img(id, 1200, 900)
+function detailsFromDraft(
+  type: ContentType,
+  id: string,
+  d: Draft,
+  previous?: ContentDetails
+): ContentDetails {
+  const lines = (s: string) =>
+    s
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean)
+  const cover =
+    d.cover[0]?.src ??
+    (type === 'artwork'
+      ? d.images[0]?.src
+      : type === 'comic'
+        ? d.comicChapters[0]?.pages[0]?.src
+        : undefined) ??
+    img(id, 1200, 900)
   const base: ContentDetails = {
     description: d.summary,
     cover,
@@ -200,7 +254,13 @@ function detailsFromDraft(type: ContentType, id: string, d: Draft, previous?: Co
     case 'artwork':
       return {
         ...base,
-        images: d.images.map((i, n) => ({ src: i.src, fullSrc: i.src.startsWith('blob:') ? i.src : i.src.replace(/\/(\d+)\/(\d+)$/, '/2000/2500'), alt: n === 0 ? d.title : `${d.title}, view ${n + 1}` })),
+        images: d.images.map((i, n) => ({
+          src: i.src,
+          fullSrc: i.src.startsWith('blob:')
+            ? i.src
+            : i.src.replace(/\/(\d+)\/(\d+)$/, '/2000/2500'),
+          alt: n === 0 ? d.title : `${d.title}, view ${n + 1}`,
+        })),
         artInfo: [
           d.medium && { label: 'Medium', value: d.medium },
           d.dimensions && { label: 'Size', value: d.dimensions },
@@ -210,19 +270,37 @@ function detailsFromDraft(type: ContentType, id: string, d: Draft, previous?: Co
     case 'comic':
       return {
         ...base,
-        comicChapters: d.comicChapters.map((c) => ({ id: c.id, title: c.title, pages: c.pages.map((p, n) => ({ src: p.src, alt: `Page ${n + 1}` })) })),
+        comicChapters: d.comicChapters.map((c) => ({
+          id: c.id,
+          title: c.title,
+          pages: c.pages.map((p, n) => ({ src: p.src, alt: `Page ${n + 1}` })),
+        })),
         comicSettings: { direction: d.direction, defaultMode: d.defaultMode, spread: d.spread },
       }
     case 'story':
       return {
         ...base,
-        chapters: d.chapters.map((c) => ({ id: c.id, title: c.title, paragraphs: c.body.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean) })),
+        chapters: d.chapters.map((c) => ({
+          id: c.id,
+          title: c.title,
+          paragraphs: c.body
+            .split(/\n{2,}/)
+            .map((p) => p.trim())
+            .filter(Boolean),
+        })),
       }
     case 'visual-novel': {
       const now = new Date().toISOString()
       const prev = previous?.vn
       const changelog = prev?.changelog ?? []
-      const files: DownloadFile[] = d.builds.map((b) => ({ id: b.id, name: b.fileName, platform: b.platform, size: b.size, version: d.version, note: b.note || undefined }))
+      const files: DownloadFile[] = d.builds.map((b) => ({
+        id: b.id,
+        name: b.fileName,
+        platform: b.platform,
+        size: b.size,
+        version: d.version,
+        note: b.note || undefined,
+      }))
       return {
         ...base,
         vn: {
@@ -231,13 +309,23 @@ function detailsFromDraft(type: ContentType, id: string, d: Draft, previous?: Co
           released: prev?.released ?? now,
           updated: now,
           playtime: d.playtime,
-          languages: d.languages.split(',').map((l) => l.trim()).filter(Boolean),
+          languages: d.languages
+            .split(',')
+            .map((l) => l.trim())
+            .filter(Boolean),
           platforms: Array.from(new Set(d.builds.map((b) => b.platform))),
           files,
-          screenshots: d.screenshots.map((s, n) => ({ src: s.src, fullSrc: s.src, alt: `Screenshot ${n + 1}` })),
+          screenshots: d.screenshots.map((s, n) => ({
+            src: s.src,
+            fullSrc: s.src,
+            alt: `Screenshot ${n + 1}`,
+          })),
           features: lines(d.features),
           contentWarnings: lines(d.warnings),
-          changelog: d.whatsNew.trim() && changelog[0]?.version !== d.version ? [{ version: d.version, date: now, notes: d.whatsNew.trim() }, ...changelog] : changelog,
+          changelog:
+            d.whatsNew.trim() && changelog[0]?.version !== d.version
+              ? [{ version: d.version, date: now, notes: d.whatsNew.trim() }, ...changelog]
+              : changelog,
           price: d.price,
         },
       }
@@ -259,7 +347,11 @@ function useTagSuggestions() {
 }
 
 function formatBytes(bytes: number) {
-  return bytes > 1e9 ? `${(bytes / 1e9).toFixed(1)} GB` : bytes > 1e6 ? `${Math.round(bytes / 1e6)} MB` : `${Math.max(1, Math.round(bytes / 1e3))} KB`
+  return bytes > 1e9
+    ? `${(bytes / 1e9).toFixed(1)} GB`
+    : bytes > 1e6
+      ? `${Math.round(bytes / 1e6)} MB`
+      : `${Math.max(1, Math.round(bytes / 1e3))} KB`
 }
 
 /* ------------------------------------------------------- Validation */
@@ -277,19 +369,41 @@ function checksFor(type: ContentType, d: Draft): Check[] {
     checks.push({ label: 'Summary', ok: d.summary.trim().length >= 20, required: true })
     checks.push({ label: 'Age rating', ok: d.rating !== '', required: true })
     checks.push({ label: 'At least 5 tags', ok: d.tags.length >= 5, required: false })
-    checks.push({ label: 'An artist tag', ok: d.tags.some((t) => t.category === 'artist'), required: false })
+    checks.push({
+      label: 'An artist tag',
+      ok: d.tags.some((t) => t.category === 'artist'),
+      required: false,
+    })
   }
-  if (type === 'page') checks.push({ label: 'Some body text', ok: countWords(d.body) >= 10, required: true })
-  if (type === 'artwork') checks.push({ label: 'At least one image', ok: d.images.length > 0, required: true })
+  if (type === 'page')
+    checks.push({ label: 'Some body text', ok: countWords(d.body) >= 10, required: true })
+  if (type === 'artwork')
+    checks.push({ label: 'At least one image', ok: d.images.length > 0, required: true })
   if (type === 'comic') {
-    checks.push({ label: 'Every chapter has pages', ok: d.comicChapters.length > 0 && d.comicChapters.every((c) => c.pages.length > 0), required: true })
+    checks.push({
+      label: 'Every chapter has pages',
+      ok: d.comicChapters.length > 0 && d.comicChapters.every((c) => c.pages.length > 0),
+      required: true,
+    })
   }
   if (type === 'story') {
-    checks.push({ label: 'Every chapter has text', ok: d.chapters.length > 0 && d.chapters.every((c) => countWords(c.body) > 0), required: true })
+    checks.push({
+      label: 'Every chapter has text',
+      ok: d.chapters.length > 0 && d.chapters.every((c) => countWords(c.body) > 0),
+      required: true,
+    })
   }
   if (type === 'visual-novel') {
-    checks.push({ label: 'At least one build', ok: d.builds.length > 0 && d.builds.every((b) => b.fileName), required: true })
-    checks.push({ label: 'Three or more screenshots', ok: d.screenshots.length >= 3, required: false })
+    checks.push({
+      label: 'At least one build',
+      ok: d.builds.length > 0 && d.builds.every((b) => b.fileName),
+      required: true,
+    })
+    checks.push({
+      label: 'Three or more screenshots',
+      ok: d.screenshots.length >= 3,
+      required: false,
+    })
   }
   return checks
 }
@@ -308,7 +422,10 @@ export function NewContentPicker() {
   const { navigate } = useShowcase()
   return (
     <div className="mx-auto flex max-w-[var(--container-max)] flex-col gap-8 px-4 py-10 sm:px-8">
-      <PageHeader title="Create something" description="Pick what you're making. You can save a draft at any point." />
+      <PageHeader
+        title="Create something"
+        description="Pick what you're making. You can save a draft at any point."
+      />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {(Object.keys(TYPE_LABELS) as ContentType[]).map((type) => (
           <button
@@ -347,12 +464,17 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
   if (!type || !draft || (id && !record)) {
     return (
       <div className="mx-auto max-w-[var(--container-max)] px-4 py-10 sm:px-8">
-        <NotFoundState title="Nothing to edit" description="That creation doesn't exist, or the type isn't one we know." onHomeClick={() => navigate('lab/new')} />
+        <NotFoundState
+          title="Nothing to edit"
+          description="That creation doesn't exist, or the type isn't one we know."
+          onHomeClick={() => navigate('lab/new')}
+        />
       </div>
     )
   }
 
-  const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setDraft((d) => (d ? { ...d, [key]: value } : d))
+  const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
+    setDraft((d) => (d ? { ...d, [key]: value } : d))
   const dirty = JSON.stringify(draft) !== JSON.stringify(saved)
   const checks = checksFor(type, draft)
   const canPublish = checks.every((c) => !c.required || c.ok)
@@ -363,16 +485,29 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
   const save = (status: ContentStatus) => {
     setSubmitted(true)
     if (!draft.title.trim()) {
-      toast({ title: 'Add a title first', description: 'Everything else can wait.', tone: 'warning' })
+      toast({
+        title: 'Add a title first',
+        description: 'Everything else can wait.',
+        tone: 'warning',
+      })
       return
     }
     if (status !== 'draft' && !canPublish) {
-      toast({ title: 'A few things are missing', description: 'Check the list on the right.', tone: 'warning' })
+      toast({
+        title: 'A few things are missing',
+        description: 'Check the list on the right.',
+        tone: 'warning',
+      })
       return
     }
     const contentId = record?.id ?? `n${uid()}`
     // Showcase only: details live in a module-level map, so editing it is enough for every view to pick it up.
-    DETAILS[contentId] = detailsFromDraft(type, contentId, draft, record ? getDetails(record) : undefined)
+    DETAILS[contentId] = detailsFromDraft(
+      type,
+      contentId,
+      draft,
+      record ? getDetails(record) : undefined
+    )
     const fields: Partial<ContentRecord> = {
       title: draft.title.trim(),
       rating: (draft.rating || 'general') as AgeRatingValue,
@@ -385,15 +520,32 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
     if (record) {
       updateContent([record.id], fields)
     } else {
-      addContent({ ...fields, id: contentId, type, creator: CURRENT_USER.name, updated: new Date().toISOString() } as ContentRecord)
+      addContent({
+        ...fields,
+        id: contentId,
+        type,
+        creator: CURRENT_USER.name,
+        updated: new Date().toISOString(),
+      } as ContentRecord)
     }
     const next = { ...draft, status }
     setDraft(next)
     setSaved(next)
-    log(`“${fields.title}” ${status === 'draft' ? 'saved as a draft' : status === 'in-review' ? 'sent for review' : 'published'}`, STATUS_TONES[status])
+    log(
+      `“${fields.title}” ${status === 'draft' ? 'saved as a draft' : status === 'in-review' ? 'sent for review' : 'published'}`,
+      STATUS_TONES[status]
+    )
     toast({
-      title: status === 'draft' ? 'Draft saved' : status === 'in-review' ? 'Sent for review' : 'Published',
-      description: status === 'published' ? 'It’s live on your profile and in Browse.' : `“${fields.title}” is in My content.`,
+      title:
+        status === 'draft'
+          ? 'Draft saved'
+          : status === 'in-review'
+            ? 'Sent for review'
+            : 'Published',
+      description:
+        status === 'published'
+          ? 'It’s live on your profile and in Browse.'
+          : `“${fields.title}” is in My content.`,
       tone: 'success',
       action: { label: 'View', onClick: () => navigate(`lab/view/${contentId}`) },
     })
@@ -401,7 +553,10 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
     else if (isNew) navigate(`lab/edit/${contentId}`)
   }
 
-  const leave = () => (dirty ? setConfirmLeave(true) : navigate(record ? `lab/view/${record.id}` : 'lab/library/content'))
+  const leave = () =>
+    dirty
+      ? setConfirmLeave(true)
+      : navigate(record ? `lab/view/${record.id}` : 'lab/library/content')
 
   return (
     <div className="flex flex-col">
@@ -424,7 +579,9 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
               </>
             ) : (
               <BreadcrumbItem>
-                <BreadcrumbPage className="max-w-[16rem] truncate">Edit “{record.title}”</BreadcrumbPage>
+                <BreadcrumbPage className="max-w-[16rem] truncate">
+                  Edit “{record.title}”
+                </BreadcrumbPage>
               </BreadcrumbItem>
             )}
           </BreadcrumbList>
@@ -435,9 +592,15 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
           description={TYPE_BLURBS[type]}
           actions={
             <>
-              <StatusBadge tone={STATUS_TONES[saved?.status ?? 'draft']}>{STATUS_LABELS[saved?.status ?? 'draft']}</StatusBadge>
+              <StatusBadge tone={STATUS_TONES[saved?.status ?? 'draft']}>
+                {STATUS_LABELS[saved?.status ?? 'draft']}
+              </StatusBadge>
               {record && (
-                <Button variant="secondary" size="sm" leftIcon={<Eye className="size-4" />} onClick={() => navigate(`lab/view/${record.id}`)}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  leftIcon={<Eye className="size-4" />}
+                  onClick={() => navigate(`lab/view/${record.id}`)}>
                   View
                 </Button>
               )}
@@ -447,7 +610,13 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
           <form className="flex min-w-0 flex-col gap-10" onSubmit={(e) => e.preventDefault()}>
-            <FormSection title="Basics" description={type === 'page' ? 'Pages have no rating, tags or comments.' : 'What people see in Browse and on your profile.'}>
+            <FormSection
+              title="Basics"
+              description={
+                type === 'page'
+                  ? 'Pages have no rating, tags or comments.'
+                  : 'What people see in Browse and on your profile.'
+              }>
               <TextField
                 label="Title"
                 value={draft.title}
@@ -465,7 +634,10 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
                   value={draft.summary}
                   onChange={(e) => set('summary', e.target.value)}
                   placeholder="A sentence or two for the card and the top of the page"
-                  error={err(draft.summary.trim().length >= 20, 'Write at least a sentence (20 characters)')}
+                  error={err(
+                    draft.summary.trim().length >= 20,
+                    'Write at least a sentence (20 characters)'
+                  )}
                   helperText={`${draft.summary.length}/400`}
                   maxLength={400}
                 />
@@ -478,13 +650,19 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
                   onChange={(v) => set('cover', v)}
                   aspect={type === 'comic' ? 'page' : 'video'}
                   noun="cover"
-                  helperText={type === 'comic' ? 'Optional. The first page is used if you skip this.' : 'JPG, PNG or WebP. 1600 × 900 or larger looks best.'}
+                  helperText={
+                    type === 'comic'
+                      ? 'Optional. The first page is used if you skip this.'
+                      : 'JPG, PNG or WebP. 1600 × 900 or larger looks best.'
+                  }
                 />
               )}
             </FormSection>
 
             {type === 'page' && (
-              <FormSection title="Content" description="Write in Markdown. Use ## for section headings.">
+              <FormSection
+                title="Content"
+                description="Write in Markdown. Use ## for section headings.">
                 <MarkdownEditor
                   label="Body"
                   rows={16}
@@ -498,11 +676,15 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
             {type === 'artwork' && <ArtworkFields draft={draft} set={set} submitted={submitted} />}
             {type === 'comic' && <ComicFields draft={draft} set={set} submitted={submitted} />}
             {type === 'story' && <StoryFields draft={draft} set={set} submitted={submitted} />}
-            {type === 'visual-novel' && <VisualNovelFields draft={draft} set={set} submitted={submitted} />}
+            {type === 'visual-novel' && (
+              <VisualNovelFields draft={draft} set={set} submitted={submitted} />
+            )}
 
             {type !== 'page' && (
               <>
-                <FormSection title="Age rating" description="Pick the highest rating that applies. Mature work is hidden from people who haven't opted in.">
+                <FormSection
+                  title="Age rating"
+                  description="Pick the highest rating that applies. Mature work is hidden from people who haven't opted in.">
                   <RadioGroup
                     label="Rating"
                     value={draft.rating}
@@ -522,11 +704,22 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
                       />
                     ))}
                   </RadioGroup>
-                  {submitted && !draft.rating && <p className="text-xs font-medium text-[var(--destructive)]">Choose a rating</p>}
+                  {submitted && !draft.rating && (
+                    <p className="text-xs font-medium text-[var(--destructive)]">Choose a rating</p>
+                  )}
                 </FormSection>
 
-                <FormSection title="Tags" description="Tags are how people find work and filter what they don't want to see. Be thorough and honest.">
-                  <TagInput label="Tags" value={draft.tags} onChange={(v) => set('tags', v)} suggestions={suggestions} minTags={5} maxTags={60} />
+                <FormSection
+                  title="Tags"
+                  description="Tags are how people find work and filter what they don't want to see. Be thorough and honest.">
+                  <TagInput
+                    label="Tags"
+                    value={draft.tags}
+                    onChange={(v) => set('tags', v)}
+                    suggestions={suggestions}
+                    minTags={5}
+                    maxTags={60}
+                  />
                 </FormSection>
               </>
             )}
@@ -540,24 +733,48 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
                   value={draft.lab}
                   onChange={(e) => set('lab', e.target.value)}
                   options={[
-                    ...LABS.filter((l) => l.members.some((m) => m.handle === CURRENT_USER.handle)).map((l) => ({ value: l.name, label: l.name })),
+                    ...LABS.filter((l) =>
+                      l.members.some((m) => m.handle === CURRENT_USER.handle)
+                    ).map((l) => ({ value: l.name, label: l.name })),
                     { value: PERSONAL, label: 'My profile only' },
                   ]}
                 />
-                {type !== 'page' && <Switch checked={draft.comments} onCheckedChange={(v) => set('comments', v)} label="Allow comments" />}
+                {type !== 'page' && (
+                  <Switch
+                    checked={draft.comments}
+                    onCheckedChange={(v) => set('comments', v)}
+                    label="Allow comments"
+                  />
+                )}
               </div>
             </Panel>
-            <Panel title="Checklist" description={canPublish ? 'Ready to publish.' : 'Required items must be done before publishing.'}>
+            <Panel
+              title="Checklist"
+              description={
+                canPublish ? 'Ready to publish.' : 'Required items must be done before publishing.'
+              }>
               <ul className="flex flex-col gap-2 text-sm">
                 {checks.map((c) => (
                   <li key={c.label} className="flex items-center gap-2">
                     {c.ok ? (
                       <CheckCircle2 className="size-4 shrink-0 text-[var(--status-success-ink)]" />
                     ) : (
-                      <Circle className={c.required ? 'size-4 shrink-0 text-[var(--status-warning-ink)]' : 'size-4 shrink-0 text-[var(--muted-foreground)]'} />
+                      <Circle
+                        className={
+                          c.required
+                            ? 'size-4 shrink-0 text-[var(--status-warning-ink)]'
+                            : 'size-4 shrink-0 text-[var(--muted-foreground)]'
+                        }
+                      />
                     )}
-                    <span className={c.ok ? 'text-[var(--muted-foreground)] line-through' : ''}>{c.label}</span>
-                    {!c.required && !c.ok && <Badge variant="neutral" size="sm">Tip</Badge>}
+                    <span className={c.ok ? 'text-[var(--muted-foreground)] line-through' : ''}>
+                      {c.label}
+                    </span>
+                    {!c.required && !c.ok && (
+                      <Badge variant="neutral" size="sm">
+                        Tip
+                      </Badge>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -591,7 +808,9 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
             <Button variant="secondary" onClick={() => setConfirmLeave(false)}>
               Keep editing
             </Button>
-            <Button variant="danger" onClick={() => navigate(record ? `lab/view/${record.id}` : 'lab/library/content')}>
+            <Button
+              variant="danger"
+              onClick={() => navigate(record ? `lab/view/${record.id}` : 'lab/library/content')}>
               Discard
             </Button>
           </>
@@ -611,7 +830,9 @@ type FieldProps = {
 
 function ArtworkFields({ draft, set, submitted }: FieldProps) {
   return (
-    <FormSection title="Images" description="The first image is the main piece and the cover. Add alternates, details or sketches after it.">
+    <FormSection
+      title="Images"
+      description="The first image is the main piece and the cover. Add alternates, details or sketches after it.">
       <ImageUploader
         label="Images"
         value={draft.images}
@@ -622,9 +843,24 @@ function ArtworkFields({ draft, set, submitted }: FieldProps) {
         error={submitted && draft.images.length === 0 ? 'Add at least one image' : undefined}
       />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <TextField label="Medium" value={draft.medium} onChange={(e) => set('medium', e.target.value)} placeholder="Gouache, digital…" />
-        <TextField label="Size" value={draft.dimensions} onChange={(e) => set('dimensions', e.target.value)} placeholder="4000 × 5000 px" />
-        <TextField label="Series" value={draft.series} onChange={(e) => set('series', e.target.value)} placeholder="Optional" />
+        <TextField
+          label="Medium"
+          value={draft.medium}
+          onChange={(e) => set('medium', e.target.value)}
+          placeholder="Gouache, digital…"
+        />
+        <TextField
+          label="Size"
+          value={draft.dimensions}
+          onChange={(e) => set('dimensions', e.target.value)}
+          placeholder="4000 × 5000 px"
+        />
+        <TextField
+          label="Series"
+          value={draft.series}
+          onChange={(e) => set('series', e.target.value)}
+          placeholder="Optional"
+        />
       </div>
     </FormSection>
   )
@@ -635,7 +871,10 @@ function ArtworkFields({ draft, set, submitted }: FieldProps) {
 function ComicFields({ draft, set, submitted }: FieldProps) {
   const [open, setOpen] = useState(draft.comicChapters[0]?.id ?? '')
   const update = (id: string, patch: Partial<ComicChapterDraft>) =>
-    set('comicChapters', draft.comicChapters.map((c) => (c.id === id ? { ...c, ...patch } : c)))
+    set(
+      'comicChapters',
+      draft.comicChapters.map((c) => (c.id === id ? { ...c, ...patch } : c))
+    )
   const totalPages = draft.comicChapters.reduce((n, c) => n + c.pages.length, 0)
 
   return (
@@ -649,7 +888,11 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
             variant="secondary"
             leftIcon={<Plus className="size-4" />}
             onClick={() => {
-              const chapter = { id: uid(), title: `Chapter ${draft.comicChapters.length + 1}`, pages: [] }
+              const chapter = {
+                id: uid(),
+                title: `Chapter ${draft.comicChapters.length + 1}`,
+                pages: [],
+              }
               set('comicChapters', [...draft.comicChapters, chapter])
               setOpen(chapter.id)
             }}>
@@ -665,7 +908,12 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
             <div className="ui-panel flex flex-col gap-4 p-4!">
               <div className="flex items-center gap-2">
                 <DragHandle {...api.handleProps} />
-                <TextField aria-label="Chapter title" value={chapter.title} onChange={(e) => update(chapter.id, { title: e.target.value })} className="font-semibold" />
+                <TextField
+                  aria-label="Chapter title"
+                  value={chapter.title}
+                  onChange={(e) => update(chapter.id, { title: e.target.value })}
+                  className="font-semibold"
+                />
                 <Badge variant={chapter.pages.length ? 'neutral' : 'warning'} className="shrink-0">
                   {chapter.pages.length} pages
                 </Badge>
@@ -673,7 +921,13 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
                   aria-label={open === chapter.id ? 'Collapse chapter' : 'Expand chapter'}
                   aria-expanded={open === chapter.id}
                   variant="ghost"
-                  icon={open === chapter.id ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+                  icon={
+                    open === chapter.id ? (
+                      <ChevronUp className="size-4" />
+                    ) : (
+                      <ChevronDown className="size-4" />
+                    )
+                  }
                   onClick={() => setOpen(open === chapter.id ? '' : chapter.id)}
                 />
                 <IconButton
@@ -681,7 +935,12 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
                   variant="ghost"
                   disabled={draft.comicChapters.length === 1}
                   icon={<Trash2 className="size-4" />}
-                  onClick={() => set('comicChapters', draft.comicChapters.filter((c) => c.id !== chapter.id))}
+                  onClick={() =>
+                    set(
+                      'comicChapters',
+                      draft.comicChapters.filter((c) => c.id !== chapter.id)
+                    )
+                  }
                 />
               </div>
               {open === chapter.id && (
@@ -692,7 +951,11 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
                   numbered
                   noun="page"
                   helperText="Select many files at once. They're sorted by file name, so 01.png, 02.png… works best."
-                  error={submitted && chapter.pages.length === 0 ? 'This chapter has no pages' : undefined}
+                  error={
+                    submitted && chapter.pages.length === 0
+                      ? 'This chapter has no pages'
+                      : undefined
+                  }
                 />
               )}
             </div>
@@ -700,7 +963,9 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
         />
       </FormSection>
 
-      <FormSection title="Reader" description="How the comic opens for readers. They can still switch modes.">
+      <FormSection
+        title="Reader"
+        description="How the comic opens for readers. They can still switch modes.">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
             <span className="button-sm">Default mode</span>
@@ -729,7 +994,12 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
             />
           </div>
         </div>
-        <Switch checked={draft.spread} onCheckedChange={(v) => set('spread', v)} label="Two-page spreads on wide screens" description="The first page is shown alone, as a cover." />
+        <Switch
+          checked={draft.spread}
+          onCheckedChange={(v) => set('spread', v)}
+          label="Two-page spreads on wide screens"
+          description="The first page is shown alone, as a cover."
+        />
       </FormSection>
     </>
   )
@@ -739,7 +1009,11 @@ function ComicFields({ draft, set, submitted }: FieldProps) {
 
 function StoryFields({ draft, set, submitted }: FieldProps) {
   const [open, setOpen] = useState(draft.chapters[0]?.id ?? '')
-  const update = (id: string, patch: Partial<StoryChapterDraft>) => set('chapters', draft.chapters.map((c) => (c.id === id ? { ...c, ...patch } : c)))
+  const update = (id: string, patch: Partial<StoryChapterDraft>) =>
+    set(
+      'chapters',
+      draft.chapters.map((c) => (c.id === id ? { ...c, ...patch } : c))
+    )
   const words = draft.chapters.reduce((n, c) => n + countWords(c.body), 0)
 
   return (
@@ -768,14 +1042,29 @@ function StoryFields({ draft, set, submitted }: FieldProps) {
           <div className="ui-panel flex flex-col gap-4 p-4!">
             <div className="flex items-center gap-2">
               <DragHandle {...api.handleProps} />
-              <span className="w-7 shrink-0 text-center text-sm font-bold text-[var(--muted-foreground)]">{api.index + 1}</span>
-              <TextField aria-label="Chapter title" value={chapter.title} onChange={(e) => update(chapter.id, { title: e.target.value })} className="font-semibold" />
-              <span className="hidden shrink-0 text-xs tabular-nums text-[var(--muted-foreground)] sm:inline">{countWords(chapter.body).toLocaleString()} words</span>
+              <span className="w-7 shrink-0 text-center text-sm font-bold text-[var(--muted-foreground)]">
+                {api.index + 1}
+              </span>
+              <TextField
+                aria-label="Chapter title"
+                value={chapter.title}
+                onChange={(e) => update(chapter.id, { title: e.target.value })}
+                className="font-semibold"
+              />
+              <span className="hidden shrink-0 text-xs tabular-nums text-[var(--muted-foreground)] sm:inline">
+                {countWords(chapter.body).toLocaleString()} words
+              </span>
               <IconButton
                 aria-label={open === chapter.id ? 'Collapse chapter' : 'Expand chapter'}
                 aria-expanded={open === chapter.id}
                 variant="ghost"
-                icon={open === chapter.id ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+                icon={
+                  open === chapter.id ? (
+                    <ChevronUp className="size-4" />
+                  ) : (
+                    <ChevronDown className="size-4" />
+                  )
+                }
                 onClick={() => setOpen(open === chapter.id ? '' : chapter.id)}
               />
               <IconButton
@@ -783,7 +1072,12 @@ function StoryFields({ draft, set, submitted }: FieldProps) {
                 variant="ghost"
                 disabled={draft.chapters.length === 1}
                 icon={<Trash2 className="size-4" />}
-                onClick={() => set('chapters', draft.chapters.filter((c) => c.id !== chapter.id))}
+                onClick={() =>
+                  set(
+                    'chapters',
+                    draft.chapters.filter((c) => c.id !== chapter.id)
+                  )
+                }
               />
             </div>
             {open === chapter.id && (
@@ -791,9 +1085,14 @@ function StoryFields({ draft, set, submitted }: FieldProps) {
                 rows={14}
                 value={chapter.body}
                 onChange={(body) => update(chapter.id, { body })}
-                previewStyle={{ fontFamily: "'Iowan Old Style', Palatino, Georgia, serif", fontSize: 18 }}
+                previewStyle={{
+                  fontFamily: "'Iowan Old Style', Palatino, Georgia, serif",
+                  fontSize: 18,
+                }}
                 placeholder="Start writing… Blank lines separate paragraphs."
-                error={submitted && countWords(chapter.body) === 0 ? 'This chapter is empty' : undefined}
+                error={
+                  submitted && countWords(chapter.body) === 0 ? 'This chapter is empty' : undefined
+                }
               />
             )}
           </div>
@@ -808,13 +1107,20 @@ function StoryFields({ draft, set, submitted }: FieldProps) {
 const ENGINES = ['Ren’Py', 'Unity', 'Godot', 'TyranoBuilder', 'Twine', 'Naninovel', 'Other']
 
 function VisualNovelFields({ draft, set, submitted }: FieldProps) {
-  const updateBuild = (id: string, patch: Partial<BuildDraft>) => set('builds', draft.builds.map((b) => (b.id === id ? { ...b, ...patch } : b)))
+  const updateBuild = (id: string, patch: Partial<BuildDraft>) =>
+    set(
+      'builds',
+      draft.builds.map((b) => (b.id === id ? { ...b, ...patch } : b))
+    )
   const usedPlatforms = new Set(draft.builds.map((b) => b.platform))
-  const nextPlatform = (Object.keys(PLATFORM_INFO) as Platform[]).find((p) => !usedPlatforms.has(p)) ?? 'windows'
+  const nextPlatform =
+    (Object.keys(PLATFORM_INFO) as Platform[]).find((p) => !usedPlatforms.has(p)) ?? 'windows'
 
   return (
     <>
-      <FormSection title="Store page" description="The long description, features and content warnings shown on the download page.">
+      <FormSection
+        title="Store page"
+        description="The long description, features and content warnings shown on the download page.">
         <MarkdownEditor
           label="Description"
           rows={8}
@@ -822,10 +1128,21 @@ function VisualNovelFields({ draft, set, submitted }: FieldProps) {
           onChange={(v) => set('summary', v)}
           showWordCount={false}
           helperText="The first paragraph also appears on the cover and in Browse."
-          error={submitted && draft.summary.trim().length < 20 ? 'Describe the game in at least a sentence' : undefined}
+          error={
+            submitted && draft.summary.trim().length < 20
+              ? 'Describe the game in at least a sentence'
+              : undefined
+          }
         />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <TextField label="Features" isTextarea rows={4} value={draft.features} onChange={(e) => set('features', e.target.value)} placeholder={'One per line\nThree endings\nController support'} />
+          <TextField
+            label="Features"
+            isTextarea
+            rows={4}
+            value={draft.features}
+            onChange={(e) => set('features', e.target.value)}
+            placeholder={'One per line\nThree endings\nController support'}
+          />
           <TextField
             label="Content warnings"
             isTextarea
@@ -848,12 +1165,37 @@ function VisualNovelFields({ draft, set, submitted }: FieldProps) {
 
       <FormSection title="Game details">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Select label="Engine" value={draft.engine} onChange={(e) => set('engine', e.target.value)} options={ENGINES.map((e) => ({ value: e, label: e }))} />
-          <TextField label="Version" value={draft.version} onChange={(e) => set('version', e.target.value)} placeholder="1.0.0" />
-          <TextField label="Play time" value={draft.playtime} onChange={(e) => set('playtime', e.target.value)} placeholder="2–3 hours" />
-          <TextField label="Price" value={draft.price} onChange={(e) => set('price', e.target.value)} placeholder="Free · pay what you want" />
+          <Select
+            label="Engine"
+            value={draft.engine}
+            onChange={(e) => set('engine', e.target.value)}
+            options={ENGINES.map((e) => ({ value: e, label: e }))}
+          />
+          <TextField
+            label="Version"
+            value={draft.version}
+            onChange={(e) => set('version', e.target.value)}
+            placeholder="1.0.0"
+          />
+          <TextField
+            label="Play time"
+            value={draft.playtime}
+            onChange={(e) => set('playtime', e.target.value)}
+            placeholder="2–3 hours"
+          />
+          <TextField
+            label="Price"
+            value={draft.price}
+            onChange={(e) => set('price', e.target.value)}
+            placeholder="Free · pay what you want"
+          />
         </div>
-        <TextField label="Languages" value={draft.languages} onChange={(e) => set('languages', e.target.value)} helperText="Separate with commas." />
+        <TextField
+          label="Languages"
+          value={draft.languages}
+          onChange={(e) => set('languages', e.target.value)}
+          helperText="Separate with commas."
+        />
       </FormSection>
 
       <FormSection
@@ -864,7 +1206,12 @@ function VisualNovelFields({ draft, set, submitted }: FieldProps) {
             size="sm"
             variant="secondary"
             leftIcon={<Plus className="size-4" />}
-            onClick={() => set('builds', [...draft.builds, { id: uid(), platform: nextPlatform, fileName: '', size: '', note: '' }])}>
+            onClick={() =>
+              set('builds', [
+                ...draft.builds,
+                { id: uid(), platform: nextPlatform, fileName: '', size: '', note: '' },
+              ])
+            }>
             Add build
           </Button>
         }>
@@ -875,7 +1222,13 @@ function VisualNovelFields({ draft, set, submitted }: FieldProps) {
             description="Add a build for each platform you support."
             className={submitted ? 'border-[var(--destructive)]' : undefined}
             action={
-              <Button variant="secondary" onClick={() => set('builds', [{ id: uid(), platform: 'windows', fileName: '', size: '', note: '' }])}>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  set('builds', [
+                    { id: uid(), platform: 'windows', fileName: '', size: '', note: '' },
+                  ])
+                }>
                 Add a Windows build
               </Button>
             }
@@ -889,22 +1242,49 @@ function VisualNovelFields({ draft, set, submitted }: FieldProps) {
                   containerClassName="w-40"
                   value={b.platform}
                   onChange={(e) => updateBuild(b.id, { platform: e.target.value as Platform })}
-                  options={(Object.keys(PLATFORM_INFO) as Platform[]).map((p) => ({ value: p, label: PLATFORM_INFO[p].label }))}
+                  options={(Object.keys(PLATFORM_INFO) as Platform[]).map((p) => ({
+                    value: p,
+                    label: PLATFORM_INFO[p].label,
+                  }))}
                 />
-                <label className={b.fileName ? 'secondary-button min-h-10! min-w-0 flex-1 justify-start' : 'secondary-button min-h-10! flex-1 justify-start border-dashed'}>
+                <label
+                  className={
+                    b.fileName
+                      ? 'secondary-button min-h-10! min-w-0 flex-1 justify-start'
+                      : 'secondary-button min-h-10! flex-1 justify-start border-dashed'
+                  }>
                   <FileUp className="size-4 shrink-0" />
-                  <span className="truncate">{b.fileName ? `${b.fileName} · ${b.size}` : 'Choose file…'}</span>
+                  <span className="truncate">
+                    {b.fileName ? `${b.fileName} · ${b.size}` : 'Choose file…'}
+                  </span>
                   <input
                     type="file"
                     className="sr-only"
                     onChange={(e) => {
                       const file = e.target.files?.[0]
-                      if (file) updateBuild(b.id, { fileName: file.name, size: formatBytes(file.size) })
+                      if (file)
+                        updateBuild(b.id, { fileName: file.name, size: formatBytes(file.size) })
                     }}
                   />
                 </label>
-                <TextField aria-label="Note" value={b.note} onChange={(e) => updateBuild(b.id, { note: e.target.value })} placeholder="Note, e.g. Android 8+" className="w-48" />
-                <IconButton aria-label="Remove build" variant="ghost" icon={<Trash2 className="size-4" />} onClick={() => set('builds', draft.builds.filter((x) => x.id !== b.id))} />
+                <TextField
+                  aria-label="Note"
+                  value={b.note}
+                  onChange={(e) => updateBuild(b.id, { note: e.target.value })}
+                  placeholder="Note, e.g. Android 8+"
+                  className="w-48"
+                />
+                <IconButton
+                  aria-label="Remove build"
+                  variant="ghost"
+                  icon={<Trash2 className="size-4" />}
+                  onClick={() =>
+                    set(
+                      'builds',
+                      draft.builds.filter((x) => x.id !== b.id)
+                    )
+                  }
+                />
               </li>
             ))}
           </ul>
@@ -916,7 +1296,11 @@ function VisualNovelFields({ draft, set, submitted }: FieldProps) {
             ))}
           </div>
         )}
-        {submitted && draft.builds.some((b) => !b.fileName) && <p className="text-xs font-medium text-[var(--destructive)]">Choose a file for every build</p>}
+        {submitted && draft.builds.some((b) => !b.fileName) && (
+          <p className="text-xs font-medium text-[var(--destructive)]">
+            Choose a file for every build
+          </p>
+        )}
         <TextField
           label={`What's new in ${draft.version || 'this version'}`}
           isTextarea

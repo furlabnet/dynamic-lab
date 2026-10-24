@@ -78,7 +78,11 @@ export function ContentCard({
       href={href}
       onClick={onClick}
       type={Component === 'button' ? 'button' : undefined}
-      className={cn('ui-content-card surface-card group', interactive && 'ui-content-card-interactive', className)}
+      className={cn(
+        'ui-content-card surface-card group',
+        interactive && 'ui-content-card-interactive',
+        className
+      )}
       {...props}>
       <div className={cn('ui-content-card-cover', aspectClasses[aspect])}>
         {typeof cover === 'string' ? (
@@ -116,11 +120,24 @@ export function ContentCard({
         {coverMeta && <span className="ui-content-card-meta">{coverMeta}</span>}
       </div>
       <div className="flex flex-1 flex-col gap-1 p-5 text-left">
-        {type && <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">{type}</span>}
-        <span className="text-lg font-bold leading-snug tracking-tight text-[var(--foreground)]">{title}</span>
+        {type && (
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+            {type}
+          </span>
+        )}
+        <span className="text-lg font-bold leading-snug tracking-tight text-[var(--foreground)]">
+          {title}
+        </span>
         {byline && (
           <span className="mt-1 flex items-center gap-2 text-xs text-[var(--muted-foreground)]">
-            {bylineAvatar && <img src={bylineAvatar} alt="" loading="lazy" className="size-5 rounded-full object-cover" />}
+            {bylineAvatar && (
+              <img
+                src={bylineAvatar}
+                alt=""
+                loading="lazy"
+                className="size-5 rounded-full object-cover"
+              />
+            )}
             <span className="truncate">{byline}</span>
           </span>
         )}
@@ -136,7 +153,10 @@ export function ContentCard({
         {(stats?.length || footer) && (
           <span className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-3 text-xs text-[var(--muted-foreground)]">
             {stats?.map((s) => (
-              <span key={s.label} className="inline-flex items-center gap-1 tabular-nums" title={`${s.value} ${s.label}`}>
+              <span
+                key={s.label}
+                className="inline-flex items-center gap-1 tabular-nums"
+                title={`${s.value} ${s.label}`}>
                 <span className="inline-flex [&>svg]:size-3.5" aria-hidden>
                   {s.icon}
                 </span>

@@ -165,8 +165,22 @@ export function BackstageApp() {
         keywords: ['maintenance', 'banner', 'site'],
         onSelect: () => setMaintenance(!maintenance),
       },
-      { id: 'toggle-theme', label: 'Toggle dark mode', group: 'Actions', icon: <Moon />, keywords: ['theme', 'light'], onSelect: toggleMode },
-      { id: 'public-site', label: 'Open the public site', group: 'Actions', icon: <Globe />, keywords: ['lab', 'switch app'], onSelect: () => navigate('lab/') },
+      {
+        id: 'toggle-theme',
+        label: 'Toggle dark mode',
+        group: 'Actions',
+        icon: <Moon />,
+        keywords: ['theme', 'light'],
+        onSelect: toggleMode,
+      },
+      {
+        id: 'public-site',
+        label: 'Open the public site',
+        group: 'Actions',
+        icon: <Globe />,
+        keywords: ['lab', 'switch app'],
+        onSelect: () => navigate('lab/'),
+      },
       ...content
         .filter((c) => !c.trashed)
         .map((c) => ({
@@ -198,7 +212,9 @@ export function BackstageApp() {
                       {CURRENT_USER.name.split(' ')[0]}
                       <Badge size="sm">{CURRENT_USER.role}</Badge>
                     </span>
-                    <span className="truncate text-xs text-[var(--muted-foreground)]">{CURRENT_USER.email}</span>
+                    <span className="truncate text-xs text-[var(--muted-foreground)]">
+                      {CURRENT_USER.email}
+                    </span>
                   </div>
                 </div>
                 <div className="ui-nav-text flex items-center gap-1">
@@ -209,7 +225,13 @@ export function BackstageApp() {
                       aria-label="Sign out"
                       variant="ghost"
                       icon={<LogOut className="size-[18px]" />}
-                      onClick={() => toast({ title: 'Signed out', description: 'This is a demo, so you are still here.', tone: 'info' })}
+                      onClick={() =>
+                        toast({
+                          title: 'Signed out',
+                          description: 'This is a demo, so you are still here.',
+                          tone: 'info',
+                        })
+                      }
                     />
                   </Tooltip>
                 </div>
@@ -253,7 +275,11 @@ export function BackstageApp() {
               </BreadcrumbList>
             </Breadcrumb>
             <div className="ml-auto">
-              <AppSwitcher apps={APPS} value="backstage" onValueChange={(id) => navigate(`${id}/`)} />
+              <AppSwitcher
+                apps={APPS}
+                value="backstage"
+                onValueChange={(id) => navigate(`${id}/`)}
+              />
             </div>
           </>
         }>
@@ -279,7 +305,9 @@ export function BackstageApp() {
         {pageId === 'audit' && <AuditPage />}
         {pageId === 'settings' && <SettingsPage />}
         {pageId === 'design-system' && <ComponentGallery />}
-        {['media', 'labs', 'schedules', 'schema', 'roles'].includes(pageId) && <PlaceholderPage entry={current} />}
+        {['media', 'labs', 'schedules', 'schema', 'roles'].includes(pageId) && (
+          <PlaceholderPage entry={current} />
+        )}
         {!NAV.some((n) => n.id === pageId) && <OverviewPage />}
       </AdminShell>
 
@@ -297,9 +325,22 @@ function OverviewPage() {
     <div className="flex flex-col gap-6">
       <PageHeader title="Overview" description="Site-wide health across every Creator Lab." />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard label="Waiting for review" value={live.filter((c) => c.status === 'in-review').length} href="#/backstage/content" />
-        <MetricCard label="Published" value={live.filter((c) => c.status === 'published').length} delta={{ value: '+3', direction: 'up' }} href="#/backstage/content" />
-        <MetricCard label="Active users" value={users.filter((u) => u.status === 'active').length} href="#/backstage/users" />
+        <MetricCard
+          label="Waiting for review"
+          value={live.filter((c) => c.status === 'in-review').length}
+          href="#/backstage/content"
+        />
+        <MetricCard
+          label="Published"
+          value={live.filter((c) => c.status === 'published').length}
+          delta={{ value: '+3', direction: 'up' }}
+          href="#/backstage/content"
+        />
+        <MetricCard
+          label="Active users"
+          value={users.filter((u) => u.status === 'active').length}
+          href="#/backstage/users"
+        />
         <MetricCard label="Open reports" value={reports.length} href="#/backstage/moderation" />
       </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -322,7 +363,9 @@ function OverviewPage() {
             {Array.from(new Set(content.map((c) => c.lab))).map((lab) => (
               <li key={lab} className="flex items-center justify-between gap-3">
                 <span className="font-medium">{lab}</span>
-                <Badge variant="neutral">{content.filter((c) => c.lab === lab && !c.trashed).length}</Badge>
+                <Badge variant="neutral">
+                  {content.filter((c) => c.lab === lab && !c.trashed).length}
+                </Badge>
               </li>
             ))}
           </ul>
@@ -374,11 +417,13 @@ function ContentPage() {
   const safePage = Math.min(pageIndex, pageCount - 1)
   const visible = rows.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE)
   const visibleIds = visible.map((r) => r.id)
-  const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selected.includes(id))
+  const allVisibleSelected =
+    visibleIds.length > 0 && visibleIds.every((id) => selected.includes(id))
   const someVisibleSelected = visibleIds.some((id) => selected.includes(id))
   const selectedRecords = content.filter((c) => selected.includes(c.id))
 
-  const toggle = (id: string) => setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
+  const toggle = (id: string) =>
+    setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
 
   return (
     <div className="flex flex-col gap-5">
@@ -432,7 +477,10 @@ function ContentPage() {
             label="Status"
             value={draftFilters.status}
             onChange={(e) => setDraftFilters((f) => ({ ...f, status: e.target.value }))}
-            options={[{ value: 'all', label: 'All statuses' }, ...STATUSES.map((s) => ({ value: s, label: STATUS_LABELS[s] }))]}
+            options={[
+              { value: 'all', label: 'All statuses' },
+              ...STATUSES.map((s) => ({ value: s, label: STATUS_LABELS[s] })),
+            ]}
           />
         </div>
         <div className="w-44">
@@ -440,7 +488,10 @@ function ContentPage() {
             label="Rating"
             value={draftFilters.rating}
             onChange={(e) => setDraftFilters((f) => ({ ...f, rating: e.target.value }))}
-            options={[{ value: 'all', label: 'All ratings' }, ...Object.entries(RATING_LABELS).map(([value, label]) => ({ value, label }))]}
+            options={[
+              { value: 'all', label: 'All ratings' },
+              ...Object.entries(RATING_LABELS).map(([value, label]) => ({ value, label })),
+            ]}
           />
         </div>
         <Button type="submit" variant="secondary">
@@ -469,7 +520,9 @@ function ContentPage() {
       <div className="ui-toolbar justify-between">
         <span className="text-sm font-medium">{selected.length} selected</span>
         <div className="flex items-center gap-2">
-          <span className="ui-toolbar-label text-sm text-[var(--muted-foreground)]">Bulk comments:</span>
+          <span className="ui-toolbar-label text-sm text-[var(--muted-foreground)]">
+            Bulk comments:
+          </span>
           <Select
             aria-label="Bulk comments setting"
             containerClassName="w-auto"
@@ -487,14 +540,23 @@ function ContentPage() {
             disabled={!selected.length}
             onClick={() => {
               updateContent(selected, { comments: bulkComments })
-              log(`Comments ${bulkComments === 'open' ? 'opened' : 'closed'} on ${selected.length} items`, 'info')
-              toast({ title: 'Comments updated', description: `${selected.length} items now have ${bulkComments} comments.`, tone: 'success' })
+              log(
+                `Comments ${bulkComments === 'open' ? 'opened' : 'closed'} on ${selected.length} items`,
+                'info'
+              )
+              toast({
+                title: 'Comments updated',
+                description: `${selected.length} items now have ${bulkComments} comments.`,
+                tone: 'success',
+              })
             }}>
             Apply to selected
           </Button>
         </div>
         <div className="flex items-center gap-2">
-          <span className="ui-toolbar-label text-sm text-[var(--muted-foreground)]">Bulk workflow:</span>
+          <span className="ui-toolbar-label text-sm text-[var(--muted-foreground)]">
+            Bulk workflow:
+          </span>
           <Select
             aria-label="Bulk workflow action"
             containerClassName="w-auto"
@@ -526,7 +588,9 @@ function ContentPage() {
                   indeterminate={someVisibleSelected && !allVisibleSelected}
                   onCheckedChange={() =>
                     setSelected((prev) =>
-                      allVisibleSelected ? prev.filter((id) => !visibleIds.includes(id)) : Array.from(new Set([...prev, ...visibleIds]))
+                      allVisibleSelected
+                        ? prev.filter((id) => !visibleIds.includes(id))
+                        : Array.from(new Set([...prev, ...visibleIds]))
                     )
                   }
                 />
@@ -544,16 +608,28 @@ function ContentPage() {
             {visible.map((row) => (
               <TableRow key={row.id} selected={selected.includes(row.id)}>
                 <TableCell>
-                  <Checkbox aria-label={`Select ${row.title}`} checked={selected.includes(row.id)} onCheckedChange={() => toggle(row.id)} />
+                  <Checkbox
+                    aria-label={`Select ${row.title}`}
+                    checked={selected.includes(row.id)}
+                    onCheckedChange={() => toggle(row.id)}
+                  />
                 </TableCell>
                 <TableCell className="font-semibold">{row.title}</TableCell>
-                <TableCell className="text-[var(--muted-foreground)]">{TYPE_LABELS[row.type]}</TableCell>
-                <TableCell>{row.creator}</TableCell>
-                <TableCell className="text-[var(--muted-foreground)]">{RATING_LABELS[row.rating]}</TableCell>
-                <TableCell>
-                  <StatusBadge tone={STATUS_TONES[row.status]}>{STATUS_LABELS[row.status]}</StatusBadge>
+                <TableCell className="text-[var(--muted-foreground)]">
+                  {TYPE_LABELS[row.type]}
                 </TableCell>
-                <TableCell className="whitespace-nowrap text-[var(--muted-foreground)]">{formatDate(row.updated)}</TableCell>
+                <TableCell>{row.creator}</TableCell>
+                <TableCell className="text-[var(--muted-foreground)]">
+                  {RATING_LABELS[row.rating]}
+                </TableCell>
+                <TableCell>
+                  <StatusBadge tone={STATUS_TONES[row.status]}>
+                    {STATUS_LABELS[row.status]}
+                  </StatusBadge>
+                </TableCell>
+                <TableCell className="whitespace-nowrap text-[var(--muted-foreground)]">
+                  {formatDate(row.updated)}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="inline-flex items-center gap-1.5">
                     <Button size="sm" variant="secondary" onClick={() => setViewing(row)}>
@@ -562,7 +638,11 @@ function ContentPage() {
                     <Button size="sm" variant="secondary" onClick={() => setEditing(row)}>
                       Edit
                     </Button>
-                    <Button size="sm" variant="ghost" className="text-[var(--destructive)] hover:text-[var(--destructive)]" onClick={() => setDeleting(row)}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-[var(--destructive)] hover:text-[var(--destructive)]"
+                      onClick={() => setDeleting(row)}>
                       Delete
                     </Button>
                   </div>
@@ -580,7 +660,10 @@ function ContentPage() {
         <Pagination className="mx-0 w-auto">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious disabled={safePage === 0} onClick={() => setPageIndex(safePage - 1)} />
+              <PaginationPrevious
+                disabled={safePage === 0}
+                onClick={() => setPageIndex(safePage - 1)}
+              />
             </PaginationItem>
             {Array.from({ length: pageCount }, (_, i) => (
               <PaginationItem key={i}>
@@ -590,7 +673,10 @@ function ContentPage() {
               </PaginationItem>
             ))}
             <PaginationItem>
-              <PaginationNext disabled={safePage >= pageCount - 1} onClick={() => setPageIndex(safePage + 1)} />
+              <PaginationNext
+                disabled={safePage >= pageCount - 1}
+                onClick={() => setPageIndex(safePage + 1)}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
@@ -611,8 +697,15 @@ function ContentPage() {
             <Button
               onClick={() => {
                 updateContent(selected, { status: bulkStatus })
-                log(`${selected.length} items moved to ${STATUS_LABELS[bulkStatus]}`, STATUS_TONES[bulkStatus])
-                toast({ title: 'Workflow updated', description: `${selected.length} items are now ${STATUS_LABELS[bulkStatus].toLowerCase()}.`, tone: 'success' })
+                log(
+                  `${selected.length} items moved to ${STATUS_LABELS[bulkStatus]}`,
+                  STATUS_TONES[bulkStatus]
+                )
+                toast({
+                  title: 'Workflow updated',
+                  description: `${selected.length} items are now ${STATUS_LABELS[bulkStatus].toLowerCase()}.`,
+                  tone: 'success',
+                })
                 setSelected([])
                 setPreviewOpen(false)
               }}>
@@ -626,7 +719,9 @@ function ContentPage() {
               <span className="font-medium">{r.title}</span>
               <span className="flex items-center gap-2 text-xs">
                 <StatusBadge tone={STATUS_TONES[r.status]}>{STATUS_LABELS[r.status]}</StatusBadge>→
-                <StatusBadge tone={STATUS_TONES[bulkStatus]}>{STATUS_LABELS[bulkStatus]}</StatusBadge>
+                <StatusBadge tone={STATUS_TONES[bulkStatus]}>
+                  {STATUS_LABELS[bulkStatus]}
+                </StatusBadge>
               </span>
             </li>
           ))}
@@ -638,7 +733,11 @@ function ContentPage() {
         open={viewing !== null}
         onClose={() => setViewing(null)}
         title={viewing?.title}
-        description={viewing ? `${TYPE_LABELS[viewing.type]} by ${viewing.creator} · ${viewing.lab}` : undefined}
+        description={
+          viewing
+            ? `${TYPE_LABELS[viewing.type]} by ${viewing.creator} · ${viewing.lab}`
+            : undefined
+        }
         footer={
           <>
             <Button variant="secondary" onClick={() => setViewing(null)}>
@@ -657,7 +756,9 @@ function ContentPage() {
           <dl className="grid grid-cols-[120px_1fr] gap-x-4 gap-y-3">
             <dt className="text-[var(--muted-foreground)]">Status</dt>
             <dd>
-              <StatusBadge tone={STATUS_TONES[viewing.status]}>{STATUS_LABELS[viewing.status]}</StatusBadge>
+              <StatusBadge tone={STATUS_TONES[viewing.status]}>
+                {STATUS_LABELS[viewing.status]}
+              </StatusBadge>
             </dd>
             <dt className="text-[var(--muted-foreground)]">Rating</dt>
             <dd>{RATING_LABELS[viewing.rating]}</dd>
@@ -665,7 +766,13 @@ function ContentPage() {
             <dd className="capitalize">{viewing.comments}</dd>
             <dt className="text-[var(--muted-foreground)]">Tags</dt>
             <dd className="flex flex-wrap gap-1.5">
-              {viewing.tags.length ? viewing.tags.map((t) => <Badge key={t} variant="neutral">{t}</Badge>) : '—'}
+              {viewing.tags.length
+                ? viewing.tags.map((t) => (
+                    <Badge key={t} variant="neutral">
+                      {t}
+                    </Badge>
+                  ))
+                : '—'}
             </dd>
             <dt className="text-[var(--muted-foreground)]">Updated</dt>
             <dd>{formatDate(viewing.updated)}</dd>
@@ -687,7 +794,11 @@ function ContentPage() {
           onSave={(patch) => {
             updateContent([editing.id], patch)
             log(`“${patch.title ?? editing.title}” was edited`, 'info')
-            toast({ title: 'Saved', description: `“${patch.title ?? editing.title}” was updated.`, tone: 'success' })
+            toast({
+              title: 'Saved',
+              description: `“${patch.title ?? editing.title}” was updated.`,
+              tone: 'success',
+            })
             setEditing(null)
           }}
         />
@@ -715,7 +826,10 @@ function ContentPage() {
                 toast({
                   title: 'Moved to trash',
                   description: `“${target.title}” can be restored from Trash.`,
-                  action: { label: 'Undo', onClick: () => updateContent([target.id], { trashed: false }) },
+                  action: {
+                    label: 'Undo',
+                    onClick: () => updateContent([target.id], { trashed: false }),
+                  },
                 })
                 setDeleting(null)
               }}>
@@ -751,7 +865,10 @@ function EditDialog({
       description={`${TYPE_LABELS[record.type]} by ${record.creator}`}
       footer={
         <>
-          <Button variant="ghost" className="mr-auto" onClick={() => navigate(`lab/edit/${record.id}`)}>
+          <Button
+            variant="ghost"
+            className="mr-auto"
+            onClick={() => navigate(`lab/edit/${record.id}`)}>
             Open full editor
           </Button>
           <Button variant="secondary" onClick={onClose}>
@@ -759,13 +876,25 @@ function EditDialog({
           </Button>
           <Button
             disabled={!title.trim()}
-            onClick={() => onSave({ title: title.trim(), status, rating, comments: comments ? 'open' : 'closed' })}>
+            onClick={() =>
+              onSave({
+                title: title.trim(),
+                status,
+                rating,
+                comments: comments ? 'open' : 'closed',
+              })
+            }>
             Save changes
           </Button>
         </>
       }>
       <div className="flex flex-col gap-4">
-        <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} error={title.trim() ? undefined : 'Title is required'} />
+        <TextField
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          error={title.trim() ? undefined : 'Title is required'}
+        />
         <Select
           label="Status"
           value={status}
@@ -802,13 +931,20 @@ function TrashPage() {
         title="Trash"
         description="Deleted items stay here for 45 days."
         actions={
-          <Button variant="danger-outline" disabled={!trashed.length} onClick={() => setConfirmEmpty(true)}>
+          <Button
+            variant="danger-outline"
+            disabled={!trashed.length}
+            onClick={() => setConfirmEmpty(true)}>
             Empty trash
           </Button>
         }
       />
       {trashed.length === 0 ? (
-        <EmptyState icon={<Trash2 className="size-7" />} title="Trash is empty" description="Delete something from Content and it shows up here." />
+        <EmptyState
+          icon={<Trash2 className="size-7" />}
+          title="Trash is empty"
+          description="Delete something from Content and it shows up here."
+        />
       ) : (
         <Table>
           <TableHeader>
@@ -823,8 +959,12 @@ function TrashPage() {
             {trashed.map((row) => (
               <TableRow key={row.id}>
                 <TableCell className="font-semibold">{row.title}</TableCell>
-                <TableCell className="text-[var(--muted-foreground)]">{TYPE_LABELS[row.type]}</TableCell>
-                <TableCell className="text-[var(--muted-foreground)]">{formatDate(row.updated)}</TableCell>
+                <TableCell className="text-[var(--muted-foreground)]">
+                  {TYPE_LABELS[row.type]}
+                </TableCell>
+                <TableCell className="text-[var(--muted-foreground)]">
+                  {formatDate(row.updated)}
+                </TableCell>
                 <TableCell className="text-right">
                   <Button
                     size="sm"
@@ -833,7 +973,11 @@ function TrashPage() {
                     onClick={() => {
                       updateContent([row.id], { trashed: false })
                       log(`“${row.title}” restored from trash`, 'success')
-                      toast({ title: 'Restored', description: `“${row.title}” is back in Content.`, tone: 'success' })
+                      toast({
+                        title: 'Restored',
+                        description: `“${row.title}” is back in Content.`,
+                        tone: 'success',
+                      })
                     }}>
                     Restore
                   </Button>
@@ -910,7 +1054,13 @@ function UsersPage() {
             <TableRow key={u.id}>
               <TableCell>
                 <div className="flex items-center gap-3">
-                  <ProfileAvatar initials={u.name.split(' ').map((p) => p[0]).join('')} size="sm" />
+                  <ProfileAvatar
+                    initials={u.name
+                      .split(' ')
+                      .map((p) => p[0])
+                      .join('')}
+                    size="sm"
+                  />
                   <div className="flex flex-col">
                     <span className="font-semibold">{u.name}</span>
                     <span className="text-xs text-[var(--muted-foreground)]">{u.email}</span>
@@ -923,10 +1073,19 @@ function UsersPage() {
               <TableCell>
                 <StatusBadge tone={USER_TONES[u.status]}>{u.status}</StatusBadge>
               </TableCell>
-              <TableCell className="text-[var(--muted-foreground)]">{formatDate(u.joined)}</TableCell>
+              <TableCell className="text-[var(--muted-foreground)]">
+                {formatDate(u.joined)}
+              </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu
-                  trigger={<IconButton aria-label={`Actions for ${u.name}`} variant="ghost" size="icon" icon={<MoreHorizontal className="size-4" />} />}>
+                  trigger={
+                    <IconButton
+                      aria-label={`Actions for ${u.name}`}
+                      variant="ghost"
+                      size="icon"
+                      icon={<MoreHorizontal className="size-4" />}
+                    />
+                  }>
                   <MenuLabel>Role</MenuLabel>
                   {ROLES.map((r) => (
                     <MenuItem
@@ -944,9 +1103,18 @@ function UsersPage() {
                     danger={u.status !== 'suspended'}
                     onClick={() => {
                       const next = u.status === 'suspended' ? 'active' : 'suspended'
-                      setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, status: next } : x)))
-                      log(`${u.name} was ${next === 'suspended' ? 'suspended' : 'reinstated'}`, next === 'suspended' ? 'danger' : 'success')
-                      toast({ title: next === 'suspended' ? 'User suspended' : 'User reinstated', description: u.name, tone: next === 'suspended' ? 'warning' : 'success' })
+                      setUsers((prev) =>
+                        prev.map((x) => (x.id === u.id ? { ...x, status: next } : x))
+                      )
+                      log(
+                        `${u.name} was ${next === 'suspended' ? 'suspended' : 'reinstated'}`,
+                        next === 'suspended' ? 'danger' : 'success'
+                      )
+                      toast({
+                        title: next === 'suspended' ? 'User suspended' : 'User reinstated',
+                        description: u.name,
+                        tone: next === 'suspended' ? 'warning' : 'success',
+                      })
                     }}>
                     {u.status === 'suspended' ? 'Reinstate' : 'Suspend'}
                   </MenuItem>
@@ -970,13 +1138,27 @@ function UsersPage() {
             <Button
               disabled={!emailValid}
               onClick={() => {
-                const name = email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
+                const name = email
+                  .split('@')[0]
+                  .replace(/[._-]/g, ' ')
+                  .replace(/\b\w/g, (m) => m.toUpperCase())
                 setUsers((prev) => [
                   ...prev,
-                  { id: Math.random().toString(36).slice(2), name, email, role, status: 'invited', joined: new Date().toISOString() },
+                  {
+                    id: Math.random().toString(36).slice(2),
+                    name,
+                    email,
+                    role,
+                    status: 'invited',
+                    joined: new Date().toISOString(),
+                  },
                 ])
                 log(`${email} was invited as ${role}`, 'info')
-                toast({ title: 'Invite sent', description: `${email} was invited as ${role}.`, tone: 'success' })
+                toast({
+                  title: 'Invite sent',
+                  description: `${email} was invited as ${role}.`,
+                  tone: 'success',
+                })
                 setEmail('')
                 setInviteOpen(false)
               }}>
@@ -1021,14 +1203,22 @@ function ModerationPage() {
       log(`Report on “${item?.title}” dismissed`, 'neutral')
     }
     setReports((prev) => prev.filter((r) => r.id !== id))
-    toast({ title: action === 'archive' ? 'Content archived' : 'Report dismissed', description: item?.title ?? '', tone: action === 'archive' ? 'warning' : 'info' })
+    toast({
+      title: action === 'archive' ? 'Content archived' : 'Report dismissed',
+      description: item?.title ?? '',
+      tone: action === 'archive' ? 'warning' : 'info',
+    })
   }
 
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title="Moderation" description="Reports from the community, oldest first." />
       {reports.length === 0 ? (
-        <EmptyState icon={<Shield className="size-7" />} title="No open reports" description="Nice. The queue is empty." />
+        <EmptyState
+          icon={<Shield className="size-7" />}
+          title="No open reports"
+          description="Nice. The queue is empty."
+        />
       ) : (
         <div className="flex flex-col gap-3">
           {reports.map((r) => {
@@ -1063,7 +1253,9 @@ function ModerationPage() {
 function TagsPage() {
   const { content, navigate } = useShowcase()
   const counts = new Map<string, number>()
-  content.filter((c) => !c.trashed).forEach((c) => c.tags.forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1)))
+  content
+    .filter((c) => !c.trashed)
+    .forEach((c) => c.tags.forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1)))
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title="Tags" description="Tags in use across all Labs." />
@@ -1071,7 +1263,10 @@ function TagsPage() {
         {Array.from(counts.entries())
           .sort((a, b) => b[1] - a[1])
           .map(([tag, count]) => (
-            <FilterChip key={tag} count={count} onClick={() => navigate(`backstage/content?q=${tag}`)}>
+            <FilterChip
+              key={tag}
+              count={count}
+              onClick={() => navigate(`backstage/content?q=${tag}`)}>
               {tag}
             </FilterChip>
           ))}
@@ -1102,7 +1297,9 @@ function AuditPage() {
               <TableCell>
                 <StatusBadge tone={a.tone}>{a.tone}</StatusBadge>
               </TableCell>
-              <TableCell className="text-[var(--muted-foreground)]">{new Date(a.at).toLocaleString()}</TableCell>
+              <TableCell className="text-[var(--muted-foreground)]">
+                {new Date(a.at).toLocaleString()}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -1121,9 +1318,14 @@ function SettingsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Site settings" description="Changes here apply to the public site right away." />
+      <PageHeader
+        title="Site settings"
+        description="Changes here apply to the public site right away."
+      />
 
-      <Panel title="Maintenance mode" description="Shows a banner on the public site and limits access for visitors and Lab members.">
+      <Panel
+        title="Maintenance mode"
+        description="Shows a banner on the public site and limits access for visitors and Lab members.">
         <Switch
           checked={maintenance}
           onCheckedChange={setMaintenance}
@@ -1140,12 +1342,24 @@ function SettingsPage() {
           setTimeout(() => {
             setSaving(false)
             log('Site settings saved', 'success')
-            toast({ title: 'Settings saved', description: 'The public site picks them up on next load.', tone: 'success' })
+            toast({
+              title: 'Settings saved',
+              description: 'The public site picks them up on next load.',
+              tone: 'success',
+            })
           }, 900)
         }}>
         <h3 className="ui-section-title">General</h3>
-        <TextField label="Site name" value={siteName} onChange={(e) => setSiteName(e.target.value)} />
-        <RadioGroup label="Registration" defaultValue="invite" orientation="horizontal" variant="card">
+        <TextField
+          label="Site name"
+          value={siteName}
+          onChange={(e) => setSiteName(e.target.value)}
+        />
+        <RadioGroup
+          label="Registration"
+          defaultValue="invite"
+          orientation="horizontal"
+          variant="card">
           <RadioGroupItem value="open" label="Open" description="Anyone can sign up" />
           <RadioGroupItem value="invite" label="Invite only" description="Staff send invites" />
           <RadioGroupItem value="closed" label="Closed" description="No new accounts" />
@@ -1158,7 +1372,12 @@ function SettingsPage() {
             options={Object.entries(RATING_LABELS).map(([value, label]) => ({ value, label }))}
           />
         </div>
-        <FileInput label="Site logo" variant="dropzone" accept=".svg,.png" helperText="SVG or PNG, at least 512 px wide." />
+        <FileInput
+          label="Site logo"
+          variant="dropzone"
+          accept=".svg,.png"
+          helperText="SVG or PNG, at least 512 px wide."
+        />
         <div className="flex justify-end gap-2 border-t border-[var(--border)] pt-4">
           <Button variant="secondary" onClick={() => setSiteName('Dynamic Lab')}>
             Reset

@@ -48,7 +48,7 @@ Component classes sit in Tailwind's `components` layer, so utilities passed via 
 
 ### Content & creators (new)
 - `Tag`, `TagList` (`grouped`): e621-style tags in categories (artist, copyright, character, species, general, lore, meta), each with its own colour.
-- `AgeRating`, `AgeGate`: General / Teen / Mature badges, plus a blur gate that hides content above the viewer's allowed rating.
+- `AgeRating`, `AgeGate`: General / Suggestive / Mature badges, plus a blur gate that hides content above the viewer's allowed rating.
 - `ContentActions`: Save (with count), Share (copies the link) and Report (a dialog with reasons).
 - `CommentThread`, `CommentComposer`: Comments with likes, one level of replies, and a closed state.
 - `ReadingProgress`, `useReadingProgress`, `ReaderSettings`, `useReaderPrefs`, `readerStyle`, `ChapterNav`: The story reader. A sticky progress bar with time left; font size, family, line spacing and width controls saved to localStorage; chapter navigation.

@@ -7,12 +7,20 @@ export interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: string
 }
 
-export function Separator({ className, orientation = 'horizontal', label, ...props }: SeparatorProps) {
+export function Separator({
+  className,
+  orientation = 'horizontal',
+  label,
+  ...props
+}: SeparatorProps) {
   if (label && orientation === 'horizontal') {
     return (
       <div
         role="separator"
-        className={cn('flex items-center gap-3 text-xs font-medium text-[var(--muted-foreground)]', className)}
+        className={cn(
+          'flex items-center gap-3 text-xs font-medium text-[var(--muted-foreground)]',
+          className
+        )}
         {...props}>
         <span className="h-px flex-1 bg-[var(--border)]" />
         {label}

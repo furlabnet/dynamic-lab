@@ -58,7 +58,9 @@ export function Accordion({
 
   return (
     <AccordionContext.Provider value={{ expandedItems: currentExpanded, toggleItem }}>
-      <div className={cn('divide-y divide-[var(--border)] border-y border-[var(--border)]', className)} {...props}>
+      <div
+        className={cn('divide-y divide-[var(--border)] border-y border-[var(--border)]', className)}
+        {...props}>
         {children}
       </div>
     </AccordionContext.Provider>

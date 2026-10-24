@@ -35,7 +35,9 @@ export function Progress({
         <div className="flex items-center justify-between text-sm">
           {label && <span className="font-medium text-[var(--foreground)]">{label}</span>}
           {showValue && !indeterminate && (
-            <span className="tabular-nums text-[var(--muted-foreground)]">{Math.round(clamped)}%</span>
+            <span className="tabular-nums text-[var(--muted-foreground)]">
+              {Math.round(clamped)}%
+            </span>
           )}
         </div>
       )}

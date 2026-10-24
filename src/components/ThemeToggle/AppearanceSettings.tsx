@@ -21,7 +21,11 @@ export interface TransparencyControlProps {
 }
 
 /** System / Full / Reduced / Off picker for glass transparency. */
-export function TransparencyControl({ className, showHelp = true, size = 'md' }: TransparencyControlProps) {
+export function TransparencyControl({
+  className,
+  showHelp = true,
+  size = 'md',
+}: TransparencyControlProps) {
   const { transparency, resolvedTransparency, setTransparency } = useTheme()
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
@@ -59,7 +63,13 @@ export interface AppearanceSettingsProps {
 }
 
 /** Popover with colour mode and transparency, for headers and sidebars. */
-export function AppearanceSettings({ align = 'end', side = 'bottom', variant = 'icon', themesHref, className }: AppearanceSettingsProps) {
+export function AppearanceSettings({
+  align = 'end',
+  side = 'bottom',
+  variant = 'icon',
+  themesHref,
+  className,
+}: AppearanceSettingsProps) {
   const { mode, setMode, palette, palettes, paletteActive } = useTheme()
   return (
     <Popover
@@ -85,11 +95,17 @@ export function AppearanceSettings({ align = 'end', side = 'bottom', variant = '
         <div className="flex flex-col gap-1.5">
           <span className="flex items-baseline justify-between gap-2">
             <span className="button-sm">Colour theme</span>
-            {paletteActive && <span className="text-xs text-[var(--muted-foreground)]">{palettes.find((p) => p.id === palette)?.name}</span>}
+            {paletteActive && (
+              <span className="text-xs text-[var(--muted-foreground)]">
+                {palettes.find((p) => p.id === palette)?.name}
+              </span>
+            )}
           </span>
           <PalettePicker variant="compact" />
           {themesHref && (
-            <a href={themesHref} className="text-xs font-semibold text-[var(--primary)] hover:underline">
+            <a
+              href={themesHref}
+              className="text-xs font-semibold text-[var(--primary)] hover:underline">
               See all themes →
             </a>
           )}

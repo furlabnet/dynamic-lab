@@ -67,17 +67,25 @@ export function DownloadList({ files, onDownload, recommended, className }: Down
         const info = PLATFORM_INFO[file.platform]
         const isRecommended = file.platform === recommended
         return (
-          <li key={file.id} className={cn('ui-download-row', isRecommended && 'ui-download-row-recommended')}>
+          <li
+            key={file.id}
+            className={cn('ui-download-row', isRecommended && 'ui-download-row-recommended')}>
             <span className="ui-command-item-icon size-10! [&>svg]:size-5!">{info.icon}</span>
             <div className="flex min-w-0 flex-1 flex-col">
               <span className="flex flex-wrap items-center gap-2 text-sm font-semibold">
                 <span className="truncate">{info.label}</span>
-                {isRecommended && <span className="ui-badge ui-badge-primary ui-badge-sm">For your device</span>}
+                {isRecommended && (
+                  <span className="ui-badge ui-badge-primary ui-badge-sm">For your device</span>
+                )}
               </span>
               <span className="text-xs text-[var(--muted-foreground)]">
-                {[file.version && `v${file.version}`, file.size, file.note].filter(Boolean).join(' · ')}
+                {[file.version && `v${file.version}`, file.size, file.note]
+                  .filter(Boolean)
+                  .join(' · ')}
               </span>
-              <span className="truncate text-xs text-[var(--muted-foreground)] opacity-80" title={file.name}>
+              <span
+                className="truncate text-xs text-[var(--muted-foreground)] opacity-80"
+                title={file.name}>
                 {file.name}
               </span>
             </div>
@@ -86,7 +94,11 @@ export function DownloadList({ files, onDownload, recommended, className }: Down
                 <Download className="size-4" /> Download
               </a>
             ) : (
-              <Button size="sm" variant={isRecommended ? 'primary' : 'secondary'} leftIcon={<Download className="size-4" />} onClick={() => onDownload?.(file)}>
+              <Button
+                size="sm"
+                variant={isRecommended ? 'primary' : 'secondary'}
+                leftIcon={<Download className="size-4" />}
+                onClick={() => onDownload?.(file)}>
                 Download
               </Button>
             )}

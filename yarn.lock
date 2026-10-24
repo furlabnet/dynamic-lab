@@ -54,6 +54,7 @@ __metadata:
     tailwindcss: "npm:^4.3.3"
     tsdown: "npm:^0.23.2"
     typescript: "npm:^7.0.2"
+    updates: "npm:^19.3.0"
     vite: "npm:^8.3.5"
     vite-plugin-dts: "npm:^5.1.2"
   languageName: unknown
@@ -2049,6 +2050,15 @@ __metadata:
   bin:
     update-browserslist-db: cli.js
   checksum: 10c0/5c0769472715b57371208c3146cc07a4f0917c1d18cc34f60325bc4234f4a28f332e50b99f675999ff311315231ff19beb22a815dfe04ccc1e798e1d389514d7
+  languageName: node
+  linkType: hard
+
+"updates@npm:^19.3.0":
+  version: 19.3.0
+  resolution: "updates@npm:19.3.0"
+  bin:
+    updates: dist/index.js
+  checksum: 10c0/1d0b529d6c4bcd3bcab83eb4ee1442b9ded08ebaaf283caed5c9b0297159a4b31fe52098e6336156c0a040376befa7d6ea496a98232439cfe22604cfb03f3d80
   languageName: node
   linkType: hard
 

@@ -47,9 +47,16 @@ export function BrandLockup({
 }: BrandLockupProps) {
   return (
     <div
-      className={cn('ui-brand inline-flex items-center select-none', size === 'sm' ? 'gap-2' : 'gap-2.5', className)}
+      className={cn(
+        'ui-brand inline-flex items-center select-none',
+        size === 'sm' ? 'gap-2' : 'gap-2.5',
+        className
+      )}
       {...props}>
-      <DynamicLabMark size={markSize ?? (size === 'sm' ? 20 : 26)} className="text-[var(--primary)]" />
+      <DynamicLabMark
+        size={markSize ?? (size === 'sm' ? 20 : 26)}
+        className="text-[var(--primary)]"
+      />
       <span
         className={cn(
           'font-extrabold tracking-tight whitespace-nowrap text-[var(--foreground)]',

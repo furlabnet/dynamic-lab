@@ -54,7 +54,11 @@ export function Popover({
   const containerRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const panelId = useId()
-  const [position, setPosition] = useState<{ top: number; left: number; side: 'top' | 'bottom' } | null>(null)
+  const [position, setPosition] = useState<{
+    top: number
+    left: number
+    side: 'top' | 'bottom'
+  } | null>(null)
 
   const close = (restoreFocus = false) => {
     setOpen(false)
@@ -66,7 +70,9 @@ export function Popover({
   useDismiss([containerRef, panelRef], open, (reason) => close(reason === 'escape'))
 
   const place = useCallback(() => {
-    const anchor = containerRef.current?.querySelector<HTMLElement>('[data-popover-trigger]') ?? containerRef.current
+    const anchor =
+      containerRef.current?.querySelector<HTMLElement>('[data-popover-trigger]') ??
+      containerRef.current
     const panel = panelRef.current
     if (!anchor || !panel) return
     const rect = anchor.getBoundingClientRect()
@@ -76,14 +82,30 @@ export function Popover({
 
     const roomBelow = vh - rect.bottom - GAP
     const roomAbove = rect.top - GAP
-    const resolvedSide = side === 'bottom' ? (h > roomBelow && roomAbove > roomBelow ? 'top' : 'bottom') : h > roomAbove && roomBelow > roomAbove ? 'bottom' : 'top'
+    const resolvedSide =
+      side === 'bottom'
+        ? h > roomBelow && roomAbove > roomBelow
+          ? 'top'
+          : 'bottom'
+        : h > roomAbove && roomBelow > roomAbove
+          ? 'bottom'
+          : 'top'
     let top = resolvedSide === 'bottom' ? rect.bottom + GAP : rect.top - GAP - h
     top = Math.max(VIEWPORT_MARGIN, Math.min(top, vh - h - VIEWPORT_MARGIN))
 
-    let left = align === 'start' ? rect.left : align === 'end' ? rect.right - w : rect.left + rect.width / 2 - w / 2
+    let left =
+      align === 'start'
+        ? rect.left
+        : align === 'end'
+          ? rect.right - w
+          : rect.left + rect.width / 2 - w / 2
     left = Math.max(VIEWPORT_MARGIN, Math.min(left, vw - w - VIEWPORT_MARGIN))
 
-    setPosition((prev) => (prev && prev.top === top && prev.left === left && prev.side === resolvedSide ? prev : { top, left, side: resolvedSide }))
+    setPosition((prev) =>
+      prev && prev.top === top && prev.left === left && prev.side === resolvedSide
+        ? prev
+        : { top, left, side: resolvedSide }
+    )
   }, [side, align])
 
   useLayoutEffect(() => {

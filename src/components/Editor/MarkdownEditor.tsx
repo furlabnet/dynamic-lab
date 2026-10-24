@@ -16,7 +16,12 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
     if (link) {
       const safe = /^(https?:|mailto:|#)/.test(link[2])
       return safe ? (
-        <a key={key} href={link[2]} className="text-[var(--primary)] underline" target={link[2].startsWith('#') ? undefined : '_blank'} rel="noreferrer">
+        <a
+          key={key}
+          href={link[2]}
+          className="text-[var(--primary)] underline"
+          target={link[2].startsWith('#') ? undefined : '_blank'}
+          rel="noreferrer">
           {link[1]}
         </a>
       ) : (
@@ -29,14 +34,29 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
 
 /** Renders a small Markdown subset (headings, quotes, lists, rules, bold, italic, links) as React nodes. No HTML is injected. */
 export function renderMarkdown(source: string): React.ReactNode {
-  const blocks = source.replace(/\r\n/g, '\n').split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
+  const blocks = source
+    .replace(/\r\n/g, '\n')
+    .split(/\n{2,}/)
+    .map((b) => b.trim())
+    .filter(Boolean)
   return blocks.map((block, i) => {
     const key = `b${i}`
     if (/^-{3,}$/.test(block)) return <hr key={key} />
     if (block.startsWith('### ')) return <h3 key={key}>{renderInline(block.slice(4), key)}</h3>
-    if (block.startsWith('## ') || block.startsWith('# ')) return <h2 key={key}>{renderInline(block.replace(/^#+\s/, ''), key)}</h2>
+    if (block.startsWith('## ') || block.startsWith('# '))
+      return <h2 key={key}>{renderInline(block.replace(/^#+\s/, ''), key)}</h2>
     if (block.split('\n').every((l) => l.startsWith('> ')))
-      return <blockquote key={key}>{renderInline(block.split('\n').map((l) => l.slice(2)).join(' '), key)}</blockquote>
+      return (
+        <blockquote key={key}>
+          {renderInline(
+            block
+              .split('\n')
+              .map((l) => l.slice(2))
+              .join(' '),
+            key
+          )}
+        </blockquote>
+      )
     if (block.split('\n').every((l) => /^[-*] /.test(l)))
       return (
         <ul key={key} className="list-disc pl-6">
@@ -206,7 +226,11 @@ export function MarkdownEditor({
           />
         ) : (
           <div className={cn('ui-prose ui-md-preview', previewClassName)} style={previewStyle}>
-            {value.trim() ? renderMarkdown(value) : <p className="text-[var(--muted-foreground)]">Nothing to preview yet.</p>}
+            {value.trim() ? (
+              renderMarkdown(value)
+            ) : (
+              <p className="text-[var(--muted-foreground)]">Nothing to preview yet.</p>
+            )}
           </div>
         )}
       </div>
@@ -216,7 +240,11 @@ export function MarkdownEditor({
         ) : (
           <span className="text-[var(--muted-foreground)]">{helperText}</span>
         )}
-        {showWordCount && <span className="shrink-0 tabular-nums text-[var(--muted-foreground)]">{countWords(value).toLocaleString()} words</span>}
+        {showWordCount && (
+          <span className="shrink-0 tabular-nums text-[var(--muted-foreground)]">
+            {countWords(value).toLocaleString()} words
+          </span>
+        )}
       </div>
     </div>
   )

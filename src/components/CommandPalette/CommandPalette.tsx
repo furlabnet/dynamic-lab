@@ -80,7 +80,10 @@ export function CommandPalette({
     }
   }, [open])
 
-  const filtered = useMemo(() => items.filter((item) => matches(item, query.trim())), [items, query])
+  const filtered = useMemo(
+    () => items.filter((item) => matches(item, query.trim())),
+    [items, query]
+  )
 
   const groups = useMemo(() => {
     const map = new Map<string, CommandItem[]>()
@@ -150,13 +153,19 @@ export function CommandPalette({
             role="combobox"
             aria-expanded="true"
             aria-controls={listId}
-            aria-activedescendant={filtered[activeIndex] ? `${listId}-${filtered[activeIndex].id}` : undefined}
+            aria-activedescendant={
+              filtered[activeIndex] ? `${listId}-${filtered[activeIndex].id}` : undefined
+            }
             className="h-14 flex-1 bg-transparent text-[15px] text-[var(--foreground)] outline-none placeholder:text-[var(--muted-foreground)]"
           />
           <Kbd>Esc</Kbd>
         </div>
 
-        <div ref={listRef} id={listId} role="listbox" className="max-h-[min(60vh,420px)] overflow-y-auto p-2">
+        <div
+          ref={listRef}
+          id={listId}
+          role="listbox"
+          className="max-h-[min(60vh,420px)] overflow-y-auto p-2">
           {filtered.length === 0 ? (
             <div className="flex flex-col items-center gap-2 px-4 py-10 text-center text-sm text-[var(--muted-foreground)]">
               <SearchX className="size-6" aria-hidden />
@@ -164,7 +173,11 @@ export function CommandPalette({
             </div>
           ) : (
             groups.map(([group, groupItems]) => (
-              <div key={group || 'default'} role="group" aria-label={group || undefined} className="mb-1">
+              <div
+                key={group || 'default'}
+                role="group"
+                aria-label={group || undefined}
+                className="mb-1">
                 {group && (
                   <div className="px-3 pb-1 pt-2 text-[11px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
                     {group}
@@ -188,13 +201,20 @@ export function CommandPalette({
                       <span className="flex min-w-0 flex-1 flex-col">
                         <span className="truncate text-sm font-medium">{item.label}</span>
                         {item.description && (
-                          <span className="truncate text-xs text-[var(--muted-foreground)]">{item.description}</span>
+                          <span className="truncate text-xs text-[var(--muted-foreground)]">
+                            {item.description}
+                          </span>
                         )}
                       </span>
                       {item.shortcut ? (
                         <Kbd keys={item.shortcut} />
                       ) : (
-                        active && <CornerDownLeft className="size-3.5 text-[var(--muted-foreground)]" aria-hidden />
+                        active && (
+                          <CornerDownLeft
+                            className="size-3.5 text-[var(--muted-foreground)]"
+                            aria-hidden
+                          />
+                        )
                       )}
                     </div>
                   )
@@ -213,8 +233,7 @@ export function CommandPalette({
           </span>
         </div>
       </div>
-    </div>
-    ,
+    </div>,
     document.body
   )
 }

@@ -5,10 +5,7 @@
       "$value": 2.0,
       "$description": "Brand product tag vertical padding; nav item gap.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-6": {
@@ -16,10 +13,7 @@
       "$value": 6.0,
       "$description": "Pill-nav and menu inner padding; nav-label bottom margin.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-8": {
@@ -27,10 +21,7 @@
       "$value": 8.0,
       "$description": "Toolbar and page-actions gap; nav link vertical padding.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-10": {
@@ -38,10 +29,7 @@
       "$value": 10.0,
       "$description": "Nav link horizontal padding; brand lockup gap; toolbar vertical padding.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-12": {
@@ -49,10 +37,7 @@
       "$value": 12.0,
       "$description": "Field horizontal padding; menu item padding; empty-state gap.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-16": {
@@ -60,10 +45,7 @@
       "$value": 16.0,
       "$description": "Notice-panel padding; page-heading and timeline gaps; container gutter on phones.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-20": {
@@ -71,10 +53,7 @@
       "$value": 20.0,
       "$description": "ui-panel padding below 640px; primary-button horizontal padding; dashboard gap.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-24": {
@@ -82,10 +61,7 @@
       "$value": 24.0,
       "$description": "ui-panel padding from 640px; dialog padding; page-header column gap.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-28": {
@@ -93,10 +69,7 @@
       "$value": 28.0,
       "$description": "Auth card padding; metric-card padding at its largest.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-32": {
@@ -104,10 +77,7 @@
       "$value": 32.0,
       "$description": "Empty-panel padding; desktop dashboard gap; container gutter at its largest.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     },
     "space-40": {
@@ -115,10 +85,7 @@
       "$value": 40.0,
       "$description": "Page-stack gap at its largest; ui-empty vertical padding.",
       "$extensions": {
-        "com.figma.scopes": [
-          "GAP",
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["GAP", "WIDTH_HEIGHT"]
       }
     }
   },
@@ -128,9 +95,7 @@
       "$value": 6.0,
       "$description": "rounded-sm: small inner elements.",
       "$extensions": {
-        "com.figma.scopes": [
-          "CORNER_RADIUS"
-        ]
+        "com.figma.scopes": ["CORNER_RADIUS"]
       }
     },
     "radius-md": {
@@ -138,9 +103,7 @@
       "$value": 8.0,
       "$description": "rounded-md; icon-button, nav links, menu items, file-picker button.",
       "$extensions": {
-        "com.figma.scopes": [
-          "CORNER_RADIUS"
-        ]
+        "com.figma.scopes": ["CORNER_RADIUS"]
       }
     },
     "radius-lg": {
@@ -148,9 +111,7 @@
       "$value": 10.0,
       "$description": "`--radius`: buttons and form fields.",
       "$extensions": {
-        "com.figma.scopes": [
-          "CORNER_RADIUS"
-        ]
+        "com.figma.scopes": ["CORNER_RADIUS"]
       }
     },
     "radius-xl": {
@@ -158,9 +119,7 @@
       "$value": 14.0,
       "$description": "Menus, toolbars and pill-nav links (0.875rem).",
       "$extensions": {
-        "com.figma.scopes": [
-          "CORNER_RADIUS"
-        ]
+        "com.figma.scopes": ["CORNER_RADIUS"]
       }
     },
     "radius-2xl": {
@@ -168,9 +127,7 @@
       "$value": 16.0,
       "$description": "ui-panel, notice-panel, dashboard sidebar.",
       "$extensions": {
-        "com.figma.scopes": [
-          "CORNER_RADIUS"
-        ]
+        "com.figma.scopes": ["CORNER_RADIUS"]
       }
     },
     "radius-3xl": {
@@ -178,9 +135,7 @@
       "$value": 20.0,
       "$description": "surface-card, dialogs, auth card, empty-panel, hero icon.",
       "$extensions": {
-        "com.figma.scopes": [
-          "CORNER_RADIUS"
-        ]
+        "com.figma.scopes": ["CORNER_RADIUS"]
       }
     },
     "radius-full": {
@@ -188,9 +143,7 @@
       "$value": 999.0,
       "$description": "Status pills, filter chips, avatars, the brand product tag.",
       "$extensions": {
-        "com.figma.scopes": [
-          "CORNER_RADIUS"
-        ]
+        "com.figma.scopes": ["CORNER_RADIUS"]
       }
     }
   },
@@ -200,9 +153,7 @@
       "$value": 44.0,
       "$description": "Minimum height of buttons, fields, chips and phone nav links (min-h-11).",
       "$extensions": {
-        "com.figma.scopes": [
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["WIDTH_HEIGHT"]
       }
     },
     "control-compact": {
@@ -210,9 +161,7 @@
       "$value": 36.0,
       "$description": "icon-button; toolbar fields and buttons from 1024px; desktop nav links.",
       "$extensions": {
-        "com.figma.scopes": [
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["WIDTH_HEIGHT"]
       }
     },
     "container-max": {
@@ -220,9 +169,7 @@
       "$value": 1280.0,
       "$description": ".site-container and .dash-shell max width (80rem).",
       "$extensions": {
-        "com.figma.scopes": [
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["WIDTH_HEIGHT"]
       }
     },
     "sidebar-width": {
@@ -230,9 +177,7 @@
       "$value": 248.0,
       "$description": "Dashboard and Backstage sidebar (15.5rem); Backstage rail collapses to 68px.",
       "$extensions": {
-        "com.figma.scopes": [
-          "WIDTH_HEIGHT"
-        ]
+        "com.figma.scopes": ["WIDTH_HEIGHT"]
       }
     }
   }

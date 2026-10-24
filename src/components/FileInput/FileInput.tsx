@@ -2,7 +2,10 @@ import React, { useId, useState } from 'react'
 import { UploadCloud, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-export interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
+export interface FileInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'type' | 'onChange'
+> {
   label?: string
   helperText?: string
   error?: string
@@ -19,7 +22,19 @@ function formatSize(bytes: number) {
 
 export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
   (
-    { label, helperText, error, variant = 'inline', onFilesChange, className, id, multiple, accept, disabled, ...props },
+    {
+      label,
+      helperText,
+      error,
+      variant = 'inline',
+      onFilesChange,
+      className,
+      id,
+      multiple,
+      accept,
+      disabled,
+      ...props
+    },
     ref
   ) => {
     const generatedId = useId()
@@ -71,7 +86,11 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
               setDragging(false)
               if (!disabled) update(e.dataTransfer.files)
             }}
-            className={cn('ui-dropzone', error && 'border-[var(--destructive)]', disabled && 'pointer-events-none opacity-50')}>
+            className={cn(
+              'ui-dropzone',
+              error && 'border-[var(--destructive)]',
+              disabled && 'pointer-events-none opacity-50'
+            )}>
             <input
               ref={ref}
               id={inputId}
@@ -89,9 +108,14 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
               <UploadCloud className="size-5" />
             </span>
             <span className="text-sm font-semibold text-[var(--foreground)]">
-              Drop {multiple ? 'files' : 'a file'} here or <span className="text-[var(--primary)]">browse</span>
+              Drop {multiple ? 'files' : 'a file'} here or{' '}
+              <span className="text-[var(--primary)]">browse</span>
             </span>
-            {accept && <span className="text-xs text-[var(--muted-foreground)]">{accept.split(',').join(', ')}</span>}
+            {accept && (
+              <span className="text-xs text-[var(--muted-foreground)]">
+                {accept.split(',').join(', ')}
+              </span>
+            )}
           </label>
         )}
 

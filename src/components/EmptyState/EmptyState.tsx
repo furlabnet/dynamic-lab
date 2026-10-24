@@ -35,7 +35,9 @@ export function EmptyState({
           {icon}
         </span>
       )}
-      <h4 className="ui-empty-title text-base sm:text-lg font-bold text-[var(--foreground)]">{title}</h4>
+      <h4 className="ui-empty-title text-base sm:text-lg font-bold text-[var(--foreground)]">
+        {title}
+      </h4>
       {description && (
         <p className="ui-empty-description text-sm text-[var(--muted-foreground)] max-w-md">
           {description}

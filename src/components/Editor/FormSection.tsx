@@ -9,7 +9,14 @@ export interface FormSectionProps extends Omit<React.HTMLAttributes<HTMLElement>
 }
 
 /** A titled group of fields: heading and help on the left from lg up, fields on the right. */
-export function FormSection({ title, description, actions, className, children, ...props }: FormSectionProps) {
+export function FormSection({
+  title,
+  description,
+  actions,
+  className,
+  children,
+  ...props
+}: FormSectionProps) {
   return (
     <section className={cn('ui-form-section', className)} {...props}>
       <div className="flex flex-col gap-1">
@@ -33,12 +40,26 @@ export interface EditorActionBarProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 /** A bar pinned to the bottom of the viewport with the save status and primary actions. */
-export function EditorActionBar({ dirty = false, status, className, children, ...props }: EditorActionBarProps) {
+export function EditorActionBar({
+  dirty = false,
+  status,
+  className,
+  children,
+  ...props
+}: EditorActionBarProps) {
   return (
     <div className={cn('ui-editor-bar glass-chrome', className)} {...props}>
       <div className="mx-auto flex max-w-[var(--container-max)] flex-wrap items-center gap-3 px-4 py-3 sm:px-8">
-        <span className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]" aria-live="polite">
-          <span className={cn('size-2 rounded-full', dirty ? 'bg-[var(--status-warning-ink)]' : 'bg-[var(--status-success-ink)]')} aria-hidden />
+        <span
+          className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]"
+          aria-live="polite">
+          <span
+            className={cn(
+              'size-2 rounded-full',
+              dirty ? 'bg-[var(--status-warning-ink)]' : 'bg-[var(--status-success-ink)]'
+            )}
+            aria-hidden
+          />
           {status ?? (dirty ? 'Unsaved changes' : 'All changes saved')}
         </span>
         <div className="ml-auto flex flex-wrap items-center gap-2">{children}</div>

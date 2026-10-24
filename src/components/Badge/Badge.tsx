@@ -25,8 +25,7 @@ export const badgeVariants = cva('ui-badge', {
 })
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
   icon?: React.ReactNode
 }
 

@@ -69,8 +69,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <div className="flex items-start gap-3 flex-1 min-w-0">
               {t.tone && toneIcons[t.tone]}
               <div className="flex flex-col gap-0.5">
-                {t.title && <h5 className="font-bold text-sm leading-tight text-[var(--foreground)]">{t.title}</h5>}
-                <p className="text-xs text-[var(--muted-foreground)] leading-snug">{t.description}</p>
+                {t.title && (
+                  <h5 className="font-bold text-sm leading-tight text-[var(--foreground)]">
+                    {t.title}
+                  </h5>
+                )}
+                <p className="text-xs text-[var(--muted-foreground)] leading-snug">
+                  {t.description}
+                </p>
                 {t.action && (
                   <button
                     type="button"

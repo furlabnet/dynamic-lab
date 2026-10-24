@@ -58,7 +58,11 @@ export function SortableList<T>({
     setAnnouncement(`${getLabel(items[from], from)} moved to position ${to + 1} of ${items.length}`)
     if (refocus) {
       requestAnimationFrame(() =>
-        rootRef.current?.querySelector<HTMLElement>(`[data-sortable-key="${CSS.escape(key)}"] [data-sortable-handle]`)?.focus()
+        rootRef.current
+          ?.querySelector<HTMLElement>(
+            `[data-sortable-key="${CSS.escape(key)}"] [data-sortable-handle]`
+          )
+          ?.focus()
       )
     }
   }
@@ -67,7 +71,9 @@ export function SortableList<T>({
   const nextKey = layout === 'grid' ? ['ArrowRight', 'ArrowDown'] : ['ArrowDown']
 
   return (
-    <div ref={rootRef} className={cn(layout === 'grid' ? 'grid gap-3' : 'flex flex-col gap-2', className)}>
+    <div
+      ref={rootRef}
+      className={cn(layout === 'grid' ? 'grid gap-3' : 'flex flex-col gap-2', className)}>
       {items.map((item, index) => {
         const key = getKey(item)
         const api: SortableItemApi = {
@@ -115,7 +121,11 @@ export function SortableList<T>({
               setDragging(null)
               setArmed(null)
             }}
-            className={cn('ui-sortable-item', dragging === key && 'ui-sortable-dragging', itemClassName)}>
+            className={cn(
+              'ui-sortable-item',
+              dragging === key && 'ui-sortable-dragging',
+              itemClassName
+            )}>
             {renderItem(item, api)}
           </div>
         )

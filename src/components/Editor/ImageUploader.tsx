@@ -103,31 +103,57 @@ export function ImageUploader({
       {value.length > 0 && (
         <SortableList
           layout="grid"
-          className={aspect === 'video' ? 'grid-cols-2 sm:grid-cols-3 xl:grid-cols-4' : 'grid-cols-3 sm:grid-cols-5 xl:grid-cols-6'}
+          className={
+            aspect === 'video'
+              ? 'grid-cols-2 sm:grid-cols-3 xl:grid-cols-4'
+              : 'grid-cols-3 sm:grid-cols-5 xl:grid-cols-6'
+          }
           items={value}
           getKey={(i) => i.id}
           getLabel={(_i, idx) => `${noun} ${idx + 1}`}
           onReorder={onChange}
           renderItem={(image, api) => (
             <figure className={cn('ui-upload-tile', aspectClasses[aspect])}>
-              <img src={image.src} alt={image.name ?? `${noun} ${api.index + 1}`} draggable={false} />
+              <img
+                src={image.src}
+                alt={image.name ?? `${noun} ${api.index + 1}`}
+                draggable={false}
+              />
               <div className="ui-upload-tile-top">
                 <DragHandle {...api.handleProps} className="ui-upload-tile-button" />
                 {api.index === 0 && firstLabel ? (
                   <span className="ui-badge ui-badge-solid ui-badge-sm">{firstLabel}</span>
                 ) : numbered ? (
-                  <span className="ui-badge ui-badge-sm bg-black/60 text-white">{api.index + 1}</span>
+                  <span className="ui-badge ui-badge-sm bg-black/60 text-white">
+                    {api.index + 1}
+                  </span>
                 ) : null}
-                <button type="button" aria-label={`Remove ${noun} ${api.index + 1}`} onClick={() => remove(image.id)} className="ui-upload-tile-button ml-auto">
+                <button
+                  type="button"
+                  aria-label={`Remove ${noun} ${api.index + 1}`}
+                  onClick={() => remove(image.id)}
+                  className="ui-upload-tile-button ml-auto">
                   <X className="size-3.5" />
                 </button>
               </div>
               <div className="ui-upload-tile-bottom">
-                <button type="button" aria-label="Move earlier" disabled={api.isFirst} onClick={api.moveUp} className="ui-upload-tile-button">
+                <button
+                  type="button"
+                  aria-label="Move earlier"
+                  disabled={api.isFirst}
+                  onClick={api.moveUp}
+                  className="ui-upload-tile-button">
                   <ChevronLeft className="size-3.5" />
                 </button>
-                {numbered && firstLabel && api.index > 0 && <span className="text-[11px] font-bold text-white">{api.index + 1}</span>}
-                <button type="button" aria-label="Move later" disabled={api.isLast} onClick={api.moveDown} className="ui-upload-tile-button">
+                {numbered && firstLabel && api.index > 0 && (
+                  <span className="text-[11px] font-bold text-white">{api.index + 1}</span>
+                )}
+                <button
+                  type="button"
+                  aria-label="Move later"
+                  disabled={api.isLast}
+                  onClick={api.moveDown}
+                  className="ui-upload-tile-button">
                   <ChevronRight className="size-3.5" />
                 </button>
               </div>
@@ -153,7 +179,11 @@ export function ImageUploader({
             setDragging(false)
             add(e.dataTransfer.files)
           }}
-          className={cn('ui-dropzone', value.length > 0 && 'py-5!', error && 'border-[var(--destructive)]')}>
+          className={cn(
+            'ui-dropzone',
+            value.length > 0 && 'py-5!',
+            error && 'border-[var(--destructive)]'
+          )}>
           <input
             id={inputId}
             type="file"
@@ -167,10 +197,16 @@ export function ImageUploader({
           />
           <ImagePlus className="size-6 text-[var(--primary)]" aria-hidden />
           <span className="text-sm font-semibold">
-            {value.length ? (multiple ? `Add more ${noun}s` : `Replace ${noun}`) : `Drop ${multiple ? `${noun}s` : `a ${noun}`} here or `}
+            {value.length
+              ? multiple
+                ? `Add more ${noun}s`
+                : `Replace ${noun}`
+              : `Drop ${multiple ? `${noun}s` : `a ${noun}`} here or `}
             {!value.length && <span className="text-[var(--primary)]">browse</span>}
           </span>
-          {helperText && <span className="text-xs text-[var(--muted-foreground)]">{helperText}</span>}
+          {helperText && (
+            <span className="text-xs text-[var(--muted-foreground)]">{helperText}</span>
+          )}
         </label>
       )}
       {error && <p className="text-xs font-medium text-[var(--destructive)]">{error}</p>}

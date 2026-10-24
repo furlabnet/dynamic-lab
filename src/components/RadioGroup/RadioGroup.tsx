@@ -12,7 +12,10 @@ interface RadioGroupContextValue {
 
 const RadioGroupContext = createContext<RadioGroupContextValue | null>(null)
 
-export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
+export interface RadioGroupProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onChange' | 'defaultValue'
+> {
   value?: string
   defaultValue?: string
   onValueChange?: (value: string) => void
@@ -42,7 +45,13 @@ export function RadioGroup({
 
   return (
     <RadioGroupContext.Provider
-      value={{ name: name ?? generatedName, value: current, setValue: setCurrent, disabled, variant }}>
+      value={{
+        name: name ?? generatedName,
+        value: current,
+        setValue: setCurrent,
+        disabled,
+        variant,
+      }}>
       <div
         role="radiogroup"
         aria-label={label}
@@ -70,7 +79,13 @@ export interface RadioGroupItemProps {
   className?: string
 }
 
-export function RadioGroupItem({ value, label, description, disabled, className }: RadioGroupItemProps) {
+export function RadioGroupItem({
+  value,
+  label,
+  description,
+  disabled,
+  className,
+}: RadioGroupItemProps) {
   const group = useContext(RadioGroupContext)
   if (!group) throw new Error('RadioGroupItem must be used within RadioGroup')
 
@@ -101,7 +116,9 @@ export function RadioGroupItem({ value, label, description, disabled, className 
       <span className="ui-radio mt-0.5" aria-hidden />
       <span className="flex flex-col">
         <span className="text-sm font-medium text-[var(--foreground)]">{label}</span>
-        {description && <span className="text-xs text-[var(--muted-foreground)]">{description}</span>}
+        {description && (
+          <span className="text-xs text-[var(--muted-foreground)]">{description}</span>
+        )}
       </span>
     </label>
   )

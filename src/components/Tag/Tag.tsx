@@ -3,7 +3,8 @@ import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 /** Booru-style tag categories (as on e621), each with its own colour. */
-export type TagCategory = 'artist' | 'copyright' | 'character' | 'species' | 'general' | 'lore' | 'meta'
+export type TagCategory =
+  'artist' | 'copyright' | 'character' | 'species' | 'general' | 'lore' | 'meta'
 
 export interface TagItem {
   name: string
@@ -22,7 +23,15 @@ export const TAG_CATEGORY_LABELS: Record<TagCategory, string> = {
   meta: 'Meta',
 }
 
-const CATEGORY_ORDER: TagCategory[] = ['artist', 'copyright', 'character', 'species', 'general', 'lore', 'meta']
+const CATEGORY_ORDER: TagCategory[] = [
+  'artist',
+  'copyright',
+  'character',
+  'species',
+  'general',
+  'lore',
+  'meta',
+]
 
 /** "red_fox" → "red fox". Tags are stored with underscores and shown with spaces. */
 export function formatTagName(name: string) {
@@ -42,11 +51,23 @@ export interface TagProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onCli
   onRemove?: (name: string) => void
 }
 
-export function Tag({ name, category = 'general', count, href, onClick, onRemove, className, ...props }: TagProps) {
+export function Tag({
+  name,
+  category = 'general',
+  count,
+  href,
+  onClick,
+  onRemove,
+  className,
+  ...props
+}: TagProps) {
   const interactive = Boolean(href || onClick)
   const Component = (href ? 'a' : onClick ? 'button' : 'span') as React.ElementType
   return (
-    <span data-category={category} className={cn('ui-tag', interactive && 'ui-tag-interactive', className)} {...props}>
+    <span
+      data-category={category}
+      className={cn('ui-tag', interactive && 'ui-tag-interactive', className)}
+      {...props}>
       <Component
         href={href}
         type={Component === 'button' ? 'button' : undefined}
@@ -56,7 +77,11 @@ export function Tag({ name, category = 'general', count, href, onClick, onRemove
       </Component>
       {count !== undefined && <span className="ui-tag-count">{formatCount(count)}</span>}
       {onRemove && (
-        <button type="button" aria-label={`Remove tag ${formatTagName(name)}`} onClick={() => onRemove(name)} className="ui-tag-remove">
+        <button
+          type="button"
+          aria-label={`Remove tag ${formatTagName(name)}`}
+          onClick={() => onRemove(name)}
+          className="ui-tag-remove">
           <X className="size-3" />
         </button>
       )}
@@ -97,7 +122,10 @@ export function TagList({ tags, grouped = false, onTagClick, className, ...props
         const inCategory = tags.filter((t) => (t.category ?? 'general') === category)
         if (inCategory.length === 0) return null
         return (
-          <section key={category} className="flex flex-col gap-1.5" aria-label={`${TAG_CATEGORY_LABELS[category]} tags`}>
+          <section
+            key={category}
+            className="flex flex-col gap-1.5"
+            aria-label={`${TAG_CATEGORY_LABELS[category]} tags`}>
             <h4 className="ui-tag-heading" data-category={category}>
               {TAG_CATEGORY_LABELS[category]}
             </h4>

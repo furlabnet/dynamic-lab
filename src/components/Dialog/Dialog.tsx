@@ -85,8 +85,7 @@ export function Dialog({
           </div>
         )}
       </div>
-    </div>
-    ,
+    </div>,
     document.body
   )
 }

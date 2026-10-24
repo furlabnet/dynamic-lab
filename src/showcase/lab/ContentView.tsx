@@ -37,7 +37,20 @@ import {
   useToast,
   type TagItem,
 } from '../../index'
-import { AlertTriangle, Calendar, Clock, Cpu, Eye, Gamepad2, Globe, History, Languages, Package, Pencil, Sparkles } from 'lucide-react'
+import {
+  AlertTriangle,
+  Calendar,
+  Clock,
+  Cpu,
+  Eye,
+  Gamepad2,
+  Globe,
+  History,
+  Languages,
+  Package,
+  Pencil,
+  Sparkles,
+} from 'lucide-react'
 import { CURRENT_USER, TYPE_LABELS, TYPE_PLURALS, type ContentRecord } from '../data'
 import { getDetails, labByName, profileByName, wordCount, type ContentDetails } from '../details'
 import { formatDate, useShowcase } from '../state'
@@ -60,7 +73,11 @@ function useContentHandlers(record: ContentRecord) {
     },
     onReport: ({ reason, details }: { reason: string; details: string }) => {
       report(record.id, details ? `${reason}: ${details}` : reason, CURRENT_USER.name)
-      toast({ title: 'Report sent', description: 'It is now in Backstage → Moderation.', tone: 'info' })
+      toast({
+        title: 'Report sent',
+        description: 'It is now in Backstage → Moderation.',
+        tone: 'info',
+      })
     },
     comments: comments[record.id] ?? [],
     onAddComment: (body: string, parentId?: string) =>
@@ -68,7 +85,11 @@ function useContentHandlers(record: ContentRecord) {
         record.id,
         {
           id: Math.random().toString(36).slice(2),
-          author: { name: CURRENT_USER.name, avatarSrc: CURRENT_USER.avatar, href: `#/lab/u/${CURRENT_USER.handle}` },
+          author: {
+            name: CURRENT_USER.name,
+            avatarSrc: CURRENT_USER.avatar,
+            href: `#/lab/u/${CURRENT_USER.handle}`,
+          },
           body,
           createdAt: new Date().toISOString(),
         },
@@ -103,14 +124,18 @@ function Byline({ record }: { record: ContentRecord }) {
   const lab = labByName(record.lab)
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
-      <a href={profile ? `#/lab/u/${profile.handle}` : undefined} className="flex items-center gap-2 font-semibold hover:underline">
+      <a
+        href={profile ? `#/lab/u/${profile.handle}` : undefined}
+        className="flex items-center gap-2 font-semibold hover:underline">
         <ProfileAvatar src={profile?.avatar} initials={record.creator.slice(0, 2)} size="sm" />
         {record.creator}
       </a>
       {lab && (
         <span className="text-[var(--muted-foreground)]">
           in{' '}
-          <a href={`#/lab/labs/${lab.slug}`} className="font-semibold text-[var(--foreground)] hover:underline">
+          <a
+            href={`#/lab/labs/${lab.slug}`}
+            className="font-semibold text-[var(--foreground)] hover:underline">
             {lab.name}
           </a>
         </span>
@@ -120,7 +145,15 @@ function Byline({ record }: { record: ContentRecord }) {
   )
 }
 
-function ContentHeading({ record, details, extra }: { record: ContentRecord; details: ContentDetails; extra?: React.ReactNode }) {
+function ContentHeading({
+  record,
+  details,
+  extra,
+}: {
+  record: ContentRecord
+  details: ContentDetails
+  extra?: React.ReactNode
+}) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
@@ -144,14 +177,27 @@ function TagPanel({ tags }: { tags: TagItem[] }) {
   if (tags.length === 0) return null
   return (
     <Panel title="Tags">
-      <TagList grouped tags={tags} onTagClick={(tag) => navigate(`lab/browse?tag=${encodeURIComponent(tag.name)}`)} />
+      <TagList
+        grouped
+        tags={tags}
+        onTagClick={(tag) => navigate(`lab/browse?tag=${encodeURIComponent(tag.name)}`)}
+      />
     </Panel>
   )
 }
 
 function MoreFrom({ record }: { record: ContentRecord }) {
   const { content, navigate } = useShowcase()
-  const more = content.filter((c) => c.creator === record.creator && c.id !== record.id && c.status === 'published' && !c.trashed && c.type !== 'page').slice(0, 3)
+  const more = content
+    .filter(
+      (c) =>
+        c.creator === record.creator &&
+        c.id !== record.id &&
+        c.status === 'published' &&
+        !c.trashed &&
+        c.type !== 'page'
+    )
+    .slice(0, 3)
   if (more.length === 0) return null
   return (
     <section className="flex flex-col gap-4">
@@ -181,13 +227,24 @@ function Comments({ record }: { record: ContentRecord }) {
 function EditButton({ id }: { id: string }) {
   const { navigate } = useShowcase()
   return (
-    <Button variant="secondary" leftIcon={<Pencil className="size-4" />} onClick={() => navigate(`lab/edit/${id}`)}>
+    <Button
+      variant="secondary"
+      leftIcon={<Pencil className="size-4" />}
+      onClick={() => navigate(`lab/edit/${id}`)}>
       Edit
     </Button>
   )
 }
 
-function Actions({ record, details, children }: { record: ContentRecord; details: ContentDetails; children?: React.ReactNode }) {
+function Actions({
+  record,
+  details,
+  children,
+}: {
+  record: ContentRecord
+  details: ContentDetails
+  children?: React.ReactNode
+}) {
   const h = useContentHandlers(record)
   return (
     <ContentActions
@@ -213,7 +270,11 @@ export function ContentView({ id }: { id: string }) {
   if (!record) {
     return (
       <div className={shell}>
-        <NotFoundState title="That creation isn't here" description="It may have been deleted or moved to the trash." onHomeClick={() => navigate('lab/browse')} />
+        <NotFoundState
+          title="That creation isn't here"
+          description="It may have been deleted or moved to the trash."
+          onHomeClick={() => navigate('lab/browse')}
+        />
       </div>
     )
   }
@@ -227,11 +288,21 @@ export function ContentView({ id }: { id: string }) {
 
   return (
     <>
-      {record.type === 'page' && <PageView record={record} details={details} notice={notPublished} />}
-      {record.type === 'artwork' && <ArtworkView record={record} details={details} notice={notPublished} />}
-      {record.type === 'comic' && <ComicView record={record} details={details} notice={notPublished} />}
-      {record.type === 'story' && <StoryView record={record} details={details} notice={notPublished} />}
-      {record.type === 'visual-novel' && <VisualNovelView record={record} details={details} notice={notPublished} />}
+      {record.type === 'page' && (
+        <PageView record={record} details={details} notice={notPublished} />
+      )}
+      {record.type === 'artwork' && (
+        <ArtworkView record={record} details={details} notice={notPublished} />
+      )}
+      {record.type === 'comic' && (
+        <ComicView record={record} details={details} notice={notPublished} />
+      )}
+      {record.type === 'story' && (
+        <StoryView record={record} details={details} notice={notPublished} />
+      )}
+      {record.type === 'visual-novel' && (
+        <VisualNovelView record={record} details={details} notice={notPublished} />
+      )}
     </>
   )
 }
@@ -256,16 +327,22 @@ function PageView({ record, details, notice }: ViewProps) {
           <EditButton id={record.id} />
         </div>
       </div>
-      <img src={details.cover} alt="" className="aspect-[16/7] w-full rounded-[var(--radius-3xl)] object-cover" />
+      <img
+        src={details.cover}
+        alt=""
+        className="aspect-[16/7] w-full rounded-[var(--radius-3xl)] object-cover"
+      />
       <div className="ui-prose flex flex-col text-[17px] leading-relaxed">
-        {details.body ? renderMarkdown(details.body) : details.sections?.map((s, i) => (
-          <React.Fragment key={i}>
-            {s.heading && <h2>{s.heading}</h2>}
-            {s.paragraphs.map((p, j) => (
-              <p key={j}>{p}</p>
+        {details.body
+          ? renderMarkdown(details.body)
+          : details.sections?.map((s, i) => (
+              <React.Fragment key={i}>
+                {s.heading && <h2>{s.heading}</h2>}
+                {s.paragraphs.map((p, j) => (
+                  <p key={j}>{p}</p>
+                ))}
+              </React.Fragment>
             ))}
-          </React.Fragment>
-        ))}
       </div>
     </article>
   )
@@ -290,7 +367,11 @@ function ArtworkView({ record, details, notice }: ViewProps) {
               onClick={() => setLightbox(active)}
               className="block w-full cursor-zoom-in bg-[var(--muted)]"
               aria-label="Open full size">
-              <img src={images[active].src} alt={images[active].alt ?? record.title} className="mx-auto max-h-[80vh] w-auto object-contain" />
+              <img
+                src={images[active].src}
+                alt={images[active].alt ?? record.title}
+                className="mx-auto max-h-[80vh] w-auto object-contain"
+              />
             </button>
           </AgeGate>
           {images.length > 1 && (
@@ -342,13 +423,22 @@ function ComicView({ record, details, notice }: ViewProps) {
         <ContentHeading
           record={record}
           details={details}
-          extra={<Badge variant="neutral">{chapters.reduce((n, c) => n + c.pages.length, 0)} pages</Badge>}
+          extra={
+            <Badge variant="neutral">
+              {chapters.reduce((n, c) => n + c.pages.length, 0)} pages
+            </Badge>
+          }
         />
         <Actions record={record} details={details} />
       </div>
 
       {chapters.length > 1 && (
-        <ChapterNav chapters={chapters} current={chapter} onChange={setChapter} className="max-w-xl" />
+        <ChapterNav
+          chapters={chapters}
+          current={chapter}
+          onChange={setChapter}
+          className="max-w-xl"
+        />
       )}
 
       {current && (
@@ -365,7 +455,12 @@ function ComicView({ record, details, notice }: ViewProps) {
       )}
 
       {chapter < chapters.length - 1 && (
-        <Button className="self-center" onClick={() => (setChapter(chapter + 1), window.scrollTo({ top: 0, behavior: 'smooth' }))}>
+        <Button
+          className="self-center"
+          onClick={() => (
+            setChapter(chapter + 1),
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          )}>
           Next: {chapters[chapter + 1].title}
         </Button>
       )}
@@ -404,7 +499,11 @@ function StoryView({ record, details, notice }: ViewProps) {
 
   return (
     <>
-      <ReadingProgress value={progress} minutes={minutes} label={`${record.title} · Chapter ${chapter + 1}: ${current?.title}`} />
+      <ReadingProgress
+        value={progress}
+        minutes={minutes}
+        label={`${record.title} · Chapter ${chapter + 1}: ${current?.title}`}
+      />
       <div className={shell}>
         <Crumbs record={record} />
         {notice}
@@ -425,14 +524,22 @@ function StoryView({ record, details, notice }: ViewProps) {
           <Actions record={record} details={details} />
           <Separator />
           <div className="flex items-center gap-2">
-            <ChapterNav chapters={chapters} current={chapter} onChange={go} variant="compact" className="flex-1" />
+            <ChapterNav
+              chapters={chapters}
+              current={chapter}
+              onChange={go}
+              variant="compact"
+              className="flex-1"
+            />
             <ReaderSettings value={prefs} onChange={setPrefs} />
           </div>
         </div>
 
         <AgeGate rating={record.rating}>
           <article ref={articleRef} className="mx-auto scroll-mt-32" style={readerStyle(prefs)}>
-            <header className="mb-8 flex flex-col gap-1 text-center" style={{ fontFamily: 'var(--font-sans)' }}>
+            <header
+              className="mb-8 flex flex-col gap-1 text-center"
+              style={{ fontFamily: 'var(--font-sans)' }}>
               <span className="page-eyebrow">Chapter {chapter + 1}</span>
               <h2 className="section-title">{current?.title}</h2>
               <span className="inline-flex items-center justify-center gap-1 text-xs text-[var(--muted-foreground)]">
@@ -479,7 +586,9 @@ function VisualNovelView({ record, details, notice }: ViewProps) {
             <span className="ui-badge bg-white/15 text-white">v{vn.version}</span>
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl">{record.title}</h1>
-          <p className="max-w-2xl text-sm text-white/85 sm:text-base">{details.description.split('\n')[0]}</p>
+          <p className="max-w-2xl text-sm text-white/85 sm:text-base">
+            {details.description.split('\n')[0]}
+          </p>
         </div>
       </div>
 
@@ -506,7 +615,9 @@ function VisualNovelView({ record, details, notice }: ViewProps) {
 
           {section === 'about' ? (
             <div className="flex flex-col gap-6">
-              <div className="ui-prose ui-md-preview p-0! text-[15px]">{renderMarkdown(details.description)}</div>
+              <div className="ui-prose ui-md-preview p-0! text-[15px]">
+                {renderMarkdown(details.description)}
+              </div>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <Panel title="Features">
                   <ul className="flex flex-col gap-2 text-sm">
@@ -521,7 +632,8 @@ function VisualNovelView({ record, details, notice }: ViewProps) {
                   <ul className="flex flex-col gap-2 text-sm">
                     {vn.contentWarnings.map((w) => (
                       <li key={w} className="flex items-center gap-2">
-                        <AlertTriangle className="size-4 shrink-0 text-[var(--status-warning-ink)]" /> {w}
+                        <AlertTriangle className="size-4 shrink-0 text-[var(--status-warning-ink)]" />{' '}
+                        {w}
                       </li>
                     ))}
                   </ul>
@@ -534,7 +646,9 @@ function VisualNovelView({ record, details, notice }: ViewProps) {
                 <li key={c.version} className="ui-panel py-4!">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-bold">v{c.version}</span>
-                    <span className="text-xs text-[var(--muted-foreground)]">{formatDate(c.date)}</span>
+                    <span className="text-xs text-[var(--muted-foreground)]">
+                      {formatDate(c.date)}
+                    </span>
                   </div>
                   <p className="body-sm mt-1 text-[var(--muted-foreground)]">{c.notes}</p>
                 </li>
@@ -551,7 +665,11 @@ function VisualNovelView({ record, details, notice }: ViewProps) {
               files={vn.files}
               recommended={recommended}
               onDownload={(file) =>
-                toast({ title: 'Download started', description: `${file.name} (${file.size}). It's a demo, so nothing is downloaded.`, tone: 'success' })
+                toast({
+                  title: 'Download started',
+                  description: `${file.name} (${file.size}). It's a demo, so nothing is downloaded.`,
+                  tone: 'success',
+                })
               }
             />
           </Panel>

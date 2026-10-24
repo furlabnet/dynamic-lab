@@ -40,7 +40,12 @@ export function SegmentedControl({
   const ref = useRef<HTMLDivElement>(null)
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 'next' : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? 'prev' : null
+    const dir =
+      e.key === 'ArrowRight' || e.key === 'ArrowDown'
+        ? 'next'
+        : e.key === 'ArrowLeft' || e.key === 'ArrowUp'
+          ? 'prev'
+          : null
     if (!dir) return
     e.preventDefault()
     focusSibling(ref.current, '[role="radio"]', dir)
@@ -54,7 +59,12 @@ export function SegmentedControl({
       role="radiogroup"
       aria-label={props['aria-label']}
       onKeyDown={onKeyDown}
-      className={cn('ui-segmented', fullWidth && 'flex w-full', size === 'sm' && 'ui-segmented-sm', className)}>
+      className={cn(
+        'ui-segmented',
+        fullWidth && 'flex w-full',
+        size === 'sm' && 'ui-segmented-sm',
+        className
+      )}>
       {options.map((opt) => {
         const selected = opt.value === current
         return (

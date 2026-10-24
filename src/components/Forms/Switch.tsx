@@ -3,8 +3,10 @@ import { Check, Minus } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { useControllableState } from '../../lib/hooks'
 
-export interface SwitchProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'defaultChecked'> {
+export interface SwitchProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'defaultChecked'
+> {
   checked?: boolean
   defaultChecked?: boolean
   onCheckedChange?: (checked: boolean) => void
@@ -25,7 +27,11 @@ export function Switch({
   const [checked, setChecked] = useControllableState(checkedProp, defaultChecked, onCheckedChange)
 
   return (
-    <label className={cn('inline-flex items-start gap-3 select-none cursor-pointer', disabled && 'opacity-50 cursor-not-allowed')}>
+    <label
+      className={cn(
+        'inline-flex items-start gap-3 select-none cursor-pointer',
+        disabled && 'opacity-50 cursor-not-allowed'
+      )}>
       <button
         type="button"
         role="switch"
@@ -48,7 +54,9 @@ export function Switch({
       {(label || description) && (
         <span className="flex flex-col">
           {label && <span className="text-sm font-medium text-[var(--foreground)]">{label}</span>}
-          {description && <span className="text-xs text-[var(--muted-foreground)]">{description}</span>}
+          {description && (
+            <span className="text-xs text-[var(--muted-foreground)]">{description}</span>
+          )}
         </span>
       )}
     </label>
@@ -66,7 +74,18 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
 /** Works controlled (`checked` + `onChange`/`onCheckedChange`) or uncontrolled (`defaultChecked`). */
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   (
-    { className, label, description, checked, onChange, onCheckedChange, indeterminate = false, disabled, id, ...props },
+    {
+      className,
+      label,
+      description,
+      checked,
+      onChange,
+      onCheckedChange,
+      indeterminate = false,
+      disabled,
+      id,
+      ...props
+    },
     ref
   ) => {
     const generatedId = React.useId()
@@ -81,7 +100,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <label
         htmlFor={checkboxId}
-        className={cn('inline-flex items-start gap-2.5 select-none cursor-pointer', disabled && 'opacity-50 cursor-not-allowed')}>
+        className={cn(
+          'inline-flex items-start gap-2.5 select-none cursor-pointer',
+          disabled && 'opacity-50 cursor-not-allowed'
+        )}>
         <span className="relative mt-px flex items-center justify-center">
           <input
             ref={innerRef}
@@ -112,7 +134,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         {(label || description) && (
           <span className="flex flex-col">
             {label && <span className="text-sm font-medium text-[var(--foreground)]">{label}</span>}
-            {description && <span className="text-xs text-[var(--muted-foreground)]">{description}</span>}
+            {description && (
+              <span className="text-xs text-[var(--muted-foreground)]">{description}</span>
+            )}
           </span>
         )}
       </label>

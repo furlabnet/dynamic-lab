@@ -37,7 +37,8 @@ export function Tabs({
   }
 
   return (
-    <TabsContext.Provider value={{ value: currentValue, onValueChange: handleValueChange, variant }}>
+    <TabsContext.Provider
+      value={{ value: currentValue, onValueChange: handleValueChange, variant }}>
       <div className={cn('flex flex-col gap-3 w-full', className)} {...props}>
         {children}
       </div>
@@ -121,7 +122,10 @@ export function TabsContent({ className, value, children, ...props }: TabsConten
   return (
     <div
       role="tabpanel"
-      className={cn('pt-2 focus-visible:outline-none animate-in fade-in-50 duration-150', className)}
+      className={cn(
+        'pt-2 focus-visible:outline-none animate-in fade-in-50 duration-150',
+        className
+      )}
       {...props}>
       {children}
     </div>

@@ -42,19 +42,18 @@ export function Drawer({
   if (!open) return null
 
   const sideClasses = {
-    right: 'inset-y-0 right-0 h-full w-full max-w-md border-l border-[var(--glass-border)] dl-animate-slide-right',
+    right:
+      'inset-y-0 right-0 h-full w-full max-w-md border-l border-[var(--glass-border)] dl-animate-slide-right',
     left: 'inset-y-0 left-0 h-full w-full max-w-md border-r border-[var(--glass-border)] dl-animate-slide-left',
     top: 'inset-x-0 top-0 w-full max-h-[80vh] border-b border-[var(--glass-border)] dl-animate-slide-top',
-    bottom: 'inset-x-0 bottom-0 w-full max-h-[80vh] border-t border-[var(--glass-border)] rounded-t-[var(--radius-3xl)] dl-animate-slide-bottom',
+    bottom:
+      'inset-x-0 bottom-0 w-full max-h-[80vh] border-t border-[var(--glass-border)] rounded-t-[var(--radius-3xl)] dl-animate-slide-bottom',
   }
 
   return createPortal(
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
-      <div
-        onClick={onClose}
-        className="fixed inset-0 ui-overlay dl-animate-fade"
-      />
+      <div onClick={onClose} className="fixed inset-0 ui-overlay dl-animate-fade" />
 
       {/* Drawer Panel */}
       <div
@@ -87,8 +86,7 @@ export function Drawer({
           </div>
         )}
       </div>
-    </div>
-    ,
+    </div>,
     document.body
   )
 }

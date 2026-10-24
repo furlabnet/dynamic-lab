@@ -59,7 +59,12 @@ export function CardContent({ className, children, ...props }: CardContentProps)
 export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <div className={cn('flex items-center justify-end gap-3 mt-5 pt-3 border-t border-[var(--border)]', className)} {...props}>
+    <div
+      className={cn(
+        'flex items-center justify-end gap-3 mt-5 pt-3 border-t border-[var(--border)]',
+        className
+      )}
+      {...props}>
       {children}
     </div>
   )

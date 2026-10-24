@@ -136,7 +136,13 @@ export function MenuSeparator({ className }: { className?: string }) {
   return <div className={cn('my-1 h-px bg-[var(--border)]', className)} role="separator" />
 }
 
-export function MenuLabel({ className, children }: { className?: string; children: React.ReactNode }) {
+export function MenuLabel({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
   return (
     <div
       className={cn(

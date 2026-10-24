@@ -1,5 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { BookOpen, ChevronLeft, ChevronRight, Columns2, Maximize, Minimize, Rows3, Square } from 'lucide-react'
+import {
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  Columns2,
+  Maximize,
+  Minimize,
+  Rows3,
+  Square,
+} from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { useControllableState } from '../../lib/hooks'
 import { IconButton } from '../Button'
@@ -82,14 +91,20 @@ export function ComicReader({
     const page = currentView[0]
     const nextViews = buildViews(pages.length, !spread)
     setSpread(!spread)
-    setView(Math.max(0, nextViews.findIndex((v) => v.includes(page))))
+    setView(
+      Math.max(
+        0,
+        nextViews.findIndex((v) => v.includes(page))
+      )
+    )
   }
 
   useEffect(() => {
     if (mode !== 'book') return
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement
-      if (target.closest('input, textarea, select, [contenteditable="true"], [role="dialog"]')) return
+      if (target.closest('input, textarea, select, [contenteditable="true"], [role="dialog"]'))
+        return
       const rtl = direction === 'rtl'
       if (e.key === 'ArrowRight') (rtl ? back : forward)()
       else if (e.key === 'ArrowLeft') (rtl ? forward : back)()
@@ -107,7 +122,9 @@ export function ComicReader({
     if (mode !== 'scroll') return
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
         if (visible) setScrollPage(Number((visible.target as HTMLElement).dataset.page))
       },
       { threshold: [0.3, 0.6] }
@@ -135,7 +152,10 @@ export function ComicReader({
   const ordered = direction === 'rtl' ? [...currentView].reverse() : currentView
 
   return (
-    <div ref={rootRef} className={cn('ui-comic-reader', fullscreen && 'ui-comic-reader-fullscreen', className)} data-mode={mode}>
+    <div
+      ref={rootRef}
+      className={cn('ui-comic-reader', fullscreen && 'ui-comic-reader-fullscreen', className)}
+      data-mode={mode}>
       <div className="ui-comic-toolbar">
         <SegmentedControl
           size="sm"
@@ -147,7 +167,9 @@ export function ComicReader({
             { value: 'scroll', label: 'Scroll', icon: <Rows3 /> },
           ]}
         />
-        <span className="text-sm font-medium tabular-nums text-[var(--muted-foreground)]" aria-live="polite">
+        <span
+          className="text-sm font-medium tabular-nums text-[var(--muted-foreground)]"
+          aria-live="polite">
           {pageLabel}
         </span>
         <div className="ml-auto flex items-center gap-1.5">
@@ -184,7 +206,7 @@ export function ComicReader({
               const rtl = direction === 'rtl'
               if (Math.abs(dx) > 40) {
                 // Swipe left = next page in ltr.
-                ;(dx < 0) !== rtl ? forward() : back()
+                dx < 0 !== rtl ? forward() : back()
                 return
               }
               // Tap: right half turns forward, left half goes back.
@@ -192,7 +214,9 @@ export function ComicReader({
               const rightHalf = e.clientX > rect.left + rect.width / 2
               rightHalf !== rtl ? forward() : back()
             }}>
-            <div key={view} className={cn('ui-comic-spread', turn === 'next' ? 'dl-page-next' : 'dl-page-prev')}>
+            <div
+              key={view}
+              className={cn('ui-comic-spread', turn === 'next' ? 'dl-page-next' : 'dl-page-prev')}>
               {ordered.map((i) => (
                 <img
                   key={i}
@@ -244,10 +268,19 @@ export function ComicReader({
       ) : (
         <div className="ui-comic-scroll">
           {pages.map((p, i) => (
-            <div key={i} ref={(el) => {
+            <div
+              key={i}
+              ref={(el) => {
                 scrollRefs.current[i] = el
-              }} data-page={i} className="relative">
-              <img src={p.src} alt={p.alt ?? `Page ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} className="block w-full" />
+              }}
+              data-page={i}
+              className="relative">
+              <img
+                src={p.src}
+                alt={p.alt ?? `Page ${i + 1}`}
+                loading={i < 2 ? 'eager' : 'lazy'}
+                className="block w-full"
+              />
               <span className="ui-comic-page-number">{i + 1}</span>
             </div>
           ))}

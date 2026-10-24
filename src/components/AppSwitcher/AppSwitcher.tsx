@@ -72,7 +72,10 @@ export function AppSwitcher({
       aria-label="Switch app"
       containerClassName={className}
       trigger={
-        <button type="button" className="ui-app-switcher-trigger" aria-label={`Switch app, current: ${currentApp?.name}`}>
+        <button
+          type="button"
+          className="ui-app-switcher-trigger"
+          aria-label={`Switch app, current: ${currentApp?.name}`}>
           <GridIcon />
           <span className="hidden whitespace-nowrap lg:inline">{currentApp?.name}</span>
           <ChevronDown className="size-3.5 opacity-70" aria-hidden />
@@ -94,7 +97,9 @@ export function AppSwitcher({
               if (!isCurrent) setCurrent(app.id)
             }}>
             {app.name}
-            {isCurrent && <span className="font-normal text-[var(--muted-foreground)]"> · current</span>}
+            {isCurrent && (
+              <span className="font-normal text-[var(--muted-foreground)]"> · current</span>
+            )}
           </MenuItem>
         )
       })}

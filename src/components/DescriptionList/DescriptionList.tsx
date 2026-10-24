@@ -14,7 +14,12 @@ export interface DescriptionListProps extends React.HTMLAttributes<HTMLDListElem
 }
 
 /** Label / value pairs for metadata: engine, version, release date, dimensions… */
-export function DescriptionList({ items, layout = 'rows', className, ...props }: DescriptionListProps) {
+export function DescriptionList({
+  items,
+  layout = 'rows',
+  className,
+  ...props
+}: DescriptionListProps) {
   return (
     <dl className={cn('ui-description-list', className)} data-layout={layout} {...props}>
       {items.map((item, i) => (

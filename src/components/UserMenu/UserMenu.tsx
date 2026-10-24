@@ -48,17 +48,34 @@ export function UserMenu({
       aria-label="Account"
       containerClassName={className}
       trigger={
-        <button type="button" className={cn('ui-user-menu-trigger', compact && 'px-1')} aria-label={`Account menu for ${name}`}>
-          <ProfileAvatar initials={resolvedInitials} src={avatarSrc} size="sm" className="ui-user-avatar" />
-          {!compact && <span className="hidden whitespace-nowrap text-sm font-semibold lg:inline">{name}</span>}
+        <button
+          type="button"
+          className={cn('ui-user-menu-trigger', compact && 'px-1')}
+          aria-label={`Account menu for ${name}`}>
+          <ProfileAvatar
+            initials={resolvedInitials}
+            src={avatarSrc}
+            size="sm"
+            className="ui-user-avatar"
+          />
+          {!compact && (
+            <span className="hidden whitespace-nowrap text-sm font-semibold lg:inline">{name}</span>
+          )}
           <ChevronDown className="size-3.5 opacity-70" aria-hidden />
         </button>
       }>
       <div className="flex items-center gap-3 px-3 pb-2 pt-2.5">
-        <ProfileAvatar initials={resolvedInitials} src={avatarSrc} size="md" className="ui-user-avatar" />
+        <ProfileAvatar
+          initials={resolvedInitials}
+          src={avatarSrc}
+          size="md"
+          className="ui-user-avatar"
+        />
         <div className="flex min-w-0 flex-col">
           <span className="truncate text-sm font-semibold">{name}</span>
-          {email && <span className="truncate text-xs text-[var(--muted-foreground)]">{email}</span>}
+          {email && (
+            <span className="truncate text-xs text-[var(--muted-foreground)]">{email}</span>
+          )}
           {meta && <span className="mt-1">{meta}</span>}
         </div>
       </div>

@@ -5,11 +5,7 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'rectangular' | 'circular' | 'rounded'
 }
 
-export function Skeleton({
-  className,
-  variant = 'rounded',
-  ...props
-}: SkeletonProps) {
+export function Skeleton({ className, variant = 'rounded', ...props }: SkeletonProps) {
   const variantClass =
     variant === 'circular'
       ? 'rounded-full'
@@ -29,20 +25,11 @@ export function Skeleton({
   )
 }
 
-export function SkeletonText({
-  lines = 3,
-  className,
-}: {
-  lines?: number
-  className?: string
-}) {
+export function SkeletonText({ lines = 3, className }: { lines?: number; className?: string }) {
   return (
     <div className={cn('flex flex-col gap-2 w-full', className)}>
       {Array.from({ length: lines }).map((_, i) => (
-        <Skeleton
-          key={i}
-          className={cn('h-4', i === lines - 1 ? 'w-3/5' : 'w-full')}
-        />
+        <Skeleton key={i} className={cn('h-4', i === lines - 1 ? 'w-3/5' : 'w-full')} />
       ))}
     </div>
   )
@@ -66,7 +53,8 @@ export function SkeletonAvatar({
 
 export function SkeletonCard({ className }: { className?: string }) {
   return (
-    <div className={cn('surface-card p-6 flex flex-col gap-4 rounded-[var(--radius-3xl)]', className)}>
+    <div
+      className={cn('surface-card p-6 flex flex-col gap-4 rounded-[var(--radius-3xl)]', className)}>
       <div className="flex items-center gap-3">
         <Skeleton variant="circular" className="size-10" />
         <div className="flex flex-col gap-1.5 flex-1">

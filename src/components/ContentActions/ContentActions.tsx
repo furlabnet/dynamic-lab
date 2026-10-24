@@ -9,8 +9,16 @@ import { Textarea } from '../Input'
 
 export const DEFAULT_REPORT_REASONS = [
   { value: 'rating', label: 'Wrong age rating', description: 'The content is rated too low.' },
-  { value: 'tags', label: 'Missing or wrong tags', description: 'Tags hide what the work contains.' },
-  { value: 'theft', label: 'Stolen or uncredited work', description: "It's someone else's art or writing." },
+  {
+    value: 'tags',
+    label: 'Missing or wrong tags',
+    description: 'Tags hide what the work contains.',
+  },
+  {
+    value: 'theft',
+    label: 'Stolen or uncredited work',
+    description: "It's someone else's art or writing.",
+  },
   { value: 'spam', label: 'Spam or advertising' },
   { value: 'other', label: 'Something else' },
 ]
@@ -95,7 +103,11 @@ export function ContentActions({
       </Button>
       {children}
       {onReport && (
-        <Button size={size} variant="ghost" leftIcon={<Flag className="size-4" />} onClick={() => setReportOpen(true)}>
+        <Button
+          size={size}
+          variant="ghost"
+          leftIcon={<Flag className="size-4" />}
+          onClick={() => setReportOpen(true)}>
           Report
         </Button>
       )}
@@ -105,7 +117,11 @@ export function ContentActions({
           open={reportOpen}
           onClose={closeReport}
           title={submitted ? 'Thanks for the report' : 'Report this content'}
-          description={submitted ? 'A moderator will review it. You can keep browsing.' : "Reports are anonymous to the creator."}
+          description={
+            submitted
+              ? 'A moderator will review it. You can keep browsing.'
+              : 'Reports are anonymous to the creator.'
+          }
           footer={
             submitted ? (
               <Button onClick={closeReport}>Done</Button>
@@ -118,7 +134,10 @@ export function ContentActions({
                   variant="danger"
                   disabled={!reason}
                   onClick={() => {
-                    onReport({ reason: reportReasons.find((r) => r.value === reason)?.label ?? reason, details: details.trim() })
+                    onReport({
+                      reason: reportReasons.find((r) => r.value === reason)?.label ?? reason,
+                      details: details.trim(),
+                    })
                     setSubmitted(true)
                   }}>
                   Send report
@@ -130,7 +149,12 @@ export function ContentActions({
             <div className="flex flex-col gap-4">
               <RadioGroup label="What's wrong?" value={reason} onValueChange={setReason}>
                 {reportReasons.map((r) => (
-                  <RadioGroupItem key={r.value} value={r.value} label={r.label} description={r.description} />
+                  <RadioGroupItem
+                    key={r.value}
+                    value={r.value}
+                    label={r.label}
+                    description={r.description}
+                  />
                 ))}
               </RadioGroup>
               <Textarea

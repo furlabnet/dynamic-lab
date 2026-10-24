@@ -27,34 +27,99 @@
  * Motion
  * ===================================================================== */
 @keyframes dl-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes dl-pop-in {
-  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-@keyframes dl-slide-right { from { transform: translateX(100%); } to { transform: none; } }
-@keyframes dl-slide-left { from { transform: translateX(-100%); } to { transform: none; } }
-@keyframes dl-slide-top { from { transform: translateY(-100%); } to { transform: none; } }
-@keyframes dl-slide-bottom { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes dl-slide-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes dl-slide-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes dl-slide-top {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes dl-slide-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
 @keyframes dl-toast-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 @keyframes dl-indeterminate {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(300%); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
 }
 
-.dl-animate-fade { animation: dl-fade-in 150ms ease-out; }
-.dl-animate-pop { animation: dl-pop-in 140ms cubic-bezier(0.2, 0.9, 0.3, 1.2); transform-origin: top; }
-.dl-animate-slide-right { animation: dl-slide-right 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-.dl-animate-slide-left { animation: dl-slide-left 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-.dl-animate-slide-top { animation: dl-slide-top 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-.dl-animate-slide-bottom { animation: dl-slide-bottom 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-.dl-animate-toast { animation: dl-toast-in 180ms ease-out; }
-.dl-progress-indeterminate { animation: dl-indeterminate 1.2s ease-in-out infinite; }
+.dl-animate-fade {
+  animation: dl-fade-in 150ms ease-out;
+}
+.dl-animate-pop {
+  animation: dl-pop-in 140ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  transform-origin: top;
+}
+.dl-animate-slide-right {
+  animation: dl-slide-right 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.dl-animate-slide-left {
+  animation: dl-slide-left 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.dl-animate-slide-top {
+  animation: dl-slide-top 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.dl-animate-slide-bottom {
+  animation: dl-slide-bottom 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.dl-animate-toast {
+  animation: dl-toast-in 180ms ease-out;
+}
+.dl-progress-indeterminate {
+  animation: dl-indeterminate 1.2s ease-in-out infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .dl-animate-fade,
@@ -84,7 +149,11 @@
 .ui-menu,
 .ui-dialog,
 .ui-drawer {
-  background-color: color-mix(in srgb, var(--glass) calc(var(--glass-alpha) * 100% + 20%), transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--glass) calc(var(--glass-alpha) * 100% + 20%),
+    transparent
+  );
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(var(--blur-chrome)) saturate(1.6);
   -webkit-backdrop-filter: blur(var(--blur-chrome)) saturate(1.6);
@@ -196,14 +265,38 @@
   white-space: nowrap;
 }
 
-.ui-badge-sm { padding: 0.0625rem 0.4375rem; font-size: 11px; }
-.ui-badge-primary { background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
-.ui-badge-solid { background: var(--primary); color: var(--primary-foreground); }
-.ui-badge-neutral { background: var(--muted); color: var(--muted-foreground); }
-.ui-badge-outline { border: 1px solid var(--border); color: var(--foreground); }
-.ui-badge-success { background: var(--status-success-bg); color: var(--status-success-ink); }
-.ui-badge-warning { background: var(--status-warning-bg); color: var(--status-warning-ink); }
-.ui-badge-danger { background: var(--status-danger-bg); color: var(--status-danger-ink); }
+.ui-badge-sm {
+  padding: 0.0625rem 0.4375rem;
+  font-size: 11px;
+}
+.ui-badge-primary {
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  color: var(--primary);
+}
+.ui-badge-solid {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.ui-badge-neutral {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+.ui-badge-outline {
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+.ui-badge-success {
+  background: var(--status-success-bg);
+  color: var(--status-success-ink);
+}
+.ui-badge-warning {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-ink);
+}
+.ui-badge-danger {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-ink);
+}
 
 .ui-brand-product {
   border-radius: var(--radius-full);
@@ -220,7 +313,9 @@
 .ui-checkbox .ui-checkbox-check {
   opacity: 0;
   transform: scale(0.6);
-  transition: opacity 120ms ease, transform 120ms ease;
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
 }
 
 input:checked + .ui-checkbox .ui-checkbox-check {
@@ -237,11 +332,13 @@ input:checked + .ui-checkbox .ui-checkbox-check {
   border: 1px solid var(--input);
   border-radius: 50%;
   background: var(--card);
-  transition: border-color 120ms ease, box-shadow 120ms ease;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .ui-radio::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 3px;
   border-radius: 50%;
@@ -267,7 +364,9 @@ input:focus-visible + .ui-radio {
   border-radius: var(--radius-xl);
   background: color-mix(in srgb, var(--card) 70%, transparent);
   padding: var(--space-12) var(--space-16);
-  transition: border-color 120ms ease, background-color 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
 }
 
 .ui-radio-card:hover {
@@ -301,7 +400,10 @@ input:focus-visible + .ui-radio {
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .ui-segmented-sm .ui-segmented-item {
@@ -317,7 +419,9 @@ input:focus-visible + .ui-radio {
 .ui-segmented-item[aria-checked='true'] {
   background: var(--card);
   color: var(--foreground);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 0 0 1px var(--border);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.08),
+    0 0 0 1px var(--border);
 }
 
 .ui-segmented-item:focus-visible {
@@ -361,7 +465,9 @@ input:focus-visible + .ui-radio {
   padding: var(--space-28) var(--space-20);
   text-align: center;
   cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
 }
 
 .ui-dropzone:hover,
@@ -432,10 +538,22 @@ input:focus-visible + .ui-radio {
   text-align: center;
 }
 
-.ui-site-banner[data-tone='warning'] { background: var(--warning); color: var(--warning-foreground); }
-.ui-site-banner[data-tone='info'] { background: var(--info); color: var(--info-foreground); }
-.ui-site-banner[data-tone='primary'] { background: var(--primary); color: var(--primary-foreground); }
-.ui-site-banner[data-tone='danger'] { background: var(--destructive); color: var(--destructive-foreground); }
+.ui-site-banner[data-tone='warning'] {
+  background: var(--warning);
+  color: var(--warning-foreground);
+}
+.ui-site-banner[data-tone='info'] {
+  background: var(--info);
+  color: var(--info-foreground);
+}
+.ui-site-banner[data-tone='primary'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.ui-site-banner[data-tone='danger'] {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+}
 
 .ui-site-header {
   border-width: 0 0 1px;
@@ -453,7 +571,9 @@ input:focus-visible + .ui-radio {
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .ui-site-nav-link:hover {
@@ -521,7 +641,10 @@ input:focus-visible + .ui-radio {
   padding: 0;
   text-decoration: none;
   color: inherit;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
 }
 
 .ui-content-card-interactive {
@@ -547,8 +670,16 @@ input:focus-visible + .ui-radio {
   overflow: hidden;
   place-items: center;
   background:
-    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--primary) 22%, transparent), transparent 60%),
-    linear-gradient(160deg, color-mix(in srgb, var(--primary) 18%, var(--card)), color-mix(in srgb, var(--glow-b) 10%, var(--card)));
+    radial-gradient(
+      120% 90% at 0% 0%,
+      color-mix(in srgb, var(--primary) 22%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--primary) 18%, var(--card)),
+      color-mix(in srgb, var(--glow-b) 10%, var(--card))
+    );
 }
 
 .ui-content-card-icon {
@@ -613,7 +744,9 @@ input:focus-visible + .ui-radio {
   backdrop-filter: blur(var(--blur-chrome));
   -webkit-backdrop-filter: blur(var(--blur-chrome));
   transform: translateX(-100%);
-  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), width 200ms ease;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    width 200ms ease;
 }
 
 .ui-admin-shell[data-mobile-open] .ui-admin-sidebar {
@@ -637,7 +770,11 @@ input:focus-visible + .ui-radio {
   align-items: center;
   gap: var(--space-12);
   border-bottom: 1px solid transparent;
-  background: color-mix(in srgb, var(--background) calc(var(--glass-alpha) * 100% + 10%), transparent);
+  background: color-mix(
+    in srgb,
+    var(--background) calc(var(--glass-alpha) * 100% + 10%),
+    transparent
+  );
   backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
   -webkit-backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
   padding: var(--space-12) clamp(1rem, 3vw, 2.5rem);
@@ -719,7 +856,9 @@ input:focus-visible + .ui-radio {
   border-radius: var(--radius-md);
   color: var(--muted-foreground);
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .ui-sidebar-toggle:hover {
@@ -740,7 +879,9 @@ input:focus-visible + .ui-radio {
   color: var(--muted-foreground);
   font-size: 0.875rem;
   cursor: pointer;
-  transition: border-color 150ms ease, color 150ms ease;
+  transition:
+    border-color 150ms ease,
+    color 150ms ease;
 }
 
 .ui-command-trigger:hover {

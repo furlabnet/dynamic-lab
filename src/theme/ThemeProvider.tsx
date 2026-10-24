@@ -110,7 +110,8 @@ export function ThemeProvider({
   const [transparency, setTransparencyState] = useState<TransparencyPreference>(() => {
     if (typeof window !== 'undefined') {
       const saved = readStorage(`${storageKey}-transparency`)
-      if (saved === 'system' || saved === 'full' || saved === 'reduced' || saved === 'off') return saved
+      if (saved === 'system' || saved === 'full' || saved === 'reduced' || saved === 'off')
+        return saved
     }
     return defaultTransparency
   })

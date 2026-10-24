@@ -25,7 +25,13 @@ export function useReadingProgress(ref: React.RefObject<HTMLElement | null>, top
         const rect = el.getBoundingClientRect()
         const total = rect.height - (window.innerHeight - topOffset)
         const read = topOffset - rect.top
-        setProgress(total <= 0 ? (rect.top <= topOffset ? 100 : 0) : Math.min(100, Math.max(0, (read / total) * 100)))
+        setProgress(
+          total <= 0
+            ? rect.top <= topOffset
+              ? 100
+              : 0
+            : Math.min(100, Math.max(0, (read / total) * 100))
+        )
       })
     }
     measure()
@@ -55,7 +61,8 @@ export interface ReadingProgressProps {
 
 /** A thin bar pinned under the header that fills as you read. */
 export function ReadingProgress({ value, minutes, label, className }: ReadingProgressProps) {
-  const left = minutes !== undefined ? Math.max(0, Math.ceil(minutes * (1 - value / 100))) : undefined
+  const left =
+    minutes !== undefined ? Math.max(0, Math.ceil(minutes * (1 - value / 100))) : undefined
   return (
     <div className={cn('ui-reading-progress', className)}>
       <div
@@ -70,7 +77,8 @@ export function ReadingProgress({ value, minutes, label, className }: ReadingPro
       <div className="ui-reading-progress-meta">
         {label && <span className="truncate">{label}</span>}
         <span className="ml-auto tabular-nums">
-          {Math.round(value)}%{left !== undefined && ` · ${value >= 100 ? 'finished' : `${left} min left`}`}
+          {Math.round(value)}%
+          {left !== undefined && ` · ${value >= 100 ? 'finished' : `${left} min left`}`}
         </span>
       </div>
     </div>
@@ -145,8 +153,15 @@ export interface ReaderSettingsProps {
 }
 
 /** "Aa" popover with font size, family, line spacing and column width. */
-export function ReaderSettings({ value, onChange, minFontSize = 14, maxFontSize = 28, align = 'end' }: ReaderSettingsProps) {
-  const set = <K extends keyof ReaderPrefs>(key: K, v: ReaderPrefs[K]) => onChange({ ...value, [key]: v })
+export function ReaderSettings({
+  value,
+  onChange,
+  minFontSize = 14,
+  maxFontSize = 28,
+  align = 'end',
+}: ReaderSettingsProps) {
+  const set = <K extends keyof ReaderPrefs>(key: K, v: ReaderPrefs[K]) =>
+    onChange({ ...value, [key]: v })
 
   return (
     <Popover
@@ -154,7 +169,11 @@ export function ReaderSettings({ value, onChange, minFontSize = 14, maxFontSize 
       aria-label="Reading settings"
       className="ui-menu w-72 p-4!"
       trigger={
-        <Button variant="secondary" size="sm" aria-label="Reading settings" leftIcon={<Type className="size-4" />}>
+        <Button
+          variant="secondary"
+          size="sm"
+          aria-label="Reading settings"
+          leftIcon={<Type className="size-4" />}>
           Aa
         </Button>
       }>
@@ -185,7 +204,9 @@ export function ReaderSettings({ value, onChange, minFontSize = 14, maxFontSize 
               disabled={value.fontSize >= maxFontSize}
               onClick={() => set('fontSize', Math.min(maxFontSize, value.fontSize + 1))}
             />
-            <span className="w-9 text-right text-sm tabular-nums text-[var(--muted-foreground)]">{value.fontSize}</span>
+            <span className="w-9 text-right text-sm tabular-nums text-[var(--muted-foreground)]">
+              {value.fontSize}
+            </span>
           </div>
         </div>
         <div className="flex flex-col gap-1.5">
@@ -196,7 +217,10 @@ export function ReaderSettings({ value, onChange, minFontSize = 14, maxFontSize 
             value={value.fontFamily}
             onValueChange={(v) => set('fontFamily', v as ReaderFont)}
             options={[
-              { value: 'serif', label: <span style={{ fontFamily: FONT_STACKS.serif }}>Serif</span> },
+              {
+                value: 'serif',
+                label: <span style={{ fontFamily: FONT_STACKS.serif }}>Serif</span>,
+              },
               { value: 'sans', label: 'Sans' },
               { value: 'mono', label: <span style={{ fontFamily: FONT_STACKS.mono }}>Mono</span> },
             ]}
@@ -231,7 +255,11 @@ export function ReaderSettings({ value, onChange, minFontSize = 14, maxFontSize 
             ]}
           />
         </div>
-        <Button size="sm" variant="ghost" className="self-start" onClick={() => onChange(DEFAULT_READER_PREFS)}>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="self-start"
+          onClick={() => onChange(DEFAULT_READER_PREFS)}>
           Reset to defaults
         </Button>
       </div>
@@ -250,18 +278,35 @@ export interface ChapterNavProps {
   className?: string
 }
 
-export function ChapterNav({ chapters, current, onChange, variant = 'full', className }: ChapterNavProps) {
+export function ChapterNav({
+  chapters,
+  current,
+  onChange,
+  variant = 'full',
+  className,
+}: ChapterNavProps) {
   const prev = current > 0 ? current - 1 : null
   const next = current < chapters.length - 1 ? current + 1 : null
 
   return (
     <nav aria-label="Chapters" className={cn('flex items-center gap-2', className)}>
       {variant === 'full' ? (
-        <Button variant="secondary" size="sm" leftIcon={<ChevronLeft className="size-4" />} disabled={prev === null} onClick={() => prev !== null && onChange(prev)}>
+        <Button
+          variant="secondary"
+          size="sm"
+          leftIcon={<ChevronLeft className="size-4" />}
+          disabled={prev === null}
+          onClick={() => prev !== null && onChange(prev)}>
           Previous
         </Button>
       ) : (
-        <IconButton aria-label="Previous chapter" size="icon" icon={<ChevronLeft className="size-4" />} disabled={prev === null} onClick={() => prev !== null && onChange(prev)} />
+        <IconButton
+          aria-label="Previous chapter"
+          size="icon"
+          icon={<ChevronLeft className="size-4" />}
+          disabled={prev === null}
+          onClick={() => prev !== null && onChange(prev)}
+        />
       )}
       <Select
         aria-label="Chapter"
@@ -272,11 +317,22 @@ export function ChapterNav({ chapters, current, onChange, variant = 'full', clas
         options={chapters.map((c, i) => ({ value: String(i), label: `${i + 1}. ${c.title}` }))}
       />
       {variant === 'full' ? (
-        <Button variant="secondary" size="sm" rightIcon={<ChevronRight className="size-4" />} disabled={next === null} onClick={() => next !== null && onChange(next)}>
+        <Button
+          variant="secondary"
+          size="sm"
+          rightIcon={<ChevronRight className="size-4" />}
+          disabled={next === null}
+          onClick={() => next !== null && onChange(next)}>
           Next
         </Button>
       ) : (
-        <IconButton aria-label="Next chapter" size="icon" icon={<ChevronRight className="size-4" />} disabled={next === null} onClick={() => next !== null && onChange(next)} />
+        <IconButton
+          aria-label="Next chapter"
+          size="icon"
+          icon={<ChevronRight className="size-4" />}
+          disabled={next === null}
+          onClick={() => next !== null && onChange(next)}
+        />
       )}
     </nav>
   )

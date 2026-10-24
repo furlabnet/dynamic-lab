@@ -16,7 +16,12 @@ const variantClasses = {
     'size-9 rounded-[var(--radius-lg)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[color-mix(in_srgb,var(--foreground)_6%,transparent)]',
 }
 
-export function ThemeToggle({ className, showBrandToggle = false, variant = 'outline', ...props }: ThemeToggleProps) {
+export function ThemeToggle({
+  className,
+  showBrandToggle = false,
+  variant = 'outline',
+  ...props
+}: ThemeToggleProps) {
   const { mode, brand, toggleMode, toggleBrand } = useTheme()
   const iconSize = variant === 'ghost' ? 'size-[18px]' : 'size-5'
 
@@ -36,7 +41,13 @@ export function ThemeToggle({ className, showBrandToggle = false, variant = 'out
         {mode === 'light' ? (
           <Moon className={cn(iconSize, 'transition-transform')} />
         ) : (
-          <Sun className={cn(iconSize, 'transition-transform', variant === 'outline' && 'text-amber-400')} />
+          <Sun
+            className={cn(
+              iconSize,
+              'transition-transform',
+              variant === 'outline' && 'text-amber-400'
+            )}
+          />
         )}
       </button>
 

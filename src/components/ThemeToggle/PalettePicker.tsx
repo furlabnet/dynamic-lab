@@ -17,7 +17,14 @@ export interface PalettePreviewProps extends React.HTMLAttributes<HTMLDivElement
  * A palette rendered in isolation: its tokens are scoped to this element, so many previews can
  * sit side by side regardless of the active theme.
  */
-export function PalettePreview({ palette, mode, size = 'mini', className, style, ...props }: PalettePreviewProps) {
+export function PalettePreview({
+  palette,
+  mode,
+  size = 'mini',
+  className,
+  style,
+  ...props
+}: PalettePreviewProps) {
   return (
     <div
       data-mode={mode}
@@ -65,12 +72,20 @@ export interface PalettePickerProps {
 }
 
 /** Choose a named colour theme. Reads and writes ThemeProvider's palette. */
-export function PalettePicker({ variant = 'cards', showBothModes = false, className }: PalettePickerProps) {
+export function PalettePicker({
+  variant = 'cards',
+  showBothModes = false,
+  className,
+}: PalettePickerProps) {
   const { palette, setPalette, palettes, mode, paletteActive } = useTheme()
   const ref = useRef<HTMLDivElement>(null)
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    const dir = ['ArrowRight', 'ArrowDown'].includes(e.key) ? 'next' : ['ArrowLeft', 'ArrowUp'].includes(e.key) ? 'prev' : null
+    const dir = ['ArrowRight', 'ArrowDown'].includes(e.key)
+      ? 'next'
+      : ['ArrowLeft', 'ArrowUp'].includes(e.key)
+        ? 'prev'
+        : null
     if (!dir) return
     e.preventDefault()
     focusSibling(ref.current, '[role="radio"]', dir)
@@ -102,15 +117,21 @@ export function PalettePicker({ variant = 'cards', showBothModes = false, classN
               data-palette={p.id}
               tabIndex={selected ? 0 : -1}
               onClick={() => setPalette(p.id)}
-              className={cn('ui-palette-option', variant === 'compact' ? 'ui-palette-option-compact' : 'ui-palette-option-card')}>
+              className={cn(
+                'ui-palette-option',
+                variant === 'compact' ? 'ui-palette-option-compact' : 'ui-palette-option-card'
+              )}>
               {variant === 'compact' ? (
                 <>
                   <PalettePreview palette={p} mode={mode} />
-                  <span className="line-clamp-2 text-[11px] font-semibold leading-tight">{p.name}</span>
+                  <span className="line-clamp-2 text-[11px] font-semibold leading-tight">
+                    {p.name}
+                  </span>
                 </>
               ) : (
                 <>
-                  <div className={cn('grid gap-1.5', showBothModes ? 'grid-cols-2' : 'grid-cols-1')}>
+                  <div
+                    className={cn('grid gap-1.5', showBothModes ? 'grid-cols-2' : 'grid-cols-1')}>
                     {showBothModes ? (
                       <>
                         <PalettePreview palette={p} mode="light" />
@@ -124,7 +145,9 @@ export function PalettePicker({ variant = 'cards', showBothModes = false, classN
                     <span className="text-sm font-bold">{p.name}</span>
                     {selected && <Check className="size-4 text-[var(--primary)]" aria-hidden />}
                   </span>
-                  <span className="text-left text-xs text-[var(--muted-foreground)]">{p.description}</span>
+                  <span className="text-left text-xs text-[var(--muted-foreground)]">
+                    {p.description}
+                  </span>
                 </>
               )}
             </button>
@@ -132,7 +155,9 @@ export function PalettePicker({ variant = 'cards', showBothModes = false, classN
         })}
       </div>
       {!paletteActive && (
-        <p className="text-xs text-[var(--muted-foreground)]">Themes apply to the public site. This area keeps its own colours.</p>
+        <p className="text-xs text-[var(--muted-foreground)]">
+          Themes apply to the public site. This area keeps its own colours.
+        </p>
       )}
     </div>
   )

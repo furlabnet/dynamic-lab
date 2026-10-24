@@ -1,14 +1,27 @@
 import React, { useState } from 'react'
+
 import { EyeOff } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 import { Button } from '../Button'
 
-export type AgeRatingValue = 'general' | 'teen' | 'mature'
+export type AgeRatingValue = 'general' | 'suggestive' | 'mature'
 
-export const AGE_RATING_INFO: Record<AgeRatingValue, { label: string; short: string; description: string }> = {
+export const AGE_RATING_INFO: Record<
+  AgeRatingValue,
+  { label: string; short: string; description: string }
+> = {
   general: { label: 'General', short: 'G', description: 'Suitable for everyone.' },
-  teen: { label: 'Teen', short: 'T', description: 'Mild violence, language or suggestive themes.' },
-  mature: { label: 'Mature', short: 'M', description: 'For adults only. Strong themes or explicit content.' },
+  suggestive: {
+    label: 'Suggestive',
+    short: 'S',
+    description: 'Mild violence, language or suggestive themes.',
+  },
+  mature: {
+    label: 'Mature',
+    short: 'M',
+    description: 'For adults only. Strong themes or explicit content.',
+  },
 }
 
 export interface AgeRatingProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -33,7 +46,11 @@ export function AgeRating({ rating, variant = 'badge', className, ...props }: Ag
     )
   }
   return (
-    <span data-rating={rating} className={cn('ui-age-rating', className)} title={info.description} {...props}>
+    <span
+      data-rating={rating}
+      className={cn('ui-age-rating', className)}
+      title={info.description}
+      {...props}>
       {info.label}
     </span>
   )
@@ -41,20 +58,27 @@ export function AgeRating({ rating, variant = 'badge', className, ...props }: Ag
 
 export interface AgeGateProps {
   rating: AgeRatingValue
-  /** Ratings shown without the gate. Defaults to general and teen. */
+  /** Ratings shown without the gate. Defaults to general and suggestive. */
   allowed?: AgeRatingValue[]
   children: React.ReactNode
   className?: string
 }
 
 /** Blurs content above the viewer's allowed rating until they choose to reveal it. */
-export function AgeGate({ rating, allowed = ['general', 'teen'], children, className }: AgeGateProps) {
+export function AgeGate({
+  rating,
+  allowed = ['general', 'suggestive'],
+  children,
+  className,
+}: AgeGateProps) {
   const [revealed, setRevealed] = useState(false)
   const gated = !allowed.includes(rating) && !revealed
 
   return (
     <div className={cn('relative', className)}>
-      <div className={cn(gated && 'pointer-events-none select-none blur-2xl saturate-50')} aria-hidden={gated || undefined}>
+      <div
+        className={cn(gated && 'pointer-events-none select-none blur-2xl saturate-50')}
+        aria-hidden={gated || undefined}>
         {children}
       </div>
       {gated && (

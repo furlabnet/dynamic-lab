@@ -1,5 +1,15 @@
 import React from 'react'
-import { Badge, Button, PageHeading, PalettePreview, SegmentedControl, TransparencyControl, paletteTokens, useTheme, useToast } from '../../index'
+import {
+  Badge,
+  Button,
+  PageHeading,
+  PalettePreview,
+  SegmentedControl,
+  TransparencyControl,
+  paletteTokens,
+  useTheme,
+  useToast,
+} from '../../index'
 import { Check, Moon, Sun } from 'lucide-react'
 
 /** Every colour theme, light and dark, with a button to switch to it. */
@@ -44,11 +54,19 @@ export function ThemesPage() {
               key={p.id}
               aria-label={p.name}
               className="ui-panel flex flex-col gap-4"
-              style={active ? { borderColor: 'var(--primary)', boxShadow: '0 0 0 1px var(--primary)' } : undefined}>
+              style={
+                active
+                  ? { borderColor: 'var(--primary)', boxShadow: '0 0 0 1px var(--primary)' }
+                  : undefined
+              }>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="flex flex-col gap-1">
                   <h2 className="flex flex-wrap items-center gap-2 text-xl font-extrabold tracking-tight">
-                    <span className="size-3 rounded-full" style={{ background: accent }} aria-hidden />
+                    <span
+                      className="size-3 rounded-full"
+                      style={{ background: accent }}
+                      aria-hidden
+                    />
                     {p.name}
                     {active && <Badge>Current</Badge>}
                   </h2>

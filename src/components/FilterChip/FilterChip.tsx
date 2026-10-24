@@ -19,11 +19,14 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         data-active={active ? 'true' : undefined}
         className={cn(
           'filter-chip group',
-          active && 'border-[var(--primary)] bg-[color-mix(in_srgb,var(--primary)_14%,transparent)] text-[var(--primary)] font-semibold shadow-xs',
+          active &&
+            'border-[var(--primary)] bg-[color-mix(in_srgb,var(--primary)_14%,transparent)] text-[var(--primary)] font-semibold shadow-xs',
           className
         )}
         {...props}>
-        {icon && <span className="inline-flex shrink-0 items-center size-4 opacity-80">{icon}</span>}
+        {icon && (
+          <span className="inline-flex shrink-0 items-center size-4 opacity-80">{icon}</span>
+        )}
         <span>{children}</span>
         {count !== undefined && (
           <span

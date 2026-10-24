@@ -32,7 +32,11 @@ export function relativeTime(date: string | Date) {
   if (hours < 24) return `${hours}h ago`
   const days = Math.round(hours / 24)
   if (days < 30) return `${days}d ago`
-  return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+  return new Date(date).toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 }
 
 function initials(name: string) {
@@ -113,14 +117,20 @@ function CommentItem({ comment, depth, onReply, onLike, user }: CommentItemProps
 
   return (
     <li className="flex gap-3">
-      <ProfileAvatar src={comment.author.avatarSrc} initials={initials(comment.author.name)} size={depth ? 'sm' : 'md'} />
+      <ProfileAvatar
+        src={comment.author.avatarSrc}
+        initials={initials(comment.author.name)}
+        size={depth ? 'sm' : 'md'}
+      />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <Name href={comment.author.href} className="font-semibold hover:underline">
             {comment.author.name}
           </Name>
           {comment.author.badge}
-          <time dateTime={new Date(comment.createdAt).toISOString()} className="text-xs text-[var(--muted-foreground)]">
+          <time
+            dateTime={new Date(comment.createdAt).toISOString()}
+            className="text-xs text-[var(--muted-foreground)]">
             {relativeTime(comment.createdAt)}
           </time>
         </div>
@@ -135,7 +145,10 @@ function CommentItem({ comment, depth, onReply, onLike, user }: CommentItemProps
             {comment.likes ? comment.likes : 'Like'}
           </button>
           {onReply && depth === 0 && (
-            <button type="button" onClick={() => setReplying((v) => !v)} className="ui-comment-action">
+            <button
+              type="button"
+              onClick={() => setReplying((v) => !v)}
+              className="ui-comment-action">
               <MessageCircle className="size-3.5" />
               Reply
             </button>
@@ -158,7 +171,13 @@ function CommentItem({ comment, depth, onReply, onLike, user }: CommentItemProps
         {comment.replies && comment.replies.length > 0 && (
           <ul className="mt-3 flex flex-col gap-4 border-l-2 border-[var(--border)] pl-4">
             {comment.replies.map((reply) => (
-              <CommentItem key={reply.id} comment={reply} depth={depth + 1} onLike={onLike} user={user} />
+              <CommentItem
+                key={reply.id}
+                comment={reply}
+                depth={depth + 1}
+                onLike={onLike}
+                user={user}
+              />
             ))}
           </ul>
         )}
@@ -180,7 +199,15 @@ export interface CommentThreadProps {
   className?: string
 }
 
-export function CommentThread({ comments, onAdd, onLike, user, closed = false, title = 'Comments', className }: CommentThreadProps) {
+export function CommentThread({
+  comments,
+  onAdd,
+  onLike,
+  user,
+  closed = false,
+  title = 'Comments',
+  className,
+}: CommentThreadProps) {
   const total = comments.reduce((n, c) => n + 1 + (c.replies?.length ?? 0), 0)
   return (
     <section className={cn('flex flex-col gap-5', className)} aria-label={title}>
@@ -196,7 +223,9 @@ export function CommentThread({ comments, onAdd, onLike, user, closed = false, t
         onAdd && <CommentComposer user={user} onSubmit={(body) => onAdd(body)} />
       )}
       {comments.length === 0 ? (
-        !closed && <p className="body-sm text-[var(--muted-foreground)]">No comments yet. Be the first.</p>
+        !closed && (
+          <p className="body-sm text-[var(--muted-foreground)]">No comments yet. Be the first.</p>
+        )
       ) : (
         <ul className="flex flex-col gap-6">
           {comments.map((c) => (

@@ -28,7 +28,8 @@ export function Lightbox({ items, index, onIndexChange }: LightboxProps) {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onIndexChange(null)
       else if (e.key === 'ArrowRight') onIndexChange(((index ?? 0) + 1) % items.length)
-      else if (e.key === 'ArrowLeft') onIndexChange(((index ?? 0) - 1 + items.length) % items.length)
+      else if (e.key === 'ArrowLeft')
+        onIndexChange(((index ?? 0) - 1 + items.length) % items.length)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -48,26 +49,46 @@ export function Lightbox({ items, index, onIndexChange }: LightboxProps) {
         <span className="tabular-nums">
           {index + 1} / {items.length}
         </span>
-        <button type="button" aria-label="Close" onClick={() => onIndexChange(null)} className="ui-lightbox-button">
+        <button
+          type="button"
+          aria-label="Close"
+          onClick={() => onIndexChange(null)}
+          className="ui-lightbox-button">
           <X className="size-5" />
         </button>
       </div>
-      <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-4" onClick={(e) => e.target === e.currentTarget && onIndexChange(null)}>
-        <img key={index} src={item.fullSrc ?? item.src} alt={item.alt ?? ''} className="dl-animate-pop max-h-full max-w-full rounded-[var(--radius-lg)] object-contain" />
+      <div
+        className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-4"
+        onClick={(e) => e.target === e.currentTarget && onIndexChange(null)}>
+        <img
+          key={index}
+          src={item.fullSrc ?? item.src}
+          alt={item.alt ?? ''}
+          className="dl-animate-pop max-h-full max-w-full rounded-[var(--radius-lg)] object-contain"
+        />
         {items.length > 1 && (
           <>
-            <button type="button" aria-label="Previous image" onClick={() => onIndexChange((index - 1 + items.length) % items.length)} className="ui-lightbox-button absolute left-4 top-1/2 -translate-y-1/2">
+            <button
+              type="button"
+              aria-label="Previous image"
+              onClick={() => onIndexChange((index - 1 + items.length) % items.length)}
+              className="ui-lightbox-button absolute left-4 top-1/2 -translate-y-1/2">
               <ChevronLeft className="size-6" />
             </button>
-            <button type="button" aria-label="Next image" onClick={() => onIndexChange((index + 1) % items.length)} className="ui-lightbox-button absolute right-4 top-1/2 -translate-y-1/2">
+            <button
+              type="button"
+              aria-label="Next image"
+              onClick={() => onIndexChange((index + 1) % items.length)}
+              className="ui-lightbox-button absolute right-4 top-1/2 -translate-y-1/2">
               <ChevronRight className="size-6" />
             </button>
           </>
         )}
       </div>
-      {item.caption && <p className="px-4 pb-6 text-center text-sm text-white/80">{item.caption}</p>}
-    </div>
-    ,
+      {item.caption && (
+        <p className="px-4 pb-6 text-center text-sm text-white/80">{item.caption}</p>
+      )}
+    </div>,
     document.body
   )
 }
@@ -84,7 +105,12 @@ const columnClasses = { 2: 'md:grid-cols-2', 3: 'md:grid-cols-3', 4: 'md:grid-co
 const aspectClasses = { video: 'aspect-video', square: 'aspect-square', portrait: 'aspect-[3/4]' }
 
 /** A grid of thumbnails that open in a Lightbox. */
-export function MediaGallery({ items, columns = 3, aspect = 'video', className }: MediaGalleryProps) {
+export function MediaGallery({
+  items,
+  columns = 3,
+  aspect = 'video',
+  className,
+}: MediaGalleryProps) {
   const [index, setIndex] = useState<number | null>(null)
   return (
     <>
