@@ -62,8 +62,6 @@ pages:
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   variables:
-    # Docs are served from https://<group>.gitlab.io/<project>/
-    DOCS_BASE: '/$CI_PROJECT_NAME/'
     VITE_REGISTRY_URL: '$CI_API_V4_URL/packages/npm/'
     VITE_REPOSITORY_URL: '$CI_PROJECT_URL'
   script:

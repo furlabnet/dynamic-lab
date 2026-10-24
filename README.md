@@ -99,7 +99,7 @@ Requires Node 24 (see `.nvmrc`) and Yarn 4 (via Corepack).
 | `yarn dev` | The showcase: two working apps (the Dynamic Lab public site and the Backstage console) built from the library, at http://localhost:5173 |
 | `yarn docs:dev` | The documentation site, at http://localhost:5180 |
 | `yarn build` | The library into `dist/`: tsdown bundles ESM and CJS, `tsc` writes the declarations, the Tailwind CLI writes `dist/styles.css` |
-| `yarn docs:build` | The docs into `public/` (set `DOCS_BASE` for a sub-path) |
+| `yarn docs:build` | The docs into `public/`, with relative asset paths so the build works at any URL |
 | `yarn typecheck` | Type-check the library, showcase and docs |
 | `yarn format` | Prettier |
 

@@ -5,11 +5,14 @@ import path from 'path'
 
 /**
  * Documentation site (separate from the showcase). Builds to public/ for GitLab Pages.
- * DOCS_BASE sets the URL prefix, e.g. "/dynamic-lab/" for https://furlab.gitlab.io/dynamic-lab/.
+ * Asset paths are relative ("./"), so the same build works at the root of a Pages unique domain
+ * (e.g. https://<project>-<id>.gitlab.io/) and under a path (https://furlab.gitlab.io/dynamic-lab/).
+ * Routing is hash-based, so every page is served from index.html at that one location.
+ * DOCS_BASE overrides it if you ever need an absolute prefix.
  */
 export default defineConfig({
   root: path.resolve(import.meta.dirname, 'docs'),
-  base: process.env.DOCS_BASE ?? '/',
+  base: process.env.DOCS_BASE ?? './',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
