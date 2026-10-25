@@ -1,5 +1,46 @@
 import React, { useMemo, useState } from 'react'
-
+import {
+  AGE_RATING_INFO,
+  AgeRating,
+  Badge,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  Button,
+  Checkbox,
+  Dialog,
+  DragHandle,
+  EditorActionBar,
+  EmptyState,
+  FormSection,
+  IconButton,
+  ImageUploader,
+  MarkdownEditor,
+  NotFoundState,
+  PLATFORM_INFO,
+  PageHeader,
+  Panel,
+  PlatformBadge,
+  RadioGroup,
+  RadioGroupItem,
+  SegmentedControl,
+  Select,
+  SortableList,
+  StatusBadge,
+  Switch,
+  TagInput,
+  TextField,
+  countWords,
+  useToast,
+  type AgeRatingValue,
+  type DownloadFile,
+  type Platform,
+  type TagItem,
+  type UploadedImage,
+} from '../../index'
 import {
   CheckCircle2,
   ChevronDown,
@@ -10,59 +51,16 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react'
-
 import {
-  AGE_RATING_INFO,
-  AgeRating,
-  type AgeRatingValue,
-  Badge,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  Button,
-  Checkbox,
-  countWords,
-  Dialog,
-  type DownloadFile,
-  DragHandle,
-  EditorActionBar,
-  EmptyState,
-  FormSection,
-  IconButton,
-  ImageUploader,
-  MarkdownEditor,
-  NotFoundState,
-  PageHeader,
-  Panel,
-  type Platform,
-  PLATFORM_INFO,
-  PlatformBadge,
-  RadioGroup,
-  RadioGroupItem,
-  SegmentedControl,
-  Select,
-  SortableList,
-  StatusBadge,
-  Switch,
-  TagInput,
-  type TagItem,
-  TextField,
-  type UploadedImage,
-  useToast,
-} from '../../index'
-import {
-  type ContentRecord,
-  type ContentStatus,
-  type ContentType,
   CURRENT_USER,
   STATUS_LABELS,
   STATUS_TONES,
   TYPE_LABELS,
+  type ContentRecord,
+  type ContentStatus,
+  type ContentType,
 } from '../data'
-import { type ContentDetails, DETAILS, getDetails, img, LABS } from '../details'
+import { DETAILS, LABS, getDetails, img, type ContentDetails } from '../details'
 import { useShowcase } from '../state'
 import { TYPE_ICONS } from './LabApp'
 
@@ -686,7 +684,7 @@ export function ContentEditor({ type: typeProp, id }: { type?: ContentType; id?:
               <>
                 <FormSection
                   title="Age rating"
-                  description="Pick the highest rating that applies. Explicit work is hidden from people who haven't opted in.">
+                  description="Pick the highest rating that applies. Mature work is hidden from people who haven't opted in.">
                   <RadioGroup
                     label="Rating"
                     value={draft.rating}

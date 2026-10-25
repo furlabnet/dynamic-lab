@@ -1,7 +1,5 @@
 import React from 'react'
-
 import { Bookmark, EyeOff, FileText } from 'lucide-react'
-
 import { cn } from '../../lib/utils'
 import { AgeRating, type AgeRatingValue } from '../AgeRating'
 
@@ -26,7 +24,7 @@ export interface ContentCardProps extends Omit<React.HTMLAttributes<HTMLElement>
   icon?: React.ReactNode
   /** Age rating badge on the cover's top-left corner. */
   rating?: AgeRatingValue
-  /** Blur the cover image (e.g. Explicit work for people who haven't opted in). Title and stats stay visible. */
+  /** Blur the cover image (e.g. Mature work for people who haven't opted in). Title and stats stay visible. */
   blurCover?: boolean
   /** Short fact on the cover's bottom-right, e.g. "24 pages", "3 chapters", "v1.2". */
   coverMeta?: React.ReactNode

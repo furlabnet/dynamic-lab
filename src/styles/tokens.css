@@ -219,10 +219,9 @@
 /* Common Core Variables (Dimensions, Spacing, Radii) */
 :root {
   --font-sans:
-    'The Lab Sans-Serif', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
-  --font-display:
-    'The Lab Sans-Serif', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-display: 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Spacing */
   --space-2: 0.125rem;

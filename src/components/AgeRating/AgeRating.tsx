@@ -5,21 +5,21 @@ import { EyeOff } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { Button } from '../Button'
 
-export type AgeRatingValue = 'general' | 'mature' | 'explicit'
+export type AgeRatingValue = 'general' | 'suggestive' | 'mature'
 
 export const AGE_RATING_INFO: Record<
   AgeRatingValue,
   { label: string; short: string; description: string }
 > = {
   general: { label: 'General', short: 'G', description: 'Suitable for everyone.' },
+  suggestive: {
+    label: 'Suggestive',
+    short: 'S',
+    description: 'Mild violence, language or suggestive themes.',
+  },
   mature: {
     label: 'Mature',
     short: 'M',
-    description: 'Mild violence, language or mature themes.',
-  },
-  explicit: {
-    label: 'Explicit',
-    short: 'E',
     description: 'For adults only. Strong themes or explicit content.',
   },
 }
@@ -58,7 +58,7 @@ export function AgeRating({ rating, variant = 'badge', className, ...props }: Ag
 
 export interface AgeGateProps {
   rating: AgeRatingValue
-  /** Ratings shown without the gate. Defaults to general and mature. */
+  /** Ratings shown without the gate. Defaults to general and suggestive. */
   allowed?: AgeRatingValue[]
   children: React.ReactNode
   className?: string
@@ -67,7 +67,7 @@ export interface AgeGateProps {
 /** Blurs content above the viewer's allowed rating until they choose to reveal it. */
 export function AgeGate({
   rating,
-  allowed = ['general', 'mature'],
+  allowed = ['general', 'suggestive'],
   children,
   className,
 }: AgeGateProps) {

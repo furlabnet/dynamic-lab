@@ -1,6 +1,6 @@
 import type {
-  ComicPage,
   CommentData,
+  ComicPage,
   DescriptionItem,
   DownloadFile,
   MediaItem,
@@ -201,7 +201,7 @@ export const PROFILES: Profile[] = [
     name: 'Priya Natarajan',
     avatar: avatar('priya'),
     banner: img('priya-banner', 1600, 500),
-    bio: 'Sci-fi horror, wolves and static. Explicit work, tagged carefully.',
+    bio: 'Sci-fi horror, wolves and static. Mature work, tagged carefully.',
     joined: '2025-08-21',
     followers: 1990,
     following: 75,

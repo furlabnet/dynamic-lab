@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
 import { Search, Sparkles } from 'lucide-react'
-
 import {
   AgeGate,
   AgeRating,
@@ -130,17 +128,17 @@ export function Ratings() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap gap-2">
         <AgeRating rating="general" />
+        <AgeRating rating="suggestive" />
         <AgeRating rating="mature" />
-        <AgeRating rating="explicit" />
       </div>
-      <AgeRating rating="mature" variant="full" />
+      <AgeRating rating="suggestive" variant="full" />
     </div>
   )
 }
 
 export function Gate() {
   return (
-    <AgeGate rating="explicit" className="max-w-sm overflow-hidden rounded-[var(--radius-2xl)]">
+    <AgeGate rating="mature" className="max-w-sm overflow-hidden rounded-[var(--radius-2xl)]">
       <img
         src="https://picsum.photos/seed/docs-gate/800/600"
         alt="Example artwork"

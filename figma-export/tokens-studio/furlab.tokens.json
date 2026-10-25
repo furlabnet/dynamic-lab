@@ -1,0 +1,1217 @@
+{
+  "core": {
+    "space": {
+      "space-2": {
+        "type": "spacing",
+        "value": "2",
+        "description": "Brand product tag vertical padding; nav item gap."
+      },
+      "space-6": {
+        "type": "spacing",
+        "value": "6",
+        "description": "Pill-nav and menu inner padding; nav-label bottom margin."
+      },
+      "space-8": {
+        "type": "spacing",
+        "value": "8",
+        "description": "Toolbar and page-actions gap; nav link vertical padding."
+      },
+      "space-10": {
+        "type": "spacing",
+        "value": "10",
+        "description": "Nav link horizontal padding; brand lockup gap; toolbar vertical padding."
+      },
+      "space-12": {
+        "type": "spacing",
+        "value": "12",
+        "description": "Field horizontal padding; menu item padding; empty-state gap."
+      },
+      "space-16": {
+        "type": "spacing",
+        "value": "16",
+        "description": "Notice-panel padding; page-heading and timeline gaps; container gutter on phones."
+      },
+      "space-20": {
+        "type": "spacing",
+        "value": "20",
+        "description": "ui-panel padding below 640px; primary-button horizontal padding; dashboard gap."
+      },
+      "space-24": {
+        "type": "spacing",
+        "value": "24",
+        "description": "ui-panel padding from 640px; dialog padding; page-header column gap."
+      },
+      "space-28": {
+        "type": "spacing",
+        "value": "28",
+        "description": "Auth card padding; metric-card padding at its largest."
+      },
+      "space-32": {
+        "type": "spacing",
+        "value": "32",
+        "description": "Empty-panel padding; desktop dashboard gap; container gutter at its largest."
+      },
+      "space-40": {
+        "type": "spacing",
+        "value": "40",
+        "description": "Page-stack gap at its largest; ui-empty vertical padding."
+      }
+    },
+    "radius": {
+      "radius-sm": {
+        "type": "borderRadius",
+        "value": "6",
+        "description": "rounded-sm: small inner elements."
+      },
+      "radius-md": {
+        "type": "borderRadius",
+        "value": "8",
+        "description": "rounded-md; icon-button, nav links, menu items, file-picker button."
+      },
+      "radius-lg": {
+        "type": "borderRadius",
+        "value": "10",
+        "description": "`--radius`: buttons and form fields."
+      },
+      "radius-xl": {
+        "type": "borderRadius",
+        "value": "14",
+        "description": "Menus, toolbars and pill-nav links (0.875rem)."
+      },
+      "radius-2xl": {
+        "type": "borderRadius",
+        "value": "16",
+        "description": "ui-panel, notice-panel, dashboard sidebar."
+      },
+      "radius-3xl": {
+        "type": "borderRadius",
+        "value": "20",
+        "description": "surface-card, dialogs, auth card, empty-panel, hero icon."
+      },
+      "radius-full": {
+        "type": "borderRadius",
+        "value": "999",
+        "description": "Status pills, filter chips, avatars, the brand product tag."
+      }
+    },
+    "size": {
+      "touch-target": {
+        "type": "sizing",
+        "value": "44",
+        "description": "Minimum height of buttons, fields, chips and phone nav links (min-h-11)."
+      },
+      "control-compact": {
+        "type": "sizing",
+        "value": "36",
+        "description": "icon-button; toolbar fields and buttons from 1024px; desktop nav links."
+      },
+      "container-max": {
+        "type": "sizing",
+        "value": "1280",
+        "description": ".site-container and .dash-shell max width (80rem)."
+      },
+      "sidebar-width": {
+        "type": "sizing",
+        "value": "248",
+        "description": "Dashboard and Backstage sidebar (15.5rem); Backstage rail collapses to 68px."
+      }
+    },
+    "typography": {
+      "Marketing & public pages": {
+        "display": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Black",
+            "fontSize": "36",
+            "lineHeight": "40px",
+            "letterSpacing": "-2.5%"
+          },
+          "description": "Maintenance and other full-page notices (text-4xl font-black tracking-tight; 30px below 640px)."
+        },
+        "page-title": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Extrabold",
+            "fontSize": "48",
+            "lineHeight": "112.0%",
+            "letterSpacing": "-3.5%"
+          },
+          "description": ".page-title: fluid clamp(30px \u2192 48px). Public page headings."
+        },
+        "section-title": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Extrabold",
+            "fontSize": "30",
+            "lineHeight": "120.0%",
+            "letterSpacing": "-2.5%"
+          },
+          "description": ".section-title: fluid clamp(22px \u2192 30px)."
+        },
+        "eyebrow": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Extrabold",
+            "fontSize": "12",
+            "lineHeight": "150.0%",
+            "letterSpacing": "14.0%"
+          },
+          "description": ".page-eyebrow: uppercase, in `primary`. Public pages only; dashboards use breadcrumbs instead."
+        },
+        "lead": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Regular",
+            "fontSize": "16",
+            "lineHeight": "160.0%",
+            "letterSpacing": "0%"
+          },
+          "description": ".page-description: max 65ch, `muted-foreground`."
+        }
+      },
+      "Dashboards & Backstage": {
+        "ui-page-title": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Bold",
+            "fontSize": "28",
+            "lineHeight": "120.0%",
+            "letterSpacing": "-2.0%"
+          },
+          "description": ".ui-page-title: fluid clamp(22px \u2192 28px). PageHeader titles."
+        },
+        "ui-page-description": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Regular",
+            "fontSize": "15",
+            "lineHeight": "155.0%",
+            "letterSpacing": "0%"
+          },
+          "description": "Under a ui-page-title, `muted-foreground`, max 65ch."
+        },
+        "ui-section-title": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Bold",
+            "fontSize": "17",
+            "lineHeight": "130.0%",
+            "letterSpacing": "-1.0%"
+          },
+          "description": "Headings inside panels and cards."
+        },
+        "sidebar-title": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Extrabold",
+            "fontSize": "16",
+            "lineHeight": "150.0%",
+            "letterSpacing": "-1.0%"
+          },
+          "description": ".dash-sidebar-title: the Creator Lab name above the dashboard nav."
+        },
+        "nav-link": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Semibold",
+            "fontSize": "14",
+            "lineHeight": "143.0%",
+            "letterSpacing": "0%"
+          },
+          "description": ".ui-nav-link; 650 when aria-current."
+        },
+        "nav-label": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Bold",
+            "fontSize": "11",
+            "lineHeight": "150.0%",
+            "letterSpacing": "8.0%"
+          },
+          "description": ".ui-nav-label: uppercase group label in sidebars, `muted-foreground` at 85%."
+        },
+        "toolbar-label": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Semibold",
+            "fontSize": "13",
+            "lineHeight": "150.0%",
+            "letterSpacing": "0%"
+          },
+          "description": ".ui-toolbar-label."
+        }
+      },
+      "Body & controls": {
+        "body": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Regular",
+            "fontSize": "16",
+            "lineHeight": "150.0%",
+            "letterSpacing": "0%"
+          },
+          "description": "Default body copy (Tailwind base, antialiased)."
+        },
+        "body-sm": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Regular",
+            "fontSize": "14",
+            "lineHeight": "150.0%",
+            "letterSpacing": "0%"
+          },
+          "description": "Notices, empty-state descriptions, table cells."
+        },
+        "button": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Semibold",
+            "fontSize": "16",
+            "lineHeight": "150.0%",
+            "letterSpacing": "0%"
+          },
+          "description": "primary-button and danger-button labels."
+        },
+        "button-sm": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Semibold",
+            "fontSize": "14",
+            "lineHeight": "143.0%",
+            "letterSpacing": "0%"
+          },
+          "description": "secondary-button and danger-outline-button labels."
+        },
+        "chip": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Bold",
+            "fontSize": "14",
+            "lineHeight": "125.0%",
+            "letterSpacing": "0%"
+          },
+          "description": ".filter-chip; pill-nav-link uses 650."
+        },
+        "pill": {
+          "type": "typography",
+          "value": {
+            "fontFamily": "Proxima Nova",
+            "fontWeight": "Bold",
+            "fontSize": "12",
+            "lineHeight": "125.0%",
+            "letterSpacing": "0%"
+          },
+          "description": ".status-pill and the brand product tag."
+        }
+      }
+    }
+  },
+  "theme/light": {
+    "surface": {
+      "background": {
+        "type": "color",
+        "value": "#f5f6fa",
+        "description": "Page colour, painted on <html> so the accent glows show through. Ground for `foreground` and `muted-foreground`."
+      },
+      "foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Body text and headings on `background`, `card` and `muted`."
+      },
+      "card": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Solid surfaces: form fields, the tint of glass-surface panels and cards."
+      },
+      "card-foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Text on `card` and inside `surface-card`."
+      },
+      "popover": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Solid floating surfaces (popovers, select menus)."
+      },
+      "popover-foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Text on `popover`."
+      },
+      "muted": {
+        "type": "color",
+        "value": "#eaecf3",
+        "description": "Subtle fills: toolbars (at 50%), neutral status pills, hover rows."
+      },
+      "muted-foreground": {
+        "type": "color",
+        "value": "#595e73",
+        "description": "Secondary text: descriptions, labels, inactive nav links. On `background`, `card` and `muted`."
+      },
+      "secondary": {
+        "type": "color",
+        "value": "#eaecf3",
+        "description": "Secondary fills (shadcn/FlyonUI secondary variant)."
+      },
+      "secondary-foreground": {
+        "type": "color",
+        "value": "#30344b",
+        "description": "Text on `secondary`."
+      },
+      "accent": {
+        "type": "color",
+        "value": "#eaecf3",
+        "description": "Hover and highlighted fills in menus and lists."
+      },
+      "accent-foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Text on `accent`."
+      }
+    },
+    "lines": {
+      "border": {
+        "type": "color",
+        "value": "#d7d9e5",
+        "description": "Default hairline on every element; panel and table dividers."
+      },
+      "input": {
+        "type": "color",
+        "value": "#cbcedc",
+        "description": "Text-field borders (`form-input`, `form-textarea`)."
+      }
+    },
+    "accent": {
+      "primary": {
+        "type": "color",
+        "value": "#2354e7",
+        "description": "The app's accent (Furlab blue): primary-button fill, links, active nav, eyebrows, timeline markers. Tinted at 10\u201312% for active chips and nav."
+      },
+      "primary-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text and icons on a `primary` fill."
+      },
+      "ring": {
+        "type": "color",
+        "value": "#2354e7",
+        "description": "Focus outline: 2px solid, 2px offset; at 30\u201340% as the 4px ring on buttons and fields."
+      }
+    },
+    "feedback": {
+      "destructive": {
+        "type": "color",
+        "value": "#ca2121",
+        "description": "danger-button fill: the final confirm of an irreversible action."
+      },
+      "destructive-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `destructive`."
+      },
+      "success": {
+        "type": "color",
+        "value": "#127852",
+        "description": "Solid success fill."
+      },
+      "success-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `success`."
+      },
+      "warning": {
+        "type": "color",
+        "value": "#84470b",
+        "description": "Solid warning fill."
+      },
+      "warning-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `warning`."
+      },
+      "info": {
+        "type": "color",
+        "value": "#1273a1",
+        "description": "Solid info fill."
+      },
+      "info-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `info`."
+      }
+    },
+    "status": {
+      "status-success-ink": {
+        "type": "color",
+        "value": "#127852",
+        "description": "Success text: on `status-success-bg` in pills and notices, or alone as status-text."
+      },
+      "status-success-bg": {
+        "type": "color",
+        "value": "#e7f9ee",
+        "description": "Success pill and notice fill."
+      },
+      "status-warning-ink": {
+        "type": "color",
+        "value": "#84470b",
+        "description": "Warning text on `status-warning-bg` (In review)."
+      },
+      "status-warning-bg": {
+        "type": "color",
+        "value": "#fff3d6",
+        "description": "Warning pill and notice fill."
+      },
+      "status-danger-ink": {
+        "type": "color",
+        "value": "#a11717",
+        "description": "Danger text on `status-danger-bg`; danger-outline-button text and border (40%)."
+      },
+      "status-danger-bg": {
+        "type": "color",
+        "value": "#ffebeb",
+        "description": "Danger pill and notice fill; danger-outline-button hover."
+      }
+    },
+    "effects": {
+      "glow-a": {
+        "type": "color",
+        "value": "#3d6bf5",
+        "description": "Top-right background glow (56rem \u00d7 40rem radial at `glow-strength`)."
+      },
+      "glow-b": {
+        "type": "color",
+        "value": "#905aed",
+        "description": "Bottom-left background glow (48rem \u00d7 36rem radial)."
+      },
+      "glass": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Tint of glass-chrome (bars, menus, dialogs), mixed at `glass-alpha`."
+      },
+      "glass-border": {
+        "type": "color",
+        "value": "#47548524",
+        "description": "Hairline around glass-chrome and glass-surface; filter chips and toolbars."
+      },
+      "glass-highlight": {
+        "type": "color",
+        "value": "#ffffffbf",
+        "description": "1px inset top highlight on glass surfaces."
+      }
+    },
+    "opacity": {
+      "glass-alpha": {
+        "type": "opacity",
+        "value": "0.68",
+        "description": "glass-chrome tint opacity in light; 0.6 in dark."
+      },
+      "surface-alpha": {
+        "type": "opacity",
+        "value": "0.76",
+        "description": "glass-surface card opacity in light; 0.66 in dark."
+      },
+      "glow-strength": {
+        "type": "opacity",
+        "value": "0.22",
+        "description": "Background glow opacity in light; 0.2 in dark."
+      }
+    }
+  },
+  "theme/dark": {
+    "surface": {
+      "background": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Page colour, painted on <html> so the accent glows show through. Ground for `foreground` and `muted-foreground`."
+      },
+      "foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Body text and headings on `background`, `card` and `muted`."
+      },
+      "card": {
+        "type": "color",
+        "value": "#151723",
+        "description": "Solid surfaces: form fields, the tint of glass-surface panels and cards."
+      },
+      "card-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `card` and inside `surface-card`."
+      },
+      "popover": {
+        "type": "color",
+        "value": "#151723",
+        "description": "Solid floating surfaces (popovers, select menus)."
+      },
+      "popover-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `popover`."
+      },
+      "muted": {
+        "type": "color",
+        "value": "#1e202f",
+        "description": "Subtle fills: toolbars (at 50%), neutral status pills, hover rows."
+      },
+      "muted-foreground": {
+        "type": "color",
+        "value": "#a4a9bc",
+        "description": "Secondary text: descriptions, labels, inactive nav links. On `background`, `card` and `muted`."
+      },
+      "secondary": {
+        "type": "color",
+        "value": "#222435",
+        "description": "Secondary fills (shadcn/FlyonUI secondary variant)."
+      },
+      "secondary-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `secondary`."
+      },
+      "accent": {
+        "type": "color",
+        "value": "#202232",
+        "description": "Hover and highlighted fills in menus and lists."
+      },
+      "accent-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `accent`."
+      }
+    },
+    "lines": {
+      "border": {
+        "type": "color",
+        "value": "#292c3d",
+        "description": "Default hairline on every element; panel and table dividers."
+      },
+      "input": {
+        "type": "color",
+        "value": "#33364c",
+        "description": "Text-field borders (`form-input`, `form-textarea`)."
+      }
+    },
+    "accent": {
+      "primary": {
+        "type": "color",
+        "value": "#6094fb",
+        "description": "The app's accent (Furlab blue): primary-button fill, links, active nav, eyebrows, timeline markers. Tinted at 10\u201312% for active chips and nav."
+      },
+      "primary-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text and icons on a `primary` fill."
+      },
+      "ring": {
+        "type": "color",
+        "value": "#6094fb",
+        "description": "Focus outline: 2px solid, 2px offset; at 30\u201340% as the 4px ring on buttons and fields."
+      }
+    },
+    "feedback": {
+      "destructive": {
+        "type": "color",
+        "value": "#f05656",
+        "description": "danger-button fill: the final confirm of an irreversible action."
+      },
+      "destructive-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `destructive`."
+      },
+      "success": {
+        "type": "color",
+        "value": "#85e0ab",
+        "description": "Solid success fill."
+      },
+      "success-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `success`."
+      },
+      "warning": {
+        "type": "color",
+        "value": "#f7ce6e",
+        "description": "Solid warning fill."
+      },
+      "warning-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `warning`."
+      },
+      "info": {
+        "type": "color",
+        "value": "#6ee0f7",
+        "description": "Solid info fill."
+      },
+      "info-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `info`."
+      }
+    },
+    "status": {
+      "status-success-ink": {
+        "type": "color",
+        "value": "#8de2b0",
+        "description": "Success text: on `status-success-bg` in pills and notices, or alone as status-text."
+      },
+      "status-success-bg": {
+        "type": "color",
+        "value": "#153729",
+        "description": "Success pill and notice fill."
+      },
+      "status-warning-ink": {
+        "type": "color",
+        "value": "#f8d177",
+        "description": "Warning text on `status-warning-bg` (In review)."
+      },
+      "status-warning-bg": {
+        "type": "color",
+        "value": "#3f2912",
+        "description": "Warning pill and notice fill."
+      },
+      "status-danger-ink": {
+        "type": "color",
+        "value": "#f98b8b",
+        "description": "Danger text on `status-danger-bg`; danger-outline-button text and border (40%)."
+      },
+      "status-danger-bg": {
+        "type": "color",
+        "value": "#411616",
+        "description": "Danger pill and notice fill; danger-outline-button hover."
+      }
+    },
+    "effects": {
+      "glow-a": {
+        "type": "color",
+        "value": "#3464f4",
+        "description": "Top-right background glow (56rem \u00d7 40rem radial at `glow-strength`)."
+      },
+      "glow-b": {
+        "type": "color",
+        "value": "#8347eb",
+        "description": "Bottom-left background glow (48rem \u00d7 36rem radial)."
+      },
+      "glass": {
+        "type": "color",
+        "value": "#171926",
+        "description": "Tint of glass-chrome (bars, menus, dialogs), mixed at `glass-alpha`."
+      },
+      "glass-border": {
+        "type": "color",
+        "value": "#e2e6f317",
+        "description": "Hairline around glass-chrome and glass-surface; filter chips and toolbars."
+      },
+      "glass-highlight": {
+        "type": "color",
+        "value": "#ffffff0f",
+        "description": "1px inset top highlight on glass surfaces."
+      }
+    },
+    "opacity": {
+      "glass-alpha": {
+        "type": "opacity",
+        "value": "0.6",
+        "description": "glass-chrome tint opacity in light; 0.6 in dark."
+      },
+      "surface-alpha": {
+        "type": "opacity",
+        "value": "0.66",
+        "description": "glass-surface card opacity in light; 0.66 in dark."
+      },
+      "glow-strength": {
+        "type": "opacity",
+        "value": "0.2",
+        "description": "Background glow opacity in light; 0.2 in dark."
+      }
+    }
+  },
+  "theme/backstage-light": {
+    "surface": {
+      "background": {
+        "type": "color",
+        "value": "#f5f6fa",
+        "description": "Page colour, painted on <html> so the accent glows show through. Ground for `foreground` and `muted-foreground`."
+      },
+      "foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Body text and headings on `background`, `card` and `muted`."
+      },
+      "card": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Solid surfaces: form fields, the tint of glass-surface panels and cards."
+      },
+      "card-foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Text on `card` and inside `surface-card`."
+      },
+      "popover": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Solid floating surfaces (popovers, select menus)."
+      },
+      "popover-foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Text on `popover`."
+      },
+      "muted": {
+        "type": "color",
+        "value": "#eaecf3",
+        "description": "Subtle fills: toolbars (at 50%), neutral status pills, hover rows."
+      },
+      "muted-foreground": {
+        "type": "color",
+        "value": "#595e73",
+        "description": "Secondary text: descriptions, labels, inactive nav links. On `background`, `card` and `muted`."
+      },
+      "secondary": {
+        "type": "color",
+        "value": "#eaecf3",
+        "description": "Secondary fills (shadcn/FlyonUI secondary variant)."
+      },
+      "secondary-foreground": {
+        "type": "color",
+        "value": "#30344b",
+        "description": "Text on `secondary`."
+      },
+      "accent": {
+        "type": "color",
+        "value": "#eaecf3",
+        "description": "Hover and highlighted fills in menus and lists."
+      },
+      "accent-foreground": {
+        "type": "color",
+        "value": "#151828",
+        "description": "Text on `accent`."
+      }
+    },
+    "lines": {
+      "border": {
+        "type": "color",
+        "value": "#d7d9e5",
+        "description": "Default hairline on every element; panel and table dividers."
+      },
+      "input": {
+        "type": "color",
+        "value": "#cbcedc",
+        "description": "Text-field borders (`form-input`, `form-textarea`)."
+      }
+    },
+    "accent": {
+      "primary": {
+        "type": "color",
+        "value": "#773eda",
+        "description": "The app's accent (Furlab blue): primary-button fill, links, active nav, eyebrows, timeline markers. Tinted at 10\u201312% for active chips and nav."
+      },
+      "primary-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text and icons on a `primary` fill."
+      },
+      "ring": {
+        "type": "color",
+        "value": "#773eda",
+        "description": "Focus outline: 2px solid, 2px offset; at 30\u201340% as the 4px ring on buttons and fields."
+      }
+    },
+    "feedback": {
+      "destructive": {
+        "type": "color",
+        "value": "#ca2121",
+        "description": "danger-button fill: the final confirm of an irreversible action."
+      },
+      "destructive-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `destructive`."
+      },
+      "success": {
+        "type": "color",
+        "value": "#127852",
+        "description": "Solid success fill."
+      },
+      "success-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `success`."
+      },
+      "warning": {
+        "type": "color",
+        "value": "#84470b",
+        "description": "Solid warning fill."
+      },
+      "warning-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `warning`."
+      },
+      "info": {
+        "type": "color",
+        "value": "#1273a1",
+        "description": "Solid info fill."
+      },
+      "info-foreground": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Text on `info`."
+      }
+    },
+    "status": {
+      "status-success-ink": {
+        "type": "color",
+        "value": "#127852",
+        "description": "Success text: on `status-success-bg` in pills and notices, or alone as status-text."
+      },
+      "status-success-bg": {
+        "type": "color",
+        "value": "#e7f9ee",
+        "description": "Success pill and notice fill."
+      },
+      "status-warning-ink": {
+        "type": "color",
+        "value": "#84470b",
+        "description": "Warning text on `status-warning-bg` (In review)."
+      },
+      "status-warning-bg": {
+        "type": "color",
+        "value": "#fff3d6",
+        "description": "Warning pill and notice fill."
+      },
+      "status-danger-ink": {
+        "type": "color",
+        "value": "#a11717",
+        "description": "Danger text on `status-danger-bg`; danger-outline-button text and border (40%)."
+      },
+      "status-danger-bg": {
+        "type": "color",
+        "value": "#ffebeb",
+        "description": "Danger pill and notice fill; danger-outline-button hover."
+      }
+    },
+    "effects": {
+      "glow-a": {
+        "type": "color",
+        "value": "#905aed",
+        "description": "Top-right background glow (56rem \u00d7 40rem radial at `glow-strength`)."
+      },
+      "glow-b": {
+        "type": "color",
+        "value": "#3d6bf5",
+        "description": "Bottom-left background glow (48rem \u00d7 36rem radial)."
+      },
+      "glass": {
+        "type": "color",
+        "value": "#ffffff",
+        "description": "Tint of glass-chrome (bars, menus, dialogs), mixed at `glass-alpha`."
+      },
+      "glass-border": {
+        "type": "color",
+        "value": "#47548524",
+        "description": "Hairline around glass-chrome and glass-surface; filter chips and toolbars."
+      },
+      "glass-highlight": {
+        "type": "color",
+        "value": "#ffffffbf",
+        "description": "1px inset top highlight on glass surfaces."
+      }
+    },
+    "opacity": {
+      "glass-alpha": {
+        "type": "opacity",
+        "value": "0.68",
+        "description": "glass-chrome tint opacity in light; 0.6 in dark."
+      },
+      "surface-alpha": {
+        "type": "opacity",
+        "value": "0.76",
+        "description": "glass-surface card opacity in light; 0.66 in dark."
+      },
+      "glow-strength": {
+        "type": "opacity",
+        "value": "0.22",
+        "description": "Background glow opacity in light; 0.2 in dark."
+      }
+    }
+  },
+  "theme/backstage-dark": {
+    "surface": {
+      "background": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Page colour, painted on <html> so the accent glows show through. Ground for `foreground` and `muted-foreground`."
+      },
+      "foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Body text and headings on `background`, `card` and `muted`."
+      },
+      "card": {
+        "type": "color",
+        "value": "#151723",
+        "description": "Solid surfaces: form fields, the tint of glass-surface panels and cards."
+      },
+      "card-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `card` and inside `surface-card`."
+      },
+      "popover": {
+        "type": "color",
+        "value": "#151723",
+        "description": "Solid floating surfaces (popovers, select menus)."
+      },
+      "popover-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `popover`."
+      },
+      "muted": {
+        "type": "color",
+        "value": "#1e202f",
+        "description": "Subtle fills: toolbars (at 50%), neutral status pills, hover rows."
+      },
+      "muted-foreground": {
+        "type": "color",
+        "value": "#a4a9bc",
+        "description": "Secondary text: descriptions, labels, inactive nav links. On `background`, `card` and `muted`."
+      },
+      "secondary": {
+        "type": "color",
+        "value": "#222435",
+        "description": "Secondary fills (shadcn/FlyonUI secondary variant)."
+      },
+      "secondary-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `secondary`."
+      },
+      "accent": {
+        "type": "color",
+        "value": "#202232",
+        "description": "Hover and highlighted fills in menus and lists."
+      },
+      "accent-foreground": {
+        "type": "color",
+        "value": "#f1f3f8",
+        "description": "Text on `accent`."
+      }
+    },
+    "lines": {
+      "border": {
+        "type": "color",
+        "value": "#292c3d",
+        "description": "Default hairline on every element; panel and table dividers."
+      },
+      "input": {
+        "type": "color",
+        "value": "#33364c",
+        "description": "Text-field borders (`form-input`, `form-textarea`)."
+      }
+    },
+    "accent": {
+      "primary": {
+        "type": "color",
+        "value": "#b890f9",
+        "description": "The app's accent (Furlab blue): primary-button fill, links, active nav, eyebrows, timeline markers. Tinted at 10\u201312% for active chips and nav."
+      },
+      "primary-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text and icons on a `primary` fill."
+      },
+      "ring": {
+        "type": "color",
+        "value": "#b890f9",
+        "description": "Focus outline: 2px solid, 2px offset; at 30\u201340% as the 4px ring on buttons and fields."
+      }
+    },
+    "feedback": {
+      "destructive": {
+        "type": "color",
+        "value": "#f05656",
+        "description": "danger-button fill: the final confirm of an irreversible action."
+      },
+      "destructive-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `destructive`."
+      },
+      "success": {
+        "type": "color",
+        "value": "#85e0ab",
+        "description": "Solid success fill."
+      },
+      "success-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `success`."
+      },
+      "warning": {
+        "type": "color",
+        "value": "#f7ce6e",
+        "description": "Solid warning fill."
+      },
+      "warning-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `warning`."
+      },
+      "info": {
+        "type": "color",
+        "value": "#6ee0f7",
+        "description": "Solid info fill."
+      },
+      "info-foreground": {
+        "type": "color",
+        "value": "#0c0e17",
+        "description": "Text on `info`."
+      }
+    },
+    "status": {
+      "status-success-ink": {
+        "type": "color",
+        "value": "#8de2b0",
+        "description": "Success text: on `status-success-bg` in pills and notices, or alone as status-text."
+      },
+      "status-success-bg": {
+        "type": "color",
+        "value": "#153729",
+        "description": "Success pill and notice fill."
+      },
+      "status-warning-ink": {
+        "type": "color",
+        "value": "#f8d177",
+        "description": "Warning text on `status-warning-bg` (In review)."
+      },
+      "status-warning-bg": {
+        "type": "color",
+        "value": "#3f2912",
+        "description": "Warning pill and notice fill."
+      },
+      "status-danger-ink": {
+        "type": "color",
+        "value": "#f98b8b",
+        "description": "Danger text on `status-danger-bg`; danger-outline-button text and border (40%)."
+      },
+      "status-danger-bg": {
+        "type": "color",
+        "value": "#411616",
+        "description": "Danger pill and notice fill; danger-outline-button hover."
+      }
+    },
+    "effects": {
+      "glow-a": {
+        "type": "color",
+        "value": "#8347eb",
+        "description": "Top-right background glow (56rem \u00d7 40rem radial at `glow-strength`)."
+      },
+      "glow-b": {
+        "type": "color",
+        "value": "#3464f4",
+        "description": "Bottom-left background glow (48rem \u00d7 36rem radial)."
+      },
+      "glass": {
+        "type": "color",
+        "value": "#171926",
+        "description": "Tint of glass-chrome (bars, menus, dialogs), mixed at `glass-alpha`."
+      },
+      "glass-border": {
+        "type": "color",
+        "value": "#e2e6f317",
+        "description": "Hairline around glass-chrome and glass-surface; filter chips and toolbars."
+      },
+      "glass-highlight": {
+        "type": "color",
+        "value": "#ffffff0f",
+        "description": "1px inset top highlight on glass surfaces."
+      }
+    },
+    "opacity": {
+      "glass-alpha": {
+        "type": "opacity",
+        "value": "0.6",
+        "description": "glass-chrome tint opacity in light; 0.6 in dark."
+      },
+      "surface-alpha": {
+        "type": "opacity",
+        "value": "0.66",
+        "description": "glass-surface card opacity in light; 0.66 in dark."
+      },
+      "glow-strength": {
+        "type": "opacity",
+        "value": "0.2",
+        "description": "Background glow opacity in light; 0.2 in dark."
+      }
+    }
+  },
+  "$themes": [
+    {
+      "id": "light",
+      "name": "Furlab Light",
+      "group": "Theme",
+      "selectedTokenSets": {
+        "core": "source",
+        "theme/light": "enabled"
+      }
+    },
+    {
+      "id": "dark",
+      "name": "Furlab Dark",
+      "group": "Theme",
+      "selectedTokenSets": {
+        "core": "source",
+        "theme/dark": "enabled"
+      }
+    },
+    {
+      "id": "backstage-light",
+      "name": "Backstage Light",
+      "group": "Theme",
+      "selectedTokenSets": {
+        "core": "source",
+        "theme/backstage-light": "enabled"
+      }
+    },
+    {
+      "id": "backstage-dark",
+      "name": "Backstage Dark",
+      "group": "Theme",
+      "selectedTokenSets": {
+        "core": "source",
+        "theme/backstage-dark": "enabled"
+      }
+    }
+  ],
+  "$metadata": {
+    "tokenSetOrder": [
+      "core",
+      "theme/light",
+      "theme/dark",
+      "theme/backstage-light",
+      "theme/backstage-dark"
+    ]
+  }
+}
