@@ -1,12 +1,13 @@
 import type React from 'react'
+
 import * as actions from './examples/actions'
-import * as overlays from './examples/overlays'
-import * as navigation from './examples/navigation'
-import * as forms from './examples/forms'
-import * as feedback from './examples/feedback'
-import * as data from './examples/data'
 import * as content from './examples/content'
+import * as data from './examples/data'
+import * as feedback from './examples/feedback'
+import * as forms from './examples/forms'
 import * as layout from './examples/layout'
+import * as navigation from './examples/navigation'
+import * as overlays from './examples/overlays'
 
 export interface PropDoc {
   name: string
@@ -912,7 +913,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'AgeRating & AgeGate',
     group: 'Feedback',
     summary:
-      'General / Teen / Mature badges, and a gate that blurs content above the viewer’s allowed rating until they choose to reveal it.',
+      'General / Teen / Explicit badges, and a gate that blurs content above the viewer’s allowed rating until they choose to reveal it.',
     imports: ['AgeRating', 'AgeGate', 'AGE_RATING_INFO'],
     examples: [
       ex('feedback', feedback, 'Ratings', 'Badges'),
@@ -922,7 +923,7 @@ export const COMPONENTS: ComponentDoc[] = [
       {
         component: 'AgeRating',
         rows: [
-          p('rating', "'general' | 'suggestive' | 'mature'", undefined, 'The rating.'),
+          p('rating', "'general' | 'mature' | 'explicit'", undefined, 'The rating.'),
           p('variant', "'badge' | 'full'", "'badge'", 'Full adds the description.'),
         ],
       },
@@ -933,7 +934,7 @@ export const COMPONENTS: ComponentDoc[] = [
           p(
             'allowed',
             'AgeRatingValue[]',
-            "['general', 'suggestive']",
+            "['general', 'mature']",
             'Ratings shown without the gate.'
           ),
         ],
@@ -1003,7 +1004,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'ContentCard',
     group: 'Data display',
     summary:
-      'A browsable card for a creation: cover, rating, type, title, byline, tags and counts. Mature covers can be blurred while the details stay readable.',
+      'A browsable card for a creation: cover, rating, type, title, byline, tags and counts. Explicit covers can be blurred while the details stay readable.',
     imports: ['ContentCard'],
     examples: [ex('data', data, 'Cards', 'Story, gated artwork and a page')],
     props: [

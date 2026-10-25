@@ -2,7 +2,7 @@ import type { StatusTone } from '../index'
 
 export type ContentType = 'page' | 'artwork' | 'story' | 'comic' | 'visual-novel'
 export type ContentStatus = 'draft' | 'in-review' | 'published' | 'archived'
-export type ContentRating = 'general' | 'suggestive' | 'mature'
+export type ContentRating = 'general' | 'mature' | 'explicit'
 
 export interface ContentRecord {
   id: string
@@ -51,8 +51,8 @@ export const STATUS_TONES: Record<ContentStatus, StatusTone> = {
 
 export const RATING_LABELS: Record<ContentRating, string> = {
   general: 'General',
-  suggestive: 'Suggestive',
   mature: 'Mature',
+  explicit: 'Explicit',
 }
 
 export const CURRENT_USER = {
@@ -86,7 +86,7 @@ export const seedContent: ContentRecord[] = [
     type: 'comic',
     creator: 'Maya Lin',
     lab: 'Night Shift Comics',
-    rating: 'suggestive',
+    rating: 'mature',
     status: 'in-review',
     updated: ago(1),
     tags: ['sci-fi', 'cyberpunk'],
@@ -110,7 +110,7 @@ export const seedContent: ContentRecord[] = [
     type: 'visual-novel',
     creator: 'Sam Okafor',
     lab: 'Moonlit Studio',
-    rating: 'suggestive',
+    rating: 'mature',
     status: 'published',
     updated: ago(3),
     tags: ['mystery', 'horror'],
@@ -146,7 +146,7 @@ export const seedContent: ContentRecord[] = [
     type: 'story',
     creator: 'Priya Natarajan',
     lab: 'Ink & Ember',
-    rating: 'mature',
+    rating: 'explicit',
     status: 'in-review',
     updated: ago(6),
     tags: ['sci-fi'],
@@ -170,7 +170,7 @@ export const seedContent: ContentRecord[] = [
     type: 'visual-novel',
     creator: 'Priya Natarajan',
     lab: 'Night Shift Comics',
-    rating: 'mature',
+    rating: 'explicit',
     status: 'archived',
     updated: ago(12),
     tags: ['sci-fi', 'horror'],
@@ -206,7 +206,7 @@ export const seedContent: ContentRecord[] = [
     type: 'artwork',
     creator: 'Priya Natarajan',
     lab: 'Ink & Ember',
-    rating: 'mature',
+    rating: 'explicit',
     status: 'published',
     updated: ago(1),
     tags: ['horror', 'nature'],

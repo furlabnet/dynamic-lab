@@ -1,42 +1,41 @@
-/* Showcase only: the library ships no font files, apps load Proxima Nova themselves. */
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url('../../figma-export/fonts/ProximaNova-Regular.otf') format('opentype');
+  font-family: 'The Lab Sans-Serif';
+  src: url('../../fonts/TheLabSans-Serif--Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url('../../figma-export/fonts/ProximaNova-Medium.otf') format('opentype');
+  font-family: 'The Lab Sans-Serif';
+  src: url('../../fonts/TheLabSans-Serif--Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url('../../figma-export/fonts/ProximaNova-Semibold.otf') format('opentype');
+  font-family: 'The Lab Sans-Serif';
+  src: url('../../fonts/TheLabSans-Serif--Semibold.otf') format('opentype');
   font-weight: 550 650;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url('../../figma-export/fonts/ProximaNova-Bold.otf') format('opentype');
+  font-family: 'The Lab Sans-Serif';
+  src: url('../../fonts/TheLabSans-Serif--Bold.otf') format('opentype');
   font-weight: 651 750;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url('../../figma-export/fonts/ProximaNova-ExtraBold.otf') format('opentype');
+  font-family: 'The Lab Sans-Serif';
+  src: url('../../fonts/TheLabSans-Serif--ExtraBold.otf') format('opentype');
   font-weight: 751 850;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url('../../figma-export/fonts/ProximaNova-Black.otf') format('opentype');
+  font-family: 'The Lab Sans-Serif';
+  src: url('../../fonts/TheLabSans-Serif--Black.otf') format('opentype');
   font-weight: 851 900;
   font-style: normal;
   font-display: swap;

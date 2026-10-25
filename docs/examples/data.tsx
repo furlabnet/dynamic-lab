@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
+
 import { Bookmark, Eye, MessageCircle } from 'lucide-react'
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
   Checkbox,
+  type CommentData,
   CommentThread,
   ContentCard,
   DescriptionList,
@@ -23,7 +26,6 @@ import {
   TagList,
   WorkflowTimeline,
   WorkflowTimelineItem,
-  type CommentData,
 } from '@furlab/dynamic-lab'
 
 export function TableExample() {
@@ -138,7 +140,7 @@ export function Cards() {
         title="Ember Wolves"
         byline="By Priya Natarajan"
         cover="https://picsum.photos/seed/ember-wolves/800/600"
-        rating="mature"
+        rating="explicit"
         blurCover
         stats={[{ icon: <Bookmark />, value: '410', label: 'saves' }]}
         onClick={() => {}}

@@ -121,10 +121,10 @@
   white-space: nowrap;
 }
 
-.ui-age-rating[data-rating='suggestive'] {
+.ui-age-rating[data-rating='mature'] {
   --rating: var(--status-warning-ink);
 }
-.ui-age-rating[data-rating='mature'] {
+.ui-age-rating[data-rating='explicit'] {
   --rating: var(--status-danger-ink);
 }
 

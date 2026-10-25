@@ -562,7 +562,7 @@ function MenusSection() {
             ]}
           />
           <Switch defaultChecked label="Only show work with open comments" />
-          <Switch label="Hide mature content" />
+          <Switch label="Hide explicit content" />
         </div>
       </Drawer>
 
@@ -894,7 +894,7 @@ function FormsSection() {
               label="Allow comments"
               description="Readers can reply to this story."
             />
-            <Switch label="Mature content" />
+            <Switch label="Explicit content" />
             <Switch disabled label="Disabled switch" />
             <Separator />
             <Checkbox
@@ -1014,8 +1014,8 @@ function FeedbackSection() {
             <Badge variant="neutral">12</Badge>
             <Badge variant="outline">Outline</Badge>
             <Badge variant="success">Verified</Badge>
-            <Badge variant="warning">Suggestive</Badge>
-            <Badge variant="danger">Mature</Badge>
+            <Badge variant="warning">Mature</Badge>
+            <Badge variant="danger">Explicit</Badge>
             <span className="inline-flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
               <Kbd keys={['⌘', 'K']} /> to search
             </span>

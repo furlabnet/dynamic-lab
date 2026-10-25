@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { Bookmark, Eye, MessageCircle } from 'lucide-react'
-import { ContentCard, PLATFORM_INFO, type ContentCardProps } from '../../index'
-import { TYPE_LABELS, type ContentRecord } from '../data'
+
+import { ContentCard, type ContentCardProps, PLATFORM_INFO } from '../../index'
+import { type ContentRecord, TYPE_LABELS } from '../data'
 import { getDetails, profileByName, wordCount } from '../details'
 import { useShowcase } from '../state'
 
@@ -13,7 +15,7 @@ type RecordCardProps = { record: ContentRecord } & Partial<Omit<ContentCardProps
 /**
  * A ContentCard filled from a showcase record: rating, saves, views, comments, a type-specific
  * fact (pages, chapters and reading time, version, image count), a few tags, and platforms for
- * visual novels. Mature covers are blurred, matching the default content preferences.
+ * visual novels. Explicit covers are blurred, matching the default content preferences.
  */
 export function RecordCard({ record, ...overrides }: RecordCardProps) {
   const { saved, comments, navigate } = useShowcase()
@@ -68,7 +70,7 @@ export function RecordCard({ record, ...overrides }: RecordCardProps) {
       bylineAvatar={profileByName(record.creator)?.avatar}
       cover={details.cover}
       rating={record.type === 'page' ? undefined : record.rating}
-      blurCover={record.rating === 'mature'}
+      blurCover={record.rating === 'explicit'}
       coverMeta={coverMeta}
       saved={isSaved}
       tags={tags}

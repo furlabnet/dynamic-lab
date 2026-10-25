@@ -249,7 +249,7 @@ const EXAMPLES = [
 function HomePage() {
   const { content, navigate } = useShowcase()
   const published = content.filter(
-    (c) => c.status === 'published' && !c.trashed && c.type !== 'page' && c.rating !== 'mature'
+    (c) => c.status === 'published' && !c.trashed && c.type !== 'page' && c.rating !== 'explicit'
   )
 
   return (
@@ -397,7 +397,7 @@ function BrowsePage() {
         if (c.status !== 'published' || c.trashed) return false
         if (type !== 'all' && c.type !== type) return false
         if (tag !== 'all' && !tagNames(c).includes(tag)) return false
-        if (rating === 'allowed' && c.rating === 'mature') return false
+        if (rating === 'allowed' && c.rating === 'explicit') return false
         if (rating !== 'allowed' && rating !== 'any' && c.rating !== rating) return false
         if (
           query &&
@@ -463,7 +463,7 @@ function BrowsePage() {
             options={[
               { value: 'allowed', label: 'Allowed ratings' },
               { value: 'general', label: 'General only' },
-              { value: 'suggestive', label: 'Suggestive only' },
+              { value: 'mature', label: 'Mature only' },
               { value: 'any', label: 'Any rating' },
             ]}
           />
@@ -933,26 +933,26 @@ function Preferences() {
         description="Choose what shows up when you browse, and how the site looks."
       />
       <div className="ui-panel flex max-w-xl flex-col gap-6">
-        <RadioGroup label="Ratings to show" defaultValue="suggestive" variant="card">
+        <RadioGroup label="Ratings to show" defaultValue="mature" variant="card">
           <RadioGroupItem
             value="general"
             label="General only"
             description="Suitable for everyone."
           />
           <RadioGroupItem
-            value="suggestive"
-            label="General and Suggestive"
+            value="mature"
+            label="General and Mature"
             description="The default for new accounts."
           />
           <RadioGroupItem
-            value="mature"
+            value="explicit"
             label="Everything"
-            description="Includes Mature creations."
+            description="Includes Explicit creations."
           />
         </RadioGroup>
         <Switch
           defaultChecked
-          label="Blur mature covers"
+          label="Blur explicit covers"
           description="Click a cover to reveal it."
         />
         <Switch label="Autoplay visual novel music" />

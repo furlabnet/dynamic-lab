@@ -1,7 +1,32 @@
 import React, { useMemo, useState } from 'react'
+
+import {
+  ArchiveRestore,
+  CalendarClock,
+  FileText,
+  FlaskConical,
+  Globe,
+  Image,
+  KeyRound,
+  LayoutGrid,
+  LogOut,
+  Moon,
+  MoreHorizontal,
+  Palette,
+  ScrollText,
+  Search,
+  Settings,
+  Shield,
+  Tag,
+  Trash2,
+  UserPlus,
+  Users,
+} from 'lucide-react'
+
 import {
   AdminShell,
   AdminSidebar,
+  AppearanceSettings,
   AppSwitcher,
   Badge,
   BrandLockup,
@@ -13,6 +38,7 @@ import {
   BreadcrumbSeparator,
   Button,
   Checkbox,
+  type CommandItem,
   CommandPalette,
   CommandTrigger,
   Dialog,
@@ -53,51 +79,26 @@ import {
   TableRow,
   TextField,
   ThemeToggle,
-  AppearanceSettings,
   Tooltip,
+  useTheme,
+  useToast,
   WorkflowTimeline,
   WorkflowTimelineItem,
-  useToast,
-  type CommandItem,
 } from '../../index'
 import {
-  ArchiveRestore,
-  CalendarClock,
-  Database,
-  FileText,
-  FlaskConical,
-  Image,
-  KeyRound,
-  LayoutGrid,
-  LogOut,
-  MoreHorizontal,
-  Search,
-  Settings,
-  Shield,
-  ScrollText,
-  Tag,
-  Trash2,
-  UserPlus,
-  Users,
-  Palette,
-  Globe,
-  Moon,
-} from 'lucide-react'
-import {
+  type ContentRecord,
+  type ContentStatus,
+  type ContentType,
   CURRENT_USER,
   RATING_LABELS,
   STATUS_LABELS,
   STATUS_TONES,
   TYPE_LABELS,
   TYPE_PLURALS,
-  type ContentRecord,
-  type ContentStatus,
-  type ContentType,
   type UserRole,
 } from '../data'
-import { APPS, formatDate, useShowcase } from '../state'
 import { ComponentGallery } from '../gallery/ComponentGallery'
-import { useTheme } from '../../index'
+import { APPS, formatDate, useShowcase } from '../state'
 
 interface NavEntry {
   id: string
@@ -117,7 +118,6 @@ const NAV: NavEntry[] = [
   { id: 'moderation', label: 'Moderation', icon: <Shield />, group: 'Trust & Safety' },
   { id: 'schedules', label: 'Schedules', icon: <CalendarClock />, group: 'System' },
   { id: 'audit', label: 'Audit', icon: <ScrollText />, group: 'System' },
-  { id: 'schema', label: 'Schema', icon: <Database />, group: 'System' },
   { id: 'roles', label: 'Roles', icon: <KeyRound />, group: 'System' },
   { id: 'settings', label: 'Site settings', icon: <Settings />, group: 'System' },
   { id: 'design-system', label: 'Design system', icon: <Palette />, group: 'System' },
@@ -305,7 +305,7 @@ export function BackstageApp() {
         {pageId === 'audit' && <AuditPage />}
         {pageId === 'settings' && <SettingsPage />}
         {pageId === 'design-system' && <ComponentGallery />}
-        {['media', 'labs', 'schedules', 'schema', 'roles'].includes(pageId) && (
+        {['media', 'labs', 'schedules', 'roles'].includes(pageId) && (
           <PlaceholderPage entry={current} />
         )}
         {!NAV.some((n) => n.id === pageId) && <OverviewPage />}
