@@ -1,4 +1,4 @@
-# Dynamic Lab
+# Dynamic Lab by Furlab
 
 The React component library for **The Furlab Project**: TypeScript, Tailwind CSS v4 and design tokens from Figma.
 
