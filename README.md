@@ -64,7 +64,7 @@ function Publish() {
 
 The stylesheet contains the tokens, component styles and every Tailwind utility the components use, so your app doesn't need Tailwind. If it does use Tailwind v4, import `tailwindcss` first and then `@furlab/dynamic-lab/styles.css`. Component classes live in the `components` layer, so utilities you pass in `className` win.
 
-The design uses Proxima Nova, which is licensed and not bundled. Load it yourself, or set `--font-sans` and `--font-display` to another family; otherwise the system font is used.
+Set `--font-sans` and `--font-display` to laod a font family; otherwise the system font is used.
 
 ## Theming
 

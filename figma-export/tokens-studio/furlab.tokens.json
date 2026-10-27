@@ -121,7 +121,7 @@
         "display": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Black",
             "fontSize": "36",
             "lineHeight": "40px",
@@ -132,7 +132,7 @@
         "page-title": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Extrabold",
             "fontSize": "48",
             "lineHeight": "112.0%",
@@ -143,7 +143,7 @@
         "section-title": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Extrabold",
             "fontSize": "30",
             "lineHeight": "120.0%",
@@ -154,7 +154,7 @@
         "eyebrow": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Extrabold",
             "fontSize": "12",
             "lineHeight": "150.0%",
@@ -165,7 +165,7 @@
         "lead": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Regular",
             "fontSize": "16",
             "lineHeight": "160.0%",
@@ -178,7 +178,7 @@
         "ui-page-title": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Bold",
             "fontSize": "28",
             "lineHeight": "120.0%",
@@ -189,7 +189,7 @@
         "ui-page-description": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Regular",
             "fontSize": "15",
             "lineHeight": "155.0%",
@@ -200,7 +200,7 @@
         "ui-section-title": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Bold",
             "fontSize": "17",
             "lineHeight": "130.0%",
@@ -211,7 +211,7 @@
         "sidebar-title": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Extrabold",
             "fontSize": "16",
             "lineHeight": "150.0%",
@@ -222,7 +222,7 @@
         "nav-link": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Semibold",
             "fontSize": "14",
             "lineHeight": "143.0%",
@@ -233,7 +233,7 @@
         "nav-label": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Bold",
             "fontSize": "11",
             "lineHeight": "150.0%",
@@ -244,7 +244,7 @@
         "toolbar-label": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Semibold",
             "fontSize": "13",
             "lineHeight": "150.0%",
@@ -257,7 +257,7 @@
         "body": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Regular",
             "fontSize": "16",
             "lineHeight": "150.0%",
@@ -268,7 +268,7 @@
         "body-sm": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Regular",
             "fontSize": "14",
             "lineHeight": "150.0%",
@@ -279,7 +279,7 @@
         "button": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Semibold",
             "fontSize": "16",
             "lineHeight": "150.0%",
@@ -290,7 +290,7 @@
         "button-sm": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Semibold",
             "fontSize": "14",
             "lineHeight": "143.0%",
@@ -301,7 +301,7 @@
         "chip": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Bold",
             "fontSize": "14",
             "lineHeight": "125.0%",
@@ -312,7 +312,7 @@
         "pill": {
           "type": "typography",
           "value": {
-            "fontFamily": "Proxima Nova",
+            "fontFamily": "The Lab Sans",
             "fontWeight": "Bold",
             "fontSize": "12",
             "lineHeight": "125.0%",

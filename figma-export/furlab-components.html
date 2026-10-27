@@ -4,28 +4,28 @@
 <meta charset="utf-8">
 <title>Furlab components for Figma</title>
 <style>
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Thin.otf");font-weight:100;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-ThinItalic.otf");font-weight:100;font-style:italic}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Light.otf");font-weight:300;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-LightItalic.otf");font-weight:300;font-style:italic}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Regular.otf");font-weight:400;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Italic.otf");font-weight:400;font-style:italic}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Medium.otf");font-weight:500;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-MediumItalic.otf");font-weight:500;font-style:italic}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Semibold.otf");font-weight:600;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-SemiboldItalic.otf");font-weight:600;font-style:italic}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Bold.otf");font-weight:700;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-BoldItalic.otf");font-weight:700;font-style:italic}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-ExtraBold.otf");font-weight:800;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-ExtraBoldItalic.otf");font-weight:800;font-style:italic}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-Black.otf");font-weight:900;font-style:normal}
-@font-face{font-family:"Proxima Nova";src:url("fonts/ProximaNova-BlackItalic.otf");font-weight:900;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-Thin.otf");font-weight:100;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-ThinItalic.otf");font-weight:100;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-Light.otf");font-weight:300;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-LightItalic.otf");font-weight:300;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans.otf");font-weight:400;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-Italic.otf");font-weight:400;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-Medium.otf");font-weight:500;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-MediumItalic.otf");font-weight:500;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-Semibold.otf");font-weight:600;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-SemiboldItalic.otf");font-weight:600;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-Bold.otf");font-weight:700;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-BoldItalic.otf");font-weight:700;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-ExtraBold.otf");font-weight:800;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-ExtraBoldItalic.otf");font-weight:800;font-style:italic}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-Black.otf");font-weight:900;font-style:normal}
+@font-face{font-family:"The Lab Sans";src:url("fonts/TheLabSans-BlackItalic.otf");font-weight:900;font-style:italic}
 
 :root, [data-theme="light"]{--background: hsl(228 33% 97%);--foreground: hsl(230 32% 12%);--card: hsl(0 0% 100%);--card-foreground: hsl(230 32% 12%);--popover: hsl(0 0% 100%);--popover-foreground: hsl(230 32% 12%);--muted: hsl(228 26% 93.5%);--muted-foreground: hsl(228 13% 40%);--secondary: hsl(228 26% 93.5%);--secondary-foreground: hsl(230 22% 24%);--accent: hsl(228 26% 93.5%);--accent-foreground: hsl(230 32% 12%);--border: hsl(228 22% 87%);--input: hsl(228 20% 83%);--primary: hsl(225 80% 52%);--primary-foreground: hsl(0 0% 100%);--ring: hsl(225 80% 52%);--destructive: hsl(0 72% 46%);--destructive-foreground: hsl(0 0% 100%);--success: hsl(158 74% 27%);--success-foreground: hsl(0 0% 100%);--warning: hsl(30 85% 28%);--warning-foreground: hsl(0 0% 100%);--info: hsl(199 80% 35%);--info-foreground: hsl(0 0% 100%);--status-success-ink: hsl(158 74% 27%);--status-success-bg: hsl(145 60% 94%);--status-warning-ink: hsl(30 85% 28%);--status-warning-bg: hsl(42 100% 92%);--status-danger-ink: hsl(0 75% 36%);--status-danger-bg: hsl(0 100% 96%);--glow-a: hsl(225 90% 60%);--glow-b: hsl(262 80% 64%);--glass: hsl(0 0% 100%);--glass-border: hsl(228 30% 40% / 0.14);--glass-highlight: hsl(0 0% 100% / 0.75);--glass-shadow: 0 1px 2px hsl(230 30% 20% / 0.04), 0 10px 30px -12px hsl(230 30% 20% / 0.14);}
 [data-theme="dark"]{--background: hsl(232 30% 7%);--foreground: hsl(228 33% 96%);--card: hsl(232 25% 11%);--card-foreground: hsl(228 33% 96%);--popover: hsl(232 25% 11%);--popover-foreground: hsl(228 33% 96%);--muted: hsl(232 22% 15%);--muted-foreground: hsl(228 15% 69%);--secondary: hsl(232 22% 17%);--secondary-foreground: hsl(228 33% 96%);--accent: hsl(232 22% 16%);--accent-foreground: hsl(228 33% 96%);--border: hsl(232 20% 20%);--input: hsl(232 20% 25%);--primary: hsl(220 95% 68%);--primary-foreground: hsl(232 30% 7%);--ring: hsl(220 95% 68%);--destructive: hsl(0 84% 64%);--destructive-foreground: hsl(232 30% 7%);--success: hsl(145 60% 70%);--success-foreground: hsl(232 30% 7%);--warning: hsl(42 90% 70%);--warning-foreground: hsl(232 30% 7%);--info: hsl(190 90% 70%);--info-foreground: hsl(232 30% 7%);--status-success-ink: hsl(145 60% 72%);--status-success-bg: hsl(155 45% 15%);--status-warning-ink: hsl(42 90% 72%);--status-warning-bg: hsl(30 55% 16%);--status-danger-ink: hsl(0 90% 76%);--status-danger-bg: hsl(0 50% 17%);--glow-a: hsl(225 90% 58%);--glow-b: hsl(262 80% 60%);--glass: hsl(232 25% 12%);--glass-border: hsl(228 40% 92% / 0.09);--glass-highlight: hsl(0 0% 100% / 0.06);--glass-shadow: 0 1px 2px hsl(0 0% 0% / 0.3), 0 16px 40px -16px hsl(0 0% 0% / 0.6);}
 [data-theme="backstage-light"]{--background: hsl(228 33% 97%);--foreground: hsl(230 32% 12%);--card: hsl(0 0% 100%);--card-foreground: hsl(230 32% 12%);--popover: hsl(0 0% 100%);--popover-foreground: hsl(230 32% 12%);--muted: hsl(228 26% 93.5%);--muted-foreground: hsl(228 13% 40%);--secondary: hsl(228 26% 93.5%);--secondary-foreground: hsl(230 22% 24%);--accent: hsl(228 26% 93.5%);--accent-foreground: hsl(230 32% 12%);--border: hsl(228 22% 87%);--input: hsl(228 20% 83%);--primary: hsl(262 68% 55%);--primary-foreground: hsl(0 0% 100%);--ring: hsl(262 68% 55%);--destructive: hsl(0 72% 46%);--destructive-foreground: hsl(0 0% 100%);--success: hsl(158 74% 27%);--success-foreground: hsl(0 0% 100%);--warning: hsl(30 85% 28%);--warning-foreground: hsl(0 0% 100%);--info: hsl(199 80% 35%);--info-foreground: hsl(0 0% 100%);--status-success-ink: hsl(158 74% 27%);--status-success-bg: hsl(145 60% 94%);--status-warning-ink: hsl(30 85% 28%);--status-warning-bg: hsl(42 100% 92%);--status-danger-ink: hsl(0 75% 36%);--status-danger-bg: hsl(0 100% 96%);--glow-a: hsl(262 80% 64%);--glow-b: hsl(225 90% 60%);--glass: hsl(0 0% 100%);--glass-border: hsl(228 30% 40% / 0.14);--glass-highlight: hsl(0 0% 100% / 0.75);--glass-shadow: 0 1px 2px hsl(230 30% 20% / 0.04), 0 10px 30px -12px hsl(230 30% 20% / 0.14);}
 [data-theme="backstage-dark"]{--background: hsl(232 30% 7%);--foreground: hsl(228 33% 96%);--card: hsl(232 25% 11%);--card-foreground: hsl(228 33% 96%);--popover: hsl(232 25% 11%);--popover-foreground: hsl(228 33% 96%);--muted: hsl(232 22% 15%);--muted-foreground: hsl(228 15% 69%);--secondary: hsl(232 22% 17%);--secondary-foreground: hsl(228 33% 96%);--accent: hsl(232 22% 16%);--accent-foreground: hsl(228 33% 96%);--border: hsl(232 20% 20%);--input: hsl(232 20% 25%);--primary: hsl(263 90% 77%);--primary-foreground: hsl(232 30% 7%);--ring: hsl(263 90% 77%);--destructive: hsl(0 84% 64%);--destructive-foreground: hsl(232 30% 7%);--success: hsl(145 60% 70%);--success-foreground: hsl(232 30% 7%);--warning: hsl(42 90% 70%);--warning-foreground: hsl(232 30% 7%);--info: hsl(190 90% 70%);--info-foreground: hsl(232 30% 7%);--status-success-ink: hsl(145 60% 72%);--status-success-bg: hsl(155 45% 15%);--status-warning-ink: hsl(42 90% 72%);--status-warning-bg: hsl(30 55% 16%);--status-danger-ink: hsl(0 90% 76%);--status-danger-bg: hsl(0 50% 17%);--glow-a: hsl(262 80% 60%);--glow-b: hsl(225 90% 58%);--glass: hsl(232 25% 12%);--glass-border: hsl(228 40% 92% / 0.09);--glass-highlight: hsl(0 0% 100% / 0.06);--glass-shadow: 0 1px 2px hsl(0 0% 0% / 0.3), 0 16px 40px -16px hsl(0 0% 0% / 0.6);}
-:root{--space-2: 2px;--space-6: 6px;--space-8: 8px;--space-10: 10px;--space-12: 12px;--space-16: 16px;--space-20: 20px;--space-24: 24px;--space-28: 28px;--space-32: 32px;--space-40: 40px;--radius-sm: 6px;--radius-md: 8px;--radius-lg: 10px;--radius-xl: 14px;--radius-2xl: 16px;--radius-3xl: 20px;--radius-full: 999px;--glass-alpha: 0.68;--surface-alpha: 0.76;--glow-strength: 0.22;--touch-target: 44px;--control-compact: 36px;--container-max: 1280px;--sidebar-width: 248px;--measure: 65ch;--font-sans: "Proxima Nova", ui-sans-serif, system-ui, sans-serif;}
+:root{--space-2: 2px;--space-6: 6px;--space-8: 8px;--space-10: 10px;--space-12: 12px;--space-16: 16px;--space-20: 20px;--space-24: 24px;--space-28: 28px;--space-32: 32px;--space-40: 40px;--radius-sm: 6px;--radius-md: 8px;--radius-lg: 10px;--radius-xl: 14px;--radius-2xl: 16px;--radius-3xl: 20px;--radius-full: 999px;--glass-alpha: 0.68;--surface-alpha: 0.76;--glow-strength: 0.22;--touch-target: 44px;--control-compact: 36px;--container-max: 1280px;--sidebar-width: 248px;--measure: 65ch;--font-sans: "The Lab Sans", ui-sans-serif, system-ui, sans-serif;}
 .display{font-size:36px;line-height:40px;font-weight:900;letter-spacing:-0.025em;}
 .page-title{font-size:48px;line-height:1.12;font-weight:800;letter-spacing:-0.035em;}
 .section-title{font-size:30px;line-height:1.2;font-weight:800;letter-spacing:-0.025em;}
@@ -1418,7 +1418,7 @@ body { margin: 0; padding: 40px; display: grid; gap: 40px; justify-content: star
 .fx-cover .cover { border-radius: 20px; }
 
   .cover { background: var(--background); color: var(--foreground); }
-  
+
   .cover { position: relative; height: 288px; overflow: hidden; }
   .art { position: absolute; top: 0; left: 480px; width: 480px; height: 288px; overflow: hidden; }
   .art svg { display: block; width: 480px; height: 288px; }

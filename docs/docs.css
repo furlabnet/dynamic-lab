@@ -1,6 +1,6 @@
 /*
  * Docs stylesheet. The Vite root is docs/, so Tailwind is pointed at the library source too.
- * Proxima Nova isn't loaded here: it's licensed, and the docs are public. Text falls back to the
+ * The Lab Sans isn't loaded here: it's licensed, and the docs are public. Text falls back to the
  * system font stack defined in --font-sans.
  */
 @import 'tailwindcss';

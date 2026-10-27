@@ -6,7 +6,7 @@ components), so the values match the code.
 
 | Path | What | Import with |
 | --- | --- | --- |
-| `fonts/` | Proxima Nova, all 16 faces | Install on your machine first (licence permitting) |
+| `fonts/` | The Lab Sans, all 16 faces | Install on your machine first (licence permitting) |
 | `variables/Theme.*.tokens.json` | 36 colours + 3 glass opacities, one file per mode | Figma variables import |
 | `variables/Dimensions.Default.tokens.json` | Spacing, radii, sizes (px) | Figma variables import |
 | `tokens-studio/furlab.tokens.json` | The same tokens plus 18 text styles, with 4 themes | Tokens Studio plugin |
@@ -16,7 +16,7 @@ components), so the values match the code.
 ## 1. Fonts
 
 Install the files in `fonts/` (double-click each, then **Install**) and restart Figma. Figma lists
-them as family **Proxima Nova** with styles Thin to Black. Without them, text styles and the
+them as family **The Lab Sans** with styles Thin to Black. Without them, text styles and the
 imported components fall back to another font.
 
 ## 2. Variables

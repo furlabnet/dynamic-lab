@@ -1,6 +1,6 @@
 {
   "name": "@furlab/dynamic-lab",
-  "version": "0.1.0",
+  "version": "0.1.0-beta.1",
   "description": "Dynamic Lab: the React component library for The Furlab Project. TypeScript, Tailwind CSS v4, two brands (Dynamic and Backstage), named colour themes, light and dark modes.",
   "keywords": [
     "react",
@@ -10,16 +10,19 @@
     "typescript",
     "furlab"
   ],
-  "author": "Vedla Creative <code@vedla.ca>",
-  "license": "MIT",
   "homepage": "https://furlab.gitlab.io/dynamic-lab/",
+  "bugs": {
+    "url": "https://gitlab.com/furlab/dynamic-lab/-/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/furlab/dynamic-lab"
   },
-  "bugs": {
-    "url": "https://gitlab.com/furlab/dynamic-lab/-/issues"
-  },
+  "license": "MIT",
+  "author": "Vedla Creative <code@vedla.ca>",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "type": "module",
   "exports": {
     ".": {
@@ -36,36 +39,26 @@
   "files": [
     "dist"
   ],
-  "sideEffects": [
-    "**/*.css"
-  ],
-  "engines": {
-    "node": ">=20"
-  },
   "scripts": {
-    "dev": "vite",
     "build": "yarn build:js && yarn build:types && yarn build:css",
-    "build:js": "tsdown",
-    "build:types": "tsc -p tsconfig.lib.json",
     "build:css": "tailwindcss -i src/styles/dynamic-lab.css -o dist/styles.css --minify",
+    "build:js": "tsdown",
     "build:showcase": "vite build",
-    "docs:dev": "vite --config vite.config.docs.ts",
+    "build:types": "tsc -p tsconfig.lib.json",
+    "dev": "vite",
     "docs:build": "vite build --config vite.config.docs.ts",
+    "docs:dev": "vite --config vite.config.docs.ts",
     "docs:preview": "vite preview --config vite.config.docs.ts",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
     "format": "prettier --write --ignore-unknown  .",
     "format:check": "prettier --check .",
-    "release": "node scripts/release.mjs",
     "prepack": "yarn build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preview": "vite preview",
+    "release": "node scripts/release.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
-  },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -91,5 +84,12 @@
     "updates": "^19.3.0",
     "vite": "^8.3.5"
   },
-  "packageManager": "yarn@4.18.1"
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "packageManager": "yarn@4.18.1",
+  "engines": {
+    "node": ">=20"
+  }
 }

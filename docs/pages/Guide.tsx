@@ -1,15 +1,22 @@
 import React from 'react'
+
 import {
   Badge,
   NoticePanel,
-  PALETTES,
   PageHeading,
   PalettePreview,
+  PALETTES,
   TransparencyControl,
   useTheme,
 } from '@furlab/dynamic-lab'
+
 import pkg from '../../package.json'
-import { Code, CodeBlock, Prose, PropsTable } from '../ui'
+import {
+  Code,
+  CodeBlock,
+  PropsTable,
+  Prose,
+} from '../ui'
 
 const REGISTRY = import.meta.env.VITE_REGISTRY_URL ?? 'https://gitlab.com/api/v4/packages/npm/'
 const REGISTRY_HOST = REGISTRY.replace(/^https?:/, '')
@@ -136,9 +143,7 @@ ${REGISTRY_HOST}:_authToken=\${GITLAB_TOKEN}`}
         />
         <h2>Fonts</h2>
         <p>
-          The design uses Proxima Nova, which is licensed and not bundled. Load it yourself (Adobe
-          Fonts or your own licence) and it is picked up automatically; otherwise text falls back to
-          the system font stack. To use a different family, set <Code>--font-sans</Code> and{' '}
+          To use a different family, set <Code>--font-sans</Code> and{' '}
           <Code>--font-display</Code> on <Code>:root</Code>.
         </p>
       </Prose>
