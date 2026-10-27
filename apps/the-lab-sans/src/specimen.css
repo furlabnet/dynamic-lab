@@ -1,0 +1,37 @@
+/*
+ * Specimen stylesheet. Tailwind is pointed at the library source too, so the components' utilities
+ * end up in the build.
+ */
+@import 'tailwindcss';
+@import '../../../packages/dynamic-lab/src/styles/base.css';
+
+@source '../../../packages/dynamic-lab/src';
+@source '.';
+
+.specimen-type {
+  font-family: var(--font-the-lab-sans);
+}
+
+.specimen-preview {
+  background:
+    radial-gradient(color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px) 0
+      0 / 18px 18px,
+    color-mix(in srgb, var(--card) 55%, transparent);
+}
+
+.specimen-code {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--foreground) 4%, var(--card));
+}
+
+.specimen-code pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 1rem 1.125rem;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  tab-size: 2;
+}

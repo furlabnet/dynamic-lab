@@ -373,41 +373,56 @@ function Publishing() {
         <h2>Release a version</h2>
         <ol>
           <li>
-            Bump <Code>version</Code> in <Code>package.json</Code> (semver) and commit.
+            Bump <Code>version</Code> in <Code>packages/dynamic-lab/package.json</Code> (semver).
+          </li>
+          <li>
+            In <Code>CHANGELOG.md</Code>, rename <Code>## Unreleased</Code> to the version, and
+            commit.
           </li>
           <li>
             Tag and push: <Code>git tag v0.2.0 &amp;&amp; git push origin v0.2.0</Code>.
           </li>
           <li>
-            The pipeline’s <Code>publish</Code> job runs <Code>yarn release</Code> with the CI job
-            token. Pre-release tags such as <Code>v1.0.0-beta.1</Code> publish under the{' '}
-            <Code>next</Code> dist-tag.
+            The GitLab pipeline publishes to the project’s package registry and, when the{' '}
+            <Code>NPM_TOKEN</Code> variable is set, to npmjs.org. Then it creates a GitLab release
+            with the changelog section. Pre-releases such as <Code>v1.0.0-beta.1</Code> publish
+            under the <Code>next</Code> dist-tag.
           </li>
         </ol>
+        <p>
+          The GitHub mirror’s workflow creates a matching GitHub release, but never publishes. The
+          Lab Sans is released the same way from <Code>the-lab-sans-v0.2.0</Code> tags.
+        </p>
         <h2>The release CLI</h2>
         <p>
-          <Code>packages/dynamic-lab/scripts/release.mjs</Code> works locally too (run{' '}
-          <Code>yarn release</Code> from the root). It checks that the tag matches the version, that
-          the tree is clean and that the version isn’t already published, then builds and publishes
-          to the project’s npm endpoint.
+          <Code>scripts/release.mjs</Code> works locally too, through each package’s{' '}
+          <Code>release</Code> script (<Code>yarn release</Code> at the root is short for this
+          library’s). It checks that the tag matches the version, that the tree is clean and that
+          the version isn’t already published, then builds and publishes.
         </p>
         <CodeBlock
           language="sh"
           code={`# Check everything and list the package contents, publish nothing
 yarn release --dry-run
 
-# Publish from your machine (token needs the api scope)
+# Publish to the GitLab package registry (token needs the api scope)
 GITLAB_TOKEN=glpat-… yarn release
 
-# Publish a pre-release under the "next" tag
-GITLAB_TOKEN=glpat-… yarn release --tag next`}
+# Publish to npmjs.org
+NPM_TOKEN=npm_… yarn release --registry npm`}
         />
         <PropsTable
           rows={[
             {
               name: 'CI_JOB_TOKEN / GITLAB_TOKEN',
               type: 'env',
-              description: 'Credentials. The job token is used automatically in CI.',
+              description: 'GitLab credentials. The job token is used automatically in CI.',
+            },
+            {
+              name: 'NPM_TOKEN',
+              type: 'env',
+              description:
+                'npmjs.org credentials. Without it, --registry npm exits with code 78, which CI allows to fail.',
             },
             {
               name: 'GITLAB_API_URL',
@@ -426,7 +441,18 @@ GITLAB_TOKEN=glpat-… yarn release --tag next`}
               type: 'flag',
               description: 'Build and list files without publishing.',
             },
-            { name: '--tag <name>', type: 'flag', default: 'latest', description: 'Dist-tag.' },
+            {
+              name: '--registry <name>',
+              type: 'flag',
+              default: 'gitlab',
+              description: 'gitlab or npm.',
+            },
+            {
+              name: '--tag <name>',
+              type: 'flag',
+              default: 'latest, or next for pre-releases',
+              description: 'Dist-tag.',
+            },
             {
               name: '--allow-dirty',
               type: 'flag',
@@ -437,12 +463,13 @@ GITLAB_TOKEN=glpat-… yarn release --tag next`}
         <h2>Documentation</h2>
         <p>
           These docs are a Vite app in <Code>apps/docs</Code>, next to the landing page (
-          <Code>apps/landing</Code>) and the showcase (<Code>apps/showcase</Code>).{' '}
-          <Code>yarn dev</Code> runs all three locally. On the default branch the <Code>pages</Code>{' '}
-          job runs <Code>yarn pages</Code>, which builds them into <Code>public/</Code> (landing at
-          the root, then <Code>showcase/</Code> and <Code>docs/</Code>) for GitLab Pages. Examples
-          live in <Code>apps/docs/src/examples</Code> and each page shows that file’s source, so the
-          code shown is always the code running.
+          <Code>apps/landing</Code>), the showcase (<Code>apps/showcase</Code>) and The Lab Sans
+          specimen (<Code>apps/the-lab-sans</Code>). <Code>yarn dev</Code> runs them all locally. On
+          the default branch the <Code>pages</Code> job runs <Code>yarn pages</Code>, which builds
+          them into <Code>public/</Code> (landing at the root, then <Code>showcase/</Code>,{' '}
+          <Code>docs/</Code> and <Code>the-lab-sans/</Code>) for GitLab Pages. Examples live in{' '}
+          <Code>apps/docs/src/examples</Code> and each page shows that file’s source, so the code
+          shown is always the code running.
         </p>
         <p>
           Source: <a href={REPO}>{REPO.replace(/^https?:\/\//, '')}</a>

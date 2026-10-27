@@ -116,9 +116,32 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@furlab/the-lab-sans-site@workspace:apps/the-lab-sans":
+  version: 0.0.0-use.local
+  resolution: "@furlab/the-lab-sans-site@workspace:apps/the-lab-sans"
+  dependencies:
+    "@furlab/dynamic-lab": "workspace:^"
+    "@furlab/the-lab-sans": "workspace:^"
+    "@tailwindcss/vite": "npm:^4.3.3"
+    "@types/node": "npm:^26.6.5"
+    "@types/react": "npm:^19.3.0"
+    "@types/react-dom": "npm:^19.3.0"
+    "@vitejs/plugin-react": "npm:^6.1.2"
+    lucide-react: "npm:^1.61.0"
+    react: "npm:^19.3.1"
+    react-dom: "npm:^19.3.1"
+    tailwindcss: "npm:^4.3.3"
+    typescript: "npm:^7.0.2"
+    vite: "npm:^8.3.5"
+  languageName: unknown
+  linkType: soft
+
 "@furlab/the-lab-sans@workspace:^, @furlab/the-lab-sans@workspace:packages/the-lab-sans":
   version: 0.0.0-use.local
   resolution: "@furlab/the-lab-sans@workspace:packages/the-lab-sans"
+  dependencies:
+    typescript: "npm:^7.0.2"
+    wawoff2: "npm:2.0.1"
   languageName: unknown
   linkType: soft
 
@@ -974,6 +997,13 @@ __metadata:
   version: 5.0.0
   resolution: "abbrev@npm:5.0.0"
   checksum: 10c0/8e88f5c798ea4562d28c5a3e9ad69e3879890bc5d695d8f2dffb8609be4c890aacc8f80ef4553fdd2c6a62d70c2ce8bc57b38074e383beb7487bdafa9ed42ea5
+  languageName: node
+  linkType: hard
+
+"argparse@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "argparse@npm:2.0.1"
+  checksum: 10c0/c5640c2d89045371c7cedd6a70212a04e360fd34d6edeae32f6952c63949e3525ea77dbec0289d8213a99bbaeab5abfa860b5c12cf88a2e6cf8106e90dd27a7e
   languageName: node
   linkType: hard
 
@@ -2144,6 +2174,18 @@ __metadata:
   bin:
     vite: bin/vite.js
   checksum: 10c0/33991600925b6717429c14a2c2907554aed077489ee6ff7815f9f49d5de559f5173ccb0472f2b3f9eef2a49e2e014f6cb624db8d4adebb37baad3a8cbc15065a
+  languageName: node
+  linkType: hard
+
+"wawoff2@npm:2.0.1":
+  version: 2.0.1
+  resolution: "wawoff2@npm:2.0.1"
+  dependencies:
+    argparse: "npm:^2.0.1"
+  bin:
+    woff2_compress.js: bin/woff2_compress.js
+    woff2_decompress.js: bin/woff2_decompress.js
+  checksum: 10c0/98a286b60114e15ed578bbeeef1759b4890a1e8106e1486d8d0d4106b8e6c7a99c4c1d1b64afc76a83893dae040cc19a59dd64cffd5754b5337b5c82efed3d12
   languageName: node
   linkType: hard
 

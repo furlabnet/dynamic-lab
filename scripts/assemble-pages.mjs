@@ -5,6 +5,7 @@
  *   public/            apps/landing/dist
  *   public/showcase/   apps/showcase/dist
  *   public/docs/       apps/docs/dist
+ *   public/the-lab-sans/  apps/the-lab-sans/dist
  *
  * Run `yarn pages`, which builds the apps first. Each app uses relative asset paths, so the result
  * works at the root of a Pages domain and under a project path alike.
@@ -17,6 +18,7 @@ const apps = [
   ['apps/landing/dist/', ''],
   ['apps/showcase/dist/', 'showcase/'],
   ['apps/docs/dist/', 'docs/'],
+  ['apps/the-lab-sans/dist/', 'the-lab-sans/'],
 ]
 
 rmSync(out, { recursive: true, force: true })

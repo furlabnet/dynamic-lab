@@ -1,0 +1,106 @@
+# GitHub mirror of the Dynamic Lab repository.
+#
+# The canonical repository is on GitLab, and only its pipeline publishes packages. This workflow
+# checks every push and pull request on each Node version in the NODE_VERSION matrix, and when a
+# release tag arrives from the mirror it creates the matching GitHub release:
+#
+#   v1.2.3                 @furlab/dynamic-lab
+#   the-lab-sans-v1.2.3    @furlab/the-lab-sans
+#
+# The release notes come from the package's changelog (scripts/release-notes.mjs) and the packed
+# package is attached. Nothing is published to a registry from here.
+#
+# Keep the NODE_VERSION matrix in sync with .gitlab-ci.yml.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*', 'the-lab-sans-v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Typecheck and build (Node ${{ matrix.NODE_VERSION }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        NODE_VERSION: ['22', '24']
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.NODE_VERSION }}
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn typecheck
+      - run: yarn build
+
+  release:
+    name: GitHub release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: corepack enable
+      - run: yarn install --immutable
+
+      - name: Work out the package
+        id: package
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          node --input-type=module -e "
+            import { releaseForTag } from './scripts/releases.mjs'
+            const release = releaseForTag(process.env.TAG)
+            if (!release) { console.error('Not a release tag: ' + process.env.TAG); process.exit(1) }
+            console.log('name=' + release.name)
+            console.log('dir=' + release.dir)
+            console.log('version=' + release.version)
+            console.log('prerelease=' + release.version.includes('-'))
+          " >> "$GITHUB_OUTPUT"
+
+      - name: Check the version matches the tag
+        env:
+          NAME: ${{ steps.package.outputs.name }}
+          DIR: ${{ steps.package.outputs.dir }}
+          VERSION: ${{ steps.package.outputs.version }}
+        run: |
+          actual=$(node -p "require('./$DIR/package.json').version")
+          if [ "$actual" != "$VERSION" ]; then
+            echo "::error::$NAME is at $actual in package.json, but the tag is for $VERSION."
+            exit 1
+          fi
+
+      - name: Pack
+        env:
+          NAME: ${{ steps.package.outputs.name }}
+        run: yarn workspace "$NAME" pack --out "$GITHUB_WORKSPACE/%s-%v.tgz"
+
+      - name: Release notes
+        run: node scripts/release-notes.mjs "${{ github.ref_name }}" > release-notes.md
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          PRERELEASE: ${{ steps.package.outputs.prerelease }}
+        run: |
+          flags=()
+          if [ "$PRERELEASE" = "true" ]; then flags+=(--prerelease); fi
+          gh release create "$TAG" ./*.tgz \
+            --title "$TAG" \
+            --notes-file release-notes.md \
+            --verify-tag \
+            "${flags[@]}"

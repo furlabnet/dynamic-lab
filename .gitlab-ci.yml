@@ -1,18 +1,29 @@
 # Dynamic Lab pipeline
 #
 # A Turborepo monorepo: packages/dynamic-lab (the library), packages/the-lab-sans (the font) and
-# apps/landing, apps/showcase, apps/docs.
+# apps/landing, apps/showcase, apps/docs, apps/the-lab-sans.
 #
-# - every push and merge request: install, typecheck, build every workspace
-# - tags like v1.2.3:              publish @furlab/dynamic-lab to this project's package registry
-# - the default branch:            build the landing page, showcase and docs into public/ and
-#                                  deploy them to GitLab Pages
+# - every push and merge request: install, typecheck and build every workspace, on each Node
+#                                  version in the NODE_VERSION matrix
+# - release tags:                  publish the package to this project's package registry and to
+#                                  npmjs.org, then create a GitLab release with the changelog
+#     v1.2.3                 @furlab/dynamic-lab
+#     the-lab-sans-v1.2.3    @furlab/the-lab-sans
+# - the default branch:            build the landing page, showcase, docs and The Lab Sans specimen
+#                                  into public/ and deploy them to GitLab Pages
 #
-# Releasing: bump "version" in packages/dynamic-lab/package.json, commit, then
+# Releasing: bump "version" in the package's package.json, move its changelog's "Unreleased"
+# section under a heading for the version, commit, then tag and push:
 #   git tag v0.2.0 && git push origin v0.2.0
+#
+# Publishing to npmjs.org needs an NPM_TOKEN CI/CD variable (masked, protected). Without it the npm
+# jobs exit with code 78 and are allowed to fail; everything else still runs. Only this GitLab
+# project publishes: the GitHub mirror's workflow builds and creates GitHub releases, nothing more.
+#
+# Keep the NODE_VERSION matrix in sync with .github/workflows/release.yml.
 
 default:
-  image: node:24
+  image: node:${NODE_VERSION}
   before_script:
     - corepack enable
     - yarn install --immutable
@@ -25,6 +36,8 @@ default:
       - .turbo/cache
 
 variables:
+  # The Node version for jobs outside the matrix (publishing, Pages). Matches .nvmrc.
+  NODE_VERSION: '24'
   # Keep Yarn's cache inside the project so the CI cache above can save it.
   YARN_ENABLE_GLOBAL_CACHE: 'false'
   # Turborepo's local cache, also saved by the CI cache.
@@ -34,10 +47,21 @@ stages:
   - check
   - build
   - publish
+  - release
   - deploy
+
+.node-matrix:
+  parallel:
+    matrix:
+      - NODE_VERSION: ['22', '24']
+
+.release-tag:
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(the-lab-sans-)?v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
 
 typecheck:
   stage: check
+  extends: .node-matrix
   script:
     - yarn typecheck
 
@@ -49,25 +73,98 @@ format:
 
 build:
   stage: build
+  extends: .node-matrix
   script:
     - yarn build
   artifacts:
     paths:
       - packages/dynamic-lab/dist/
+      - packages/the-lab-sans/dist/
     expire_in: 1 week
 
-publish:
+# ------------------------------------------------------------------ Publish
+
+.publish:
   stage: publish
+  # prepack builds the package, so these jobs don't need the build artifacts.
+  dependencies: []
+  script:
+    - yarn workspace "$PACKAGE" release --registry "$REGISTRY"
+
+.publish-npm:
+  variables:
+    REGISTRY: npm
+  # 78: NPM_TOKEN isn't set (see scripts/release.mjs). Any other failure still fails the pipeline.
+  allow_failure:
+    exit_codes: 78
+
+publish:dynamic-lab:gitlab:
+  extends: .publish
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
+  variables:
+    PACKAGE: '@furlab/dynamic-lab'
+    REGISTRY: gitlab
+
+publish:dynamic-lab:npm:
+  extends: [.publish, .publish-npm]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
+  variables:
+    PACKAGE: '@furlab/dynamic-lab'
+
+publish:the-lab-sans:gitlab:
+  extends: .publish
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^the-lab-sans-v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
+  variables:
+    PACKAGE: '@furlab/the-lab-sans'
+    REGISTRY: gitlab
+
+publish:the-lab-sans:npm:
+  extends: [.publish, .publish-npm]
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^the-lab-sans-v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
+  variables:
+    PACKAGE: '@furlab/the-lab-sans'
+
+release-notes:
+  stage: publish
+  extends: .release-tag
+  dependencies: []
+  before_script: []
+  cache: []
   script:
-    # Pre-releases (v1.0.0-beta.1) go out under the "next" dist-tag.
-    - if echo "$CI_COMMIT_TAG" | grep -q -- '-'; then yarn release --tag next; else yarn release; fi
+    - node scripts/release-notes.mjs "$CI_COMMIT_TAG" > release-notes.md
+    - cat release-notes.md
+  artifacts:
+    paths:
+      - release-notes.md
+    expire_in: 1 week
+
+# Runs once the publish stage is done, so a release only appears for a package that made it to the
+# GitLab registry. (A skipped npm publish doesn't hold it up.)
+gitlab-release:
+  stage: release
+  extends: .release-tag
+  image: registry.gitlab.com/gitlab-org/cli:latest
+  dependencies: [release-notes]
+  before_script: []
+  cache: []
+  script:
+    - echo "Creating the GitLab release for $CI_COMMIT_TAG"
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: $CI_COMMIT_TAG
+    description: ./release-notes.md
+
+# -------------------------------------------------------------------- Pages
 
 pages:
   stage: deploy
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  dependencies: []
   variables:
     VITE_REGISTRY_URL: '$CI_API_V4_URL/packages/npm/'
     VITE_REPOSITORY_URL: '$CI_PROJECT_URL'

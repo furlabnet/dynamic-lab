@@ -12,14 +12,26 @@
   `yarn preview` are gone; use `yarn workspace @furlab/docs dev` and friends instead.
 - GitLab Pages now serves a landing page at the root, with the showcase at `showcase/` and the docs
   at `docs/`. Links to the old docs root (`…/dynamic-lab/#/…`) need `docs/` added.
-- Version bumps for releases go in `packages/dynamic-lab/package.json`.
+- Version bumps for releases go in `packages/dynamic-lab/package.json`, and the release script
+  moved to `scripts/release.mjs`.
+- Releases are now also published to npmjs.org when the `NPM_TOKEN` CI/CD variable is set; without
+  it that job is allowed to fail. Pre-release versions default to the `next` dist-tag.
+- Tagged releases create a GitLab release, with this changelog's section for the version as the
+  description.
+- CI type-checks and builds on Node 22 and 24.
 
 ### Added
 
 - `apps/landing`: a landing page that introduces the library and links to the showcase and docs.
   Its header has the same GitLab and npm ("Soon") links as the docs.
-- `packages/the-lab-sans` (`@furlab/the-lab-sans`, private): The Lab Sans as OpenType files and
-  `@font-face` rules for all 8 weights and their italics. The landing page, showcase and docs load it from here.
+- `packages/the-lab-sans` (`@furlab/the-lab-sans`): The Lab Sans as its own package, released
+  from `the-lab-sans-v*` tags with its own changelog. The landing page, showcase and docs load it
+  from here.
+- `apps/the-lab-sans`: a specimen site for The Lab Sans, served at `the-lab-sans/` on Pages and
+  linked from the landing page.
+- `.github/workflows/release.yml` for the GitHub mirror: type-checks and builds every push and pull
+  request, and creates a GitHub release for each release tag. It doesn't publish packages.
+- `scripts/release-notes.mjs` prints a release's notes from its changelog.
 - `VITE_THE_LAB_SANS=off` leaves the font out of the showcase build.
 - `yarn pages` builds the apps and assembles them into `public/`.
 - Docs header: a Dynamic / Backstage switch that previews the docs and every example in either

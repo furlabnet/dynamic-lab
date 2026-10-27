@@ -39,7 +39,7 @@ import {
 } from '@furlab/dynamic-lab'
 import pkg from '@furlab/dynamic-lab/package.json'
 
-import { DOCS_URL, REPOSITORY_URL, SHOWCASE_URL } from './links'
+import { DOCS_URL, FONT_URL, REPOSITORY_URL, SHOWCASE_URL } from './links'
 import { GitLabLogo, NpmLogo } from './logos'
 
 const INSTALL = `yarn add ${pkg.name}`
@@ -128,7 +128,7 @@ function InstallSnippet() {
   return (
     <div className="inline-flex max-w-full items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[color-mix(in_srgb,var(--card)_70%,transparent)] py-1 pr-1 pl-4 font-mono text-sm backdrop-blur-md">
       <span className="text-[var(--muted-foreground)] select-none">$</span>
-      <code className="truncate">{INSTALL}</code>
+      <code className="min-w-0 truncate">{INSTALL}</code>
       <IconButton
         aria-label="Copy install command"
         variant="ghost"
@@ -211,6 +211,7 @@ function Landing() {
           <SiteNav>
             <SiteNavLink href={SHOWCASE_URL}>Showcase</SiteNavLink>
             <SiteNavLink href={DOCS_URL}>Docs</SiteNavLink>
+            <SiteNavLink href={FONT_URL}>The Lab Sans</SiteNavLink>
           </SiteNav>
         }
         actions={
@@ -355,6 +356,20 @@ function Landing() {
             </p>
             <LinkButton href={DOCS_URL} variant="secondary" size="md" className="mt-auto">
               Read the docs
+              <ArrowRight className="size-4" />
+            </LinkButton>
+          </Card>
+          <Card className="flex flex-col items-start gap-4 p-8 md:col-span-2 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-2">
+              <span className="page-eyebrow">Typeface</span>
+              <h2 className="text-3xl font-black tracking-tight">The Lab Sans</h2>
+              <p className="max-w-xl text-[var(--muted-foreground)]">
+                The typeface you’re reading: eight weights with italics, as its own package for any
+                web app, Next.js included.
+              </p>
+            </div>
+            <LinkButton href={FONT_URL} variant="secondary" size="md" className="shrink-0">
+              See the specimen
               <ArrowRight className="size-4" />
             </LinkButton>
           </Card>
