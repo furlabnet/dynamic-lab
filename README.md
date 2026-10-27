@@ -3,92 +3,44 @@
 The React component library for **The Furlab Project**: TypeScript, Tailwind CSS v4 and design tokens from Figma.
 
 - Two brands: **Dynamic** for the public site and **Backstage** for the staff console
-- Eight named colour themes, each in light and dark (Midnight Wolf, Fiery Fox, Blue Dog, Snow Leopard, Deer Delight, Scalies, Otter Space, Purrple Rain)
-- Adjustable transparency (full, reduced or off), keyboard support and reduced motion
-- About 70 components: from buttons and dialogs to a comic reader, a story reader, booru-style tags and content editors
+- Eight named colour themes, each in light and dark
+- About 70 components: from buttons and dialogs to a comic reader, a story reader and booru-style tags
 
-**Documentation:** https://furlab.gitlab.io/dynamic-lab/ (guides, live examples, source and props for every component)
+**Site:** https://furlab.gitlab.io/dynamic-lab/ (landing page) · [showcase](https://furlab.gitlab.io/dynamic-lab/showcase/) · [docs](https://furlab.gitlab.io/dynamic-lab/docs/)
+
+To use the library in an app, see [`packages/dynamic-lab`](./packages/dynamic-lab/README.md).
 
 ---
 
-## Install
+## Repository layout
 
-The package is published to the GitLab package registry. Point the `@furlab` scope at it once.
+A [Turborepo](https://turborepo.com) monorepo with Yarn workspaces.
 
-**Yarn (Berry)**, in `.yarnrc.yml`:
-
-```yaml
-npmScopes:
-  furlab:
-    npmRegistryServer: 'https://gitlab.com/api/v4/packages/npm/'
-    # Only while the project is private: a token with the read_api scope
-    npmAuthToken: '${GITLAB_TOKEN-}'
-```
-
-**npm / pnpm**, in `.npmrc`:
-
-```ini
-@furlab:registry=https://gitlab.com/api/v4/packages/npm/
-//gitlab.com/api/v4/packages/npm/:_authToken=${GITLAB_TOKEN}
-```
-
-Then:
-
-```bash
-yarn add @furlab/dynamic-lab react react-dom
-```
-
-React 19 is a peer dependency. `lucide-react`, `clsx`, `tailwind-merge` and `class-variance-authority` install with the package.
-
-## Set up
-
-```tsx
-import { ThemeProvider, ToastProvider, Button, useToast } from '@furlab/dynamic-lab'
-import '@furlab/dynamic-lab/styles.css'
-
-export function App() {
-  return (
-    <ThemeProvider defaultBrand="dynamic" defaultPalette="midnight-wolf">
-      <ToastProvider>
-        <Publish />
-      </ToastProvider>
-    </ThemeProvider>
-  )
-}
-
-function Publish() {
-  const { toast } = useToast()
-  return <Button onClick={() => toast({ title: 'Published', description: 'Your story is live.', tone: 'success' })}>Publish</Button>
-}
-```
-
-The stylesheet contains the tokens, component styles and every Tailwind utility the components use, so your app doesn't need Tailwind. If it does use Tailwind v4, import `tailwindcss` first and then `@furlab/dynamic-lab/styles.css`. Component classes live in the `components` layer, so utilities you pass in `className` win.
-
-Set `--font-sans` and `--font-display` to laod a font family; otherwise the system font is used.
-
-## Theming
-
-`ThemeProvider` writes `data-theme`, `data-mode`, `data-brand` and `data-transparency` on `<html>`, applies the colour theme as CSS variables, and saves choices to localStorage. `useTheme()` reads and changes them:
-
-```tsx
-const { setMode, setPalette, setTransparency, setBrand } = useTheme()
-
-setPalette('fiery-fox') // any id from PALETTES, or your own
-setTransparency('off') // 'system' | 'full' | 'reduced' | 'off'
-```
-
-| Theme | Species | Look |
+| Workspace | Package | What it is |
 | --- | --- | --- |
-| **Midnight Wolf** (default) | Wolf | Clear blue on cool blue-grey |
-| **Fiery Fox** | Fox | Burnt orange with an ember-pink glow |
-| **Blue Dog** | Dog | Friendly turquoise |
-| **Snow Leopard** | Snow leopard | Quiet steel and frost, almost monochrome |
-| **Deer Delight** | Deer | Rose and peach |
-| **Scalies** | Dragons and reptiles | Emerald with a lime shimmer |
-| **Otter Space** | Otter | Navy sky with golden starlight |
-| **Purrple Rain** | Cat | Royal purple with a magenta storm |
+| `packages/dynamic-lab` | `@furlab/dynamic-lab` | The component library, published to the GitLab package registry |
+| `packages/the-lab-sans` | `@furlab/the-lab-sans` | The Lab Sans typeface: OpenType files and `@font-face` rules. Loaded by every app. Private, not published |
+| `apps/landing` | `@furlab/landing` | The landing page: what the library is, with links to the showcase and docs |
+| `apps/showcase` | `@furlab/showcase` | Two working apps (the Dynamic Lab public site and the Backstage console) built from the library |
+| `apps/docs` | `@furlab/docs` | The documentation site: guides, live examples, source and props for every component |
 
-Colour themes apply to the Dynamic brand; Backstage keeps its own look unless you pass `paletteBrands={['dynamic', 'backstage']}`. Add your own with `palettes={[...PALETTES, myPalette]}`. The [theming guide](https://furlab.gitlab.io/dynamic-lab/#/guide/theming) covers brands, tokens and custom palettes.
+```
+packages/
+  dynamic-lab/
+    src/components/   one folder per component
+    src/theme/        ThemeProvider, palettes, tokens
+    src/styles/       tokens.css, components.css, content.css; dynamic-lab.css is the published entry
+    scripts/          release.mjs publishes to the GitLab package registry
+  the-lab-sans/       fonts/ and the-lab-sans.css
+apps/
+  landing/
+  showcase/
+  docs/src/examples/  live examples; each docs page shows this source
+scripts/
+  assemble-pages.mjs  puts the built apps together in public/
+```
+
+The apps load `@furlab/dynamic-lab` from its TypeScript source (the `@furlab/source` export condition), so library edits show up in every app with hot reload and type-checking doesn't need a build first. Each app's stylesheet points Tailwind at `packages/dynamic-lab/src` with `@source`.
 
 ## Development
 
@@ -96,34 +48,34 @@ Requires Node 24 (see `.nvmrc`) and Yarn 4 (via Corepack).
 
 | Command | What it does |
 | --- | --- |
-| `yarn dev` | The showcase: two working apps (the Dynamic Lab public site and the Backstage console) built from the library, at http://localhost:5173 |
-| `yarn docs:dev` | The documentation site, at http://localhost:5180 |
-| `yarn build` | The library into `dist/`: tsdown bundles ESM and CJS, `tsc` writes the declarations, the Tailwind CLI writes `dist/styles.css` |
-| `yarn docs:build` | The docs into `public/`, with relative asset paths so the build works at any URL |
-| `yarn typecheck` | Type-check the library, showcase and docs |
+| `yarn dev` | Every app at once: landing on http://localhost:5170, showcase on http://localhost:5173, docs on http://localhost:5180 |
+| `yarn workspace @furlab/showcase dev` | Just one app (likewise `@furlab/docs`, `@furlab/landing`) |
+| `yarn build` | Every workspace. The library goes to `packages/dynamic-lab/dist/` (tsdown for ESM and CJS, `tsc` for declarations, the Tailwind CLI for `styles.css`); each app to its own `dist/` |
+| `yarn pages` | Build the apps and assemble them into `public/`: landing at the root, then `showcase/` and `docs/` |
+| `yarn typecheck` | Type-check every workspace |
 | `yarn format` | Prettier |
 
-```
-src/
-  components/   one folder per component
-  theme/        ThemeProvider, palettes, tokens
-  styles/       tokens.css, components.css, content.css; dynamic-lab.css is the published entry
-  showcase/     the demo apps (yarn dev)
-docs/           the documentation site (yarn docs:dev)
-  examples/     live examples; each docs page shows this source
-scripts/
-  release.mjs   publishes to the GitLab package registry
-```
+Turborepo caches `build` and `typecheck`, so unchanged workspaces are skipped.
+
+### Environment variables
+
+| Variable | Used by | Effect |
+| --- | --- | --- |
+| `VITE_THE_LAB_SANS=off` | showcase | Leave The Lab Sans out of the build and use the system font |
+| `VITE_SHOWCASE_URL`, `VITE_DOCS_URL` | landing | Where the landing page links. Default: `./showcase/` and `./docs/` in a build, the local dev servers in `yarn dev` |
+| `VITE_REPOSITORY_URL` | landing, docs | Source link. Default: the repository URL in `packages/dynamic-lab/package.json` |
+| `VITE_REGISTRY_URL` | docs | Registry shown in the install guide. Default: `https://gitlab.com/api/v4/packages/npm/` |
+| `PAGES_BASE` | every app | Absolute base path, if relative asset paths (`./`) won't do |
 
 The showcase's sample images come from [Lorem Picsum](https://picsum.photos) and avatars from [pravatar.cc](https://pravatar.cc).
 
 ## Releasing
 
-1. Bump `version` in `package.json` and commit.
+1. Bump `version` in `packages/dynamic-lab/package.json` and commit.
 2. Tag and push: `git tag v0.2.0 && git push origin v0.2.0`.
 3. The pipeline's `publish` job runs `yarn release` with the CI job token. Tags with a pre-release suffix (`v1.0.0-beta.1`) publish under the `next` dist-tag.
 
-`yarn release` also works locally:
+`yarn release` (from the root) also works locally:
 
 ```bash
 yarn release --dry-run                 # check everything, list the package contents, publish nothing
@@ -133,7 +85,7 @@ GITLAB_TOKEN=glpat-… yarn release --tag next
 
 It refuses to publish when the tag doesn't match the version, the working tree has uncommitted changes, or the version is already in the registry. Set `GITLAB_API_URL` and `GITLAB_PROJECT` for a self-managed GitLab or another project.
 
-On the default branch, the `pages` job builds the docs and deploys them to GitLab Pages.
+On the default branch, the `pages` job runs `yarn pages` and deploys `public/` to GitLab Pages.
 
 ## Licence
 

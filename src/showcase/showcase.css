@@ -1,3 +1,0 @@
-/* Showcase stylesheet: Tailwind scans the whole project, including the showcase pages. */
-@import 'tailwindcss';
-@import '../styles/base.css';

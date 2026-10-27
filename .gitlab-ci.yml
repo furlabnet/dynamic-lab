@@ -1,10 +1,14 @@
 # Dynamic Lab pipeline
 #
-# - every push and merge request: install, typecheck, build the library
-# - tags like v1.2.3:              publish @furlab/dynamic-lab to this project's package registry
-# - the default branch:            build the documentation site and deploy it to GitLab Pages
+# A Turborepo monorepo: packages/dynamic-lab (the library), packages/the-lab-sans (the font) and
+# apps/landing, apps/showcase, apps/docs.
 #
-# Releasing: bump "version" in package.json, commit, then
+# - every push and merge request: install, typecheck, build every workspace
+# - tags like v1.2.3:              publish @furlab/dynamic-lab to this project's package registry
+# - the default branch:            build the landing page, showcase and docs into public/ and
+#                                  deploy them to GitLab Pages
+#
+# Releasing: bump "version" in packages/dynamic-lab/package.json, commit, then
 #   git tag v0.2.0 && git push origin v0.2.0
 
 default:
@@ -18,10 +22,13 @@ default:
         - yarn.lock
     paths:
       - .yarn/cache
+      - .turbo/cache
 
 variables:
   # Keep Yarn's cache inside the project so the CI cache above can save it.
   YARN_ENABLE_GLOBAL_CACHE: 'false'
+  # Turborepo's local cache, also saved by the CI cache.
+  TURBO_CACHE_DIR: .turbo/cache
 
 stages:
   - check
@@ -46,7 +53,7 @@ build:
     - yarn build
   artifacts:
     paths:
-      - dist/
+      - packages/dynamic-lab/dist/
     expire_in: 1 week
 
 publish:
@@ -65,7 +72,7 @@ pages:
     VITE_REGISTRY_URL: '$CI_API_V4_URL/packages/npm/'
     VITE_REPOSITORY_URL: '$CI_PROJECT_URL'
   script:
-    - yarn docs:build
+    - yarn pages
   artifacts:
     paths:
       - public

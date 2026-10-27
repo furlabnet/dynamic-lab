@@ -1,0 +1,8 @@
+/*
+ * Showcase stylesheet. Tailwind scans this app and the library source, so utilities used by either
+ * end up in the build.
+ */
+@import 'tailwindcss';
+@import '../../../packages/dynamic-lab/src/styles/base.css';
+
+@source '../../../packages/dynamic-lab/src';

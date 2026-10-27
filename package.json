@@ -1,92 +1,31 @@
 {
-  "name": "@furlab/dynamic-lab",
-  "version": "0.1.0-beta.1",
-  "description": "Dynamic Lab: the React component library for The Furlab Project. TypeScript, Tailwind CSS v4, two brands (Dynamic and Backstage), named colour themes, light and dark modes.",
-  "keywords": [
-    "react",
-    "components",
-    "design-system",
-    "tailwindcss",
-    "typescript",
-    "furlab"
-  ],
-  "homepage": "https://furlab.gitlab.io/dynamic-lab/",
-  "bugs": {
-    "url": "https://gitlab.com/furlab/dynamic-lab/-/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/furlab/dynamic-lab"
-  },
+  "name": "dynamic-lab-monorepo",
+  "private": true,
   "license": "MIT",
   "author": "Vedla Creative <code@vedla.ca>",
-  "sideEffects": [
-    "**/*.css"
-  ],
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./styles.css": "./dist/styles.css",
-    "./package.json": "./package.json"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types && yarn build:css",
-    "build:css": "tailwindcss -i src/styles/dynamic-lab.css -o dist/styles.css --minify",
-    "build:js": "tsdown",
-    "build:showcase": "vite build",
-    "build:types": "tsc -p tsconfig.lib.json",
-    "dev": "vite",
-    "docs:build": "vite build --config vite.config.docs.ts",
-    "docs:dev": "vite --config vite.config.docs.ts",
-    "docs:preview": "vite preview --config vite.config.docs.ts",
-    "format": "prettier --write --ignore-unknown  .",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "format": "prettier --write --ignore-unknown .",
     "format:check": "prettier --check .",
-    "prepack": "yarn build",
+    "pages": "turbo run build --filter='./apps/*' && node scripts/assemble-pages.mjs",
     "prepare": "husky",
-    "preview": "vite preview",
-    "release": "node scripts/release.mjs",
-    "typecheck": "tsc --noEmit"
+    "release": "yarn workspace @furlab/dynamic-lab release",
+    "typecheck": "turbo run typecheck"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
   },
-  "dependencies": {
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.61.0",
-    "tailwind-merge": "^3.7.0"
-  },
   "devDependencies": {
-    "@tailwindcss/cli": "4.3.3",
-    "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^26.6.5",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "autoprefixer": "^10.6.1",
-    "postcss": "^8.5.31",
     "prettier": "^3.9.10",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "tailwindcss": "^4.3.3",
-    "tsdown": "0.23.2",
+    "turbo": "^2.11.10",
     "typescript": "^7.0.2",
-    "updates": "^19.3.0",
-    "vite": "^8.3.5"
-  },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "updates": "^19.3.0"
   },
   "packageManager": "yarn@4.18.1",
   "engines": {

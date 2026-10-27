@@ -1,0 +1,22 @@
+{
+  "name": "@furlab/the-lab-sans",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Lab Sans, the Furlab typeface, as @font-face rules and OpenType files.",
+  "license": "UNLICENSED",
+  "author": "Vedla Creative <code@vedla.ca>",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": "./the-lab-sans.css",
+    "./the-lab-sans.css": "./the-lab-sans.css",
+    "./fonts/*": "./fonts/*",
+    "./package.json": "./package.json"
+  },
+  "style": "./the-lab-sans.css",
+  "files": [
+    "fonts",
+    "the-lab-sans.css"
+  ]
+}
