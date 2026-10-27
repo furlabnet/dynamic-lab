@@ -5,7 +5,6 @@ import {
   BookOpen,
   Check,
   Copy,
-  ExternalLink,
   Layers,
   LayoutDashboard,
   MousePointerClick,
@@ -23,6 +22,7 @@ import {
   cn,
   IconButton,
   PalettePicker,
+  Popover,
   Progress,
   SegmentedControl,
   SiteFooter,
@@ -40,6 +40,7 @@ import {
 import pkg from '@furlab/dynamic-lab/package.json'
 
 import { DOCS_URL, REPOSITORY_URL, SHOWCASE_URL } from './links'
+import { GitLabLogo, NpmLogo } from './logos'
 
 const INSTALL = `yarn add ${pkg.name}`
 
@@ -225,9 +226,22 @@ function Landing() {
                 rel="noreferrer"
                 className="icon-button border-0! bg-transparent!"
                 aria-label="Source on GitLab">
-                <ExternalLink className="size-4" />
+                <GitLabLogo className="size-4" />
               </a>
             </Tooltip>
+            <Popover
+              trigger={
+                <IconButton
+                  aria-label="npm"
+                  variant="ghost"
+                  icon={<NpmLogo className="size-4" />}
+                />
+              }
+              aria-label="npm"
+              align="end"
+              className="ui-menu px-3! py-2! text-sm font-semibold">
+              Soon
+            </Popover>
           </>
         }
       />

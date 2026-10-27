@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { BookOpen, Box, ExternalLink, Search } from 'lucide-react'
+import { BookOpen, Box, Building2, Globe, Search } from 'lucide-react'
 import {
   AppearanceSettings,
   Badge,
@@ -9,6 +9,8 @@ import {
   CommandTrigger,
   IconButton,
   Input,
+  Popover,
+  SegmentedControl,
   SidebarNav,
   SidebarNavGroup,
   SidebarNavItem,
@@ -23,10 +25,13 @@ import {
   ThemeProvider,
   ToastProvider,
   Tooltip,
+  useTheme,
   type CommandItem,
+  type ThemeBrand,
 } from '@furlab/dynamic-lab'
 import pkg from '@furlab/dynamic-lab/package.json'
 import { COMPONENTS, GROUPS, exampleSource, type ComponentDoc } from './registry'
+import { GitLabLogo, NpmLogo } from './logos'
 import { GUIDE } from './pages/Guide'
 import { CodeBlock, PropsTable } from './ui'
 
@@ -48,6 +53,41 @@ function useHashPath() {
 
 const go = (path: string) => {
   window.location.hash = `/${path}`
+}
+
+/* ---------------------------------------------------------- Header bits */
+
+const BRANDS: { value: ThemeBrand; label: string; icon: React.ReactNode }[] = [
+  { value: 'dynamic', label: 'Dynamic', icon: <Globe className="size-3.5" /> },
+  { value: 'backstage', label: 'Backstage', icon: <Building2 className="size-3.5" /> },
+]
+
+/** Preview the docs, and every example on them, in either brand. */
+function BrandToggle() {
+  const { brand, setBrand } = useTheme()
+  const other = BRANDS.find((b) => b.value !== brand)!
+
+  return (
+    <>
+      <SegmentedControl
+        aria-label="Brand"
+        size="sm"
+        className="hidden lg:flex"
+        value={brand}
+        onValueChange={(value) => setBrand(value as ThemeBrand)}
+        options={BRANDS}
+      />
+      <Tooltip content={`Switch to ${other.label}`} side="bottom">
+        <IconButton
+          aria-label={`Switch to the ${other.label} brand`}
+          variant="ghost"
+          className="lg:hidden"
+          icon={other.icon}
+          onClick={() => setBrand(other.value)}
+        />
+      </Tooltip>
+    </>
+  )
 }
 
 /* ----------------------------------------------------- Component page */
@@ -175,7 +215,11 @@ function Docs() {
             href="#/guide/getting-started"
             className="flex items-center gap-2"
             aria-label="Dynamic Lab documentation home">
-            <BrandLockup name="Dynamic Lab" product="Docs" />
+            <BrandLockup
+              name="Dynamic Lab"
+              product="Docs"
+              className="max-sm:[&_.ui-brand-product]:hidden"
+            />
           </a>
         }
         nav={
@@ -199,30 +243,47 @@ function Docs() {
         }
         actions={
           <>
-            <Badge variant="neutral" className="hidden sm:inline-flex">
+            <Badge variant="neutral" className="hidden xl:inline-flex">
               v{pkg.version}
             </Badge>
-            <div className="hidden w-56 md:block">
+            <div className="hidden w-56 xl:block">
               <CommandTrigger label="Search docs…" onClick={() => setPaletteOpen(true)} />
             </div>
             <IconButton
               aria-label="Search docs"
               variant="ghost"
-              className="md:hidden"
+              className="xl:hidden"
               icon={<Search className="size-4" />}
               onClick={() => setPaletteOpen(true)}
             />
+            <BrandToggle />
             <AppearanceSettings themesHref="#/guide/theming" />
-            <Tooltip content="Source on GitLab" side="bottom">
-              <a
-                href={REPO}
-                target="_blank"
-                rel="noreferrer"
-                className="icon-button border-0! bg-transparent!"
-                aria-label="Source on GitLab">
-                <ExternalLink className="size-4" />
-              </a>
-            </Tooltip>
+            {/* On phones the repository link is in the footer. */}
+            <div className="contents max-sm:hidden">
+              <Tooltip content="Source on GitLab" side="bottom">
+                <a
+                  href={REPO}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="icon-button border-0! bg-transparent!"
+                  aria-label="Source on GitLab">
+                  <GitLabLogo className="size-4" />
+                </a>
+              </Tooltip>
+              <Popover
+                trigger={
+                  <IconButton
+                    aria-label="npm"
+                    variant="ghost"
+                    icon={<NpmLogo className="size-4" />}
+                  />
+                }
+                aria-label="npm"
+                align="end"
+                className="ui-menu px-3! py-2! text-sm font-semibold">
+                Soon
+              </Popover>
+            </div>
           </>
         }
       />

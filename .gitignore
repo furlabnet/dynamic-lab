@@ -47,3 +47,5 @@ yarn-error.log*
 *.pem
 !AGENTS.md
 
+# Documentation build (GitLab Pages artifact)
+public
