@@ -48,4 +48,4 @@ yarn-error.log*
 !AGENTS.md
 
 # Documentation build (GitLab Pages artifact)
-public
+/public

@@ -6,8 +6,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    // Workspace packages resolve to their TypeScript source (see "@furlab/source" in their
-    // package.json exports), so apps type-check and run without building the library first.
     "customConditions": ["@furlab/source"],
     "resolveJsonModule": true,
     "isolatedModules": true,

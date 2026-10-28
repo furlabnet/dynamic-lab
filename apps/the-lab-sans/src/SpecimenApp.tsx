@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
+
 import { ArrowLeft, ArrowRight, Check, Copy, Type } from 'lucide-react'
+
 import {
   AppearanceSettings,
   Badge,
   BrandLockup,
+  buttonVariants,
   Card,
   FilterChip,
   IconButton,
@@ -23,11 +26,11 @@ import {
   ThemeProvider,
   ToastProvider,
   Tooltip,
-  buttonVariants,
   useToast,
 } from '@furlab/dynamic-lab'
-import { cssVariable, faces, weights, type TheLabSansFace } from '@furlab/the-lab-sans'
+import { cssVariable, faces, type TheLabSansFace, weights } from '@furlab/the-lab-sans'
 import pkg from '@furlab/the-lab-sans/package.json'
+
 import { LANDING_URL, REPOSITORY_URL } from './links'
 import { GitLabLogo, NpmLogo } from './logos'
 

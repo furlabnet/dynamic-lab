@@ -26,6 +26,11 @@ export default defineConfig({
   shims: true,
   exports: {
     customExports: {
+      '.': {
+        '@furlab/source': './src/index.ts',
+        import: './dist/index.js',
+        require: './dist/index.cjs',
+      },
       './styles.css': './dist/styles.css',
     },
   },

@@ -412,7 +412,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@furlab/dynamic-lab@workspace:^, @furlab/dynamic-lab@workspace:packages/dynamic-lab":
+"@furlab/dynamic-lab@workspace:*, @furlab/dynamic-lab@workspace:^, @furlab/dynamic-lab@workspace:packages/dynamic-lab":
   version: 0.0.0-use.local
   resolution: "@furlab/dynamic-lab@workspace:packages/dynamic-lab"
   dependencies:
@@ -489,8 +489,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@furlab/the-lab-sans-site@workspace:apps/the-lab-sans"
   dependencies:
-    "@furlab/dynamic-lab": "workspace:^"
-    "@furlab/the-lab-sans": "workspace:^"
+    "@furlab/dynamic-lab": "workspace:*"
+    "@furlab/the-lab-sans": "workspace:*"
     "@tailwindcss/vite": "npm:^4.3.3"
     "@types/node": "npm:^26.6.5"
     "@types/react": "npm:^19.3.0"
@@ -505,7 +505,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@furlab/the-lab-sans@workspace:^, @furlab/the-lab-sans@workspace:packages/the-lab-sans":
+"@furlab/the-lab-sans@workspace:*, @furlab/the-lab-sans@workspace:^, @furlab/the-lab-sans@workspace:packages/the-lab-sans":
   version: 0.0.0-use.local
   resolution: "@furlab/the-lab-sans@workspace:packages/the-lab-sans"
   dependencies:

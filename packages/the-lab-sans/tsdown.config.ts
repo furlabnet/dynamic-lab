@@ -16,6 +16,11 @@ export default defineConfig({
   platform: 'neutral',
   exports: {
     customExports: {
+      '.': {
+        '@furlab/source': './src/index.ts',
+        import: './dist/index.js',
+        require: './dist/index.cjs',
+      },
       './otf/*': './src/fonts/*',
       './fonts/*': './dist/fonts/*',
     },

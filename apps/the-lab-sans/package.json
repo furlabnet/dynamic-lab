@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@furlab/dynamic-lab": "workspace:^",
-    "@furlab/the-lab-sans": "workspace:^",
+    "@furlab/dynamic-lab": "workspace:*",
+    "@furlab/the-lab-sans": "workspace:*",
     "lucide-react": "^1.63.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

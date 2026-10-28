@@ -25,6 +25,7 @@
   "type": "module",
   "exports": {
     ".": {
+      "@furlab/source": "./src/index.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },

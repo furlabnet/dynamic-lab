@@ -42,7 +42,7 @@ default:
 
 variables:
   # The Node version for jobs outside the matrix (publishing, Pages). Matches .nvmrc.
-  NODE_VERSION: '24'
+  NODE_VERSION: '26'
   # Keep Yarn's cache inside the project so the CI cache above can save it.
   YARN_ENABLE_GLOBAL_CACHE: 'false'
   # Turborepo's local cache, also saved by the CI cache.
@@ -58,7 +58,7 @@ stages:
 .node-matrix:
   parallel:
     matrix:
-      - NODE_VERSION: ['22', '24']
+      - NODE_VERSION: ['22', '24', '26']
 
 .release-tag:
   rules:
