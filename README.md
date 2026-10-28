@@ -90,15 +90,19 @@ Each package is released from its own tag:
 
 1. Bump `version` in the package's `package.json`.
 2. In its changelog, rename `## Unreleased` to the version (`## 0.2.0`, optionally with a date) and commit.
-3. Tag and push: `git tag v0.2.0 && git push origin v0.2.0`.
+3. Tag and push: `git tag v0.2.0 && git push origin v0.2.0`. A pre-release tag needs a hyphen before the pre-release part (`v0.2.0-beta.1`, not `v0.2.0.beta.1`); anything else fails the `release-tag` job and publishes nothing.
 
 The GitLab pipeline then:
 
 - publishes the package to this project's **GitLab package registry** (with the CI job token)
-- publishes it to **npmjs.org**, if the `NPM_TOKEN` CI/CD variable is set. Without it the npm job exits with code 78 and is allowed to fail, so the rest of the release goes ahead
+- publishes it to **npmjs.org** with [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, with provenance), so there's no npm token to store. Until the package has a trusted publisher, npm refuses the job's OIDC token and the job exits with code 78 and is allowed to fail, so the rest of the release goes ahead
 - creates a **GitLab release** for the tag, with the changelog section as its description
 
-Pre-release versions (`1.0.0-beta.1`) go out under the `next` dist-tag. Only the GitLab pipeline publishes. Make `NPM_TOKEN` a masked, protected variable and protect the `v*` and `the-lab-sans-v*` tags, so only maintainers' tags can publish.
+Pre-release versions (`1.0.0-beta.1`) go out under the `next` dist-tag. Only the GitLab pipeline publishes. Protect the `v*` and `the-lab-sans-v*` tags, so only maintainers' tags can publish.
+
+#### Setting up trusted publishing
+
+npm only lets you add a trusted publisher to a package that exists, so publish each package's first version by hand (see below). Then, on npmjs.com, open the package's **Settings → Trusted publishing**, choose **GitLab CI/CD** and enter namespace `furlab`, project `dynamic-lab` and top-level CI file `.gitlab-ci.yml` (leave the environment empty). The first publish through it must happen within two days, or npm drops the configuration. Once it works, set **Publishing access** to require 2FA and disallow tokens. Trusted publishing only runs on GitLab.com shared runners.
 
 ### GitHub mirror
 
@@ -113,8 +117,10 @@ Both pipelines test on the same Node versions: keep the `NODE_VERSION` matrix in
 ```bash
 yarn workspace @furlab/dynamic-lab release --dry-run                        # check, list the contents, publish nothing
 GITLAB_TOKEN=glpat-… yarn workspace @furlab/dynamic-lab release              # GitLab registry (token needs the api scope)
-NPM_TOKEN=npm_… yarn workspace @furlab/the-lab-sans release --registry npm   # npmjs.org
+npm login && yarn workspace @furlab/the-lab-sans release --registry npm      # npmjs.org
 ```
+
+For npmjs.org the script packs the package with Yarn and publishes the tarball with the npm CLI (11.5.1 or later), so it uses your `npm login` session locally and the job's OIDC token in CI.
 
 `yarn release` at the root is short for the first package. The script refuses to publish when the CI tag doesn't match the version, the working tree has uncommitted changes, or the version is already in the registry. Set `GITLAB_API_URL` and `GITLAB_PROJECT` for a self-managed GitLab or another project; in CI they come from GitLab. `node scripts/release-notes.mjs v0.2.0` prints a release's notes.
 

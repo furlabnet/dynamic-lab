@@ -16,9 +16,14 @@
 # section under a heading for the version, commit, then tag and push:
 #   git tag v0.2.0 && git push origin v0.2.0
 #
-# Publishing to npmjs.org needs an NPM_TOKEN CI/CD variable (masked, protected). Without it the npm
-# jobs exit with code 78 and are allowed to fail; everything else still runs. Only this GitLab
-# project publishes: the GitHub mirror's workflow builds and creates GitHub releases, nothing more.
+# A tag that looks like a release tag but isn't one (the-lab-sans-v1.2.3.beta.1, say) fails the
+# release-tag job instead of quietly skipping the publish jobs.
+#
+# Publishing to npmjs.org uses trusted publishing (OIDC), not a token: each package needs a trusted
+# publisher on npmjs.com for this project and .gitlab-ci.yml (GitLab.com shared runners only). The
+# npm jobs get an NPM_ID_TOKEN for it; when npm refuses it (no trusted publisher yet) they exit with
+# code 78 and are allowed to fail, and everything else still runs. Only this GitLab project publishes: the GitHub mirror's workflow
+# builds and creates GitHub releases, nothing more.
 #
 # Keep the NODE_VERSION matrix in sync with .github/workflows/release.yml.
 
@@ -65,6 +70,31 @@ typecheck:
   script:
     - yarn typecheck
 
+release-tag:
+  stage: check
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(the-lab-sans-)?v\d/'
+  before_script: []
+  cache: []
+  script:
+    - |
+      node --input-type=module -e "
+        import { readFileSync } from 'node:fs'
+        import { releaseForTag } from './scripts/releases.mjs'
+        const tag = process.env.CI_COMMIT_TAG
+        const release = releaseForTag(tag)
+        if (!release) {
+          console.error(tag + ' is not a release tag, so nothing will be published. Use v1.2.3 or the-lab-sans-v1.2.3, with a hyphen before any pre-release (v1.2.3-beta.1).')
+          process.exit(1)
+        }
+        const { version } = JSON.parse(readFileSync(release.dir + '/package.json', 'utf8'))
+        if (version !== release.version) {
+          console.error(release.name + ' is at ' + version + ' in package.json, but ' + tag + ' is for ' + release.version + '.')
+          process.exit(1)
+        }
+        console.log(tag + ' releases ' + release.name + ' ' + version)
+      "
+
 format:
   stage: check
   script:
@@ -94,7 +124,14 @@ build:
 .publish-npm:
   variables:
     REGISTRY: npm
-  # 78: NPM_TOKEN isn't set (see scripts/release.mjs). Any other failure still fails the pipeline.
+  # Trusted publishing: npm exchanges NPM_ID_TOKEN for a short-lived publish token, and signs
+  # provenance with SIGSTORE_ID_TOKEN.
+  id_tokens:
+    NPM_ID_TOKEN:
+      aud: 'npm:registry.npmjs.org'
+    SIGSTORE_ID_TOKEN:
+      aud: sigstore
+  # 78: no NPM_ID_TOKEN, or npm refused it (see scripts/release.mjs). Any other failure still fails the pipeline.
   allow_failure:
     exit_codes: 78
 

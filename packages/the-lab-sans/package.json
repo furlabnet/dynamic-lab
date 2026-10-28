@@ -25,29 +25,48 @@
   "type": "module",
   "exports": {
     ".": {
-      "@furlab/source": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
+    "./next": {
+      "import": "./dist/next.js",
+      "require": "./dist/next.cjs"
+    },
+    "./package.json": "./package.json",
     "./the-lab-sans.css": "./dist/the-lab-sans.css",
-    "./fonts/*": "./dist/fonts/*",
-    "./otf/*": "./fonts/*",
-    "./package.json": "./package.json"
+    "./otf/*": "./src/fonts/*",
+    "./fonts/*": "./dist/fonts/*"
   },
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
   "style": "./dist/the-lab-sans.css",
   "files": [
     "dist",
     "fonts"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.build.json && node scripts/build-css.mjs",
+    "build": "tsdown --config-loader tsx",
+    "build1": "rm -rf dist && tsc -p tsconfig.build.json && node scripts/build-css.mjs",
     "prepack": "yarn build",
     "release": "node ../../scripts/release.mjs",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "typescript": "^7.0.2",
+    "@tsdown/css": "^0.23.3",
+    "@types/node": "^26.6.5",
+    "@types/wawoff2": "^1.0.2",
+    "autoprefixer": "^10.6.2",
+    "postcss": "^8.5.32",
+    "postcss-import": "^17.0.1",
+    "tsdown": "0.23.3",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
     "wawoff2": "2.0.1"
+  },
+  "optionalDependencies": {
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   }
 }

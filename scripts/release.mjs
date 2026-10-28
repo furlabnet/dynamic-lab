@@ -22,16 +22,21 @@
  *   CI_PROJECT_ID / GITLAB_PROJECT   numeric id or "group/project"; defaults to the path in
  *                                    package.json's repository URL
  *
- * npmjs.org credentials:
- *   NPM_TOKEN      a granular access token that can publish the @furlab packages. When it isn't set
- *                  the script exits with code 78, which the GitLab pipeline allows to fail.
+ * npmjs.org credentials (no tokens; the package is packed by Yarn and published by the npm CLI,
+ * which needs to be 11.5.1 or later):
+ *   in GitLab CI   trusted publishing: the job's NPM_ID_TOKEN OIDC token is exchanged for a
+ *                  short-lived publish token. When there's no NPM_ID_TOKEN, or npm refuses it (no
+ *                  trusted publisher for the package yet), the script exits with code 78, which the
+ *                  GitLab pipeline allows to fail.
+ *   locally        your `npm login` session (npm asks for 2FA as usual)
  *   NPM_REGISTRY_URL   default https://registry.npmjs.org/
  *
  * In CI, the tag being built (CI_COMMIT_TAG) must match the package version: v1.2.3 for
  * @furlab/dynamic-lab, the-lab-sans-v1.2.3 for @furlab/the-lab-sans (see releases.mjs).
  */
 import { execFileSync, spawnSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { releaseForPackage } from './releases.mjs'
 
@@ -123,35 +128,60 @@ function gitlabSettings() {
   }
 }
 
-function npmSettings() {
-  const token = process.env.NPM_TOKEN
+const npm = (npmArgs, options = {}) =>
+  spawnSync('npm', npmArgs, { encoding: 'utf8', shell: process.platform === 'win32', ...options })
+
+async function npmSettings() {
   const registry = (process.env.NPM_REGISTRY_URL ?? 'https://registry.npmjs.org/').replace(
     /\/?$/,
     '/'
   )
-  if (!token && !dryRun)
-    fail(
-      "NPM_TOKEN isn't set, so nothing was published to npmjs.org. Add it as a masked, protected CI/CD variable to publish there.",
-      NOT_CONFIGURED
-    )
 
-  return {
-    label: 'npmjs.org',
-    registry,
-    token,
-    access: 'public',
-    async isPublished() {
-      const url = `${registry}${pkg.name.replace('/', '%2f')}/${pkg.version}`
-      const res = await fetch(url, token ? { headers: { authorization: `Bearer ${token}` } } : {})
-      if (res.status === 401 || res.status === 403)
-        fail(`npmjs.org refused NPM_TOKEN (${res.status}). It needs publish access to ${pkg.name}.`)
-      if (res.status === 404) return false
-      return res.ok ? true : undefined
-    },
+  if (!dryRun) {
+    // Trusted publishing (OIDC) needs npm 11.5.1 or later.
+    const version = npm(['--version']).stdout?.trim() ?? ''
+    const [major, minor, patch] = version.split('.').map(Number)
+    if (!(major > 11 || (major === 11 && (minor > 5 || (minor === 5 && patch >= 1)))))
+      fail(`npm ${version || '(not found)'} is too old to publish; it needs 11.5.1 or later.`)
+
+    if (inCi) {
+      const idToken = process.env.NPM_ID_TOKEN
+      if (!idToken)
+        fail(
+          "NPM_ID_TOKEN isn't set, so nothing was published to npmjs.org. The job needs an id_tokens entry with the npm:registry.npmjs.org audience.",
+          NOT_CONFIGURED
+        )
+      // Exchange it here rather than leaving it to npm, so a missing trusted publisher is "not
+      // configured" (78) instead of a failed publish.
+      const res = await fetch(
+        `${registry}-/npm/v1/oidc/token/exchange/package/${pkg.name.replace('/', '%2f')}`,
+        { method: 'POST', headers: { authorization: `Bearer ${idToken}` } }
+      )
+      const token = res.ok ? (await res.json()).token : undefined
+      if (!token)
+        fail(
+          `npmjs.org refused the OIDC token (${res.status}), so nothing was published there. Add a trusted publisher for ${pkg.name} on npmjs.com (GitLab CI/CD, furlab/dynamic-lab, .gitlab-ci.yml).`,
+          NOT_CONFIGURED
+        )
+      step('Exchanged the OIDC token for an npm publish token')
+      return { label: 'npmjs.org', registry, token, access: 'public', isPublished }
+    } else {
+      const whoami = npm(['whoami', '--registry', registry])
+      if (whoami.status !== 0) fail(`You're not logged in to ${registry}. Run \`npm login\` first.`)
+      step(`Logged in to npm as ${whoami.stdout.trim()}`)
+    }
+  }
+
+  return { label: 'npmjs.org', registry, access: 'public', isPublished }
+
+  async function isPublished() {
+    const res = await fetch(`${registry}${pkg.name.replace('/', '%2f')}/${pkg.version}`)
+    if (res.status === 404) return false
+    return res.ok ? true : undefined
   }
 }
 
-const settings = target === 'npm' ? npmSettings() : gitlabSettings()
+const settings = target === 'npm' ? await npmSettings() : gitlabSettings()
 
 console.log(
   `\nReleasing ${pkg.name}@${pkg.version} to ${settings.label}${dryRun ? ' (dry run)' : ''}`
@@ -198,29 +228,51 @@ if (settings.token || target === 'npm') {
 
 /* ------------------------------------------------------------- Publish */
 
-// Yarn reads these as config; they only apply to this command.
-const env = {
-  ...process.env,
-  YARN_NPM_PUBLISH_REGISTRY: settings.registry,
-  YARN_NPM_ALWAYS_AUTH: 'true',
-  ...(settings.token ? { YARN_NPM_AUTH_TOKEN: settings.token } : {}),
+const yarn = (yarnArgs, env = process.env) => {
+  const result = spawnSync('yarn', yarnArgs, {
+    stdio: 'inherit',
+    env,
+    shell: process.platform === 'win32',
+  })
+  if (result.status !== 0)
+    fail(`yarn ${yarnArgs.join(' ')} failed with exit code ${result.status}.`)
 }
+const publishArgs = ['--access', settings.access, ...(distTag ? ['--tag', distTag] : [])]
 
-const yarnArgs = dryRun
-  ? ['pack', '--dry-run']
-  : ['npm', 'publish', '--access', settings.access, ...(distTag ? ['--tag', distTag] : [])]
-step(
-  dryRun
-    ? 'Building and listing the package contents (prepack runs the build)'
-    : 'Building and publishing (prepack runs the build)'
-)
-
-const result = spawnSync('yarn', yarnArgs, {
-  stdio: 'inherit',
-  env,
-  shell: process.platform === 'win32',
-})
-if (result.status !== 0) fail(`yarn ${yarnArgs.join(' ')} failed with exit code ${result.status}.`)
+if (dryRun) {
+  step('Building and listing the package contents (prepack runs the build)')
+  yarn(['pack', '--dry-run'])
+} else if (target === 'npm') {
+  // Yarn packs (resolving workspace: ranges), then npm publishes the tarball: with the exchanged
+  // token and provenance in CI, with the `npm login` session locally.
+  const dir = mkdtempSync(join(tmpdir(), 'furlab-release-'))
+  const tarball = join(dir, 'package.tgz')
+  const npmArgs = ['publish', tarball, '--registry', settings.registry, ...publishArgs]
+  if (settings.token) {
+    const userconfig = join(dir, '.npmrc')
+    const host = settings.registry.replace(/^https?:/, '')
+    writeFileSync(userconfig, `${host}:_authToken=${settings.token}\n`, { mode: 0o600 })
+    npmArgs.push('--userconfig', userconfig, '--provenance')
+  }
+  try {
+    step('Building and packing (prepack runs the build)')
+    yarn(['pack', '--out', tarball])
+    step('Publishing with npm')
+    const result = npm(npmArgs, { stdio: 'inherit' })
+    if (result.status !== 0) fail(`npm publish failed with exit code ${result.status}.`)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+} else {
+  step('Building and publishing (prepack runs the build)')
+  // Yarn reads these as config; they only apply to this command.
+  yarn(['npm', 'publish', ...publishArgs], {
+    ...process.env,
+    YARN_NPM_PUBLISH_REGISTRY: settings.registry,
+    YARN_NPM_ALWAYS_AUTH: 'true',
+    YARN_NPM_AUTH_TOKEN: settings.token,
+  })
+}
 
 console.log(
   dryRun

@@ -14,8 +14,11 @@
   at `docs/`. Links to the old docs root (`…/dynamic-lab/#/…`) need `docs/` added.
 - Version bumps for releases go in `packages/dynamic-lab/package.json`, and the release script
   moved to `scripts/release.mjs`.
-- Releases are now also published to npmjs.org when the `NPM_TOKEN` CI/CD variable is set; without
-  it that job is allowed to fail. Pre-release versions default to the `next` dist-tag.
+- Releases are now also published to npmjs.org, with trusted publishing (OIDC) from the GitLab
+  pipeline instead of an npm token; `npm login` covers publishing by hand. Without a trusted
+  publisher that job is allowed to fail. Pre-release versions default to the `next` dist-tag.
+- A tag that looks like a release tag but doesn't match a package version (such as
+  `the-lab-sans-v0.1.0.beta.1`) now fails the pipeline instead of skipping the publish jobs.
 - Tagged releases create a GitLab release, with this changelog's section for the version as the
   description.
 - CI type-checks and builds on Node 22 and 24.

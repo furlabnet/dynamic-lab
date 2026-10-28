@@ -16,7 +16,8 @@
     "pages": "turbo run build --filter='./apps/*' && node scripts/assemble-pages.mjs",
     "prepare": "husky",
     "release": "yarn workspace @furlab/dynamic-lab release",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "updates": "updates -u -d && yarn install"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
@@ -24,7 +25,7 @@
   "devDependencies": {
     "prettier": "^3.9.10",
     "turbo": "^2.11.10",
-    "typescript": "^7.0.2",
+    "typescript": "^6.0.3",
     "updates": "^19.3.0"
   },
   "packageManager": "yarn@4.18.1",
