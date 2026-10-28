@@ -53,14 +53,14 @@
       );
   }
 
-  /* Glass Surfaces */
+  /* Glass Surfaces. Write only the unprefixed backdrop-filter: the build adds the -webkit- copy,
+     and a hand-written pair makes Lightning CSS drop the unprefixed one (no blur in Chromium). */
   .surface-card {
     position: relative;
     background: color-mix(in srgb, var(--card) calc(var(--surface-alpha) * 100%), transparent);
     border: 1px solid var(--border);
     border-radius: var(--radius-3xl);
     backdrop-filter: blur(var(--blur-panel));
-    -webkit-backdrop-filter: blur(var(--blur-panel));
     box-shadow:
       inset 0 1px 0 var(--glass-highlight),
       var(--glass-shadow);
@@ -71,7 +71,6 @@
     background: color-mix(in srgb, var(--glass) calc(var(--glass-alpha) * 100%), transparent);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(var(--blur-chrome));
-    -webkit-backdrop-filter: blur(var(--blur-chrome));
     box-shadow:
       inset 0 1px 0 var(--glass-highlight),
       var(--glass-shadow);
@@ -83,7 +82,6 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-2xl);
     backdrop-filter: blur(var(--blur-panel));
-    -webkit-backdrop-filter: blur(var(--blur-panel));
     box-shadow:
       inset 0 1px 0 var(--glass-highlight),
       var(--glass-shadow);
@@ -197,7 +195,6 @@
     font-weight: 600;
     cursor: pointer;
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
     transition: all 150ms ease;
     user-select: none;
   }
@@ -376,7 +373,6 @@
     border: 1px solid var(--border);
     background: color-mix(in srgb, var(--card) 75%, transparent);
     backdrop-filter: blur(var(--blur-panel));
-    -webkit-backdrop-filter: blur(var(--blur-panel));
     font-size: 0.875rem;
     line-height: 1.45;
   }
