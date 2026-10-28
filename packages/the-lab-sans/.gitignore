@@ -48,5 +48,3 @@ yarn-error.log*
 !AGENTS.md
 
 the-lab-sans.css
-fonts
-!src/fonts

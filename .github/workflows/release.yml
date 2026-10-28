@@ -1,9 +1,9 @@
 # GitHub mirror of the Dynamic Lab repository.
 #
-# The canonical repository is on GitLab, and only its pipeline publishes packages. This workflow
-# checks every push and pull request on each Node version in the NODE_VERSION matrix, deploys the
-# documentation to GitHub Pages on the default branch, and when a release tag arrives from the mirror
-# it creates the matching GitHub release:
+# The canonical repository is on GitLab, and only its pipeline publishes packages. Like that
+# pipeline, this workflow only runs for release tags (or by hand). It checks the tag on each Node
+# version in the NODE_VERSION matrix, creates the matching GitHub release and deploys the
+# documentation to GitHub Pages:
 #
 #   v1.2.3                 @furlab/dynamic-lab
 #   the-lab-sans-v1.2.3    @furlab/the-lab-sans
@@ -17,9 +17,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
     tags: ['v*', 'the-lab-sans-v*']
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -115,8 +113,8 @@ jobs:
 
   pages:
     name: GitHub Pages
-    if: github.ref == 'refs/heads/main'
-    needs: check
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [check, release]
     runs-on: ubuntu-latest
     concurrency:
       group: pages

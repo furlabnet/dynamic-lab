@@ -1,6 +1,6 @@
 {
   "name": "@furlab/the-lab-sans",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
   "description": "The Lab Sans, the Furlab typeface: 8 weights with italics, as WOFF2 web fonts with a ready-made @font-face stylesheet, and OpenType files.",
   "keywords": [
     "font",
@@ -48,10 +48,10 @@
   ],
   "scripts": {
     "build": "tsdown --config-loader tsx",
-    "build1": "rm -rf dist && tsc -p tsconfig.build.json && node scripts/build-css.mjs",
     "prepack": "yarn build",
     "release": "node ../../scripts/release.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "watch": "tsdown --config-loader tsx --watch"
   },
   "devDependencies": {
     "@tsdown/css": "^0.23.3",

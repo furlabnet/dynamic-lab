@@ -4,28 +4,17 @@
  * - compresses every fonts/*.otf into dist/fonts/*.woff2
  * - writes dist/the-lab-sans.css with one @font-face per face, plus the --font-the-lab-sans variable
  */
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
-
-import { compress } from 'wawoff2'
+import { writeFile } from 'node:fs/promises'
 
 import { cssVariable, faces, fontFamily, fontStack } from './font'
 
 export async function buildCSS() {
   const root = new URL('../', import.meta.url)
-  const fontsOut = new URL('../fonts/', root)
-  await mkdir(fontsOut, { recursive: true })
-
-  // One at a time: compress() returns a view into WebAssembly memory that the next call can move,
-  // so each result is copied out before the next file starts.
-  for (const { file } of faces) {
-    const otf = await readFile(new URL(`fonts/${file}.otf`, root))
-    await writeFile(new URL(`${file}.woff2`, fontsOut), Buffer.from(await compress(otf)))
-  }
 
   const rules = faces.map(
     ({ file, weight, style }) => `@font-face {
   font-family: '${fontFamily}';
-  src: url('./fonts/${file}.woff2') format('woff2');
+  src: url('./fonts/woff2/${file}.woff2') format('woff2');
   font-weight: ${weight};
   font-style: ${style};
   font-display: swap;

@@ -3,14 +3,16 @@
 # A Turborepo monorepo: packages/dynamic-lab (the library), packages/the-lab-sans (the font) and
 # apps/landing, apps/showcase, apps/docs, apps/the-lab-sans.
 #
-# - every push and merge request: install, typecheck and build every workspace, on each Node
-#                                  version in the NODE_VERSION matrix
-# - release tags:                  publish the package to this project's package registry and to
-#                                  npmjs.org, then create a GitLab release with the changelog
+# The pipeline only runs for release tags (see workflow below); pushes to branches and merge
+# requests don't start one. For each tag it:
+#
+# - installs, typechecks and builds every workspace, on each Node version in the NODE_VERSION matrix
+# - publishes the package to this project's package registry and to npmjs.org, then creates a
+#   GitLab release with the changelog
 #     v1.2.3                 @furlab/dynamic-lab
 #     the-lab-sans-v1.2.3    @furlab/the-lab-sans
-# - the default branch:            build the landing page, showcase, docs and The Lab Sans specimen
-#                                  into public/ and deploy them to GitLab Pages
+# - builds the landing page, showcase, docs and The Lab Sans specimen into public/ and deploys them
+#   to GitLab Pages, so the published docs always match a release
 #
 # Releasing: bump "version" in the package's package.json, move its changelog's "Unreleased"
 # section under a heading for the version, commit, then tag and push:
@@ -22,10 +24,16 @@
 # Publishing to npmjs.org uses trusted publishing (OIDC), not a token: each package needs a trusted
 # publisher on npmjs.com for this project and .gitlab-ci.yml (GitLab.com shared runners only). The
 # npm jobs get an NPM_ID_TOKEN for it; when npm refuses it (no trusted publisher yet) they exit with
-# code 78 and are allowed to fail, and everything else still runs. Only this GitLab project publishes: the GitHub mirror's workflow
-# builds and creates GitHub releases, nothing more.
+# code 78 and are allowed to fail, and everything else still runs. Only this GitLab project
+# publishes: the GitHub mirror's workflow builds and creates GitHub releases, nothing more.
 #
 # Keep the NODE_VERSION matrix in sync with .github/workflows/release.yml.
+
+# Only tags that start like a release tag get a pipeline. Malformed ones (v1.2.3.beta.1) still
+# run, so the release-tag job can fail them.
+workflow:
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(the-lab-sans-)?v\d/'
 
 default:
   image: node:${NODE_VERSION}
@@ -200,8 +208,7 @@ gitlab-release:
 
 pages:
   stage: deploy
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  extends: .release-tag
   dependencies: []
   variables:
     VITE_REGISTRY_URL: '$CI_API_V4_URL/packages/npm/'

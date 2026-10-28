@@ -97,6 +97,7 @@ The GitLab pipeline then:
 - publishes the package to this project's **GitLab package registry** (with the CI job token)
 - publishes it to **npmjs.org** with [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, with provenance), so there's no npm token to store. Until the package has a trusted publisher, npm refuses the job's OIDC token and the job exits with code 78 and is allowed to fail, so the rest of the release goes ahead
 - creates a **GitLab release** for the tag, with the changelog section as its description
+- deploys the landing page, showcase, docs and specimen to **GitLab Pages**
 
 Pre-release versions (`1.0.0-beta.1`) go out under the `next` dist-tag. Only the GitLab pipeline publishes. Protect the `v*` and `the-lab-sans-v*` tags, so only maintainers' tags can publish.
 
@@ -106,7 +107,7 @@ npm only lets you add a trusted publisher to a package that exists, so publish e
 
 ### GitHub mirror
 
-The repository is mirrored to GitHub. `.github/workflows/release.yml` type-checks and builds every push and pull request there, deploys to **GitHub Pages** on pushes to the default branch, and when a release tag arrives it creates a **GitHub release** with the same notes and the packed package attached. It never publishes to a registry.
+The repository is mirrored to GitHub. `.github/workflows/release.yml` runs only when a release tag arrives (or by hand): it type-checks and builds the tag, creates a **GitHub release** with the same notes and the packed package attached, and deploys to **GitHub Pages**. It never publishes to a registry. The `github-pages` environment must allow deployments from tags (**Settings → Environments → github-pages → Deployment branches and tags**).
 
 Both pipelines test on the same Node versions: keep the `NODE_VERSION` matrix in `.gitlab-ci.yml` and `.github/workflows/release.yml` in sync.
 
@@ -124,7 +125,7 @@ For npmjs.org the script packs the package with Yarn and publishes the tarball w
 
 `yarn release` at the root is short for the first package. The script refuses to publish when the CI tag doesn't match the version, the working tree has uncommitted changes, or the version is already in the registry. Set `GITLAB_API_URL` and `GITLAB_PROJECT` for a self-managed GitLab or another project; in CI they come from GitLab. `node scripts/release-notes.mjs v0.2.0` prints a release's notes.
 
-On the default branch, the `pages` job runs `yarn pages` and deploys `public/` to GitLab Pages (and GitHub Pages on the mirror).
+Both pipelines run only for release tags: pushes to branches and merge requests don't start one, so run `yarn typecheck` and `yarn build` locally before you push. After a release publishes, the `pages` job runs `yarn pages` and deploys `public/` to GitLab Pages (and GitHub Pages on the mirror), so the live docs always match a release.
 
 ## Licence
 

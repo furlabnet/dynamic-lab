@@ -22,6 +22,8 @@
 - Tagged releases create a GitLab release, with this changelog's section for the version as the
   description.
 - CI type-checks and builds on Node 22 and 24.
+- The GitLab pipeline and the GitHub mirror's workflow only run for release tags. GitLab Pages and
+  GitHub Pages are deployed from release tags instead of every push to `main`.
 
 ### Added
 
