@@ -9,7 +9,7 @@ export default {
   },
   modes: ['npm'],
   allowDowngrade: true,
-  overrides: [{ include: ['next-auth'], prerelease: true, allowDowngrade: false }],
+  overrides: [{ prerelease: false, allowDowngrade: false }],
   inherit: {
     renovate: { cooldown: true },
   },

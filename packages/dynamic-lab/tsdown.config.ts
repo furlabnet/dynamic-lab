@@ -22,7 +22,7 @@ export default defineConfig({
   treeshake: true,
   clean: true,
   unbundle: true,
-  minify: true,
+  minify: false,
   shims: true,
   exports: {
     customExports: {

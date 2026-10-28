@@ -10,7 +10,7 @@ export default defineConfig({
   unbundle: false,
   copy: ['fonts'],
   shims: true,
-  minify: true,
+  minify: false,
   sourcemap: true,
   treeshake: true,
   platform: 'neutral',

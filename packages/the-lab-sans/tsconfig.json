@@ -1,7 +1,13 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "allowArbitraryExtensions": true
+    "allowArbitraryExtensions": true,
+    "types": [
+      "node"
+    ]
   },
-  "include": ["src", "global.d.ts"]
+  "include": [
+    "src",
+    "global.d.ts"
+  ]
 }
