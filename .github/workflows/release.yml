@@ -38,7 +38,10 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.NODE_VERSION }}
-      - run: corepack enable
+      - name: Install and Enable Corepack
+        run: |
+          npm install -g corepack
+          corepack enable
       - run: yarn install --immutable
       - run: yarn typecheck
       - run: yarn build
@@ -54,8 +57,11 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: '24'
-      - run: corepack enable
+          node-version: '26'
+      - name: Install and Enable Corepack
+        run: |
+          npm install -g corepack
+          corepack enable
       - run: yarn install --immutable
 
       - name: Work out the package
@@ -126,8 +132,11 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: '24'
-      - run: corepack enable
+          node-version: '26'
+      - name: Install and Enable Corepack
+        run: |
+          npm install -g corepack
+          corepack enable
       - run: yarn install --immutable
 
       - name: Build site
