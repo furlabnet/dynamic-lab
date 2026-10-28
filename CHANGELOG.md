@@ -30,7 +30,8 @@
 - `apps/the-lab-sans`: a specimen site for The Lab Sans, served at `the-lab-sans/` on Pages and
   linked from the landing page.
 - `.github/workflows/release.yml` for the GitHub mirror: type-checks and builds every push and pull
-  request, and creates a GitHub release for each release tag. It doesn't publish packages.
+  request, deploys the documentation to GitHub Pages on `main`, and creates a GitHub release for each
+  release tag. It doesn't publish packages.
 - `scripts/release-notes.mjs` prints a release's notes from its changelog.
 - `VITE_THE_LAB_SANS=off` leaves the font out of the showcase build.
 - `yarn pages` builds the apps and assembles them into `public/`.

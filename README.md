@@ -102,7 +102,7 @@ Pre-release versions (`1.0.0-beta.1`) go out under the `next` dist-tag. Only the
 
 ### GitHub mirror
 
-The repository is mirrored to GitHub. `.github/workflows/release.yml` type-checks and builds every push and pull request there, and when a release tag arrives it creates a **GitHub release** with the same notes and the packed package attached. It never publishes to a registry.
+The repository is mirrored to GitHub. `.github/workflows/release.yml` type-checks and builds every push and pull request there, deploys to **GitHub Pages** on pushes to the default branch, and when a release tag arrives it creates a **GitHub release** with the same notes and the packed package attached. It never publishes to a registry.
 
 Both pipelines test on the same Node versions: keep the `NODE_VERSION` matrix in `.gitlab-ci.yml` and `.github/workflows/release.yml` in sync.
 
@@ -118,7 +118,7 @@ NPM_TOKEN=npm_… yarn workspace @furlab/the-lab-sans release --registry npm   #
 
 `yarn release` at the root is short for the first package. The script refuses to publish when the CI tag doesn't match the version, the working tree has uncommitted changes, or the version is already in the registry. Set `GITLAB_API_URL` and `GITLAB_PROJECT` for a self-managed GitLab or another project; in CI they come from GitLab. `node scripts/release-notes.mjs v0.2.0` prints a release's notes.
 
-On the default branch, the `pages` job runs `yarn pages` and deploys `public/` to GitLab Pages.
+On the default branch, the `pages` job runs `yarn pages` and deploys `public/` to GitLab Pages (and GitHub Pages on the mirror).
 
 ## Licence
 
