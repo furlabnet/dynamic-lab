@@ -1,8 +1,8 @@
 import localFont from 'next/font/local'
 
 // Browsers fetch only the faces the page actually uses, so skip preloading all sixteen files.
-export const labSans = localFont({
-  variable: '--font-the-lab',
+export const TheLabSans = localFont({
+  variable: '--font-the-lab-sans',
   display: 'swap',
   preload: false,
   src: [
