@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        NODE_VERSION: ['22', '26']
+        NODE_VERSION: ['22', '24', '26']
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: '26'
+          node-version: '24'
       - name: Install and Enable Corepack
         run: |
           npm install -g corepack
@@ -130,7 +130,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: '26'
+          node-version: '24'
       - name: Install and Enable Corepack
         run: |
           npm install -g corepack

@@ -139,7 +139,6 @@
 .ui-overlay {
   background: color-mix(in srgb, var(--background) 45%, transparent);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 [data-theme$='dark'] .ui-overlay {
@@ -156,7 +155,6 @@
   );
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(var(--blur-chrome)) saturate(1.6);
-  -webkit-backdrop-filter: blur(var(--blur-chrome)) saturate(1.6);
 }
 
 .ui-menu {
@@ -742,7 +740,6 @@ input:focus-visible + .ui-radio {
   border-right: 1px solid var(--sidebar-border);
   background: var(--sidebar);
   backdrop-filter: blur(var(--blur-chrome));
-  -webkit-backdrop-filter: blur(var(--blur-chrome));
   transform: translateX(-100%);
   transition:
     transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -776,7 +773,6 @@ input:focus-visible + .ui-radio {
     transparent
   );
   backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
-  -webkit-backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
   padding: var(--space-12) clamp(1rem, 3vw, 2.5rem);
 }
 
