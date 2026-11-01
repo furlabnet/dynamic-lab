@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-import { ArrowLeft, ArrowRight, Check, Copy, Type } from 'lucide-react'
-
+import type { TheLabSansFace } from '@furlab/the-lab-sans'
 import {
   AppearanceSettings,
   Badge,
@@ -10,7 +9,6 @@ import {
   Card,
   FilterChip,
   IconButton,
-  Popover,
   SegmentedControl,
   Select,
   SiteFooter,
@@ -28,8 +26,10 @@ import {
   Tooltip,
   useToast,
 } from '@furlab/dynamic-lab'
-import { cssVariable, faces, type TheLabSansFace, weights } from '@furlab/the-lab-sans'
+import { cssVariable, faces, weights } from '@furlab/the-lab-sans'
 import pkg from '@furlab/the-lab-sans/package.json'
+
+import { ArrowLeft, ArrowRight, Check, Copy, Type } from 'lucide-react'
 
 import { LANDING_URL, REPOSITORY_URL } from './links'
 import { GitLabLogo, NpmLogo } from './logos'
@@ -361,7 +361,7 @@ function Tester() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={2}
-          className="specimen-preview specimen-type min-h-48 resize-y [field-sizing:content] leading-[1.1] break-words"
+          className="specimen-preview specimen-type [field-sizing:content] min-h-48 resize-y leading-[1.1] break-words"
           style={{
             fontSize: size,
             fontWeight: face.weight,
@@ -534,19 +534,16 @@ function Specimen() {
                 <GitLabLogo className="size-4" />
               </a>
             </Tooltip>
-            <Popover
-              trigger={
-                <IconButton
-                  aria-label="npm"
-                  variant="ghost"
-                  icon={<NpmLogo className="size-4" />}
-                />
-              }
-              aria-label="npm"
-              align="end"
-              className="ui-menu px-3! py-2! text-sm font-semibold">
-              Soon
-            </Popover>
+            <Tooltip content="Package on npm" side="bottom">
+              <a
+                href={`https://www.npmjs.com/package/${pkg.name}`}
+                target="_blank"
+                rel="noreferrer"
+                className="icon-button border-0! bg-transparent!"
+                aria-label="Package on npm">
+                <NpmLogo className="size-4" />
+              </a>
+            </Tooltip>
           </>
         }
       />

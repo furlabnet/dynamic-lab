@@ -1,5 +1,9 @@
-import React, { useId, useRef, useState } from 'react'
+'use client'
+
+import React, { useId, useState } from 'react'
+
 import { Bold, Heading2, Italic, Link2, List, Minus, Quote } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 import { SegmentedControl } from '../SegmentedControl'
 
@@ -109,11 +113,14 @@ export function MarkdownEditor({
   const generatedId = useId()
   const inputId = id ?? generatedId
   const [view, setView] = useState('write')
-  const ref = useRef<HTMLTextAreaElement>(null)
-
-  /** Wraps the selection (or inserts a placeholder) and restores a sensible selection. */
-  const apply = (kind: 'bold' | 'italic' | 'heading' | 'quote' | 'list' | 'rule' | 'link') => {
-    const el = ref.current
+  /**
+   * Wraps the selection (or inserts a placeholder) and restores a sensible selection. Takes the
+   * textarea from the event, so the toolbar and the keyboard shortcuts share it without a ref.
+   */
+  const apply = (
+    kind: 'bold' | 'italic' | 'heading' | 'quote' | 'list' | 'rule' | 'link',
+    el: HTMLTextAreaElement | null | undefined
+  ) => {
     if (!el) return
     const { selectionStart: start, selectionEnd: end } = el
     const selected = value.slice(start, end)
@@ -173,7 +180,7 @@ export function MarkdownEditor({
   ]
 
   return (
-    <div className={cn('flex w-full flex-col gap-1.5', className)}>
+    <div data-md-editor="" className={cn('flex w-full flex-col gap-1.5', className)}>
       {label && (
         <label htmlFor={inputId} className="button-sm text-[var(--foreground)]">
           {label}
@@ -188,7 +195,12 @@ export function MarkdownEditor({
                 type="button"
                 title={t.shortcut ? `${t.label} (Ctrl/⌘ ${t.shortcut.toUpperCase()})` : t.label}
                 aria-label={t.label}
-                onClick={() => apply(t.kind)}
+                onClick={(e) =>
+                  apply(
+                    t.kind,
+                    e.currentTarget.closest('[data-md-editor]')?.querySelector('textarea')
+                  )
+                }
                 className="ui-md-tool">
                 {t.icon}
               </button>
@@ -207,7 +219,6 @@ export function MarkdownEditor({
         </div>
         {view === 'write' ? (
           <textarea
-            ref={ref}
             id={inputId}
             rows={rows}
             value={value}
@@ -219,7 +230,7 @@ export function MarkdownEditor({
               const tool = tools.find((t) => t.shortcut === e.key.toLowerCase())
               if (tool) {
                 e.preventDefault()
-                apply(tool.kind)
+                apply(tool.kind, e.currentTarget)
               }
             }}
             className="ui-md-textarea"
@@ -241,7 +252,7 @@ export function MarkdownEditor({
           <span className="text-[var(--muted-foreground)]">{helperText}</span>
         )}
         {showWordCount && (
-          <span className="shrink-0 tabular-nums text-[var(--muted-foreground)]">
+          <span className="shrink-0 text-[var(--muted-foreground)] tabular-nums">
             {countWords(value).toLocaleString()} words
           </span>
         )}

@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { Search } from 'lucide-react'
+
+import type { TagItem, UploadedImage } from '@furlab/dynamic-lab'
 import {
   Checkbox,
   DragHandle,
   FileInput,
+  FilterChip,
   ImageUploader,
   MarkdownEditor,
   RadioGroup,
@@ -13,9 +15,9 @@ import {
   Switch,
   TagInput,
   TextField,
-  type TagItem,
-  type UploadedImage,
 } from '@furlab/dynamic-lab'
+
+import { Search } from 'lucide-react'
 
 export function TextFields() {
   const [title, setTitle] = useState('')
@@ -193,5 +195,28 @@ export function Sortable() {
         </div>
       )}
     />
+  )
+}
+
+export function FilterChips() {
+  const [active, setActive] = useState<string[]>(['comics'])
+  const toggle = (id: string) =>
+    setActive((a) => (a.includes(id) ? a.filter((x) => x !== id) : [...a, id]))
+  return (
+    <div className="flex flex-wrap gap-2">
+      {[
+        { id: 'comics', label: 'Comics', count: 128 },
+        { id: 'stories', label: 'Stories', count: 64 },
+        { id: 'art', label: 'Art', count: 312 },
+      ].map((f) => (
+        <FilterChip
+          key={f.id}
+          active={active.includes(f.id)}
+          count={f.count}
+          onClick={() => toggle(f.id)}>
+          {f.label}
+        </FilterChip>
+      ))}
+    </div>
   )
 }

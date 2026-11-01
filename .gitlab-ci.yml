@@ -107,7 +107,13 @@ release-tag:
 format:
   stage: check
   script:
-    - yarn format:check
+    - yarn format
+  allow_failure: true
+
+lint:
+  stage: check
+  script:
+    - yarn lint
   allow_failure: true
 
 build:

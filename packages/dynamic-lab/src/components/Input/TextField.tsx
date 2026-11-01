@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -10,9 +11,9 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, error, startIcon, endIcon, disabled, ...props }, ref) => {
     return (
-      <div className="relative flex items-center w-full">
+      <div className="relative flex w-full items-center">
         {startIcon && (
-          <span className="absolute left-3.5 flex items-center pointer-events-none text-[var(--muted-foreground)]">
+          <span className="pointer-events-none absolute left-3.5 flex items-center text-[var(--muted-foreground)]">
             {startIcon}
           </span>
         )}
@@ -25,13 +26,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             startIcon && 'pl-10',
             endIcon && 'pr-10',
             error && 'border-[var(--destructive)] focus:ring-[var(--destructive)]',
-            disabled && 'opacity-50 cursor-not-allowed bg-[var(--muted)]',
+            disabled && 'cursor-not-allowed bg-[var(--muted)] opacity-50',
             className
           )}
           {...props}
         />
         {endIcon && (
-          <span className="absolute right-3.5 flex items-center pointer-events-none text-[var(--muted-foreground)]">
+          <span className="pointer-events-none absolute right-3.5 flex items-center text-[var(--muted-foreground)]">
             {endIcon}
           </span>
         )}
@@ -57,7 +58,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         className={cn(
           'form-textarea',
           error && 'border-[var(--destructive)] focus:ring-[var(--destructive)]',
-          disabled && 'opacity-50 cursor-not-allowed bg-[var(--muted)]',
+          disabled && 'cursor-not-allowed bg-[var(--muted)] opacity-50',
           className
         )}
         {...props}
@@ -82,7 +83,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const inputId = id || generatedId
 
     return (
-      <div className="flex flex-col gap-1.5 w-full">
+      <div className="flex w-full flex-col gap-1.5">
         {label && (
           <label htmlFor={inputId} className="button-sm text-[var(--foreground)] select-none">
             {label}
@@ -100,7 +101,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <Input ref={ref} id={inputId} error={Boolean(error)} className={className} {...props} />
         )}
         {error ? (
-          <p className="text-xs text-[var(--destructive)] font-medium">{error}</p>
+          <p className="text-xs font-medium text-[var(--destructive)]">{error}</p>
         ) : helperText ? (
           <p className="text-xs text-[var(--muted-foreground)]">{helperText}</p>
         ) : null}

@@ -1,4 +1,7 @@
+'use client'
+
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface LocalDateTimeProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -48,7 +51,7 @@ export function LocalDateTime({
   return (
     <span
       className={cn(
-        'body-sm text-[var(--muted-foreground)] inline-flex items-center gap-1.5',
+        'body-sm inline-flex items-center gap-1.5 text-[var(--muted-foreground)]',
         className
       )}
       {...props}>

@@ -1,5 +1,7 @@
 import React from 'react'
-import { TrendingUp, TrendingDown } from 'lucide-react'
+
+import { TrendingDown, TrendingUp } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export interface MetricCardProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -28,17 +30,17 @@ export function MetricCard({
     <Component
       href={href}
       className={cn(
-        'metric-card surface-card flex flex-col justify-between p-5 min-h-[140px] rounded-[var(--radius-3xl)] transition-all',
+        'metric-card surface-card flex min-h-[140px] flex-col justify-between rounded-[var(--radius-3xl)] p-5 transition-all',
         href && 'cursor-pointer hover:-translate-y-1 hover:shadow-lg',
         className
       )}
-      {...(props as any)}>
+      {...(props as React.HTMLAttributes<HTMLElement>)}>
       <div className="flex items-center justify-between gap-2">
-        <span className="body-sm text-[var(--muted-foreground)] font-medium">{label}</span>
+        <span className="body-sm font-medium text-[var(--muted-foreground)]">{label}</span>
         {delta && (
           <span
             className={cn(
-              'inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full',
+              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold',
               delta.direction === 'up'
                 ? 'bg-[var(--status-success-bg)] text-[var(--status-success-ink)]'
                 : 'bg-[var(--status-danger-bg)] text-[var(--status-danger-ink)]'
@@ -53,7 +55,7 @@ export function MetricCard({
         )}
       </div>
 
-      <div className="flex flex-col gap-1 mt-2">
+      <div className="mt-2 flex flex-col gap-1">
         <span className="page-title text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
           {value}
         </span>

@@ -1,7 +1,12 @@
+'use client'
+
 import React from 'react'
+
 import { Moon, SlidersHorizontal, Sun } from 'lucide-react'
+
+import type { TransparencyPreference } from '../../theme/ThemeProvider'
 import { cn } from '../../lib/utils'
-import { useTheme, type TransparencyPreference } from '../../theme/ThemeProvider'
+import { useTheme } from '../../theme/ThemeProvider'
 import { Popover } from '../Popover'
 import { SegmentedControl } from '../SegmentedControl'
 import { PalettePicker } from './PalettePicker'

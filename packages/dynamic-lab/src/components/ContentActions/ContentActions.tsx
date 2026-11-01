@@ -1,11 +1,15 @@
+'use client'
+
 import React, { useState } from 'react'
+
 import { Bookmark, Check, Flag, Link2 } from 'lucide-react'
-import { cn } from '../../lib/utils'
+
 import { useControllableState } from '../../lib/hooks'
+import { cn } from '../../lib/utils'
 import { Button } from '../Button'
 import { Dialog } from '../Dialog'
-import { RadioGroup, RadioGroupItem } from '../RadioGroup'
 import { Textarea } from '../Input'
+import { RadioGroup, RadioGroupItem } from '../RadioGroup'
 
 export const DEFAULT_REPORT_REASONS = [
   { value: 'rating', label: 'Wrong age rating', description: 'The content is rated too low.' },

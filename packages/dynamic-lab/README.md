@@ -5,16 +5,29 @@ The React component library for **The Furlab Project**: TypeScript, Tailwind CSS
 - Two brands: **Dynamic** for the public site and **Backstage** for the staff console
 - Eight named colour themes, each in light and dark (Midnight Wolf, Fiery Fox, Blue Dog, Snow Leopard, Deer Delight, Scalies, Otter Space, Purrple Rain)
 - Adjustable transparency (full, reduced or off), keyboard support and reduced motion
-- About 70 components: from buttons and dialogs to a comic reader, a story reader, booru-style tags and content editors
+- About 130 components: layout primitives (stacks, grids, columns, containers), buttons and dialogs, comboboxes, date pickers, chat, charts, a comic reader, a story reader, booru-style tags and content editors
 
 **Documentation:** https://furlab.gitlab.io/dynamic-lab/docs/ (guides, live examples, source and props for every component)
 **Showcase:** https://furlab.gitlab.io/dynamic-lab/showcase/
+**npm:** https://www.npmjs.com/package/@furlab/dynamic-lab
 
 ---
 
 ## Install
 
-The package is published to the GitLab package registry. Point the `@furlab` scope at it once.
+```bash
+yarn add @furlab/dynamic-lab react react-dom
+# or: npm install @furlab/dynamic-lab react react-dom
+```
+
+The package is on [npm](https://www.npmjs.com/package/@furlab/dynamic-lab). While it is in beta,
+the newest pre-release is on the `next` tag: `yarn add @furlab/dynamic-lab@next`.
+
+React 19 is a peer dependency. `lucide-react`, `clsx`, `tailwind-merge` and `class-variance-authority` install with the package.
+
+### From the GitLab package registry
+
+Every release is also published to GitLab. To install from there, point the `@furlab` scope at it.
 
 **Yarn (Berry)**, in `.yarnrc.yml`:
 
@@ -32,14 +45,6 @@ npmScopes:
 @furlab:registry=https://gitlab.com/api/v4/packages/npm/
 //gitlab.com/api/v4/packages/npm/:_authToken=${GITLAB_TOKEN}
 ```
-
-Then:
-
-```bash
-yarn add @furlab/dynamic-lab react react-dom
-```
-
-React 19 is a peer dependency. `lucide-react`, `clsx`, `tailwind-merge` and `class-variance-authority` install with the package.
 
 ## Set up
 
@@ -67,6 +72,35 @@ The stylesheet contains the tokens, component styles and every Tailwind utility 
 
 Set `--font-sans` and `--font-display` to load a font family; otherwise the system font is used. Inside this repository, apps can load The Lab Sans from `@furlab/the-lab-sans`.
 
+## Layout
+
+Build screens from the layout primitives instead of writing layout CSS. Responsive props take a
+value or one per breakpoint (`base`, `sm`, `md`, `lg`, `xl`, matching Tailwind); numeric gaps and
+padding are steps on the 4px scale.
+
+```tsx
+import { Container, Stack, HStack, Grid, Spacer, Heading, Button } from '@furlab/dynamic-lab'
+
+<Container>
+  <Stack gap={6}>
+    <HStack>
+      <Heading level={1}>Your feed</Heading>
+      <Spacer />
+      <Button>Create</Button>
+    </HStack>
+    <Grid cols={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 4, lg: 6 }}>
+      {cards}
+    </Grid>
+  </Stack>
+</Container>
+```
+
+Put a `<Background variant="aurora" pattern="dots" />` at the top of the page for the ambient
+gradient (or pass your own `glows`), and use `Glass` for frosted panels over it.
+
+`ZStack` layers children, `Columns` mixes fixed, fractional and fill widths, `Align` and `Center`
+place content, `SidebarLayout` adds a side column, and `Show` / `Hide` swap content by screen size.
+
 ## Theming
 
 `ThemeProvider` writes `data-theme`, `data-mode`, `data-brand` and `data-transparency` on `<html>`, applies the colour theme as CSS variables, and saves choices to localStorage. `useTheme()` reads and changes them:
@@ -80,7 +114,7 @@ setTransparency('off') // 'system' | 'full' | 'reduced' | 'off'
 
 | Theme | Species | Look |
 | --- | --- | --- |
-| **Midnight Wolf** (default) | Wolf | Clear blue on cool blue-grey |
+| **Midnight Wolf** (default) | Wolf | Electric ultramarine with an orchid glow |
 | **Fiery Fox** | Fox | Burnt orange with an ember-pink glow |
 | **Blue Dog** | Dog | Friendly turquoise |
 | **Snow Leopard** | Snow leopard | Quiet steel and frost, almost monochrome |
@@ -90,6 +124,11 @@ setTransparency('off') // 'system' | 'full' | 'reduced' | 'off'
 | **Purrple Rain** | Cat | Royal purple with a magenta storm |
 
 Colour themes apply to the Dynamic brand; Backstage keeps its own look unless you pass `paletteBrands={['dynamic', 'backstage']}`. Add your own with `palettes={[...PALETTES, myPalette]}`. The [theming guide](https://furlab.gitlab.io/dynamic-lab/docs/#/guide/theming) covers brands, tokens and custom palettes.
+
+## The mark
+
+The fox in the Furlab logo is called **FleskyFox**. `DynamicLabMark` draws it (also exported as
+`FleskyFox`), and `BrandLockup` pairs it with the name.
 
 ## Licence
 

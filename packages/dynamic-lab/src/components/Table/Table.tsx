@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
@@ -9,12 +10,12 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, containerClassName, ...props }, ref) => (
     <div
       className={cn(
-        'ui-table relative w-full overflow-x-auto rounded-[var(--radius-2xl)] border border-[var(--border)] surface-card',
+        'ui-table surface-card relative w-full overflow-x-auto rounded-[var(--radius-2xl)] border border-[var(--border)]',
         containerClassName
       )}>
       <table
         ref={ref}
-        className={cn('w-full caption-bottom text-sm text-left border-collapse', className)}
+        className={cn('w-full caption-bottom border-collapse text-left text-sm', className)}
         {...props}
       />
     </div>
@@ -29,7 +30,7 @@ export const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      'ui-table-header border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--muted)_45%,transparent)] text-[var(--muted-foreground)] font-semibold text-[13px]',
+      'ui-table-header border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--muted)_45%,transparent)] text-[13px] font-semibold text-[var(--muted-foreground)]',
       className
     )}
     {...props}

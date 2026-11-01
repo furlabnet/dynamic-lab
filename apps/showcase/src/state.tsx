@@ -1,14 +1,10 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+
 import type { CommentData, StatusTone } from '@furlab/dynamic-lab'
+
+import type { ContentRecord, ReportRecord, UserRecord } from './data'
+import { seedContent, seedReports, seedUsers } from './data'
 import { SEED_COMMENTS } from './details'
-import {
-  seedContent,
-  seedReports,
-  seedUsers,
-  type ContentRecord,
-  type ReportRecord,
-  type UserRecord,
-} from './data'
 
 export type AppId = 'lab' | 'backstage'
 

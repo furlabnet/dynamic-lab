@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Bookmark, Plus, Settings, Share2, Sparkles, Trash2 } from 'lucide-react'
+
 import {
   AppearanceSettings,
   Button,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   TransparencyControl,
 } from '@furlab/dynamic-lab'
+
+import { Bookmark, Plus, Settings, Share2, Sparkles, Trash2 } from 'lucide-react'
 
 export function ButtonVariants() {
   return (

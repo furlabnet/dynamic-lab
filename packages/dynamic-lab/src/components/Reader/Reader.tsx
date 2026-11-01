@@ -1,10 +1,14 @@
+'use client'
+
 import React, { useEffect, useState } from 'react'
+
 import { ChevronLeft, ChevronRight, Minus, Plus, Type } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 import { Button, IconButton } from '../Button'
+import { Select } from '../Forms'
 import { Popover } from '../Popover'
 import { SegmentedControl } from '../SegmentedControl'
-import { Select } from '../Forms'
 
 /* ------------------------------------------------------------ Progress */
 
@@ -204,7 +208,7 @@ export function ReaderSettings({
               disabled={value.fontSize >= maxFontSize}
               onClick={() => set('fontSize', Math.min(maxFontSize, value.fontSize + 1))}
             />
-            <span className="w-9 text-right text-sm tabular-nums text-[var(--muted-foreground)]">
+            <span className="w-9 text-right text-sm text-[var(--muted-foreground)] tabular-nums">
               {value.fontSize}
             </span>
           </div>

@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
-import { Check, Copy } from 'lucide-react'
+
 import {
+  cn,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  cn,
 } from '@furlab/dynamic-lab'
+
+import { Check, Copy } from 'lucide-react'
+
 import type { PropDoc } from './registry'
 
 export function CodeBlock({

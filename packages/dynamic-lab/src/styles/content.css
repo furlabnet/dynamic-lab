@@ -287,9 +287,28 @@
   background: color-mix(in srgb, var(--card) 70%, transparent);
 }
 
+/* Fills the viewport (see ComicReader). dvh follows the phone's browser bars as they show and
+   hide; the safe-area padding keeps controls clear of notches and the home indicator. */
 .ui-comic-reader-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  height: 100vh;
+  height: 100dvh;
+  border: 0;
   border-radius: 0;
   background: var(--background);
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  animation: dl-fade-in 150ms ease-out;
+}
+
+.ui-comic-reader-fullscreen .ui-comic-scroll {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .ui-comic-toolbar {
@@ -341,6 +360,7 @@
 
 .ui-comic-reader-fullscreen .ui-comic-page {
   max-height: calc(100vh - 13rem);
+  max-height: calc(100dvh - 13rem);
 }
 
 .ui-comic-page-half {

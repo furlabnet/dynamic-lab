@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+
+import type { LinkHubLink } from '@furlab/dynamic-lab'
 import {
   Badge,
   Button,
@@ -25,14 +27,15 @@ import {
   TabsTrigger,
   ThemeToggle,
   useToast,
-  type LinkHubLink,
 } from '@furlab/dynamic-lab'
+
 import {
   AtSign,
   BookOpen,
   Calendar,
   Cloud,
   FlaskConical,
+  Globe,
   Grid3x3,
   Heart,
   Link2,
@@ -45,20 +48,14 @@ import {
   Play,
   Rss,
   ShoppingBag,
-  UserPlus,
   UserCheck,
-  Globe,
+  UserPlus,
 } from 'lucide-react'
-import {
-  CURRENT_USER,
-  STATUS_LABELS,
-  STATUS_TONES,
-  TYPE_LABELS,
-  TYPE_PLURALS,
-  type ContentRecord,
-  type ContentType,
-} from '../data'
-import { getDetails, labBySlug, profileByHandle, type ProfileLink } from '../details'
+
+import type { ContentRecord, ContentType } from '../data'
+import type { ProfileLink } from '../details'
+import { CURRENT_USER, STATUS_LABELS, STATUS_TONES, TYPE_LABELS, TYPE_PLURALS } from '../data'
+import { getDetails, labBySlug, profileByHandle } from '../details'
 import { formatDate, useShowcase } from '../state'
 import { RecordCard } from './RecordCard'
 
@@ -476,7 +473,7 @@ export function LabPage({ slug }: { slug: string }) {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-6 text-white">
-                <span className="text-xs font-bold uppercase tracking-wider text-white/80">
+                <span className="text-xs font-bold tracking-wider text-white/80 uppercase">
                   {TYPE_LABELS[hero.type]}
                 </span>
                 <span className="text-2xl font-extrabold tracking-tight sm:text-3xl">
@@ -607,7 +604,7 @@ export function LinksPage({ handle }: { handle: string }) {
         className="absolute inset-0 -z-10 size-full scale-110 object-cover opacity-40 blur-2xl"
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[color-mix(in_srgb,var(--background)_70%,transparent)] to-[var(--background)]" />
-      <div className="absolute right-4 top-4">
+      <div className="absolute top-4 right-4">
         <ThemeToggle variant="ghost" />
       </div>
       <div className="px-4 py-16">

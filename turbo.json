@@ -21,6 +21,16 @@
       "dependsOn": ["build"],
       "cache": false,
       "persistent": true
+    },
+    "format": {
+      "outputs": [],
+      "cache": false
+    },
+    "lint": {
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
     }
   }
 }

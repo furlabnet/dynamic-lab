@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 
 import { EyeOff } from 'lucide-react'
@@ -77,7 +79,7 @@ export function AgeGate({
   return (
     <div className={cn('relative', className)}>
       <div
-        className={cn(gated && 'pointer-events-none select-none blur-2xl saturate-50')}
+        className={cn(gated && 'pointer-events-none blur-2xl saturate-50 select-none')}
         aria-hidden={gated || undefined}>
         {children}
       </div>

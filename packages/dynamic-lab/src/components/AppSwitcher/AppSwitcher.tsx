@@ -1,6 +1,9 @@
+'use client'
+
 import React from 'react'
+
 import { ChevronDown } from 'lucide-react'
-import { cn } from '../../lib/utils'
+
 import { useControllableState } from '../../lib/hooks'
 import { DropdownMenu, MenuItem, MenuLabel } from '../Menu'
 

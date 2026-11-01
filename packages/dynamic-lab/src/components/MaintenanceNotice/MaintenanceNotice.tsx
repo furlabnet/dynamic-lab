@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { Wrench } from 'lucide-react'
-import { Button } from '../Button'
+
 import { cn } from '../../lib/utils'
+import { Button } from '../Button'
 
 export interface MaintenanceNoticeProps extends React.HTMLAttributes<HTMLElement> {
   title?: string
@@ -28,16 +30,16 @@ export function MaintenanceNotice({
         className
       )}
       {...props}>
-      <div className="relative z-10 flex flex-col items-center max-w-lg gap-4">
-        <div className="grid size-16 place-items-center rounded-2xl bg-[color-mix(in_srgb,var(--primary)_15%,transparent)] border border-[color-mix(in_srgb,var(--primary)_25%,transparent)] text-[var(--primary)] shadow-sm">
+      <div className="relative z-10 flex max-w-lg flex-col items-center gap-4">
+        <div className="grid size-16 place-items-center rounded-2xl border border-[color-mix(in_srgb,var(--primary)_25%,transparent)] bg-[color-mix(in_srgb,var(--primary)_15%,transparent)] text-[var(--primary)] shadow-sm">
           {icon || <Wrench className="size-8" />}
         </div>
         <h2
           id="maintenance-title"
-          className="page-title text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
+          className="page-title text-2xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-3xl">
           {title}
         </h2>
-        <p className="body-sm text-[var(--muted-foreground)] max-w-md">{description}</p>
+        <p className="body-sm max-w-md text-[var(--muted-foreground)]">{description}</p>
         {actionText && (
           <Button variant="primary" onClick={onAction} className="mt-2">
             {actionText}

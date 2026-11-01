@@ -1,12 +1,13 @@
 import type {
-  CommentData,
   ComicPage,
+  CommentData,
   DescriptionItem,
   DownloadFile,
   MediaItem,
   Platform,
   TagItem,
 } from '@furlab/dynamic-lab'
+
 import type { ContentRecord } from './data'
 
 /**

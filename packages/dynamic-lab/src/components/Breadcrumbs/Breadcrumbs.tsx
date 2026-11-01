@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { ChevronRight, MoreHorizontal } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export const Breadcrumb = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -14,7 +16,7 @@ export const BreadcrumbList = React.forwardRef<
   <ol
     ref={ref}
     className={cn(
-      'flex flex-wrap items-center gap-1.5 break-words text-sm text-[var(--muted-foreground)]',
+      'flex flex-wrap items-center gap-1.5 text-sm break-words text-[var(--muted-foreground)]',
       className
     )}
     {...props}
@@ -39,7 +41,7 @@ export const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLink
     <a
       ref={ref}
       className={cn(
-        'transition-colors hover:text-[var(--foreground)] cursor-pointer font-medium',
+        'cursor-pointer font-medium transition-colors hover:text-[var(--foreground)]',
         className
       )}
       {...props}
@@ -71,7 +73,7 @@ export const BreadcrumbSeparator = ({
   <li
     role="presentation"
     aria-hidden="true"
-    className={cn('[&>svg]:size-3.5 opacity-50', className)}
+    className={cn('opacity-50 [&>svg]:size-3.5', className)}
     {...props}>
     {children || <ChevronRight />}
   </li>

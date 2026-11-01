@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export type StatusTone = 'neutral' | 'warning' | 'success' | 'danger' | 'info'
@@ -28,7 +29,7 @@ export function StatusBadge({
   return (
     <span data-tone={tone} className={cn('status-pill select-none', className)} {...props}>
       {showDot && (
-        <span className="relative flex size-2 items-center justify-center mr-1">
+        <span className="relative mr-1 flex size-2 items-center justify-center">
           {pulse && (
             <span
               className={cn(

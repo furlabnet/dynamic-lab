@@ -1,18 +1,6 @@
 import React, { useState } from 'react'
 
 import {
-  ArrowRight,
-  BookOpen,
-  Check,
-  Copy,
-  Layers,
-  LayoutDashboard,
-  MousePointerClick,
-  Palette,
-  Sparkles,
-} from 'lucide-react'
-
-import {
   AppearanceSettings,
   Badge,
   BrandLockup,
@@ -22,7 +10,6 @@ import {
   cn,
   IconButton,
   PalettePicker,
-  Popover,
   Progress,
   SegmentedControl,
   SiteFooter,
@@ -38,6 +25,18 @@ import {
   useToast,
 } from '@furlab/dynamic-lab'
 import pkg from '@furlab/dynamic-lab/package.json'
+
+import {
+  ArrowRight,
+  BookOpen,
+  Check,
+  Copy,
+  Layers,
+  LayoutDashboard,
+  MousePointerClick,
+  Palette,
+  Sparkles,
+} from 'lucide-react'
 
 import { DOCS_URL, FONT_URL, REPOSITORY_URL, SHOWCASE_URL } from './links'
 import { GitLabLogo, NpmLogo } from './logos'
@@ -230,19 +229,16 @@ function Landing() {
                 <GitLabLogo className="size-4" />
               </a>
             </Tooltip>
-            <Popover
-              trigger={
-                <IconButton
-                  aria-label="npm"
-                  variant="ghost"
-                  icon={<NpmLogo className="size-4" />}
-                />
-              }
-              aria-label="npm"
-              align="end"
-              className="ui-menu px-3! py-2! text-sm font-semibold">
-              Soon
-            </Popover>
+            <Tooltip content="Package on npm" side="bottom">
+              <a
+                href={`https://www.npmjs.com/package/${pkg.name}`}
+                target="_blank"
+                rel="noreferrer"
+                className="icon-button border-0! bg-transparent!"
+                aria-label="Package on npm">
+                <NpmLogo className="size-4" />
+              </a>
+            </Tooltip>
           </>
         }
       />

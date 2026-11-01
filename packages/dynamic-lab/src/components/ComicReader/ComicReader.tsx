@@ -1,4 +1,7 @@
+'use client'
+
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+
 import {
   BookOpen,
   ChevronLeft,
@@ -9,8 +12,10 @@ import {
   Rows3,
   Square,
 } from 'lucide-react'
+import { createPortal } from 'react-dom'
+
+import { useControllableState, useScrollLock } from '../../lib/hooks'
 import { cn } from '../../lib/utils'
-import { useControllableState } from '../../lib/hooks'
 import { IconButton } from '../Button'
 import { SegmentedControl } from '../SegmentedControl'
 
@@ -65,6 +70,7 @@ export function ComicReader({
   const [scrollPage, setScrollPage] = useState(0)
   const [fullscreen, setFullscreen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const expandRef = useRef<HTMLButtonElement>(null)
   const scrollRefs = useRef<Array<HTMLDivElement | null>>([])
   const pointerStart = useRef<number | null>(null)
 
@@ -103,8 +109,10 @@ export function ComicReader({
     if (mode !== 'book') return
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement
-      if (target.closest('input, textarea, select, [contenteditable="true"], [role="dialog"]'))
-        return
+      if (target.closest('input, textarea, select, [contenteditable="true"]')) return
+      // Ignore keys in other dialogs; the expanded reader is itself a dialog.
+      const dialog = target.closest('[role="dialog"]')
+      if (dialog && dialog !== rootRef.current) return
       const rtl = direction === 'rtl'
       if (e.key === 'ArrowRight') (rtl ? back : forward)()
       else if (e.key === 'ArrowLeft') (rtl ? forward : back)()
@@ -133,16 +141,39 @@ export function ComicReader({
     return () => observer.disconnect()
   }, [mode, pages.length])
 
-  useEffect(() => {
-    const onChange = () => setFullscreen(document.fullscreenElement === rootRef.current)
-    document.addEventListener('fullscreenchange', onChange)
-    return () => document.removeEventListener('fullscreenchange', onChange)
-  }, [])
+  // "Full screen" fills the viewport rather than using the Fullscreen API, which phones (iOS
+  // Safari) and some browsers don't offer for elements. The page behind stops scrolling and Escape
+  // exits. The expanded reader renders in a portal on <body>, because an ancestor with a
+  // transform or backdrop-filter would otherwise trap position: fixed inside it.
+  useScrollLock(fullscreen)
+  const wasFullscreen = useRef(fullscreen)
 
-  const toggleFullscreen = () => {
-    if (document.fullscreenElement) document.exitFullscreen?.()
-    else rootRef.current?.requestFullscreen?.().catch(() => {})
-  }
+  useEffect(() => {
+    // Only when the reader moves in or out of the portal, not on every page or mode change.
+    if (wasFullscreen.current === fullscreen) return
+    wasFullscreen.current = fullscreen
+    // Keep focus on the toggle and the reading position.
+    expandRef.current?.focus({ preventScroll: true })
+    if (mode === 'scroll') scrollRefs.current[scrollPage]?.scrollIntoView({ block: 'start' })
+    else if (!fullscreen) rootRef.current?.scrollIntoView({ block: 'nearest' })
+  }, [fullscreen, mode, scrollPage])
+
+  useEffect(() => {
+    if (!fullscreen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || e.defaultPrevented) return
+      // Leave Escape to a menu or dialog open on top of the reader.
+      const layer = (e.target as HTMLElement).closest(
+        '[role="dialog"], [role="menu"], [role="listbox"]'
+      )
+      if (layer && layer !== rootRef.current) return
+      setFullscreen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [fullscreen])
+
+  const toggleFullscreen = () => setFullscreen((f) => !f)
 
   const pageLabel =
     mode === 'book' && currentView.length > 1
@@ -151,9 +182,12 @@ export function ComicReader({
 
   const ordered = direction === 'rtl' ? [...currentView].reverse() : currentView
 
-  return (
+  const reader = (
     <div
       ref={rootRef}
+      role={fullscreen ? 'dialog' : undefined}
+      aria-modal={fullscreen || undefined}
+      aria-label={fullscreen ? 'Comic reader' : undefined}
       className={cn('ui-comic-reader', fullscreen && 'ui-comic-reader-fullscreen', className)}
       data-mode={mode}>
       <div className="ui-comic-toolbar">
@@ -168,7 +202,7 @@ export function ComicReader({
           ]}
         />
         <span
-          className="text-sm font-medium tabular-nums text-[var(--muted-foreground)]"
+          className="text-sm font-medium text-[var(--muted-foreground)] tabular-nums"
           aria-live="polite">
           {pageLabel}
         </span>
@@ -185,7 +219,9 @@ export function ComicReader({
             />
           )}
           <IconButton
+            ref={expandRef}
             aria-label={fullscreen ? 'Exit full screen' : 'Full screen'}
+            aria-pressed={fullscreen}
             size="icon"
             variant="ghost"
             icon={fullscreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
@@ -206,13 +242,15 @@ export function ComicReader({
               const rtl = direction === 'rtl'
               if (Math.abs(dx) > 40) {
                 // Swipe left = next page in ltr.
-                dx < 0 !== rtl ? forward() : back()
+                if (dx < 0 !== rtl) forward()
+                else back()
                 return
               }
               // Tap: right half turns forward, left half goes back.
               const rect = e.currentTarget.getBoundingClientRect()
               const rightHalf = e.clientX > rect.left + rect.width / 2
-              rightHalf !== rtl ? forward() : back()
+              if (rightHalf !== rtl) forward()
+              else back()
             }}>
             <div
               key={view}
@@ -289,4 +327,8 @@ export function ComicReader({
       )}
     </div>
   )
+
+  return fullscreen && typeof document !== 'undefined'
+    ? createPortal(reader, document.body)
+    : reader
 }

@@ -1,8 +1,12 @@
-import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+'use client'
+
+import React, { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+
 import { CornerDownLeft, Search, SearchX } from 'lucide-react'
-import { cn } from '../../lib/utils'
+import { createPortal } from 'react-dom'
+
 import { isMacPlatform, useScrollLock } from '../../lib/hooks'
+import { cn } from '../../lib/utils'
 import { Kbd } from '../Kbd'
 
 export interface CommandItem {
@@ -69,11 +73,19 @@ export function CommandPalette({
     return () => window.removeEventListener('keydown', onKey)
   }, [hotkey, open, onOpenChange])
 
+  // Start each opening with an empty search (adjusting state during render, not in an effect).
+  const [wasOpen, setWasOpen] = useState(open)
+  if (open !== wasOpen) {
+    setWasOpen(open)
+    if (open) {
+      setQuery('')
+      setActiveIndex(0)
+    }
+  }
+
   useEffect(() => {
     if (open) {
       restoreFocusRef.current = document.activeElement as HTMLElement | null
-      setQuery('')
-      setActiveIndex(0)
       requestAnimationFrame(() => inputRef.current?.focus())
     } else {
       restoreFocusRef.current?.focus?.()
@@ -94,10 +106,6 @@ export function CommandPalette({
     }
     return Array.from(map.entries())
   }, [filtered])
-
-  useEffect(() => {
-    setActiveIndex(0)
-  }, [query])
 
   useEffect(() => {
     listRef.current
@@ -148,7 +156,10 @@ export function CommandPalette({
           <input
             ref={inputRef}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value)
+              setActiveIndex(0)
+            }}
             placeholder={placeholder}
             role="combobox"
             aria-expanded="true"
@@ -179,7 +190,7 @@ export function CommandPalette({
                 aria-label={group || undefined}
                 className="mb-1">
                 {group && (
-                  <div className="px-3 pb-1 pt-2 text-[11px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+                  <div className="px-3 pt-2 pb-1 text-[11px] font-bold tracking-wider text-[var(--muted-foreground)] uppercase">
                     {group}
                   </div>
                 )}
@@ -243,9 +254,11 @@ export interface CommandTriggerProps extends React.ButtonHTMLAttributes<HTMLButt
 }
 
 /** The "Jump to… ⌘K" search-styled button that opens a CommandPalette. */
+const subscribeNever = () => () => {}
+
 export function CommandTrigger({ className, label = 'Jump to…', ...props }: CommandTriggerProps) {
-  const [mac, setMac] = useState(true)
-  useEffect(() => setMac(isMacPlatform()), [])
+  // Read on the client only; the server (and hydration) render the Mac label.
+  const mac = useSyncExternalStore(subscribeNever, isMacPlatform, () => true)
 
   return (
     <button type="button" className={cn('ui-command-trigger', className)} {...props}>

@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from 'react'
+
+import type { CommandItem } from '@furlab/dynamic-lab'
 import {
   AdminShell,
   AdminSidebar,
+  AppearanceSettings,
   AppSwitcher,
   Badge,
   BrandLockup,
@@ -53,36 +56,38 @@ import {
   TableRow,
   TextField,
   ThemeToggle,
-  AppearanceSettings,
   Tooltip,
+  useTheme,
+  useToast,
   WorkflowTimeline,
   WorkflowTimelineItem,
-  useToast,
-  type CommandItem,
 } from '@furlab/dynamic-lab'
+
 import {
   ArchiveRestore,
   CalendarClock,
   Database,
   FileText,
   FlaskConical,
+  Globe,
   Image,
   KeyRound,
   LayoutGrid,
   LogOut,
+  Moon,
   MoreHorizontal,
+  Palette,
+  ScrollText,
   Search,
   Settings,
   Shield,
-  ScrollText,
   Tag,
   Trash2,
   UserPlus,
   Users,
-  Palette,
-  Globe,
-  Moon,
 } from 'lucide-react'
+
+import type { ContentRecord, ContentStatus, ContentType, UserRole } from '../data'
 import {
   CURRENT_USER,
   RATING_LABELS,
@@ -90,14 +95,9 @@ import {
   STATUS_TONES,
   TYPE_LABELS,
   TYPE_PLURALS,
-  type ContentRecord,
-  type ContentStatus,
-  type ContentType,
-  type UserRole,
 } from '../data'
-import { APPS, formatDate, useShowcase } from '../state'
 import { ComponentGallery } from '../gallery/ComponentGallery'
-import { useTheme } from '@furlab/dynamic-lab'
+import { APPS, formatDate, useShowcase } from '../state'
 
 interface NavEntry {
   id: string

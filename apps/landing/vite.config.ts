@@ -1,6 +1,6 @@
-import { defineConfig, defaultClientConditions } from 'vite'
-import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+import { defaultClientConditions, defineConfig } from 'vite'
 
 /**
  * Landing page: what Dynamic Lab is, with a way into the showcase and the docs. Served at the root

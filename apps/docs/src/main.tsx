@@ -1,6 +1,9 @@
 import React from 'react'
+
 import ReactDOM from 'react-dom/client'
+
 import { DocsApp } from './DocsApp'
+
 import '@furlab/the-lab-sans/the-lab-sans.css'
 import './docs.css'
 

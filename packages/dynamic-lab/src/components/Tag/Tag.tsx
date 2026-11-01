@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { X } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 /** Booru-style tag categories (as on e621), each with its own colour. */

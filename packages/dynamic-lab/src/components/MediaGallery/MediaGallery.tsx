@@ -1,8 +1,12 @@
+'use client'
+
 import React, { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
+
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { cn } from '../../lib/utils'
+import { createPortal } from 'react-dom'
+
 import { useScrollLock } from '../../lib/hooks'
+import { cn } from '../../lib/utils'
 
 export interface MediaItem {
   src: string
@@ -72,14 +76,14 @@ export function Lightbox({ items, index, onIndexChange }: LightboxProps) {
               type="button"
               aria-label="Previous image"
               onClick={() => onIndexChange((index - 1 + items.length) % items.length)}
-              className="ui-lightbox-button absolute left-4 top-1/2 -translate-y-1/2">
+              className="ui-lightbox-button absolute top-1/2 left-4 -translate-y-1/2">
               <ChevronLeft className="size-6" />
             </button>
             <button
               type="button"
               aria-label="Next image"
               onClick={() => onIndexChange((index + 1) % items.length)}
-              className="ui-lightbox-button absolute right-4 top-1/2 -translate-y-1/2">
+              className="ui-lightbox-button absolute top-1/2 right-4 -translate-y-1/2">
               <ChevronRight className="size-6" />
             </button>
           </>

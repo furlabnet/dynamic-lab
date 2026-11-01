@@ -1,7 +1,11 @@
+'use client'
+
 import React, { useCallback, useId, useLayoutEffect, useRef, useState } from 'react'
+
 import { createPortal } from 'react-dom'
-import { cn } from '../../lib/utils'
+
 import { useControllableState, useDismiss } from '../../lib/hooks'
+import { cn } from '../../lib/utils'
 
 export interface PopoverRenderApi {
   close: () => void
@@ -62,8 +66,9 @@ export function Popover({
 
   const close = (restoreFocus = false) => {
     setOpen(false)
+    // Found by aria-controls rather than a ref, because `close` is handed to render-prop children.
     if (restoreFocus) {
-      containerRef.current?.querySelector<HTMLElement>('[data-popover-trigger]')?.focus()
+      document.querySelector<HTMLElement>(`[aria-controls="${CSS.escape(panelId)}"]`)?.focus()
     }
   }
 
@@ -109,10 +114,8 @@ export function Popover({
   }, [side, align])
 
   useLayoutEffect(() => {
-    if (!open) {
-      setPosition(null)
-      return
-    }
+    // While closed the panel isn't rendered; the last position is re-measured before the next paint.
+    if (!open) return
     place()
     // Follow the trigger while the page or any scroll container moves, and when the panel resizes.
     window.addEventListener('scroll', place, true)

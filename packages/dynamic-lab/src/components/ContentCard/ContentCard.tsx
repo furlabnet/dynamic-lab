@@ -1,7 +1,10 @@
 import React from 'react'
+
 import { Bookmark, EyeOff, FileText } from 'lucide-react'
+
+import type { AgeRatingValue } from '../AgeRating'
 import { cn } from '../../lib/utils'
-import { AgeRating, type AgeRatingValue } from '../AgeRating'
+import { AgeRating } from '../AgeRating'
 
 export interface ContentCardStat {
   icon: React.ReactNode
@@ -106,7 +109,7 @@ export function ContentCard({
           </span>
         )}
         {(rating || coverBadge) && (
-          <span className="absolute left-3 top-3 flex items-center gap-1.5">
+          <span className="absolute top-3 left-3 flex items-center gap-1.5">
             {rating && <AgeRating rating={rating} className="ui-content-card-rating" />}
             {coverBadge}
           </span>
@@ -121,11 +124,11 @@ export function ContentCard({
       </div>
       <div className="flex flex-1 flex-col gap-1 p-5 text-left">
         {type && (
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">
+          <span className="text-[11px] font-bold tracking-wider text-[var(--muted-foreground)] uppercase">
             {type}
           </span>
         )}
-        <span className="text-lg font-bold leading-snug tracking-tight text-[var(--foreground)]">
+        <span className="text-lg leading-snug font-bold tracking-tight text-[var(--foreground)]">
           {title}
         </span>
         {byline && (

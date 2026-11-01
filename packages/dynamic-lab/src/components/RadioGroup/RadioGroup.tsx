@@ -1,6 +1,9 @@
+'use client'
+
 import React, { createContext, useContext, useId } from 'react'
-import { cn } from '../../lib/utils'
+
 import { useControllableState } from '../../lib/hooks'
+import { cn } from '../../lib/utils'
 
 interface RadioGroupContextValue {
   name: string

@@ -1,4 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react'
+'use client'
+
+import React, { useEffect, useRef, useState } from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface TooltipProps {
@@ -53,7 +56,7 @@ export function Tooltip({
         <div
           role="tooltip"
           className={cn(
-            'absolute z-50 whitespace-nowrap rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[color-mix(in_srgb,var(--card)_95%,transparent)] px-2.5 py-1 text-xs font-semibold text-[var(--foreground)] shadow-lg backdrop-blur-[var(--blur-chrome)] animate-in fade-in-0 zoom-in-95 duration-150 pointer-events-none',
+            'animate-in fade-in-0 zoom-in-95 pointer-events-none absolute z-50 rounded-[var(--radius-md)] border border-[var(--glass-border)] bg-[color-mix(in_srgb,var(--card)_95%,transparent)] px-2.5 py-1 text-xs font-semibold whitespace-nowrap text-[var(--foreground)] shadow-lg backdrop-blur-[var(--blur-chrome)] duration-150',
             sideClasses[side],
             className
           )}>

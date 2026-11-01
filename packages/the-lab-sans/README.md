@@ -18,7 +18,11 @@ The package contains:
 
 ```bash
 yarn add @furlab/the-lab-sans
+# or: npm install @furlab/the-lab-sans
 ```
+
+The package is on [npm](https://www.npmjs.com/package/@furlab/the-lab-sans), and every release is
+also in the GitLab package registry.
 
 ## Next.js
 

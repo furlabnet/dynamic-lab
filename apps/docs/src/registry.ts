@@ -1,12 +1,17 @@
 import type React from 'react'
+
 import * as actions from './examples/actions'
-import * as overlays from './examples/overlays'
-import * as navigation from './examples/navigation'
-import * as forms from './examples/forms'
-import * as feedback from './examples/feedback'
-import * as data from './examples/data'
 import * as content from './examples/content'
+import * as data from './examples/data'
+import * as feedback from './examples/feedback'
+import * as forms from './examples/forms'
 import * as layout from './examples/layout'
+import * as navigation from './examples/navigation'
+import * as overlays from './examples/overlays'
+import * as platform from './examples/platform'
+import * as primitives from './examples/primitives'
+import * as social from './examples/social'
+import * as surfaces from './examples/surfaces'
 
 export interface PropDoc {
   name: string
@@ -91,7 +96,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'Button',
     group: 'Actions',
     summary:
-      'Buttons for actions, in six variants and three sizes, with icons and a loading state. IconButton is the square, icon-only version and needs an aria-label.',
+      'Buttons for actions, in seven variants (glass for use over images and gradients) and three sizes, with icons and a loading state. IconButton is the square, icon-only version and needs an aria-label.',
     imports: ['Button', 'IconButton'],
     examples: [
       ex('actions', actions, 'ButtonVariants', 'Variants'),
@@ -104,7 +109,7 @@ export const COMPONENTS: ComponentDoc[] = [
         rows: [
           p(
             'variant',
-            "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'danger-outline'",
+            "'primary' | 'secondary' | 'outline' | 'ghost' | 'glass' | 'danger' | 'danger-outline'",
             "'primary'",
             'Visual weight. Use one primary per area.'
           ),
@@ -156,6 +161,38 @@ export const COMPONENTS: ComponentDoc[] = [
   },
 
   /* --------------------------------------------------------- Overlays */
+  {
+    id: 'hover-card',
+    name: 'HoverCard',
+    group: 'Overlays',
+    summary:
+      "A preview on hover or keyboard focus, such as a creator's profile on their name. It only supplements the link, so touch screens just follow it. ProfilePreview is the standard content.",
+    imports: ['HoverCard', 'ProfilePreview'],
+    examples: [ex('social', social, 'HoverCardExample', 'Creator preview')],
+    props: [
+      {
+        component: 'HoverCard',
+        rows: [
+          p('children', 'ReactElement', undefined, 'The trigger, ideally a link.'),
+          p('content', 'ReactNode', undefined, 'What the card shows.'),
+          p('openDelay / closeDelay', 'number', '450 / 200', 'Milliseconds.'),
+          p(
+            'side / align',
+            "'top' | 'bottom' / 'start' | 'center' | 'end'",
+            "'bottom' / 'start'",
+            'Placement.'
+          ),
+        ],
+      },
+      {
+        component: 'ProfilePreview',
+        rows: [
+          p('name / handle / avatar / initials / banner', '', undefined, 'Who.'),
+          p('bio / stats / action', '', undefined, 'Details and a follow button.'),
+        ],
+      },
+    ],
+  },
   {
     id: 'dropdown-menu',
     name: 'DropdownMenu',
@@ -337,6 +374,28 @@ export const COMPONENTS: ComponentDoc[] = [
 
   /* ------------------------------------------------------- Navigation */
   {
+    id: 'carousel',
+    name: 'Carousel',
+    group: 'Navigation',
+    summary:
+      'A sideways-scrolling row (a shelf of works, featured items) on native scroll snapping. Swipes on touch, arrows on desktop, optional page dots. Items per view are responsive and can be fractional for a peek.',
+    imports: ['Carousel'],
+    examples: [ex('social', social, 'CarouselExample', 'A shelf of comics')],
+    props: [
+      {
+        component: 'Carousel',
+        rows: [
+          p('title / action', 'ReactNode', undefined, 'Shelf heading and a link beside it.'),
+          p('perView', 'Responsive<number>', '{ base: 1.2, sm: 2.2, lg: 4 }', 'Items across.'),
+          p('gap', 'number | string', '4', 'Space between items.'),
+          p('arrows', 'boolean', 'true', 'Previous / next buttons (hidden on touch).'),
+          p('dots', 'boolean', 'false', 'Page dots.'),
+          p('label', 'string', undefined, 'Accessible name without a title.'),
+        ],
+      },
+    ],
+  },
+  {
     id: 'app-switcher',
     name: 'AppSwitcher',
     group: 'Navigation',
@@ -472,6 +531,7 @@ export const COMPONENTS: ComponentDoc[] = [
       'BreadcrumbList',
       'BreadcrumbItem',
       'BreadcrumbLink',
+      'BreadcrumbEllipsis',
       'BreadcrumbPage',
       'BreadcrumbSeparator',
     ],
@@ -522,7 +582,180 @@ export const COMPONENTS: ComponentDoc[] = [
     ],
   },
 
+  {
+    id: 'bottom-nav',
+    name: 'BottomNav',
+    group: 'Navigation',
+    summary:
+      'The tab bar along the bottom of the screen on phones, with active state and badges. Fixed and safe-area aware; hidden from md up by default.',
+    imports: ['BottomNav', 'BottomNavItem'],
+    examples: [ex('platform', platform, 'BottomNavExample', 'Five tabs')],
+    props: [
+      {
+        component: 'BottomNav',
+        rows: [
+          p('label', 'string', "'Main'", 'Accessible name.'),
+          p('mobileOnly', 'boolean', 'true', 'Hide from md up.'),
+        ],
+      },
+      {
+        component: 'BottomNavItem',
+        rows: [
+          p('icon / label', 'ReactNode', undefined, 'Required.'),
+          p('active', 'boolean', 'false', 'Sets aria-current="page".'),
+          p('badge', 'number | boolean', undefined, 'Count or dot.'),
+        ],
+      },
+    ],
+  },
   /* ------------------------------------------------------------ Forms */
+  {
+    id: 'filter-chip',
+    name: 'FilterChip',
+    group: 'Forms',
+    summary:
+      'A toggleable filter with an optional count and icon, for narrowing lists. It is a toggle button (aria-pressed).',
+    imports: ['FilterChip'],
+    examples: [ex('forms', forms, 'FilterChips', 'Toggle filters')],
+    props: [
+      {
+        component: 'FilterChip',
+        rows: [
+          p('active', 'boolean', 'false', 'Selected state.'),
+          p('count', 'number | string', undefined, 'Count after the label.'),
+          p('icon', 'ReactNode', undefined, 'Icon before the label.'),
+          p('onDismiss', '() => void', undefined, 'Shows a remove button.'),
+          p('…button attributes', 'ButtonHTMLAttributes', undefined, 'onClick toggles it.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'combobox',
+    name: 'Combobox',
+    group: 'Forms',
+    summary:
+      'A text field with a filtered list: species, tags, creators. Type to filter, arrows and Enter to pick. Supports groups, multiple picks as chips, a maximum, creating new options, and server-side search.',
+    imports: ['Combobox'],
+    examples: [ex('social', social, 'ComboboxExample', 'Single, and multiple with create')],
+    props: [
+      {
+        component: 'Combobox',
+        rows: [
+          p(
+            'options',
+            'Array<{ value, label, description?, icon?, group?, disabled? }>',
+            undefined,
+            'Required.'
+          ),
+          p(
+            'value / defaultValue / onValueChange',
+            'string | null, or string[] with multiple',
+            undefined,
+            'Selection.'
+          ),
+          p('multiple', 'boolean', 'false', 'Pick several; they show as chips.'),
+          p('max', 'number', undefined, 'Most picks, with multiple.'),
+          p('onCreate', '(label: string) => void', undefined, 'Offer to create the typed text.'),
+          p(
+            'inputValue / onInputChange',
+            'string',
+            undefined,
+            'The typed text, for loading options from a server.'
+          ),
+          p(
+            'filter',
+            'false | (option, query) => boolean',
+            'label + description',
+            'false when options are already filtered.'
+          ),
+          p('loading / emptyText', 'boolean / ReactNode', undefined, 'States in the list.'),
+          p('label / placeholder / error / disabled', '', undefined, 'Field basics.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'date-picker',
+    name: 'Calendar & DatePicker',
+    group: 'Forms',
+    summary:
+      'A month grid for picking a day or a range, with event dots, min/max and disabled days, and a field that opens it. Locale-aware names and first day of the week; full keyboard support.',
+    imports: ['Calendar', 'DatePicker', 'toDateKey'],
+    examples: [ex('social', social, 'CalendarExample', 'Events, single and range')],
+    props: [
+      {
+        component: 'Calendar',
+        rows: [
+          p('mode', "'single' | 'range'", "'single'", 'What is picked.'),
+          p(
+            'value / defaultValue / onValueChange',
+            'Date | null, or { from, to }',
+            undefined,
+            'Selection.'
+          ),
+          p('minDate / maxDate', 'Date', undefined, 'Limits.'),
+          p('isDateDisabled', '(date) => boolean', undefined, 'Unpickable days.'),
+          p(
+            'events',
+            'Record<"YYYY-MM-DD", number>',
+            undefined,
+            'Days with a dot. Build keys with toDateKey.'
+          ),
+          p('eventLabel', 'string', "'events'", 'What events counts, for screen readers.'),
+          p(
+            'locale / weekStartsOn',
+            'string / 0–6',
+            'browser / locale',
+            'Names and first weekday.'
+          ),
+        ],
+      },
+      {
+        component: 'DatePicker',
+        rows: [
+          p('…Calendar props', '', undefined, 'Passed to the calendar.'),
+          p('label / placeholder', 'ReactNode / string', undefined, 'Field text.'),
+          p('clearable', 'boolean', 'true', 'Clear button.'),
+          p(
+            'dateStyle',
+            "'short' | 'medium' | 'long' | 'full'",
+            "'medium'",
+            'Format in the field.'
+          ),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'image-cropper',
+    name: 'ImageCropper',
+    group: 'Forms',
+    summary:
+      'Frame part of an image by dragging, pinching or scrolling, for avatars and banners. cropImage turns the result into a Blob for upload.',
+    imports: ['ImageCropper', 'cropImage'],
+    examples: [ex('social', social, 'ImageCropperExample', 'Round avatar')],
+    props: [
+      {
+        component: 'ImageCropper',
+        rows: [
+          p('src', 'string', undefined, 'Image or object URL. Required.'),
+          p('aspect', 'number', '1', 'Width / height of the crop.'),
+          p('shape', "'rect' | 'circle'", "'rect'", 'Guide shape.'),
+          p('maxZoom', 'number', '4', 'Largest zoom.'),
+          p('onCropChange', '(area: CropArea) => void', undefined, 'The area in image pixels.'),
+          p('hideZoom', 'boolean', 'false', 'Hide the slider.'),
+        ],
+      },
+      {
+        component: 'cropImage(src, area, options?)',
+        rows: [
+          p('options.width', 'number', 'area width', 'Output width.'),
+          p('options.type / quality', 'string / number', "'image/png'", 'Output format.'),
+        ],
+      },
+    ],
+  },
   {
     id: 'text-field',
     name: 'TextField',
@@ -766,6 +999,27 @@ export const COMPONENTS: ComponentDoc[] = [
     ],
   },
 
+  {
+    id: 'slider',
+    name: 'Slider',
+    group: 'Forms',
+    summary:
+      'Pick a number from a range: reader font size, zoom, volume. A styled native range input with a label and value.',
+    imports: ['Slider'],
+    examples: [ex('platform', platform, 'Sliders', 'Reader font size')],
+    props: [
+      {
+        component: 'Slider',
+        rows: [
+          ...CONTROLLED('number', 'value'),
+          p('min / max / step', 'number', '0 / 100 / 1', 'Range.'),
+          p('label', 'ReactNode', undefined, 'Visible label.'),
+          p('showValue', 'boolean | (value) => ReactNode', 'false', 'Show (and format) the value.'),
+          p('marks', '[ReactNode, ReactNode]', undefined, 'Text under each end.'),
+        ],
+      },
+    ],
+  },
   /* --------------------------------------------------------- Feedback */
   {
     id: 'status-badge',
@@ -959,6 +1213,201 @@ export const COMPONENTS: ComponentDoc[] = [
 
   /* ----------------------------------------------------- Data display */
   {
+    id: 'charts',
+    name: 'Sparkline, BarChart & StatTile',
+    group: 'Data display',
+    summary:
+      'Simple single-series charts for creator analytics, in the primary colour. Hover or focus for values; screen readers get a summary or a hidden table.',
+    imports: ['Sparkline', 'BarChart', 'StatTile'],
+    examples: [ex('social', social, 'ChartsExample', 'Creator dashboard')],
+    props: [
+      {
+        component: 'Sparkline',
+        rows: [
+          p('values', 'number[]', undefined, 'Required.'),
+          p('label', 'string', undefined, 'What it measures. Required.'),
+          p('labels', 'string[]', undefined, 'Per-point labels for the tooltip.'),
+          p('area / endDot / interactive', 'boolean', 'true', 'Wash, last-value dot, tooltip.'),
+          p('format / height', '(v) => string / number', 'toLocaleString / 40', ''),
+        ],
+      },
+      {
+        component: 'BarChart',
+        rows: [
+          p('data', 'Array<{ label, value }>', undefined, 'Required.'),
+          p('label', 'string', undefined, 'Accessible name and table caption. Required.'),
+          p('highlight', 'number', undefined, 'Index labelled at its cap; others a lighter step.'),
+          p('height / format / showAllLabels / locale', '', undefined, ''),
+        ],
+      },
+      {
+        component: 'StatTile',
+        rows: [
+          p('label / value', 'string / number', undefined, 'Required.'),
+          p('delta / deltaLabel', 'number / string', undefined, '0.12 = +12%.'),
+          p('upIsGood', 'boolean', 'true', 'Colour of the delta.'),
+          p('trend', 'number[]', undefined, 'Sparkline.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'typography',
+    name: 'Heading, Text & Link',
+    group: 'Data display',
+    summary:
+      'Type with the theme built in. Heading separates its look (size) from its outline level; Text has sizes, tones, line clamping and mono; Link marks external links. VisuallyHidden and SkipLink are for screen readers.',
+    imports: ['Heading', 'Text', 'Link', 'VisuallyHidden', 'SkipLink'],
+    examples: [ex('platform', platform, 'TypographyExample', 'Sizes and tones')],
+    props: [
+      {
+        component: 'Heading',
+        rows: [
+          p('level', '1 | 2 | 3 | 4 | 5 | 6', '2', 'The h1–h6 element.'),
+          p('size', "'display' | '2xl' | 'xl' | 'lg' | 'md' | 'sm'", 'from level', 'Visual size.'),
+          p(
+            'tone',
+            "'default' | 'muted' | 'primary' | 'success' | 'warning' | 'danger' | 'inherit'",
+            "'default'",
+            'Colour.'
+          ),
+        ],
+      },
+      {
+        component: 'Text',
+        rows: [
+          p('as', "'p' | 'span' | 'div' | 'label' | 'small' | 'strong' | 'em'", "'p'", 'Element.'),
+          p('size', "'xs' | 'sm' | 'md' | 'lg'", "'md'", 'Font size.'),
+          p('weight', "'normal' | 'medium' | 'semibold' | 'bold'", undefined, 'Font weight.'),
+          p('tone', 'Same as Heading', "'inherit'", 'Colour.'),
+          p(
+            'truncate / lines',
+            'boolean / number',
+            undefined,
+            'One-line ellipsis, or clamp to n lines.'
+          ),
+          p('mono', 'boolean', 'false', 'Monospaced.'),
+        ],
+      },
+      {
+        component: 'Link',
+        rows: [
+          p('variant', "'default' | 'subtle'", "'default'", 'subtle keeps the surrounding colour.'),
+          p('external', 'boolean', 'auto', 'New tab, icon and rel. Detected from http(s) hrefs.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'list',
+    name: 'List',
+    group: 'Data display',
+    summary:
+      'Rows of related items, such as notifications, followers or settings, with leading media, a title and description, and trailing content. Rows can be links or buttons.',
+    imports: ['List', 'ListItem'],
+    examples: [ex('platform', platform, 'Lists', 'Notifications and settings')],
+    props: [
+      {
+        component: 'List',
+        rows: [
+          p(
+            'variant',
+            "'plain' | 'divided' | 'inset'",
+            "'divided'",
+            'inset draws a card with dividers.'
+          ),
+          p('dense', 'boolean', 'false', 'Tighter rows.'),
+          p('label', 'ReactNode', undefined, 'Heading above the list.'),
+        ],
+      },
+      {
+        component: 'ListItem',
+        rows: [
+          p('title', 'ReactNode', undefined, 'Required.'),
+          p(
+            'description / leading / trailing',
+            'ReactNode',
+            undefined,
+            'Optional parts of the row.'
+          ),
+          p('href / onClick', 'string / handler', undefined, 'Makes the row a link or a button.'),
+          p('selected / disabled', 'boolean', 'false', 'States.'),
+          p('chevron', 'boolean', 'true for links', 'Show a chevron on interactive rows.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'avatar-group',
+    name: 'AvatarGroup',
+    group: 'Data display',
+    summary: 'Overlapping avatars for collaborators, followers and Lab members, with a +N counter.',
+    imports: ['AvatarGroup'],
+    examples: [ex('platform', platform, 'AvatarGroups', 'Max and total')],
+    props: [
+      {
+        component: 'AvatarGroup',
+        rows: [
+          p(
+            'avatars',
+            'Array<{ src?, alt?, initials? }>',
+            undefined,
+            'The people to show. alt is read out.'
+          ),
+          p('max', 'number', '4', 'Avatars before the counter.'),
+          p('total', 'number', 'avatars.length', 'Full count when only some are loaded.'),
+          p('size', 'ProfileAvatar size', "'md'", 'Avatar size.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'indicator',
+    name: 'Indicator',
+    group: 'Data display',
+    summary:
+      'A dot or count on the corner of an icon button or avatar, for unread messages, new activity or presence.',
+    imports: ['Indicator'],
+    examples: [ex('platform', platform, 'Indicators', 'Counts and a dot')],
+    props: [
+      {
+        component: 'Indicator',
+        rows: [
+          p('count', 'number', undefined, 'Leave out for a dot. 0 hides it unless showZero.'),
+          p('max', 'number', '99', 'Above this shows as "99+".'),
+          p('tone', "'danger' | 'primary' | 'success' | 'neutral'", "'danger'", 'Colour.'),
+          p(
+            'placement',
+            "'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'",
+            "'top-right'",
+            'Corner.'
+          ),
+          p('label', 'string', undefined, 'Read out by screen readers.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'stepper',
+    name: 'Stepper',
+    group: 'Data display',
+    summary:
+      'Progress through a multi-step flow such as publishing or onboarding. Finished steps can be clickable; horizontal steppers stack on phones.',
+    imports: ['Stepper'],
+    examples: [ex('platform', platform, 'Steppers', 'Publishing flow and an error')],
+    props: [
+      {
+        component: 'Stepper',
+        rows: [
+          p('steps', 'Array<{ label, description?, error? }>', undefined, 'Required.'),
+          p('current', 'number', undefined, 'Index of the current step. Required.'),
+          p('orientation', "'horizontal' | 'vertical'", "'horizontal'", 'Layout.'),
+          p('onStepClick', '(index: number) => void', undefined, 'Makes finished steps clickable.'),
+        ],
+      },
+    ],
+  },
+  {
     id: 'table',
     name: 'Table',
     group: 'Data display',
@@ -1069,14 +1518,29 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'Accordion',
     group: 'Data display',
     summary: 'Expandable sections, one or several open at a time.',
-    imports: ['Accordion', 'AccordionItem', 'AccordionTrigger', 'AccordionContent'],
-    examples: [ex('data', data, 'AccordionExample', 'Single')],
+    imports: ['Accordion', 'AccordionItem', 'AccordionTrigger', 'AccordionContent', 'Collapsible'],
+    examples: [
+      ex('data', data, 'AccordionExample', 'Single'),
+      ex('data', data, 'CollapsibleExample', 'Collapsible: one section, your own trigger'),
+    ],
     props: [
       {
         component: 'Accordion',
         rows: [
           p('type', "'single' | 'multiple'", "'single'", 'How many can be open.'),
           p('value / defaultValue / onValueChange', 'string | string[]', undefined, 'Open items.'),
+        ],
+      },
+      {
+        component: 'Collapsible',
+        rows: [
+          p(
+            'trigger',
+            'ReactNode',
+            undefined,
+            'What toggles it. A <button> gets the handler and aria-expanded; anything else is wrapped in one.'
+          ),
+          p('open / defaultOpen / onOpenChange', 'boolean', undefined, 'Open state.'),
         ],
       },
     ],
@@ -1172,6 +1636,153 @@ export const COMPONENTS: ComponentDoc[] = [
 
   /* ---------------------------------------------------------- Content */
   {
+    id: 'messages',
+    name: 'Messages',
+    group: 'Content',
+    summary:
+      'The parts of a chat: an inbox row, a thread that keeps to the newest message, bubbles that group runs from one person, date dividers, and a composer that grows and sends on Enter.',
+    imports: [
+      'MessageThread',
+      'MessageBubble',
+      'MessageDivider',
+      'MessageComposer',
+      'ConversationItem',
+    ],
+    examples: [ex('social', social, 'MessagesExample', 'Commission chat')],
+    props: [
+      {
+        component: 'MessageBubble',
+        rows: [
+          p('own', 'boolean', 'false', 'The viewer’s message (right, primary).'),
+          p('author / avatar / initials', '', undefined, 'Sender.'),
+          p(
+            'time / status',
+            "ReactNode / 'sending' | 'sent' | 'read'",
+            undefined,
+            'Meta under the last bubble.'
+          ),
+          p(
+            'grouping',
+            "'single' | 'first' | 'middle' | 'last'",
+            "'single'",
+            'Position in a run from one sender.'
+          ),
+          p('attachments', 'ReactNode', undefined, 'Images or files.'),
+        ],
+      },
+      {
+        component: 'MessageComposer',
+        rows: [
+          p('onSend', '(text: string) => void', undefined, 'Required.'),
+          p('onAttach', '() => void', undefined, 'Shows an attach button.'),
+          p('maxRows', 'number', '6', 'Growth before scrolling.'),
+        ],
+      },
+      {
+        component: 'ConversationItem',
+        rows: [
+          p('name / preview / time', '', undefined, 'Row text.'),
+          p('unread / online / active', 'number / boolean / boolean', undefined, 'States.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'tier-card',
+    name: 'TierCard',
+    group: 'Content',
+    summary:
+      'A commission type or supporter tier: price, features, open/closed/sold-out status, slots left and a call to action.',
+    imports: ['TierCard'],
+    examples: [ex('social', social, 'TierCards', 'Commission menu')],
+    props: [
+      {
+        component: 'TierCard',
+        rows: [
+          p('name / price / period / description', 'ReactNode', undefined, 'The offer.'),
+          p(
+            'features',
+            'Array<string | { label, included? }>',
+            undefined,
+            'included: false crosses it out.'
+          ),
+          p(
+            'status',
+            "'open' | 'limited' | 'waitlist' | 'closed' | 'sold-out'",
+            undefined,
+            'Status pill.'
+          ),
+          p('slotsLeft / slotsTotal', 'number', undefined, 'Slot meter.'),
+          p('highlight', 'ReactNode', undefined, 'Banner such as “Most popular”.'),
+          p('image / action / footnote', '', undefined, 'Sample art, the button and small print.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'reactions',
+    name: 'LikeButton & reactions',
+    group: 'Content',
+    summary:
+      'A like toggle with a count and a small burst, and emoji reaction chips with a picker. Counts are compact in the reader’s locale (1.2K).',
+    imports: ['LikeButton', 'ReactionBar', 'ReactionPicker', 'formatCount'],
+    examples: [ex('social', social, 'Likes', 'Likes and reactions')],
+    props: [
+      {
+        component: 'LikeButton',
+        rows: [
+          p('liked / defaultLiked / onLikedChange', 'boolean', undefined, 'State.'),
+          p('count', 'number', undefined, 'Count before the viewer’s like.'),
+          p('icon', 'ReactNode', 'heart', 'e.g. a star or paw.'),
+          p('label', 'string', "'Like'", 'Accessible name.'),
+        ],
+      },
+      {
+        component: 'ReactionBar',
+        rows: [
+          p('reactions', 'Array<{ emoji, count, reacted?, label? }>', undefined, 'Required.'),
+          p('onToggle', '(emoji: string) => void', undefined, 'Required.'),
+          p('choices', 'string[]', '12 defaults', 'Emoji in the picker.'),
+          p('readOnly', 'boolean', 'false', 'No toggling or picker.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'character-sheet',
+    name: 'CharacterSheet & ColorSwatch',
+    group: 'Content',
+    summary:
+      'A reference sheet for a character or fursona: art, species, pronouns, palette (click a swatch to copy it), facts, notes for artists and tags.',
+    imports: ['CharacterSheet', 'ColorSwatch', 'SwatchList'],
+    examples: [ex('social', social, 'CharacterSheetExample', 'Fursona ref')],
+    props: [
+      {
+        component: 'CharacterSheet',
+        rows: [
+          p('name / species / pronouns', 'ReactNode', undefined, 'Header.'),
+          p(
+            'image / imageAlt / credit',
+            'string / string / ReactNode',
+            undefined,
+            'Reference art.'
+          ),
+          p('swatches', 'Array<{ color, name? }>', undefined, 'Palette.'),
+          p('details', 'Array<{ label, value }>', undefined, 'Facts.'),
+          p('bio / notes / tags / actions', '', undefined, 'Everything else.'),
+        ],
+      },
+      {
+        component: 'ColorSwatch',
+        rows: [
+          p('color / name', 'string', undefined, 'Required colour.'),
+          p('size', "'sm' | 'md' | 'lg'", "'md'", 'Chip size.'),
+          p('copyable', 'boolean', 'true', 'Click to copy.'),
+        ],
+      },
+    ],
+  },
+  {
     id: 'content-actions',
     name: 'ContentActions',
     group: 'Content',
@@ -1202,7 +1813,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'ComicReader',
     group: 'Content',
     summary:
-      'Multi-page comics. Book mode turns pages with arrow keys, swipes or a tap on either half, with two-page spreads, thumbnails, full screen and right-to-left reading; scroll mode is a vertical strip.',
+      'Multi-page comics. Book mode turns pages with arrow keys, swipes or a tap on either half, with two-page spreads, thumbnails and right-to-left reading; scroll mode is a vertical strip. Full screen expands the reader over the whole viewport (Escape exits), so it works on phones too.',
     imports: ['ComicReader', 'type ComicPage'],
     examples: [ex('content', content, 'Comic', 'Book mode with spreads')],
     props: [
@@ -1347,6 +1958,392 @@ export const COMPONENTS: ComponentDoc[] = [
   },
 
   /* ----------------------------------------------------------- Layout */
+  {
+    id: 'background',
+    name: 'Background',
+    group: 'Layout',
+    summary:
+      'The ambient gradient behind a page or section, from theme colours. Pick a preset (brand, aurora, mesh, spotlight) or place your own glows; add dots, a grid or grain; drift it slowly. Glows fade with the transparency setting.',
+    imports: ['Background'],
+    examples: [
+      ex('surfaces', surfaces, 'BackgroundPresets', 'Presets'),
+      ex('surfaces', surfaces, 'CustomGlows', 'Custom glows and a grid'),
+    ],
+    props: [
+      {
+        component: 'Background',
+        rows: [
+          p(
+            'variant',
+            "'brand' | 'aurora' | 'mesh' | 'spotlight' | 'none'",
+            "'brand'",
+            'Preset glow layout. brand matches each brand’s classic look.'
+          ),
+          p(
+            'glows',
+            'Array<{ color, x, y, size?, opacity?, fade? }>',
+            undefined,
+            'Your own glows. Overrides variant. opacity multiplies the theme glow strength.'
+          ),
+          p('pattern', "'none' | 'dots' | 'grid' | 'noise'", "'none'", 'Pattern over the glows.'),
+          p('patternColor / patternSize', 'string', undefined, 'Pattern ink and spacing.'),
+          p('patternFade', 'boolean', 'false', 'Fade the pattern out towards the bottom.'),
+          p('intensity', 'number', '1', 'Multiplies glow strength.'),
+          p('animate', 'boolean', 'false', 'Slow drift. Off with reduced motion.'),
+          p(
+            'position',
+            "'fixed' | 'absolute'",
+            "'fixed'",
+            'Behind the viewport, or filling the nearest positioned parent (give it relative isolate).'
+          ),
+          p('base', 'string', undefined, 'Solid colour underneath.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'glass',
+    name: 'Glass',
+    group: 'Layout',
+    summary:
+      'A frosted surface you can tune: how clear it is, blur, a primary tint, the rim light and grain. Button has a matching glass variant. Every setting respects the transparency preference.',
+    imports: ['Glass'],
+    examples: [
+      ex('surfaces', surfaces, 'GlassSurfaces', 'Clear, regular and frosted'),
+      ex('surfaces', surfaces, 'GlassButtons', 'Glass button and pill'),
+    ],
+    props: [
+      {
+        component: 'Glass',
+        rows: [
+          p('opacity', "'clear' | 'regular' | 'frosted'", "'regular'", 'How see-through it is.'),
+          p('blur', "'sm' | 'md' | 'lg' | 'xl'", "'md'", 'Blur strength.'),
+          p('tint', "'none' | 'primary'", "'none'", 'Tint with the primary colour.'),
+          p('edge', 'boolean', 'true', 'Rim light along the edge.'),
+          p('grain', 'boolean', 'false', 'Fine frosted grain.'),
+          p('interactive', 'boolean', 'false', 'Lift on hover.'),
+          p('radius', "'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full'", "'2xl'", 'Corner radius.'),
+          p('as', 'ElementType', "'div'", 'Element to render.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'stack',
+    name: 'Stack, HStack & VStack',
+    group: 'Layout',
+    summary:
+      'Lay children out in a row or column with even gaps. Most screens are stacks of stacks. Direction and gap are responsive, so a row can become a column on phones. Spacer pushes siblings apart.',
+    imports: ['Stack', 'HStack', 'VStack', 'Spacer', 'Box'],
+    examples: [
+      ex('primitives', primitives, 'Stacks', 'A post header'),
+      ex('primitives', primitives, 'ResponsiveStack', 'Column on phones, row on desktop'),
+    ],
+    props: [
+      {
+        component: 'Stack',
+        rows: [
+          p(
+            'direction',
+            "Responsive<'row' | 'column' | 'row-reverse' | 'column-reverse'>",
+            "'column'",
+            'Main axis. Responsive: a value or { base, sm, md, lg, xl }.'
+          ),
+          p(
+            'gap',
+            'Responsive<number | string>',
+            '4',
+            'Space between children. A number is a 4px step (4 = 16px); a string is any CSS length.'
+          ),
+          p(
+            'align',
+            "'start' | 'center' | 'end' | 'stretch' | 'baseline'",
+            undefined,
+            'Cross-axis alignment.'
+          ),
+          p(
+            'justify',
+            "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'",
+            undefined,
+            'Main-axis distribution.'
+          ),
+          p('wrap', 'boolean', 'false', 'Let children wrap.'),
+          p('inline', 'boolean', 'false', 'inline-flex instead of flex.'),
+          p('as', 'ElementType', "'div'", 'Element to render, e.g. ul or nav.'),
+        ],
+      },
+      {
+        component: 'HStack / VStack',
+        rows: [
+          p('reverse', 'boolean', 'false', 'Reverse the order.'),
+          p('…Stack props', '', undefined, 'HStack centres vertically and defaults to gap 3.'),
+        ],
+      },
+      {
+        component: 'Box',
+        rows: [
+          p(
+            'p / px / py',
+            'number | string',
+            undefined,
+            'Padding. A number is a 4px step (4 = 16px); a string is any CSS length.'
+          ),
+          p(
+            'surface',
+            "'none' | 'card' | 'panel' | 'glass' | 'muted' | 'outline'",
+            "'none'",
+            'One of the library surfaces.'
+          ),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'zstack',
+    name: 'ZStack',
+    group: 'Layout',
+    summary:
+      'Layers children on top of each other in the same space, without absolute positioning. ZStackItem pins a layer to an edge, a corner or the centre. AspectRatio keeps media at a fixed shape.',
+    imports: ['ZStack', 'ZStackItem', 'AspectRatio'],
+    examples: [ex('primitives', primitives, 'ZStacks', 'Caption and badge over artwork')],
+    props: [
+      {
+        component: 'ZStack',
+        rows: [
+          p(
+            'align',
+            "'fill' | 'center' | 'top-left' | 'top' | … | 'bottom-right'",
+            "'fill'",
+            'Default position of every layer.'
+          ),
+        ],
+      },
+      {
+        component: 'ZStackItem',
+        rows: [
+          p('position', 'Same as align', "'fill'", 'Where this layer sits.'),
+          p('inset', 'string', undefined, 'Gap from the edges it is pinned to.'),
+        ],
+      },
+      {
+        component: 'AspectRatio',
+        rows: [p('ratio', 'number', '1', 'Width / height, e.g. 16 / 9.')],
+      },
+    ],
+  },
+  {
+    id: 'align',
+    name: 'Align & Center',
+    group: 'Layout',
+    summary:
+      'Place children left, centre or right (and top, middle or bottom), or spread them out. Center centres on both axes.',
+    imports: ['Align', 'Center'],
+    examples: [ex('primitives', primitives, 'Alignment', 'Left, center, right, between')],
+    props: [
+      {
+        component: 'Align',
+        rows: [
+          p(
+            'x',
+            "'left' | 'center' | 'right' | 'between' | 'around' | 'evenly'",
+            "'left'",
+            'Horizontal placement. Also sets text-align.'
+          ),
+          p(
+            'y',
+            "'top' | 'center' | 'bottom' | 'stretch' | 'baseline'",
+            "'center'",
+            'Vertical placement.'
+          ),
+          p('gap', 'number | string', '3', 'Space between children.'),
+          p('wrap', 'boolean', 'true', 'Let children wrap.'),
+        ],
+      },
+      {
+        component: 'Center',
+        rows: [p('inline', 'boolean', 'false', 'inline-flex instead of flex.')],
+      },
+    ],
+  },
+  {
+    id: 'grid',
+    name: 'Grid',
+    group: 'Layout',
+    summary:
+      'Equal columns, either a fixed count per breakpoint or as many as fit with minChildWidth. GridItem spans several columns or the full row.',
+    imports: ['Grid', 'GridItem'],
+    examples: [ex('primitives', primitives, 'Grids', 'Counts, spans and auto-fit')],
+    props: [
+      {
+        component: 'Grid',
+        rows: [
+          p(
+            'cols',
+            'Responsive<number>',
+            '1',
+            'Number of columns. Responsive: a value or { base, sm, md, lg, xl }.'
+          ),
+          p(
+            'minChildWidth',
+            'string',
+            undefined,
+            'Fit as many columns as there is room for, each at least this wide. Overrides cols.'
+          ),
+          p('gap', 'Responsive<number | string>', '4', 'Space between cells.'),
+          p('rowGap', 'number | string', undefined, 'Row gap, when it differs.'),
+          p(
+            'alignItems',
+            "'start' | 'center' | 'end' | 'stretch'",
+            undefined,
+            'Vertical alignment in rows.'
+          ),
+        ],
+      },
+      {
+        component: 'GridItem',
+        rows: [
+          p('span', "Responsive<number | 'full'>", undefined, 'Columns to span.'),
+          p('rowSpan', 'number', undefined, 'Rows to span.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'columns',
+    name: 'Columns',
+    group: 'Layout',
+    summary:
+      'Side-by-side columns of different widths (fractions, fixed, fill or fit-content) that stack on small screens.',
+    imports: ['Columns', 'Column'],
+    examples: [
+      ex('primitives', primitives, 'ColumnsExample', 'Fractions, content and fixed widths'),
+    ],
+    props: [
+      {
+        component: 'Columns',
+        rows: [
+          p('gap', 'number | string', '6', 'Space between columns.'),
+          p(
+            'collapseBelow',
+            "'sm' | 'md' | 'lg' | 'none'",
+            "'md'",
+            'Stack the columns below this breakpoint.'
+          ),
+          p('align', "'start' | 'center' | 'end' | 'stretch'", undefined, 'Vertical alignment.'),
+          p('reverseWhenStacked', 'boolean', 'false', 'Show the last column first when stacked.'),
+        ],
+      },
+      {
+        component: 'Column',
+        rows: [
+          p(
+            'width',
+            "'fill' | 'content' | '1/2' | '1/3' | '2/3' | '1/4' | '3/4' | … | string",
+            "'fill'",
+            'Column width. Fractions that add up to 1 fill the row exactly.'
+          ),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'container',
+    name: 'Container & Section',
+    group: 'Layout',
+    summary:
+      'Container centres content at a maximum width with responsive side padding. Section is a band of a page with an optional heading block, inside a Container.',
+    imports: ['Container', 'Section'],
+    examples: [ex('primitives', primitives, 'ContainerSection', 'A titled section')],
+    props: [
+      {
+        component: 'Container',
+        rows: [
+          p(
+            'size',
+            "'sm' | 'md' | 'lg' | 'xl' | 'prose' | 'full'",
+            "'xl'",
+            'Maximum width. xl is --container-max; prose is --measure.'
+          ),
+          p('gutter', "'none' | 'sm' | 'md' | 'lg'", "'md'", 'Side padding.'),
+        ],
+      },
+      {
+        component: 'Section',
+        rows: [
+          p('eyebrow / title / description', 'ReactNode', undefined, 'Heading block.'),
+          p('actions', 'ReactNode', undefined, 'Shown beside the heading.'),
+          p('spacing', "'none' | 'sm' | 'md' | 'lg'", "'md'", 'Vertical padding.'),
+          p('container', 'Container size | false', "'xl'", 'false for full bleed.'),
+          p('centered', 'boolean', 'false', 'Centre the heading.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sidebar-layout',
+    name: 'SidebarLayout',
+    group: 'Layout',
+    summary:
+      'A main column with a sidebar beside it, for browse pages, settings and profiles. Stacks on small screens.',
+    imports: ['SidebarLayout'],
+    examples: [ex('primitives', primitives, 'SidebarLayoutExample', 'Browse filters')],
+    props: [
+      {
+        component: 'SidebarLayout',
+        rows: [
+          p('sidebar', 'ReactNode', undefined, 'The side column. Required.'),
+          p('side', "'left' | 'right'", "'left'", 'Which side it sits on.'),
+          p('sidebarWidth', 'string', "'16rem'", 'Sidebar width.'),
+          p('gap', 'number | string', '8', 'Space between the columns.'),
+          p(
+            'sticky / stickyTop',
+            'boolean / string',
+            "false / '5rem'",
+            'Keep the sidebar in view while scrolling.'
+          ),
+          p('collapseBelow', "'md' | 'lg'", "'lg'", 'Stack below this breakpoint.'),
+          p('sidebarLabel', 'string', undefined, 'Accessible name for the aside.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'scroll-area',
+    name: 'ScrollArea',
+    group: 'Layout',
+    summary:
+      'A scrolling region with thin, themed scrollbars and optional edge fades. Focusable for keyboard scrolling.',
+    imports: ['ScrollArea'],
+    examples: [ex('primitives', primitives, 'ScrollAreaExample', 'Chapter list')],
+    props: [
+      {
+        component: 'ScrollArea',
+        rows: [
+          p('orientation', "'vertical' | 'horizontal' | 'both'", "'vertical'", 'Scroll direction.'),
+          p('maxHeight', 'string', undefined, 'Height before it scrolls.'),
+          p('fade', 'boolean', 'false', 'Fade content at the scrolling edges.'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'show-hide',
+    name: 'Show & Hide',
+    group: 'Layout',
+    summary:
+      'Show or hide content at some screen sizes, with CSS. The wrapper is display: contents, so layout is unaffected.',
+    imports: ['Show', 'Hide'],
+    examples: [ex('primitives', primitives, 'Responsive', 'Swap at md')],
+    props: [
+      {
+        component: 'Show / Hide',
+        rows: [
+          p('above', "'sm' | 'md' | 'lg' | 'xl'", undefined, 'From this breakpoint up.'),
+          p('below', "'sm' | 'md' | 'lg' | 'xl'", undefined, 'Below this breakpoint.'),
+        ],
+      },
+    ],
+  },
   {
     id: 'panel-card',
     name: 'Panel & Card',
@@ -1501,8 +2498,9 @@ export const COMPONENTS: ComponentDoc[] = [
     id: 'brand',
     name: 'BrandLockup',
     group: 'Layout',
-    summary: 'The Dynamic Lab mark and name, with an optional product tag.',
-    imports: ['BrandLockup', 'DynamicLabMark'],
+    summary:
+      'The Dynamic Lab mark and name, with an optional product tag. The fox in the mark is called FleskyFox; DynamicLabMark (or FleskyFox) draws it on its own.',
+    imports: ['BrandLockup', 'DynamicLabMark', 'FleskyFox'],
     examples: [ex('layout', layout, 'Brand', 'Default and Backstage')],
     props: [
       {

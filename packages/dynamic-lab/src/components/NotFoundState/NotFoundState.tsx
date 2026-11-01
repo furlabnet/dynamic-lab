@@ -1,7 +1,8 @@
 import React from 'react'
-import { Illustration404 } from './Illustration404'
-import { Button } from '../Button'
+
 import { cn } from '../../lib/utils'
+import { Button } from '../Button'
+import { Illustration404 } from './Illustration404'
 
 export interface NotFoundStateProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string
@@ -25,24 +26,24 @@ export function NotFoundState({
   return (
     <div
       className={cn(
-        'surface-card flex flex-col items-center justify-center text-center p-8 sm:p-12 max-w-2xl mx-auto rounded-[var(--radius-3xl)] gap-6',
+        'surface-card mx-auto flex max-w-2xl flex-col items-center justify-center gap-6 rounded-[var(--radius-3xl)] p-8 text-center sm:p-12',
         className
       )}
       {...props}>
       {showIllustration && (
-        <div className="w-full max-w-xs sm:max-w-sm mb-2 drop-shadow-md">
+        <div className="mb-2 w-full max-w-xs drop-shadow-md sm:max-w-sm">
           <Illustration404 />
         </div>
       )}
 
-      <div className="flex flex-col gap-2 max-w-md">
-        <h2 className="page-title text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
+      <div className="flex max-w-md flex-col gap-2">
+        <h2 className="page-title text-2xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-3xl">
           {title}
         </h2>
-        <p className="body-sm text-[var(--muted-foreground)] leading-relaxed">{description}</p>
+        <p className="body-sm leading-relaxed text-[var(--muted-foreground)]">{description}</p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
         {action || (
           <Button
             variant="primary"

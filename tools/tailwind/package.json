@@ -1,0 +1,31 @@
+{
+  "name": "@vedla/tailwind-config",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./theme": "./theme.css",
+    "./postcss-config": "./postcss-config.js"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore --ignore-path ../../.prettierignore",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@vedla/prettier-config",
+  "dependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "postcss": "^8.5.32",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@vedla/eslint-config": "workspace:*",
+    "@vedla/prettier-config": "workspace:*",
+    "@vedla/tsconfig": "workspace:*",
+    "eslint": "^10",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3"
+  }
+}

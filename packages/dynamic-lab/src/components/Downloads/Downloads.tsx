@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { Download, Globe, Laptop, Monitor, Smartphone, Tablet, Terminal } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 import { Button } from '../Button'
 
@@ -98,7 +100,7 @@ export function DownloadList({ files, onDownload, recommended, className }: Down
                 size="sm"
                 variant={isRecommended ? 'primary' : 'secondary'}
                 leftIcon={<Download className="size-4" />}
-                onClick={() => onDownload?.(file)}>
+                onClick={onDownload ? () => onDownload(file) : undefined}>
                 Download
               </Button>
             )}

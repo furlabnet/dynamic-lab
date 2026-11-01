@@ -1,9 +1,14 @@
+'use client'
+
 import React, { useState } from 'react'
+
 import { Heart, Lock, MessageCircle } from 'lucide-react'
+
+import { relativeTime } from '../../lib/format'
 import { cn } from '../../lib/utils'
 import { Button } from '../Button'
-import { ProfileAvatar } from '../ProfileAvatar'
 import { Textarea } from '../Input'
+import { ProfileAvatar } from '../ProfileAvatar'
 
 export interface CommentAuthor {
   name: string
@@ -21,22 +26,6 @@ export interface CommentData {
   likes?: number
   liked?: boolean
   replies?: CommentData[]
-}
-
-export function relativeTime(date: string | Date) {
-  const diff = Date.now() - new Date(date).getTime()
-  const minutes = Math.round(diff / 60000)
-  if (minutes < 1) return 'just now'
-  if (minutes < 60) return `${minutes}m ago`
-  const hours = Math.round(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.round(hours / 24)
-  if (days < 30) return `${days}d ago`
-  return new Date(date).toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
 }
 
 function initials(name: string) {
@@ -134,7 +123,7 @@ function CommentItem({ comment, depth, onReply, onLike, user }: CommentItemProps
             {relativeTime(comment.createdAt)}
           </time>
         </div>
-        <p className="whitespace-pre-line text-sm leading-relaxed">{comment.body}</p>
+        <p className="text-sm leading-relaxed whitespace-pre-line">{comment.body}</p>
         <div className="flex items-center gap-1 text-xs">
           <button
             type="button"

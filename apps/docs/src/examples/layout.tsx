@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FileText, LayoutGrid, Search, Settings, Users } from 'lucide-react'
+
 import {
   AdminShell,
   AdminSidebar,
@@ -31,6 +31,8 @@ import {
   ThemeToggle,
   Toolbar,
 } from '@furlab/dynamic-lab'
+
+import { FileText, LayoutGrid, Search, Settings, Users } from 'lucide-react'
 
 export function Panels() {
   return (

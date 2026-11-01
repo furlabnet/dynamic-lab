@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface PageHeaderProps extends React.HTMLAttributes<HTMLElement> {
@@ -11,7 +12,7 @@ export function PageHeader({ className, title, description, actions, ...props }:
   return (
     <header
       className={cn(
-        'ui-page-header flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]',
+        'ui-page-header flex flex-col justify-between gap-4 border-b border-[var(--border)] pb-4 sm:flex-row sm:items-center',
         className
       )}
       {...props}>
@@ -19,7 +20,7 @@ export function PageHeader({ className, title, description, actions, ...props }:
         <h2 className="ui-page-title text-2xl font-bold tracking-tight">{title}</h2>
         {description && <p className="ui-page-description text-sm">{description}</p>}
       </div>
-      {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </header>
   )
 }
@@ -40,9 +41,9 @@ export function PageHeading({
   return (
     <div className={cn('page-heading flex flex-col gap-2', className)} {...props}>
       {eyebrow && <span className="page-eyebrow">{eyebrow}</span>}
-      <h1 className="page-title text-3xl sm:text-4xl font-extrabold tracking-tight">{title}</h1>
+      <h1 className="page-title text-3xl font-extrabold tracking-tight sm:text-4xl">{title}</h1>
       {description && (
-        <p className="page-description text-base text-[var(--muted-foreground)] max-w-2xl">
+        <p className="page-description max-w-2xl text-base text-[var(--muted-foreground)]">
           {description}
         </p>
       )}

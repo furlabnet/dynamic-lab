@@ -1,5 +1,9 @@
+'use client'
+
 import React, { useId, useState } from 'react'
+
 import { UploadCloud, X } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export interface FileInputProps extends Omit<

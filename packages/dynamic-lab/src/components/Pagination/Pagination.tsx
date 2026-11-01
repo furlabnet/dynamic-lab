@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
-import { buttonVariants } from '../Button'
+
 import { cn } from '../../lib/utils'
+import { buttonVariants } from '../Button'
 
 export const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav
@@ -45,8 +47,8 @@ export const PaginationLink = ({
         variant: isActive ? 'primary' : 'secondary',
         size: 'sm',
       }),
-      'size-9 p-0 font-semibold cursor-pointer',
-      disabled && 'opacity-40 cursor-not-allowed',
+      'size-9 cursor-pointer p-0 font-semibold',
+      disabled && 'cursor-not-allowed opacity-40',
       className
     )}
     {...props}
@@ -62,7 +64,7 @@ export const PaginationPrevious = ({
   <PaginationLink
     aria-label="Go to previous page"
     disabled={disabled}
-    className={cn('gap-1 w-auto px-3', className)}
+    className={cn('w-auto gap-1 px-3', className)}
     {...props}>
     <ChevronLeft className="size-4" />
     <span className="hidden sm:inline">Previous</span>
@@ -78,7 +80,7 @@ export const PaginationNext = ({
   <PaginationLink
     aria-label="Go to next page"
     disabled={disabled}
-    className={cn('gap-1 w-auto px-3', className)}
+    className={cn('w-auto gap-1 px-3', className)}
     {...props}>
     <span className="hidden sm:inline">Next</span>
     <ChevronRight className="size-4" />

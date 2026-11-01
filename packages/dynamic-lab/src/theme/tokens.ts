@@ -27,16 +27,16 @@ export const TOKENS = {
   colors: {
     dynamic: {
       light: {
-        primary: '#2354e7',
+        primary: '#3a3fe4',
         primaryForeground: '#ffffff',
-        glowA: '#3d6bf5',
-        glowB: '#905aed',
+        glowA: '#5156f6',
+        glowB: '#c95ceb',
       },
       dark: {
-        primary: '#6094fb',
+        primary: '#8f9aff',
         primaryForeground: '#0c0e17',
-        glowA: '#3464f4',
-        glowB: '#8347eb',
+        glowA: '#393fef',
+        glowB: '#b940dd',
       },
     },
     backstage: {

@@ -1,6 +1,10 @@
+'use client'
+
 import React, { useId, useMemo, useRef, useState } from 'react'
+
+import type { TagCategory, TagItem } from '../Tag'
 import { cn } from '../../lib/utils'
-import { Tag, TAG_CATEGORY_LABELS, formatTagName, type TagCategory, type TagItem } from '../Tag'
+import { formatTagName, Tag, TAG_CATEGORY_LABELS } from '../Tag'
 
 const CATEGORIES = Object.keys(TAG_CATEGORY_LABELS) as TagCategory[]
 
