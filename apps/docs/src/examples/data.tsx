@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Bookmark, Eye, MessageCircle } from 'lucide-react'
+
+import type { CommentData } from '@furlab/dynamic-lab'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
   Checkbox,
+  Collapsible,
   CommentThread,
   ContentCard,
   DescriptionList,
@@ -23,8 +25,9 @@ import {
   TagList,
   WorkflowTimeline,
   WorkflowTimelineItem,
-  type CommentData,
 } from '@furlab/dynamic-lab'
+
+import { Bookmark, Eye, MessageCircle } from 'lucide-react'
 
 export function TableExample() {
   const rows = [
@@ -283,5 +286,18 @@ export function Comments() {
         )
       }
     />
+  )
+}
+
+export function CollapsibleExample() {
+  return (
+    <Collapsible
+      trigger={
+        <button type="button" className="text-sm font-semibold text-[var(--primary)]">
+          Show content warnings
+        </button>
+      }>
+      <p className="body-sm text-[var(--muted-foreground)]">Mild peril, one thunderstorm.</p>
+    </Collapsible>
   )
 }

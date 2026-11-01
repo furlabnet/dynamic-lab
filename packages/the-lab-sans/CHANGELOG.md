@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Fixed
+
+- Loading the package from source in the browser (the `@furlab/source` condition, as the apps in
+  this repository do) no longer logs "Could not find or load the CSS module file." The build still
+  bundles the stylesheet as before.
+
 ### Added
 
 - First release: The Lab Sans in 8 weights (Thin 100 to Black 900), each with an italic.

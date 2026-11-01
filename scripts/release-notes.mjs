@@ -10,6 +10,7 @@
  * after it, "## 0.2.0 - 2026-11-01"). Exits with an error for a tag that isn't a release tag.
  */
 import { existsSync, readFileSync } from 'node:fs'
+
 import { releaseForTag } from './releases.mjs'
 
 const tag = process.argv[2]

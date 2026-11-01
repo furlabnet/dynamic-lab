@@ -1,0 +1,16 @@
+/*
+ * Landing stylesheet. Tailwind is pointed at the library source too, so the components' utilities
+ * end up in the build.
+ */
+@import 'tailwindcss';
+@import '../../../packages/dynamic-lab/src/styles/base.css';
+
+@source '../../../packages/dynamic-lab/src';
+@source '.';
+
+.landing-preview {
+  background:
+    radial-gradient(color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px) 0
+      0 / 18px 18px,
+    color-mix(in srgb, var(--card) 55%, transparent);
+}

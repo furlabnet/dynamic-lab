@@ -1,6 +1,9 @@
 import React from 'react'
+
 import ReactDOM from 'react-dom/client'
+
 import App from './App'
+
 import './showcase.css'
 
 // The Lab Sans. Set VITE_THE_LAB_SANS=off to fall back to the system font; the font files are

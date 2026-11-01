@@ -1,7 +1,11 @@
+'use client'
+
 import React, { createContext, useContext, useEffect, useState } from 'react'
+
 import { Menu as MenuIcon, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
-import { cn } from '../../lib/utils'
+
 import { useControllableState, useScrollLock } from '../../lib/hooks'
+import { cn } from '../../lib/utils'
 
 interface AdminShellContextValue {
   collapsed: boolean

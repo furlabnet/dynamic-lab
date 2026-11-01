@@ -5,6 +5,10 @@
 @import './tokens.css';
 @import './components.css' layer(components);
 @import './content.css' layer(components);
+@import './layout.css' layer(components);
+@import './platform.css' layer(components);
+@import './surfaces.css' layer(components);
+@import './widgets.css' layer(components);
 
 @layer base {
   *,
@@ -60,7 +64,7 @@
     background: color-mix(in srgb, var(--card) calc(var(--surface-alpha) * 100%), transparent);
     border: 1px solid var(--border);
     border-radius: var(--radius-3xl);
-    backdrop-filter: blur(var(--blur-panel));
+    backdrop-filter: blur(var(--blur-panel)) saturate(var(--glass-saturate, 1));
     box-shadow:
       inset 0 1px 0 var(--glass-highlight),
       var(--glass-shadow);
@@ -70,7 +74,7 @@
     position: relative;
     background: color-mix(in srgb, var(--glass) calc(var(--glass-alpha) * 100%), transparent);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(var(--blur-chrome));
+    backdrop-filter: blur(var(--blur-chrome)) saturate(var(--glass-saturate, 1));
     box-shadow:
       inset 0 1px 0 var(--glass-highlight),
       var(--glass-shadow);
@@ -81,11 +85,29 @@
     background: color-mix(in srgb, var(--card) calc(var(--surface-alpha) * 100%), transparent);
     border: 1px solid var(--border);
     border-radius: var(--radius-2xl);
-    backdrop-filter: blur(var(--blur-panel));
+    backdrop-filter: blur(var(--blur-panel)) saturate(var(--glass-saturate, 1));
     box-shadow:
       inset 0 1px 0 var(--glass-highlight),
       var(--glass-shadow);
     padding: var(--space-20);
+  }
+
+  /* The rim: a 1px gradient border, bright where light hits the top-left edge, drawn on top of
+     the solid border with a mask so it follows the corner radius. Off in Backstage and when
+     transparency is off (--glass-edge: none). */
+  .surface-card::after,
+  .glass-chrome::after,
+  .ui-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--glass-edge, none);
+    pointer-events: none;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
   }
 
   @media (min-width: 640px) {
@@ -147,7 +169,7 @@
     gap: var(--space-8);
     min-height: var(--touch-target);
     padding: var(--space-8) var(--space-20);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-control);
     border: 1px solid var(--primary);
     background-color: var(--primary);
     color: var(--primary-foreground);
@@ -158,14 +180,41 @@
     user-select: none;
   }
 
-  .primary-button:hover:not(:disabled) {
-    opacity: 0.92;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
+  /* Solid buttons are the same material as the other controls: a flat fill, a 1px edge a shade
+     deeper than the fill, and the faint inner top highlight that glass surfaces have. Hover and
+     press shift the fill rather than filtering, so the label keeps its contrast. Button's primary
+     and danger variants use this too. */
+  .primary-button,
+  .danger-button,
+  .dl-btn-solid {
+    --btn-fill: var(--primary);
+    background-color: var(--btn-fill);
+    border-color: color-mix(in srgb, var(--btn-fill) 78%, var(--foreground));
+    box-shadow:
+      var(--control-highlight),
+      0 1px 2px hsl(230 30% 10% / 0.1);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      transform 150ms ease;
   }
 
-  .primary-button:active:not(:disabled) {
-    transform: translateY(0);
+  .danger-button,
+  .dl-btn-solid.dl-btn-danger {
+    --btn-fill: var(--destructive);
+  }
+
+  .primary-button:hover:not(:disabled),
+  .danger-button:hover:not(:disabled),
+  .dl-btn-solid:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--btn-fill) 88%, var(--foreground));
+  }
+
+  .primary-button:active:not(:disabled),
+  .danger-button:active:not(:disabled),
+  .dl-btn-solid:active:not(:disabled) {
+    background-color: color-mix(in srgb, var(--btn-fill) 80%, var(--foreground));
+    transform: translateY(0.5px);
   }
 
   .primary-button:focus-visible {
@@ -187,7 +236,7 @@
     gap: var(--space-8);
     min-height: var(--touch-target);
     padding: var(--space-8) var(--space-20);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-control);
     border: 1px solid var(--border);
     background-color: color-mix(in srgb, var(--card) 60%, transparent);
     color: var(--foreground);
@@ -216,7 +265,7 @@
     gap: var(--space-8);
     min-height: var(--touch-target);
     padding: var(--space-8) var(--space-20);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-control);
     border: 1px solid var(--destructive);
     background-color: var(--destructive);
     color: var(--destructive-foreground);
@@ -226,10 +275,6 @@
     transition: all 150ms ease;
   }
 
-  .danger-button:hover:not(:disabled) {
-    opacity: 0.92;
-  }
-
   .danger-outline-button {
     display: inline-flex;
     align-items: center;
@@ -237,7 +282,7 @@
     gap: var(--space-8);
     min-height: var(--touch-target);
     padding: var(--space-8) var(--space-20);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-control);
     border: 1px solid color-mix(in srgb, var(--destructive) 40%, var(--border));
     background-color: transparent;
     color: var(--destructive);
@@ -258,7 +303,7 @@
     justify-content: center;
     width: var(--control-compact);
     height: var(--control-compact);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-control);
     border: 1px solid var(--border);
     background-color: color-mix(in srgb, var(--card) 60%, transparent);
     color: var(--foreground);
@@ -271,13 +316,15 @@
   }
 
   /* Forms */
+  /* Fields are filled rather than outlined: a soft tinted well with a faint edge that firms up
+     on hover and lifts to the card colour with a ring on focus. */
   .form-input,
   .form-textarea {
     display: block;
     width: 100%;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--input);
-    background-color: color-mix(in srgb, var(--card) 85%, transparent);
+    border-radius: var(--radius-field);
+    border: 1px solid color-mix(in srgb, var(--input) 55%, transparent);
+    background-color: color-mix(in srgb, var(--muted) 70%, transparent);
     color: var(--foreground);
     padding: 0.625rem var(--space-12);
     font-size: 0.875rem;
@@ -287,10 +334,21 @@
       box-shadow 150ms ease;
   }
 
+  .form-input:hover:not(:focus):not(:disabled),
+  .form-textarea:hover:not(:focus):not(:disabled) {
+    border-color: var(--input);
+  }
+
   .form-input:focus,
   .form-textarea:focus {
     border-color: var(--ring);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 25%, transparent);
+    background-color: var(--card);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--ring) 18%, transparent);
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: color-mix(in srgb, var(--muted-foreground) 80%, transparent);
   }
 
   /* Filter Chip */
@@ -429,6 +487,9 @@
   /* Pill Navigation */
   .pill-nav {
     display: inline-flex;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
     align-items: center;
     padding: 4px;
     gap: 4px;
@@ -437,6 +498,8 @@
 
   .pill-nav-link {
     display: inline-flex;
+    flex-shrink: 0;
+    white-space: nowrap;
     align-items: center;
     gap: var(--space-6);
     padding: 0.5rem 1rem;

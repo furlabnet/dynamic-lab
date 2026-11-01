@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface DynamicLabMarkProps extends React.SVGProps<SVGSVGElement> {
   size?: number | string
 }
 
+/** The Furlab mark: a fox called FleskyFox. Also exported under that name. */
 export function DynamicLabMark({ size = 28, className, ...props }: DynamicLabMarkProps) {
   return (
     <svg
@@ -68,3 +70,6 @@ export function BrandLockup({
     </div>
   )
 }
+
+/** FleskyFox, the fox in the Furlab logo. The same component as DynamicLabMark. */
+export const FleskyFox = DynamicLabMark

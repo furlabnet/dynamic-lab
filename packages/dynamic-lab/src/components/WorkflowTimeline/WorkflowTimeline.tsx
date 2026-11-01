@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { Check } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export interface WorkflowTimelineProps extends React.HTMLAttributes<HTMLOListElement> {
@@ -35,21 +37,21 @@ export function WorkflowTimelineItem({
   return (
     <li
       className={cn(
-        'workflow-timeline-item ui-panel p-4 rounded-[var(--radius-xl)] transition-all',
+        'workflow-timeline-item ui-panel rounded-[var(--radius-xl)] p-4 transition-all',
         className
       )}
       {...props}>
       <span
         className={cn(
           'workflow-timeline-marker',
-          completed && 'bg-[var(--status-success-ink)] border-[var(--status-success-ink)]',
-          !completed && !active && 'bg-[var(--muted)] border-[var(--border)] shadow-none'
+          completed && 'border-[var(--status-success-ink)] bg-[var(--status-success-ink)]',
+          !completed && !active && 'border-[var(--border)] bg-[var(--muted)] shadow-none'
         )}>
-        {completed && <Check className="size-2 text-[var(--card)] stroke-[3]" />}
+        {completed && <Check className="size-2 stroke-[3] text-[var(--card)]" />}
       </span>
       {(title || status || time) && (
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-          {title && <h5 className="font-bold text-sm text-[var(--foreground)]">{title}</h5>}
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          {title && <h5 className="text-sm font-bold text-[var(--foreground)]">{title}</h5>}
           <div className="flex items-center gap-2">
             {time && <span className="text-xs text-[var(--muted-foreground)]">{time}</span>}
             {status}

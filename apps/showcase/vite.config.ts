@@ -1,6 +1,6 @@
-import { defineConfig, defaultClientConditions } from 'vite'
-import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+import { defaultClientConditions, defineConfig } from 'vite'
 
 /**
  * Showcase: two working apps (the Dynamic Lab public site and the Backstage console) built from the

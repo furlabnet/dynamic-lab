@@ -1,7 +1,12 @@
 import React from 'react'
+
+import type { ContentCardProps } from '@furlab/dynamic-lab'
+import { ContentCard, PLATFORM_INFO } from '@furlab/dynamic-lab'
+
 import { Bookmark, Eye, MessageCircle } from 'lucide-react'
-import { ContentCard, PLATFORM_INFO, type ContentCardProps } from '@furlab/dynamic-lab'
-import { TYPE_LABELS, type ContentRecord } from '../data'
+
+import type { ContentRecord } from '../data'
+import { TYPE_LABELS } from '../data'
 import { getDetails, profileByName, wordCount } from '../details'
 import { useShowcase } from '../state'
 

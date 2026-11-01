@@ -1,28 +1,6 @@
 import React, { useMemo, useState } from 'react'
 
 import {
-  Bell,
-  BookImage,
-  BookOpen,
-  FilePlus2,
-  FileText,
-  Gamepad2,
-  LayoutDashboard,
-  Library,
-  Link2,
-  LogOut,
-  Palette,
-  Pencil,
-  Search,
-  SearchX,
-  Settings,
-  ShieldCheck,
-  SlidersHorizontal,
-  Trash2,
-  User,
-} from 'lucide-react'
-
-import {
   AppearanceSettings,
   AppSwitcher,
   BrandLockup,
@@ -65,10 +43,32 @@ import {
   UserMenu,
   useToast,
 } from '@furlab/dynamic-lab'
+
+import {
+  Bell,
+  BookImage,
+  BookOpen,
+  FilePlus2,
+  FileText,
+  Gamepad2,
+  LayoutDashboard,
+  Library,
+  Link2,
+  LogOut,
+  Palette,
+  Pencil,
+  Search,
+  SearchX,
+  Settings,
+  ShieldCheck,
+  SlidersHorizontal,
+  Trash2,
+  User,
+} from 'lucide-react'
+
+import type { ContentRecord, ContentType } from '../data'
 import {
   ALL_TAGS,
-  type ContentRecord,
-  type ContentType,
   CURRENT_USER,
   STATUS_LABELS,
   STATUS_TONES,
@@ -820,7 +820,7 @@ function SavedLibrary() {
               <Button
                 size="sm"
                 variant="secondary"
-                className="absolute right-3 top-3"
+                className="absolute top-3 right-3"
                 onClick={() => setSaved(item.id, false)}>
                 Remove
               </Button>

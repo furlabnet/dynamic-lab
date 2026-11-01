@@ -1,4 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react'
+
+import type { TagItem } from '@furlab/dynamic-lab'
 import {
   AgeGate,
   AgeRating,
@@ -16,6 +18,7 @@ import {
   ContentActions,
   ContentCard,
   DescriptionList,
+  detectPlatform,
   DownloadList,
   Lightbox,
   MediaGallery,
@@ -25,18 +28,17 @@ import {
   PlatformBadge,
   ProfileAvatar,
   ReaderSettings,
+  readerStyle,
   ReadingProgress,
+  renderMarkdown,
   SegmentedControl,
   Separator,
   TagList,
-  detectPlatform,
-  readerStyle,
-  renderMarkdown,
   useReaderPrefs,
   useReadingProgress,
   useToast,
-  type TagItem,
 } from '@furlab/dynamic-lab'
+
 import {
   AlertTriangle,
   Calendar,
@@ -51,8 +53,11 @@ import {
   Pencil,
   Sparkles,
 } from 'lucide-react'
-import { CURRENT_USER, TYPE_LABELS, TYPE_PLURALS, type ContentRecord } from '../data'
-import { getDetails, labByName, profileByName, wordCount, type ContentDetails } from '../details'
+
+import type { ContentRecord } from '../data'
+import type { ContentDetails } from '../details'
+import { CURRENT_USER, TYPE_LABELS, TYPE_PLURALS } from '../data'
+import { getDetails, labByName, profileByName, wordCount } from '../details'
 import { formatDate, useShowcase } from '../state'
 import { RecordCard } from './RecordCard'
 

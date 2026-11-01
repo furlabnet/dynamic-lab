@@ -1,15 +1,17 @@
 import React from 'react'
+
 import {
   Badge,
   Button,
   PageHeading,
   PalettePreview,
+  paletteTokens,
   SegmentedControl,
   TransparencyControl,
-  paletteTokens,
   useTheme,
   useToast,
 } from '@furlab/dynamic-lab'
+
 import { Check, Moon, Sun } from 'lucide-react'
 
 /** Every colour theme, light and dark, with a button to switch to it. */

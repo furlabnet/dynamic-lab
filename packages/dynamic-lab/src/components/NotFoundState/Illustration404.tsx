@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface Illustration404Props extends React.SVGProps<SVGSVGElement> {
@@ -15,7 +16,7 @@ export function Illustration404({ className, ...props }: Illustration404Props) {
       xmlns="http://www.w3.org/2000/svg"
       role="img"
       aria-label="404 Page Not Found"
-      className={cn('max-w-full h-auto', className)}
+      className={cn('h-auto max-w-full', className)}
       {...props}>
       <path
         style={{ mixBlendMode: 'darken' }}

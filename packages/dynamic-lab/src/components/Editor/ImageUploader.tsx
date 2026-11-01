@@ -1,5 +1,9 @@
+'use client'
+
 import React, { useId, useState } from 'react'
+
 import { ChevronLeft, ChevronRight, ImagePlus, X } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 import { DragHandle, SortableList } from './SortableList'
 

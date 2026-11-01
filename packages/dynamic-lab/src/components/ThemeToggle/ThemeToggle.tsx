@@ -1,7 +1,11 @@
+'use client'
+
 import React from 'react'
-import { Sun, Moon, Palette } from 'lucide-react'
-import { useTheme } from '../../theme/ThemeProvider'
+
+import { Moon, Palette, Sun } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
+import { useTheme } from '../../theme/ThemeProvider'
 
 export interface ThemeToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   showBrandToggle?: boolean
@@ -33,7 +37,7 @@ export function ThemeToggle({
         title={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`}
         aria-label={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`}
         className={cn(
-          'grid shrink-0 place-items-center text-[var(--foreground)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] transition-all cursor-pointer active:scale-95',
+          'grid shrink-0 cursor-pointer place-items-center text-[var(--foreground)] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] active:scale-95',
           variantClasses[variant],
           className
         )}
@@ -58,7 +62,7 @@ export function ThemeToggle({
           title={`Switch to ${brand === 'dynamic' ? 'backstage' : 'dynamic'} style`}
           aria-label="Toggle theme brand"
           className={cn(
-            'grid shrink-0 place-items-center text-[var(--primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] transition-all cursor-pointer active:scale-95',
+            'grid shrink-0 cursor-pointer place-items-center text-[var(--primary)] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] active:scale-95',
             variantClasses[variant]
           )}>
           <Palette className={iconSize} />

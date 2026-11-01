@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { FolderSearch } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,23 +25,23 @@ export function EmptyState({
     <div
       data-variant={variant}
       className={cn(
-        'ui-empty flex flex-col items-center justify-center text-center p-8 sm:p-12 gap-3',
+        'ui-empty flex flex-col items-center justify-center gap-3 p-8 text-center sm:p-12',
         variant === 'panel' &&
-          'border border-dashed border-[var(--border)] rounded-[var(--radius-2xl)] bg-[color-mix(in_srgb,var(--card)_40%,transparent)]',
+          'rounded-[var(--radius-2xl)] border border-dashed border-[var(--border)] bg-[color-mix(in_srgb,var(--card)_40%,transparent)]',
         variant === 'card' && 'surface-card',
         className
       )}
       {...props}>
       {icon && (
-        <span className="ui-hero-icon grid size-14 place-items-center rounded-2xl bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] border border-[color-mix(in_srgb,var(--primary)_20%,transparent)] mb-1">
+        <span className="ui-hero-icon mb-1 grid size-14 place-items-center rounded-2xl border border-[color-mix(in_srgb,var(--primary)_20%,transparent)] bg-[color-mix(in_srgb,var(--primary)_12%,transparent)]">
           {icon}
         </span>
       )}
-      <h4 className="ui-empty-title text-base sm:text-lg font-bold text-[var(--foreground)]">
+      <h4 className="ui-empty-title text-base font-bold text-[var(--foreground)] sm:text-lg">
         {title}
       </h4>
       {description && (
-        <p className="ui-empty-description text-sm text-[var(--muted-foreground)] max-w-md">
+        <p className="ui-empty-description max-w-md text-sm text-[var(--muted-foreground)]">
           {description}
         </p>
       )}

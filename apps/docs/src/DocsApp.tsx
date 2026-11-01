@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { BookOpen, Box, Building2, Globe, Search } from 'lucide-react'
+
+import type { CommandItem, ThemeBrand } from '@furlab/dynamic-lab'
 import {
+  AdminShell,
+  AdminSidebar,
   AppearanceSettings,
   Badge,
   BrandLockup,
@@ -9,7 +12,6 @@ import {
   CommandTrigger,
   IconButton,
   Input,
-  Popover,
   SegmentedControl,
   SidebarNav,
   SidebarNavGroup,
@@ -26,13 +28,16 @@ import {
   ToastProvider,
   Tooltip,
   useTheme,
-  type CommandItem,
-  type ThemeBrand,
 } from '@furlab/dynamic-lab'
 import pkg from '@furlab/dynamic-lab/package.json'
-import { COMPONENTS, GROUPS, exampleSource, type ComponentDoc } from './registry'
+
+import { BookOpen, Box, Building2, Globe, Search } from 'lucide-react'
+
+import type { ComponentDoc } from './registry'
+import { pageIcon } from './icons'
 import { GitLabLogo, NpmLogo } from './logos'
 import { GUIDE } from './pages/Guide'
+import { COMPONENTS, exampleSource, GROUPS } from './registry'
 import { CodeBlock, PropsTable } from './ui'
 
 const REPO = import.meta.env.VITE_REPOSITORY_URL ?? pkg.repository.url
@@ -207,6 +212,166 @@ function Docs() {
     document.title = `${currentLabel} · Dynamic Lab docs`
   }, [currentLabel])
 
+  const { brand } = useTheme()
+
+  const actions = (
+    <>
+      <Badge variant="neutral" className="hidden xl:inline-flex">
+        v{pkg.version}
+      </Badge>
+      {brand === 'dynamic' && (
+        <div className="hidden w-56 xl:block">
+          <CommandTrigger label="Search docs…" onClick={() => setPaletteOpen(true)} />
+        </div>
+      )}
+      <IconButton
+        aria-label="Search docs"
+        variant="ghost"
+        className={brand === 'dynamic' ? 'xl:hidden' : 'lg:hidden'}
+        icon={<Search className="size-4" />}
+        onClick={() => setPaletteOpen(true)}
+      />
+      <BrandToggle />
+      <AppearanceSettings themesHref="#/guide/theming" />
+      {/* On phones the repository link is in the footer. */}
+      <div className="contents max-sm:hidden">
+        <Tooltip content="Source on GitLab" side="bottom">
+          <a
+            href={REPO}
+            target="_blank"
+            rel="noreferrer"
+            className="icon-button border-0! bg-transparent!"
+            aria-label="Source on GitLab">
+            <GitLabLogo className="size-4" />
+          </a>
+        </Tooltip>
+        <Tooltip content="Package on npm" side="bottom">
+          <a
+            href={`https://www.npmjs.com/package/${pkg.name}`}
+            target="_blank"
+            rel="noreferrer"
+            className="icon-button border-0! bg-transparent!"
+            aria-label="Package on npm">
+            <NpmLogo className="size-4" />
+          </a>
+        </Tooltip>
+      </div>
+    </>
+  )
+
+  // Backstage's sidebar collapses to an icon rail, so its items need icons.
+  const railIcons = brand === 'backstage'
+  const navItems = (
+    <>
+      <SidebarNavGroup label="Guide">
+        {GUIDE.map((g) => (
+          <SidebarNavItem
+            key={g.id}
+            icon={railIcons && pageIcon(g.id)}
+            active={guide?.id === g.id || (!guide && !component && g === GUIDE[0])}
+            onClick={() => go(`guide/${g.id}`)}>
+            {g.title}
+          </SidebarNavItem>
+        ))}
+      </SidebarNavGroup>
+      <div className="ui-nav-text px-1 pt-2 pb-2">
+        <Input
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder="Filter components"
+          aria-label="Filter components"
+          startIcon={<Search className="size-4" />}
+        />
+      </div>
+      {GROUPS.map((group) => {
+        const items = COMPONENTS.filter((c) => c.group === group && matches(c))
+        if (!items.length) return null
+        return (
+          <SidebarNavGroup key={group} label={group}>
+            {items.map((c) => (
+              <SidebarNavItem
+                key={c.id}
+                icon={railIcons && pageIcon(c.id)}
+                active={component?.id === c.id}
+                onClick={() => go(`components/${c.id}`)}>
+                {c.name}
+              </SidebarNavItem>
+            ))}
+          </SidebarNavGroup>
+        )
+      })}
+      {q && !COMPONENTS.some(matches) && (
+        <p className="px-3 py-2 text-sm text-[var(--muted-foreground)]">
+          No components match “{filter}”.
+        </p>
+      )}
+    </>
+  )
+
+  const content = component ? (
+    <ComponentPage key={component.id} doc={component} />
+  ) : (
+    page && <page.render key={page.id} />
+  )
+
+  const footer = (
+    <SiteFooter
+      start={<span>© 2026 Vedla Creative &amp; The Furlab Project · MIT licence</span>}
+      end={
+        <a href={REPO} className="hover:underline">
+          {pkg.name}@{pkg.version}
+        </a>
+      }
+    />
+  )
+
+  const palette = (
+    <CommandPalette
+      open={paletteOpen}
+      onOpenChange={setPaletteOpen}
+      items={commands}
+      placeholder="Search components and guides…"
+    />
+  )
+
+  // Backstage previews the docs in the console layout the staff apps use.
+  if (brand === 'backstage') {
+    return (
+      <div className="dynamic-lab-glow-bg">
+        <AdminShell
+          sidebar={
+            <AdminSidebar
+              aria-label="Documentation"
+              header={
+                <a
+                  href="#/guide/getting-started"
+                  className="flex items-center"
+                  aria-label="Dynamic Lab documentation home">
+                  <BrandLockup name="Dynamic Lab" product="Docs" size="sm" />
+                </a>
+              }
+              search={<CommandTrigger label="Search docs…" onClick={() => setPaletteOpen(true)} />}>
+              {navItems}
+            </AdminSidebar>
+          }
+          topbar={
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="truncate text-sm text-[var(--muted-foreground)]">
+                {component ? component.group : 'Guide'}
+                <span aria-hidden="true"> / </span>
+                <span className="font-semibold text-[var(--foreground)]">{currentLabel}</span>
+              </span>
+              <div className="ml-auto flex shrink-0 items-center gap-1.5">{actions}</div>
+            </div>
+          }>
+          {content}
+          <div className="mt-16">{footer}</div>
+        </AdminShell>
+        {palette}
+      </div>
+    )
+  }
+
   return (
     <div className="dynamic-lab-glow-bg flex min-h-screen flex-col">
       <SiteHeader
@@ -241,51 +406,7 @@ function Docs() {
             </SiteNavLink>
           </SiteNav>
         }
-        actions={
-          <>
-            <Badge variant="neutral" className="hidden xl:inline-flex">
-              v{pkg.version}
-            </Badge>
-            <div className="hidden w-56 xl:block">
-              <CommandTrigger label="Search docs…" onClick={() => setPaletteOpen(true)} />
-            </div>
-            <IconButton
-              aria-label="Search docs"
-              variant="ghost"
-              className="xl:hidden"
-              icon={<Search className="size-4" />}
-              onClick={() => setPaletteOpen(true)}
-            />
-            <BrandToggle />
-            <AppearanceSettings themesHref="#/guide/theming" />
-            {/* On phones the repository link is in the footer. */}
-            <div className="contents max-sm:hidden">
-              <Tooltip content="Source on GitLab" side="bottom">
-                <a
-                  href={REPO}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="icon-button border-0! bg-transparent!"
-                  aria-label="Source on GitLab">
-                  <GitLabLogo className="size-4" />
-                </a>
-              </Tooltip>
-              <Popover
-                trigger={
-                  <IconButton
-                    aria-label="npm"
-                    variant="ghost"
-                    icon={<NpmLogo className="size-4" />}
-                  />
-                }
-                aria-label="npm"
-                align="end"
-                className="ui-menu px-3! py-2! text-sm font-semibold">
-                Soon
-              </Popover>
-            </div>
-          </>
-        }
+        actions={actions}
       />
 
       <div className="mx-auto grid w-full max-w-[var(--container-max)] flex-1 grid-cols-1 gap-8 px-4 py-8 sm:px-8 lg:grid-cols-[260px_minmax(0,1fr)]">
@@ -295,72 +416,14 @@ function Docs() {
           collapsible
           currentLabel={currentLabel}
           className="h-fit w-full lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
-          <SidebarNavGroup label="Guide">
-            {GUIDE.map((g) => (
-              <SidebarNavItem
-                key={g.id}
-                active={guide?.id === g.id || (!guide && !component && g === GUIDE[0])}
-                onClick={() => go(`guide/${g.id}`)}>
-                {g.title}
-              </SidebarNavItem>
-            ))}
-          </SidebarNavGroup>
-          <div className="px-1 pt-2">
-            <Input
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              placeholder="Filter components"
-              aria-label="Filter components"
-              startIcon={<Search className="size-4" />}
-            />
-          </div>
-          {GROUPS.map((group) => {
-            const items = COMPONENTS.filter((c) => c.group === group && matches(c))
-            if (!items.length) return null
-            return (
-              <SidebarNavGroup key={group} label={group}>
-                {items.map((c) => (
-                  <SidebarNavItem
-                    key={c.id}
-                    active={component?.id === c.id}
-                    onClick={() => go(`components/${c.id}`)}>
-                    {c.name}
-                  </SidebarNavItem>
-                ))}
-              </SidebarNavGroup>
-            )
-          })}
-          {q && !COMPONENTS.some(matches) && (
-            <p className="px-3 py-2 text-sm text-[var(--muted-foreground)]">
-              No components match “{filter}”.
-            </p>
-          )}
+          {navItems}
         </SidebarNav>
 
-        <main className="min-w-0">
-          {component ? (
-            <ComponentPage key={component.id} doc={component} />
-          ) : (
-            page && <page.render key={page.id} />
-          )}
-        </main>
+        <main className="min-w-0">{content}</main>
       </div>
 
-      <SiteFooter
-        start={<span>© 2026 Vedla Creative &amp; The Furlab Project · MIT licence</span>}
-        end={
-          <a href={REPO} className="hover:underline">
-            {pkg.name}@{pkg.version}
-          </a>
-        }
-      />
-
-      <CommandPalette
-        open={paletteOpen}
-        onOpenChange={setPaletteOpen}
-        items={commands}
-        placeholder="Search components and guides…"
-      />
+      {footer}
+      {palette}
     </div>
   )
 }

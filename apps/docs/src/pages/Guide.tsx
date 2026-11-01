@@ -9,8 +9,8 @@ import {
   TransparencyControl,
   useTheme,
 } from '@furlab/dynamic-lab'
-
 import pkg from '@furlab/dynamic-lab/package.json'
+
 import { Code, CodeBlock, PropsTable, Prose } from '../ui'
 
 const REGISTRY = import.meta.env.VITE_REGISTRY_URL ?? 'https://gitlab.com/api/v4/packages/npm/'
@@ -34,9 +34,8 @@ function GettingStarted() {
       <Prose>
         <h2>Install</h2>
         <p>
-          The package is published to the GitLab package registry. Point the <Code>@furlab</Code>{' '}
-          scope at it once (see <a href="#/guide/installation">Installation</a>), then add it with
-          React 19:
+          The package is on npm (and mirrored in the GitLab package registry, see{' '}
+          <a href="#/guide/installation">Installation</a>). Add it with React 19:
         </p>
         <CodeBlock language="sh" code={`yarn add ${pkg.name} react react-dom`} />
         <h2>Set up</h2>
@@ -85,13 +84,32 @@ function Installation() {
       <PageHeading
         eyebrow="Guide"
         title="Installation"
-        description={`${pkg.name} lives in the GitLab package registry, not on npmjs.com.`}
+        description={`${pkg.name} is on npm, with a mirror in the GitLab package registry.`}
       />
       <Prose>
-        <h2>1. Point the scope at GitLab</h2>
+        <h2>1. Add the package</h2>
         <p>
-          Packages in the <Code>@furlab</Code> scope come from the instance-level endpoint, which
-          serves every project in the <Code>furlab</Code> group.
+          It is published to{' '}
+          <a href={`https://www.npmjs.com/package/${pkg.name}`} target="_blank" rel="noreferrer">
+            npmjs.com
+          </a>
+          , so no registry set-up is needed:
+        </p>
+        <CodeBlock
+          language="sh"
+          code={`yarn add ${pkg.name}\n# or: npm install ${pkg.name} / pnpm add ${pkg.name}`}
+        />
+        <p>
+          While the library is in beta, the newest pre-release is on the <Code>next</Code> tag (
+          <Code>yarn add {pkg.name}@next</Code>); <Code>latest</Code> is the last one promoted.
+          React and React DOM 19 are peer dependencies. <Code>lucide-react</Code>, <Code>clsx</Code>
+          , <Code>tailwind-merge</Code> and <Code>class-variance-authority</Code> install with it.
+        </p>
+        <h2>2. Or install from GitLab</h2>
+        <p>
+          Every release is also in the GitLab package registry. To use it, point the{' '}
+          <Code>@furlab</Code> scope at the instance-level endpoint, which serves every project in
+          the <Code>furlab</Code> group, then add the package as above.
         </p>
         <h3>Yarn (Berry)</h3>
         <CodeBlock
@@ -113,15 +131,6 @@ ${REGISTRY_HOST}:_authToken=\${GITLAB_TOKEN}`}
           For a private project, create a personal or group access token with the{' '}
           <Code>read_api</Code> scope and export it as <Code>GITLAB_TOKEN</Code>. Never commit the
           token itself. In GitLab CI you can use <Code>CI_JOB_TOKEN</Code> instead.
-        </p>
-        <h2>2. Add the package</h2>
-        <CodeBlock
-          language="sh"
-          code={`yarn add ${pkg.name}\n# or: npm install ${pkg.name} / pnpm add ${pkg.name}`}
-        />
-        <p>
-          React and React DOM 19 are peer dependencies. <Code>lucide-react</Code>, <Code>clsx</Code>
-          , <Code>tailwind-merge</Code> and <Code>class-variance-authority</Code> install with it.
         </p>
         <h2>3. Import the styles</h2>
         <CodeBlock code={`import '${pkg.name}/styles.css'`} />
@@ -360,7 +369,7 @@ function Publishing() {
       <PageHeading
         eyebrow="Guide"
         title="Releasing"
-        description="How new versions get to the GitLab package registry, and how these docs are deployed."
+        description="How new versions get to npm and the GitLab package registry, and how these docs are deployed."
       />
       <Prose>
         <h2>Build</h2>
@@ -479,10 +488,179 @@ NPM_TOKEN=npm_… yarn release --registry npm`}
   )
 }
 
+function Utilities() {
+  return (
+    <>
+      <PageHeading
+        eyebrow="Guide"
+        title="Utilities and hooks"
+        description="The helpers the components are built from, exported for your own components."
+      />
+      <Prose>
+        <h2>Class names</h2>
+        <p>
+          <Code>cn(...classes)</Code> joins class names with <Code>clsx</Code> and resolves
+          conflicting Tailwind utilities with <Code>tailwind-merge</Code>, so a{' '}
+          <Code>className</Code> you pass wins over a component's own.
+        </p>
+        <CodeBlock code={`cn('px-4 py-2', isActive && 'bg-[var(--primary)]', className)`} />
+
+        <h2>Variant classes</h2>
+        <p>
+          To style your own element like a library component, use its class builder:{' '}
+          <Code>buttonVariants({'{ variant, size }'})</Code>,{' '}
+          <Code>badgeVariants({'{ variant, size }'})</Code>,{' '}
+          <Code>headingVariants({'{ size, tone }'})</Code>,{' '}
+          <Code>textVariants({'{ size, weight, tone }'})</Code> and{' '}
+          <Code>containerVariants({'{ size, gutter }'})</Code>. They return class names, so a link
+          can look like a button.
+        </p>
+        <CodeBlock
+          code={`<a href="/upload" className={buttonVariants({ variant: 'primary' })}>Upload</a>`}
+        />
+
+        <h2>State and dismissal</h2>
+        <PropsTable
+          rows={[
+            {
+              name: 'useControllableState(value, defaultValue, onChange)',
+              type: '[value, setValue]',
+              description:
+                'State that is controlled when value is set and uncontrolled otherwise, the pattern every component with value / defaultValue / onValueChange uses.',
+            },
+            {
+              name: 'useDismiss(refs, active, onDismiss)',
+              type: 'void',
+              description:
+                "Calls onDismiss('outside' | 'escape') on a press outside every ref, or on Escape. Pass several refs when part of the UI is in a portal.",
+            },
+            {
+              name: 'useLatestRef(value)',
+              type: 'RefObject',
+              description:
+                'A ref that always holds the latest value, for reading in handlers and effects without re-subscribing. Updated after render, so don’t read it during render.',
+            },
+            {
+              name: 'useScrollLock(active)',
+              type: 'void',
+              description: 'Stops the page scrolling while a dialog or drawer is open.',
+            },
+            {
+              name: 'focusSibling(container, selector, direction)',
+              type: 'void',
+              description:
+                "Moves focus to the 'next', 'prev', 'first' or 'last' element matching selector, for arrow-key menus and lists.",
+            },
+            {
+              name: 'isMacPlatform()',
+              type: 'boolean',
+              description: 'True on macOS and iOS, to show ⌘ instead of Ctrl in shortcuts.',
+            },
+          ]}
+        />
+
+        <h2>Floating panels</h2>
+        <p>
+          <Code>useFloating(anchorRef, panelRef, open, {'{ side, align, matchWidth }'})</Code>{' '}
+          positions a panel rendered in a portal next to its anchor: it flips when there isn't room,
+          stays on screen and follows the anchor on scroll and resize. Spread{' '}
+          <Code>floatingStyle(position)</Code> on the panel; it stays hidden until measured.
+          Combobox, DatePicker and HoverCard use it.
+        </p>
+        <CodeBlock
+          code={`const position = useFloating(fieldRef, panelRef, open, { matchWidth: true })
+
+{open && createPortal(
+  <div ref={panelRef} style={floatingStyle(position)} className="ui-menu z-[80]">…</div>,
+  document.body
+)}`}
+        />
+
+        <h2>Responsive layout values</h2>
+        <p>
+          The layout primitives take <Code>{'Responsive<T>'}</Code>: a value, or one per breakpoint
+          (<Code>{'{ base, sm, md, lg, xl }'}</Code>, the same as Tailwind's, listed in{' '}
+          <Code>BREAKPOINTS</Code>). Spacing is a <Code>Space</Code>: a number on the 4px scale or
+          any CSS length, converted by <Code>toSpace</Code>.
+        </p>
+        <p>
+          To make your own responsive component, turn a prop into CSS variables with{' '}
+          <Code>responsiveVars(name, value, format)</Code> (it writes <Code>--name</Code>,{' '}
+          <Code>--name-md</Code> and so on), merge them into <Code>style</Code> with{' '}
+          <Code>withVars</Code>, and read them in your CSS inside media queries. <Code>ALIGN</Code>{' '}
+          and <Code>JUSTIFY</Code> map the short alignment names to CSS values.
+        </p>
+        <CodeBlock
+          code={`style={withVars(responsiveVars('cols', cols, String), style)}
+
+/* CSS */
+.my-grid { grid-template-columns: repeat(var(--cols, 1), 1fr); }
+@media (min-width: 768px) {
+  .my-grid { grid-template-columns: repeat(var(--cols-md, var(--cols, 1)), 1fr); }
+}`}
+        />
+
+        <h2>Formatting and data</h2>
+        <PropsTable
+          rows={[
+            {
+              name: 'formatCount(n, locale?)',
+              type: 'string',
+              description: 'Compact counts in the reader’s locale: 1.2K, 34K, 1.5M.',
+            },
+            {
+              name: 'toDateKey(date)',
+              type: 'string',
+              description: "'YYYY-MM-DD' in local time, the key format of Calendar events.",
+            },
+            {
+              name: 'cropImage(src, area, options?)',
+              type: 'Promise<Blob>',
+              description: 'Exports an ImageCropper area as an image file.',
+            },
+            {
+              name: 'formatTagName(name)',
+              type: 'string',
+              description: 'Shows a stored tag ("red_fox") with spaces ("red fox").',
+            },
+            {
+              name: 'relativeTime(date)',
+              type: 'string',
+              description:
+                "Relative times as comments show them: 'just now', '5m ago', '3h ago', then a date after 30 days.",
+            },
+            {
+              name: 'DEFAULT_REACTIONS',
+              type: 'string[]',
+              description: 'The emoji ReactionBar and ReactionPicker offer by default.',
+            },
+            {
+              name: 'DEFAULT_READER_PREFS',
+              type: 'ReaderPrefs',
+              description: 'The story reader’s starting font size, font, line height and width.',
+            },
+          ]}
+        />
+
+        <h2>Theme data</h2>
+        <p>
+          <Code>TOKENS</Code> holds the radii, spacing and brand colours as values for JavaScript
+          (charts, canvas, emails). <Code>PALETTES</Code> and <Code>DEFAULT_PALETTE_ID</Code> list
+          the colour themes, and <Code>paletteTokens(palette, mode)</Code> /{' '}
+          <Code>paletteStyle</Code> give the CSS variables one sets, e.g. to preview a theme inside
+          a card. <Code>defaultApps</Code> is the AppSwitcher's standard list of Furlab apps. See{' '}
+          <a href="#/guide/theming">Theming</a>.
+        </p>
+      </Prose>
+    </>
+  )
+}
+
 export const GUIDE: GuidePage[] = [
   { id: 'getting-started', title: 'Getting started', render: GettingStarted },
   { id: 'installation', title: 'Installation', render: Installation },
   { id: 'theming', title: 'Theming', render: Theming },
   { id: 'accessibility', title: 'Accessibility', render: Accessibility },
+  { id: 'utilities', title: 'Utilities and hooks', render: Utilities },
   { id: 'releasing', title: 'Releasing', render: Publishing },
 ]

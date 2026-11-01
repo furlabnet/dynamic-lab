@@ -1,30 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-  Bell,
-  Bookmark,
-  BookOpen,
-  Copy,
-  FileCode,
-  Filter,
-  Grid3x3,
-  Home,
-  Layers,
-  LayoutDashboard,
-  List,
-  LogOut,
-  Palette,
-  Pencil,
-  Plus,
-  Search,
-  Settings,
-  Share2,
-  Sparkles,
-  Trash2,
-  User,
-  Wrench,
-} from 'lucide-react'
-
+import type { CommandItem } from '@furlab/dynamic-lab'
 import {
   Accordion,
   AccordionContent,
@@ -43,7 +19,6 @@ import {
   BreadcrumbSeparator,
   Button,
   Checkbox,
-  type CommandItem,
   CommandPalette,
   CommandTrigger,
   ContentCard,
@@ -114,6 +89,32 @@ import {
   WorkflowTimeline,
   WorkflowTimelineItem,
 } from '@furlab/dynamic-lab'
+
+import {
+  Bell,
+  Bookmark,
+  BookOpen,
+  Copy,
+  FileCode,
+  Filter,
+  Grid3x3,
+  Home,
+  Layers,
+  LayoutDashboard,
+  List,
+  LogOut,
+  Palette,
+  Pencil,
+  Plus,
+  Search,
+  Settings,
+  Share2,
+  Sparkles,
+  Trash2,
+  User,
+  Wrench,
+} from 'lucide-react'
+
 import { APPS, useShowcase } from '../state'
 
 const SECTIONS = [

@@ -15,10 +15,10 @@
   --accent-foreground: hsl(230 32% 12%);
   --border: hsl(228 22% 87%);
   --input: hsl(228 20% 83%);
-  --primary: hsl(225 80% 52%);
+  --primary: hsl(238 76% 56%);
   --primary-foreground: hsl(0 0% 100%);
-  --ring: hsl(225 80% 52%);
-  --destructive: hsl(0 72% 46%);
+  --ring: hsl(238 76% 56%);
+  --destructive: hsl(350 76% 46%);
   --destructive-foreground: hsl(0 0% 100%);
   --success: hsl(158 74% 27%);
   --success-foreground: hsl(0 0% 100%);
@@ -34,8 +34,8 @@
   --status-danger-ink: hsl(0 75% 36%);
   --status-danger-bg: hsl(0 100% 96%);
 
-  --glow-a: hsl(225 90% 60%);
-  --glow-b: hsl(262 80% 64%);
+  --glow-a: hsl(238 90% 64%);
+  --glow-b: hsl(286 78% 64%);
   --glass: hsl(0 0% 100%);
   --glass-border: hsl(228 30% 40% / 0.14);
   --glass-highlight: hsl(0 0% 100% / 0.75);
@@ -44,10 +44,18 @@
   --glass-alpha: 0.68;
   --surface-alpha: 0.76;
   --glow-strength: 0.22;
+  --glass-edge: linear-gradient(
+    155deg,
+    hsl(0 0% 100% / 0.95),
+    hsl(0 0% 100% / 0.2) 28%,
+    hsl(0 0% 100% / 0) 55%,
+    hsl(0 0% 100% / 0.45)
+  );
+  --glass-saturate: 1.8;
 
   --sidebar: hsl(0 0% 100% / 0.6);
   --sidebar-border: hsl(228 22% 87%);
-  --sidebar-accent: hsl(225 80% 96%);
+  --sidebar-accent: hsl(238 80% 96%);
   --grid-dot: transparent;
   color-scheme: light;
 }
@@ -68,10 +76,10 @@
   --accent-foreground: hsl(228 33% 96%);
   --border: hsl(232 20% 20%);
   --input: hsl(232 20% 25%);
-  --primary: hsl(220 95% 68%);
+  --primary: hsl(234 100% 78%);
   --primary-foreground: hsl(232 30% 7%);
-  --ring: hsl(220 95% 68%);
-  --destructive: hsl(0 84% 64%);
+  --ring: hsl(234 100% 78%);
+  --destructive: hsl(350 90% 68%);
   --destructive-foreground: hsl(232 30% 7%);
   --success: hsl(145 60% 70%);
   --success-foreground: hsl(232 30% 7%);
@@ -87,8 +95,8 @@
   --status-danger-ink: hsl(0 90% 76%);
   --status-danger-bg: hsl(0 50% 17%);
 
-  --glow-a: hsl(225 90% 58%);
-  --glow-b: hsl(262 80% 60%);
+  --glow-a: hsl(238 85% 58%);
+  --glow-b: hsl(286 70% 56%);
   --glass: hsl(232 25% 12%);
   --glass-border: hsl(228 40% 92% / 0.09);
   --glass-highlight: hsl(0 0% 100% / 0.06);
@@ -97,10 +105,18 @@
   --glass-alpha: 0.6;
   --surface-alpha: 0.66;
   --glow-strength: 0.2;
+  --glass-edge: linear-gradient(
+    155deg,
+    hsl(0 0% 100% / 0.18),
+    hsl(0 0% 100% / 0.04) 32%,
+    hsl(0 0% 100% / 0) 58%,
+    hsl(0 0% 100% / 0.08)
+  );
+  --glass-saturate: 1.7;
 
   --sidebar: color-mix(in srgb, var(--card) 60%, transparent);
   --sidebar-border: hsl(232 20% 20%);
-  --sidebar-accent: hsl(225 40% 18%);
+  --sidebar-accent: hsl(238 40% 19%);
   --grid-dot: transparent;
   color-scheme: dark;
 }
@@ -130,7 +146,7 @@
   --primary: hsl(262 67% 55%);
   --primary-foreground: hsl(0 0% 100%);
   --ring: hsl(262 67% 55%);
-  --destructive: hsl(0 72% 46%);
+  --destructive: hsl(350 76% 46%);
   --destructive-foreground: hsl(0 0% 100%);
   --success: hsl(158 74% 27%);
   --success-foreground: hsl(0 0% 100%);
@@ -161,6 +177,8 @@
   --glass-alpha: 0.72;
   --surface-alpha: 0.82;
   --glow-strength: 0.16;
+  --glass-edge: none;
+  --glass-saturate: 1.25;
   color-scheme: light;
 }
 
@@ -182,7 +200,7 @@
   --primary: hsl(265 89% 77%);
   --primary-foreground: hsl(252 30% 7%);
   --ring: hsl(265 89% 77%);
-  --destructive: hsl(0 84% 64%);
+  --destructive: hsl(350 90% 68%);
   --destructive-foreground: hsl(252 30% 7%);
   --success: hsl(145 60% 70%);
   --success-foreground: hsl(252 30% 7%);
@@ -213,6 +231,8 @@
   --glass-alpha: 0.66;
   --surface-alpha: 0.72;
   --glow-strength: 0.18;
+  --glass-edge: none;
+  --glass-saturate: 1.25;
   color-scheme: dark;
 }
 
@@ -245,6 +265,14 @@
   --radius-3xl: 20px;
   --radius-full: 9999px;
 
+  /* Shape roles. Dynamic draws buttons, nav links and fields as soft rounded rectangles (chips stay
+     pills); Backstage keeps both tight (see below). */
+  --radius-control: 12px;
+  --radius-field: 12px;
+
+  /* Inner top highlight on solid buttons, matching the glass surfaces. */
+  --control-highlight: inset 0 1px 0 hsl(0 0% 100% / 0.2);
+
   /* Target Dimensions */
   --touch-target: 44px;
   --control-compact: 36px;
@@ -255,6 +283,13 @@
   /* Glass Blur */
   --blur-chrome: 20px;
   --blur-panel: 14px;
+  /* Glass and Glass-button blur is multiplied by this; the transparency setting lowers it. */
+  --blur-scale: 1;
+  /* Lowest opacity any Glass may have; the transparency setting raises it. */
+  --glass-floor: 0;
+
+  /* Monochrome grain for frosted glass and the noise background pattern. */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Backstage is a dense desktop console: tighter corners and compact controls. */
@@ -265,6 +300,9 @@
   --radius-xl: 10px;
   --radius-2xl: 12px;
   --radius-3xl: 14px;
+  --radius-control: 6px;
+  --radius-field: 6px;
+  --control-highlight: 0 0 #0000;
 
   --touch-target: 40px;
   --control-compact: 32px;
@@ -282,6 +320,9 @@ html[data-transparency='reduced'] {
   --blur-chrome: 8px;
   --blur-panel: 6px;
   --glow-strength: 0.1;
+  --glass-saturate: 1.2;
+  --glass-floor: 0.94;
+  --blur-scale: 0.4;
 }
 
 html[data-transparency='off'] {
@@ -290,6 +331,10 @@ html[data-transparency='off'] {
   --blur-chrome: 0px;
   --blur-panel: 0px;
   --glow-strength: 0;
+  --glass-saturate: 1;
+  --glass-edge: none;
+  --glass-floor: 1;
+  --blur-scale: 0;
 }
 
 html[data-transparency='reduced'][data-brand='dynamic'],
@@ -308,5 +353,6 @@ html[data-transparency='off'] ::after {
   html {
     --glass-alpha: 1;
     --surface-alpha: 1;
+    --glass-floor: 1;
   }
 }

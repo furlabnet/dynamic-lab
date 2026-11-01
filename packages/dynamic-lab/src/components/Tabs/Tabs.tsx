@@ -1,4 +1,7 @@
+'use client'
+
 import React, { createContext, useContext, useState } from 'react'
+
 import { cn } from '../../lib/utils'
 
 interface TabsContextValue {
@@ -39,14 +42,14 @@ export function Tabs({
   return (
     <TabsContext.Provider
       value={{ value: currentValue, onValueChange: handleValueChange, variant }}>
-      <div className={cn('flex flex-col gap-3 w-full', className)} {...props}>
+      <div className={cn('flex w-full flex-col gap-3', className)} {...props}>
         {children}
       </div>
     </TabsContext.Provider>
   )
 }
 
-export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type TabsListProps = React.HTMLAttributes<HTMLDivElement>
 
 export function TabsList({ className, children, ...props }: TabsListProps) {
   const context = useContext(TabsContext)
@@ -58,7 +61,7 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
       className={cn(
         'inline-flex items-center',
         variant === 'pill'
-          ? 'p-1 gap-1 rounded-[var(--radius-full)] bg-[color-mix(in_srgb,var(--card)_70%,transparent)] border border-[var(--border)] surface-card'
+          ? 'surface-card gap-1 rounded-[var(--radius-full)] border border-[var(--border)] bg-[color-mix(in_srgb,var(--card)_70%,transparent)] p-1'
           : 'gap-6 border-b border-[var(--border)]',
         className
       )}
@@ -87,23 +90,23 @@ export function TabsTrigger({ className, value, icon, children, ...props }: Tabs
       aria-selected={isSelected}
       onClick={() => context.onValueChange(value)}
       className={cn(
-        'inline-flex items-center justify-center gap-2 text-sm font-semibold transition-all select-none cursor-pointer',
+        'inline-flex cursor-pointer items-center justify-center gap-2 text-sm font-semibold transition-all select-none',
         variant === 'pill' && [
-          'px-4 py-1.5 rounded-[var(--radius-full)]',
+          'rounded-[var(--radius-full)] px-4 py-1.5',
           isSelected
             ? 'bg-[var(--primary)] text-[var(--primary-foreground)] shadow-xs'
-            : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[color-mix(in_srgb,var(--foreground)_5%,transparent)]',
+            : 'text-[var(--muted-foreground)] hover:bg-[color-mix(in_srgb,var(--foreground)_5%,transparent)] hover:text-[var(--foreground)]',
         ],
         variant === 'line' && [
-          'pb-3 pt-1 border-b-2 -mb-px px-1 font-medium',
+          '-mb-px border-b-2 px-1 pt-1 pb-3 font-medium',
           isSelected
-            ? 'border-[var(--primary)] text-[var(--primary)] font-bold'
-            : 'border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:border-[var(--border)]',
+            ? 'border-[var(--primary)] font-bold text-[var(--primary)]'
+            : 'border-transparent text-[var(--muted-foreground)] hover:border-[var(--border)] hover:text-[var(--foreground)]',
         ],
         className
       )}
       {...props}>
-      {icon && <span className="inline-flex shrink-0 size-4">{icon}</span>}
+      {icon && <span className="inline-flex size-4 shrink-0">{icon}</span>}
       <span>{children}</span>
     </button>
   )
@@ -123,7 +126,7 @@ export function TabsContent({ className, value, children, ...props }: TabsConten
     <div
       role="tabpanel"
       className={cn(
-        'pt-2 focus-visible:outline-none animate-in fade-in-50 duration-150',
+        'animate-in fade-in-50 pt-2 duration-150 focus-visible:outline-none',
         className
       )}
       {...props}>

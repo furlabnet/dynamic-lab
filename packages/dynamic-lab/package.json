@@ -1,6 +1,6 @@
 {
   "name": "@furlab/dynamic-lab",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "description": "Dynamic Lab: the React component library for The Furlab Project. TypeScript, Tailwind CSS v4, two brands (Dynamic and Backstage), named colour themes, light and dark modes.",
   "keywords": [
     "react",
@@ -44,14 +44,17 @@
     "build": "tsdown",
     "build:css": "tailwindcss -i src/styles/dynamic-lab.css -o dist/styles.css --minify",
     "dev": "tsdown --watch",
+    "format": "prettier --check . --ignore-path ../../.gitignore --ignore-path ../../.prettierignore",
+    "lint": "eslint --cache --cache-location .cache/.eslintcache",
     "prepack": "yarn build",
     "release": "node ../../scripts/release.mjs",
     "typecheck": "tsc --noEmit"
   },
+  "prettier": "@vedla/prettier-config",
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.65.0",
+    "lucide-react": "^1.66.0",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
@@ -62,9 +65,12 @@
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@vedla/eslint-config": "workspace:*",
+    "@vedla/prettier-config": "workspace:*",
     "@vitejs/plugin-react": "^6.1.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "bumpp": "^12.3.0",
+    "eslint": "^10",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "rolldown": "^1.2.16",

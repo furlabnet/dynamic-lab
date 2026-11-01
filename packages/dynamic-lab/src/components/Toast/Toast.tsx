@@ -1,5 +1,9 @@
-import React, { createContext, useContext, useState, useCallback } from 'react'
-import { X, CheckCircle2, AlertTriangle, AlertCircle, Info } from 'lucide-react'
+'use client'
+
+import React, { createContext, useCallback, useContext, useState } from 'react'
+
+import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export type ToastTone = 'default' | 'success' | 'warning' | 'destructive' | 'info'
@@ -58,23 +62,23 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ toast, dismiss }}>
       {children}
       {/* Toast viewport */}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none">
+      <div className="pointer-events-none fixed right-4 bottom-4 z-50 flex w-full max-w-sm flex-col gap-2.5">
         {toasts.map((t) => (
           <div
             key={t.id}
             role="status"
             className={cn(
-              'pointer-events-auto flex items-start justify-between gap-3 p-4 rounded-[var(--radius-xl)] border border-[var(--glass-border)] bg-[color-mix(in_srgb,var(--card)_92%,transparent)] backdrop-blur-[var(--blur-chrome)] shadow-2xl dl-animate-toast select-none'
+              'dl-animate-toast pointer-events-auto flex items-start justify-between gap-3 rounded-[var(--radius-xl)] border border-[var(--glass-border)] bg-[color-mix(in_srgb,var(--card)_92%,transparent)] p-4 shadow-2xl backdrop-blur-[var(--blur-chrome)] select-none'
             )}>
-            <div className="flex items-start gap-3 flex-1 min-w-0">
+            <div className="flex min-w-0 flex-1 items-start gap-3">
               {t.tone && toneIcons[t.tone]}
               <div className="flex flex-col gap-0.5">
                 {t.title && (
-                  <h5 className="font-bold text-sm leading-tight text-[var(--foreground)]">
+                  <h5 className="text-sm leading-tight font-bold text-[var(--foreground)]">
                     {t.title}
                   </h5>
                 )}
-                <p className="text-xs text-[var(--muted-foreground)] leading-snug">
+                <p className="text-xs leading-snug text-[var(--muted-foreground)]">
                   {t.description}
                 </p>
                 {t.action && (
@@ -84,7 +88,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                       t.action?.onClick()
                       if (t.id) dismiss(t.id)
                     }}
-                    className="mt-1 text-xs font-bold text-[var(--primary)] hover:underline text-left">
+                    className="mt-1 text-left text-xs font-bold text-[var(--primary)] hover:underline">
                     {t.action.label}
                   </button>
                 )}
@@ -93,7 +97,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => t.id && dismiss(t.id)}
-              className="inline-flex size-5 items-center justify-center rounded-md opacity-50 hover:opacity-100 hover:bg-[var(--muted)] transition-opacity">
+              className="inline-flex size-5 items-center justify-center rounded-md opacity-50 transition-opacity hover:bg-[var(--muted)] hover:opacity-100">
               <X className="size-3.5" />
             </button>
           </div>

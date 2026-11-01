@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { ChevronDown } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 import { DropdownMenu } from '../Menu'
 import { ProfileAvatar } from '../ProfileAvatar'
@@ -59,12 +61,12 @@ export function UserMenu({
             className="ui-user-avatar"
           />
           {!compact && (
-            <span className="hidden whitespace-nowrap text-sm font-semibold lg:inline">{name}</span>
+            <span className="hidden text-sm font-semibold whitespace-nowrap lg:inline">{name}</span>
           )}
           <ChevronDown className="size-3.5 opacity-70" aria-hidden />
         </button>
       }>
-      <div className="flex items-center gap-3 px-3 pb-2 pt-2.5">
+      <div className="flex items-center gap-3 px-3 pt-2.5 pb-2">
         <ProfileAvatar
           initials={resolvedInitials}
           src={avatarSrc}

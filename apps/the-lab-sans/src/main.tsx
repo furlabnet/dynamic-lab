@@ -1,6 +1,9 @@
 import React from 'react'
+
 import ReactDOM from 'react-dom/client'
+
 import { SpecimenApp } from './SpecimenApp'
+
 import '@furlab/the-lab-sans/the-lab-sans.css'
 import './specimen.css'
 

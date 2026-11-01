@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface ProfileAvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -40,14 +41,14 @@ export function ProfileAvatar({
     <span className="relative inline-flex shrink-0">
       <span
         className={cn(
-          'inline-flex items-center justify-center border border-[var(--border)] bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)] font-bold overflow-hidden select-none shadow-xs',
+          'inline-flex items-center justify-center overflow-hidden border border-[var(--border)] bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] font-bold text-[var(--primary)] shadow-xs select-none',
           shape === 'square' ? 'rounded-[var(--radius-xl)]' : 'rounded-full',
           sizeClasses[size],
           className
         )}
         {...props}>
         {src ? (
-          <img src={src} alt={alt} loading="lazy" className="w-full h-full object-cover" />
+          <img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover" />
         ) : (
           <span>{initials}</span>
         )}
@@ -55,7 +56,7 @@ export function ProfileAvatar({
       {status && (
         <span
           className={cn(
-            'absolute bottom-0 right-0 size-2.5 rounded-full ring-2 ring-[var(--card)]',
+            'absolute right-0 bottom-0 size-2.5 rounded-full ring-2 ring-[var(--card)]',
             statusClasses[status]
           )}
         />

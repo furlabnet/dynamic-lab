@@ -1,6 +1,6 @@
-import { defineConfig, defaultClientConditions } from 'vite'
-import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+import { defaultClientConditions, defineConfig } from 'vite'
 
 /**
  * The Lab Sans specimen: the typeface in every weight, a type tester and how to use the package.

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { BookOpen, Heart, Palette } from 'lucide-react'
+
 import {
   Badge,
   Button,
@@ -11,12 +11,14 @@ import {
   PlatformBadge,
   ProfileHeader,
   ReaderSettings,
-  ReadingProgress,
   readerStyle,
+  ReadingProgress,
   useReaderPrefs,
   useReadingProgress,
   useToast,
 } from '@furlab/dynamic-lab'
+
+import { BookOpen, Heart, Palette } from 'lucide-react'
 
 export function Actions() {
   const { toast } = useToast()

@@ -1,4 +1,12 @@
 import React, { useMemo, useState } from 'react'
+
+import type {
+  AgeRatingValue,
+  DownloadFile,
+  Platform,
+  TagItem,
+  UploadedImage,
+} from '@furlab/dynamic-lab'
 import {
   AGE_RATING_INFO,
   AgeRating,
@@ -11,6 +19,7 @@ import {
   BreadcrumbSeparator,
   Button,
   Checkbox,
+  countWords,
   Dialog,
   DragHandle,
   EditorActionBar,
@@ -20,9 +29,9 @@ import {
   ImageUploader,
   MarkdownEditor,
   NotFoundState,
-  PLATFORM_INFO,
   PageHeader,
   Panel,
+  PLATFORM_INFO,
   PlatformBadge,
   RadioGroup,
   RadioGroupItem,
@@ -33,14 +42,9 @@ import {
   Switch,
   TagInput,
   TextField,
-  countWords,
   useToast,
-  type AgeRatingValue,
-  type DownloadFile,
-  type Platform,
-  type TagItem,
-  type UploadedImage,
 } from '@furlab/dynamic-lab'
+
 import {
   CheckCircle2,
   ChevronDown,
@@ -51,16 +55,11 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react'
-import {
-  CURRENT_USER,
-  STATUS_LABELS,
-  STATUS_TONES,
-  TYPE_LABELS,
-  type ContentRecord,
-  type ContentStatus,
-  type ContentType,
-} from '../data'
-import { DETAILS, LABS, getDetails, img, type ContentDetails } from '../details'
+
+import type { ContentRecord, ContentStatus, ContentType } from '../data'
+import type { ContentDetails } from '../details'
+import { CURRENT_USER, STATUS_LABELS, STATUS_TONES, TYPE_LABELS } from '../data'
+import { DETAILS, getDetails, img, LABS } from '../details'
 import { useShowcase } from '../state'
 import { TYPE_ICONS } from './LabApp'
 
@@ -1051,7 +1050,7 @@ function StoryFields({ draft, set, submitted }: FieldProps) {
                 onChange={(e) => update(chapter.id, { title: e.target.value })}
                 className="font-semibold"
               />
-              <span className="hidden shrink-0 text-xs tabular-nums text-[var(--muted-foreground)] sm:inline">
+              <span className="hidden shrink-0 text-xs text-[var(--muted-foreground)] tabular-nums sm:inline">
                 {countWords(chapter.body).toLocaleString()} words
               </span>
               <IconButton

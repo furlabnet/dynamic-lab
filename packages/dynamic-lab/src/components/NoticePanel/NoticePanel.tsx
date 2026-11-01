@@ -1,5 +1,7 @@
 import React from 'react'
-import { Info, CheckCircle2, AlertTriangle, AlertCircle, X } from 'lucide-react'
+
+import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export type NoticeTone = 'info' | 'success' | 'warning' | 'destructive' | 'danger'
@@ -39,7 +41,7 @@ export function NoticePanel({
       <div className="flex items-start gap-3">
         {icon !== undefined ? icon : toneIcons[tone]}
         <div className="flex flex-col gap-0.5">
-          {title && <h5 className="font-semibold text-sm leading-tight">{title}</h5>}
+          {title && <h5 className="text-sm leading-tight font-semibold">{title}</h5>}
           <div className="text-sm opacity-95">{children}</div>
         </div>
       </div>
@@ -48,7 +50,7 @@ export function NoticePanel({
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss alert"
-          className="inline-flex items-center justify-center -mr-1 -mt-1 size-6 rounded-md opacity-60 hover:opacity-100 hover:bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)] transition-all">
+          className="-mt-1 -mr-1 inline-flex size-6 items-center justify-center rounded-md opacity-60 transition-all hover:bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)] hover:opacity-100">
           <X className="size-4" />
         </button>
       )}

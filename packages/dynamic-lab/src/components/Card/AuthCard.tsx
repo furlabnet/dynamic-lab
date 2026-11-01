@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface AuthCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -18,7 +19,7 @@ export function AuthCard({
   return (
     <div
       className={cn(
-        'surface-card ui-auth-card flex flex-col gap-5 p-7 sm:p-9 max-w-md w-full mx-auto rounded-[var(--radius-3xl)] shadow-2xl',
+        'surface-card ui-auth-card mx-auto flex w-full max-w-md flex-col gap-5 rounded-[var(--radius-3xl)] p-7 shadow-2xl sm:p-9',
         className
       )}
       {...props}>

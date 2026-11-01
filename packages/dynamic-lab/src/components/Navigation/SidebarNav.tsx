@@ -1,5 +1,9 @@
+'use client'
+
 import React, { useId, useState } from 'react'
+
 import { ChevronDown } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export interface SidebarNavProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
@@ -60,7 +64,7 @@ export function SidebarNav({
           <ChevronDown className="ui-nav-toggle-icon size-4 shrink-0 lg:hidden" aria-hidden />
         </button>
       ) : (
-        title && <div className="px-2.5 pb-1 pt-1 text-base font-bold">{title}</div>
+        title && <div className="px-2.5 pt-1 pb-1 text-base font-bold">{title}</div>
       )}
       <div
         id={bodyId}
@@ -71,76 +75,5 @@ export function SidebarNav({
         {children}
       </div>
     </nav>
-  )
-}
-
-export interface SidebarNavGroupProps {
-  label?: string
-  children: React.ReactNode
-  className?: string
-}
-
-export function SidebarNavGroup({ label, children, className }: SidebarNavGroupProps) {
-  return (
-    <div className={cn('ui-nav-group mb-2 flex flex-col gap-0.5', className)}>
-      {label && <span className="ui-nav-label">{label}</span>}
-      {children}
-    </div>
-  )
-}
-
-export type SidebarNavItemProps = {
-  active?: boolean
-  icon?: React.ReactNode
-  badge?: string | number
-} & (
-  | (React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string })
-  | (React.ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined })
-)
-
-/** A sidebar link. Renders an anchor with `href`, otherwise a button (for client-side routing). */
-export function SidebarNavItem({
-  className,
-  active,
-  icon,
-  badge,
-  children,
-  ...props
-}: SidebarNavItemProps) {
-  const classes = cn('ui-nav-link w-full text-left cursor-pointer', className)
-  const label = typeof children === 'string' ? children : undefined
-  const inner = (
-    <>
-      {icon && (
-        <span className="inline-flex size-[18px] shrink-0 items-center [&>svg]:size-[18px]">
-          {icon}
-        </span>
-      )}
-      <span className="ui-nav-text flex-1 truncate">{children}</span>
-      {badge !== undefined && <span className="ui-nav-badge ui-nav-text">{badge}</span>}
-    </>
-  )
-
-  if (props.href !== undefined) {
-    return (
-      <a
-        aria-current={active ? 'page' : undefined}
-        title={label}
-        className={classes}
-        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
-        {inner}
-      </a>
-    )
-  }
-
-  return (
-    <button
-      type="button"
-      aria-current={active ? 'page' : undefined}
-      title={label}
-      className={classes}
-      {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
-      {inner}
-    </button>
   )
 }

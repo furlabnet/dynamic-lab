@@ -4,9 +4,11 @@ The React component library for **The Furlab Project**: TypeScript, Tailwind CSS
 
 - Two brands: **Dynamic** for the public site and **Backstage** for the staff console
 - Eight named colour themes, each in light and dark
-- About 70 components: from buttons and dialogs to a comic reader, a story reader and booru-style tags
+- About 130 components: from layout primitives, buttons and dialogs to a comic reader, a story reader and booru-style tags
 
 **Site:** https://furlab.gitlab.io/dynamic-lab/ (landing page) · [showcase](https://furlab.gitlab.io/dynamic-lab/showcase/) · [docs](https://furlab.gitlab.io/dynamic-lab/docs/) · [The Lab Sans](https://furlab.gitlab.io/dynamic-lab/the-lab-sans/)
+
+Install from npm: [`@furlab/dynamic-lab`](https://www.npmjs.com/package/@furlab/dynamic-lab) and [`@furlab/the-lab-sans`](https://www.npmjs.com/package/@furlab/the-lab-sans).
 
 To use the library in an app, see [`packages/dynamic-lab`](./packages/dynamic-lab/README.md). For the typeface, including in a Next.js site, see [`packages/the-lab-sans`](./packages/the-lab-sans/README.md).
 
@@ -23,7 +25,12 @@ A [Turborepo](https://turborepo.com) monorepo with Yarn workspaces.
 | `apps/landing` | `@furlab/landing` | The landing page: what the library is, with links to the showcase and docs |
 | `apps/showcase` | `@furlab/showcase` | Two working apps (the Dynamic Lab public site and the Backstage console) built from the library |
 | `apps/docs` | `@furlab/docs` | The documentation site: guides, live examples, source and props for every component |
+| `apps/playground` | `@furlab/playground` | A Furlab-style home feed built only from library components, for trying layouts at every screen size |
 | `apps/the-lab-sans` | `@furlab/the-lab-sans-site` | The Lab Sans specimen: every weight, a type tester, OpenType features, glyphs and set-up guides |
+| `tools/eslint` | `@vedla/eslint-config` | Shared ESLint flat configs: `base`, `react-internal` (React libraries) and `next-js`. TypeScript goes through typescript-eslint, and every rule is a warning |
+| `tools/prettier` | `@vedla/prettier-config` | The shared Prettier config, used by every workspace and the root: house style plus sorted imports and sorted Tailwind classes |
+| `tools/tailwind` | `@vedla/tailwind-config` | A Tailwind v4 theme stylesheet and PostCSS config. Not used by the apps yet, which take their tokens from the library |
+| `tools/typescript-config` | `@vedla/tsconfig` | Shared tsconfig presets (`base`, `react-library`, `compiled-package`, `nextjs`). The tool packages extend them; the apps and packages still use `tsconfig.base.json` |
 
 Both packages are published to this project's GitLab package registry and to npmjs.org (see [Releasing](#releasing)).
 
@@ -32,7 +39,7 @@ packages/
   dynamic-lab/
     src/components/   one folder per component
     src/theme/        ThemeProvider, palettes, tokens
-    src/styles/       tokens.css, components.css, content.css; dynamic-lab.css is the published entry
+    src/styles/       tokens.css plus one file per area (components, content, layout, platform, surfaces, widgets); dynamic-lab.css is the published entry
   the-lab-sans/
     fonts/            the OpenType sources
     src/index.ts      family name, font stack and the list of faces
@@ -42,6 +49,8 @@ apps/
   showcase/
   docs/src/examples/  live examples; each docs page shows this source
   the-lab-sans/
+tools/                shared ESLint, Prettier, Tailwind and TypeScript configs (private, not published)
+logos/                the Furlab logo and mark (the fox is FleskyFox), in ink and white
 scripts/
   assemble-pages.mjs  puts the built apps together in public/
   release.mjs         publishes a package to the GitLab registry or npmjs.org
@@ -57,14 +66,16 @@ Requires Node 24 (see `.nvmrc`) and Yarn 4 (via Corepack).
 
 | Command | What it does |
 | --- | --- |
-| `yarn dev` | Every app at once: landing on http://localhost:5170, showcase on http://localhost:5173, docs on http://localhost:5180, The Lab Sans on http://localhost:5190 |
+| `yarn dev` | Every app at once: landing on http://localhost:5170, showcase on http://localhost:5173, docs on http://localhost:5180, playground on http://localhost:5175, The Lab Sans on http://localhost:5190 |
 | `yarn turbo run dev --filter=@furlab/showcase` | Just one app (likewise `@furlab/docs`, `@furlab/landing`, `@furlab/the-lab-sans-site`), with the packages it needs built first |
 | `yarn build` | Every workspace. The library goes to `packages/dynamic-lab/dist/` (tsdown for ESM and CJS, `tsc` for declarations, the Tailwind CLI for `styles.css`); the font to `packages/the-lab-sans/dist/` (`tsc`, then the OpenType files compressed to WOFF2); each app to its own `dist/` |
 | `yarn pages` | Build the apps and assemble them into `public/`: landing at the root, then `showcase/`, `docs/` and `the-lab-sans/` |
 | `yarn typecheck` | Type-check every workspace |
-| `yarn format` | Prettier |
+| `yarn format` | Check formatting with Prettier in every workspace and the root files |
+| `yarn format:fix` | Format everything in place |
+| `yarn lint` | ESLint (the library and the Tailwind config so far) |
 
-Turborepo caches `build` and `typecheck`, so unchanged workspaces are skipped.
+Turborepo caches `build`, `typecheck` and `lint`, so unchanged workspaces are skipped. Prettier and ESLint keep their own caches in each workspace's `.cache/`.
 
 ### Environment variables
 

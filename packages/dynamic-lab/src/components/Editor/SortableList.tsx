@@ -1,5 +1,9 @@
-import React, { useRef, useState } from 'react'
+'use client'
+
+import React, { useState } from 'react'
+
 import { GripVertical } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export interface SortableItemApi {
@@ -49,16 +53,16 @@ export function SortableList<T>({
   const [armed, setArmed] = useState<string | null>(null)
   const [dragging, setDragging] = useState<string | null>(null)
   const [announcement, setAnnouncement] = useState('')
-  const rootRef = useRef<HTMLDivElement>(null)
-
-  const moveTo = (from: number, to: number, refocus = false) => {
+  /** `focusFrom` is the handle that moved; after the reorder, focus follows the item. */
+  const moveTo = (from: number, to: number, focusFrom?: HTMLElement) => {
     if (to < 0 || to >= items.length || from === to) return
     const key = getKey(items[from])
     onReorder(move(items, from, to))
     setAnnouncement(`${getLabel(items[from], from)} moved to position ${to + 1} of ${items.length}`)
-    if (refocus) {
+    if (focusFrom) {
+      const root = focusFrom.closest('[data-sortable-root]')
       requestAnimationFrame(() =>
-        rootRef.current
+        root
           ?.querySelector<HTMLElement>(
             `[data-sortable-key="${CSS.escape(key)}"] [data-sortable-handle]`
           )
@@ -72,7 +76,7 @@ export function SortableList<T>({
 
   return (
     <div
-      ref={rootRef}
+      data-sortable-root=""
       className={cn(layout === 'grid' ? 'grid gap-3' : 'flex flex-col gap-2', className)}>
       {items.map((item, index) => {
         const key = getKey(item)
@@ -92,10 +96,10 @@ export function SortableList<T>({
             onKeyDown: (e) => {
               if (prevKey.includes(e.key)) {
                 e.preventDefault()
-                moveTo(index, index - 1, true)
+                moveTo(index, index - 1, e.currentTarget)
               } else if (nextKey.includes(e.key)) {
                 e.preventDefault()
-                moveTo(index, index + 1, true)
+                moveTo(index, index + 1, e.currentTarget)
               }
             },
           },

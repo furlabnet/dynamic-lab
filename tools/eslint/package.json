@@ -1,0 +1,38 @@
+{
+  "name": "@vedla/eslint-config",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./next-js": "./next.js",
+    "./react-internal": "./react-internal.js"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore --ignore-path ../../.prettierignore",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@vedla/prettier-config",
+  "dependencies": {
+    "@babel/core": "8.0.10",
+    "@babel/eslint-parser": "8.0.7",
+    "@babel/preset-typescript": "8.0.7",
+    "@eslint/js": "10.0.1",
+    "@next/eslint-plugin-next": "16.4.3",
+    "eslint": "10.14.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-only-warn": "1.2.1",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-turbo": "2.11.10",
+    "globals": "17.13.0",
+    "typescript-eslint": "8.72.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@vedla/prettier-config": "workspace:*",
+    "@vedla/tsconfig": "workspace:*",
+    "prettier": "3.9.10",
+    "turbo": "^2.11.10",
+    "typescript": "6.0.3"
+  }
+}

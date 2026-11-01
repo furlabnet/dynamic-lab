@@ -381,7 +381,7 @@ input:focus-visible + .ui-radio {
   display: inline-flex;
   gap: 2px;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-control);
   background: var(--muted);
   padding: 3px;
 }
@@ -392,7 +392,7 @@ input:focus-visible + .ui-radio {
   align-items: center;
   justify-content: center;
   gap: var(--space-6);
-  border-radius: calc(var(--radius-lg) - 3px);
+  border-radius: calc(var(--radius-control) - 3px);
   padding: 0 var(--space-12);
   color: var(--muted-foreground);
   font-size: 0.8125rem;
@@ -438,7 +438,7 @@ input:focus-visible + .ui-radio {
 .ui-file-input::file-selector-button {
   margin-right: var(--space-12);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-control);
   background: color-mix(in srgb, var(--card) 70%, transparent);
   padding: var(--space-8) var(--space-16);
   color: var(--foreground);
@@ -562,7 +562,7 @@ input:focus-visible + .ui-radio {
   min-height: 2.5rem;
   align-items: center;
   gap: var(--space-6);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-control);
   padding: 0 0.875rem;
   color: var(--muted-foreground);
   font-size: 0.875rem;
@@ -605,7 +605,7 @@ input:focus-visible + .ui-radio {
   min-height: 2.5rem;
   align-items: center;
   gap: var(--space-6);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-control);
   padding: 0 var(--space-10);
   color: var(--foreground);
   font-size: 0.875rem;
@@ -869,7 +869,7 @@ input:focus-visible + .ui-radio {
   align-items: center;
   gap: var(--space-8);
   border: 1px solid var(--sidebar-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-control);
   background: color-mix(in srgb, var(--card) 70%, transparent);
   padding: 0 var(--space-6) 0 var(--space-10);
   color: var(--muted-foreground);

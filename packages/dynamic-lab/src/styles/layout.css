@@ -1,0 +1,318 @@
+/*
+ * Layout primitives (Stack, Grid, Columns, ZStack, SidebarLayout, ScrollArea).
+ *
+ * Responsive props arrive as inline CSS variables: --stack-gap for the base value, --stack-gap-md
+ * for md and up, and so on. Each rule falls back to the next smaller breakpoint, then the base.
+ * Every class first resets its own variables to `initial` (a guaranteed-invalid value) so a nested
+ * stack doesn't inherit its parent's settings; inline styles outrank these resets.
+ * Breakpoints match Tailwind's: sm 640px, md 768px, lg 1024px, xl 1280px.
+ */
+
+/* ---------------------------------------------------------------- Stack */
+.dl-stack {
+  --stack-dir: initial;
+  --stack-dir-sm: initial;
+  --stack-dir-md: initial;
+  --stack-dir-lg: initial;
+  --stack-dir-xl: initial;
+  --stack-gap: initial;
+  --stack-gap-sm: initial;
+  --stack-gap-md: initial;
+  --stack-gap-lg: initial;
+  --stack-gap-xl: initial;
+  --stack-align: initial;
+  --stack-justify: initial;
+  --stack-wrap: initial;
+
+  display: flex;
+  min-width: 0;
+  flex-direction: var(--stack-dir, column);
+  gap: var(--stack-gap, 0);
+  align-items: var(--stack-align, stretch);
+  justify-content: var(--stack-justify, flex-start);
+  flex-wrap: var(--stack-wrap, nowrap);
+}
+
+.dl-stack-inline {
+  display: inline-flex;
+}
+
+@media (min-width: 640px) {
+  .dl-stack {
+    flex-direction: var(--stack-dir-sm, var(--stack-dir, column));
+    gap: var(--stack-gap-sm, var(--stack-gap, 0));
+  }
+}
+
+@media (min-width: 768px) {
+  .dl-stack {
+    flex-direction: var(--stack-dir-md, var(--stack-dir-sm, var(--stack-dir, column)));
+    gap: var(--stack-gap-md, var(--stack-gap-sm, var(--stack-gap, 0)));
+  }
+}
+
+@media (min-width: 1024px) {
+  .dl-stack {
+    flex-direction: var(
+      --stack-dir-lg,
+      var(--stack-dir-md, var(--stack-dir-sm, var(--stack-dir, column)))
+    );
+    gap: var(--stack-gap-lg, var(--stack-gap-md, var(--stack-gap-sm, var(--stack-gap, 0))));
+  }
+}
+
+@media (min-width: 1280px) {
+  .dl-stack {
+    flex-direction: var(
+      --stack-dir-xl,
+      var(--stack-dir-lg, var(--stack-dir-md, var(--stack-dir-sm, var(--stack-dir, column))))
+    );
+    gap: var(
+      --stack-gap-xl,
+      var(--stack-gap-lg, var(--stack-gap-md, var(--stack-gap-sm, var(--stack-gap, 0))))
+    );
+  }
+}
+
+/* --------------------------------------------------------------- ZStack */
+.dl-zstack {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  isolation: isolate;
+}
+
+/* Every layer is positioned so later children paint on top even when an earlier one is itself
+   positioned (e.g. AspectRatio). :where() keeps this easy to override with a utility. */
+:where(.dl-zstack > *) {
+  position: relative;
+  grid-area: 1 / 1;
+}
+
+/* ----------------------------------------------------------------- Grid */
+.dl-grid {
+  --grid-cols: initial;
+  --grid-cols-sm: initial;
+  --grid-cols-md: initial;
+  --grid-cols-lg: initial;
+  --grid-cols-xl: initial;
+  --grid-gap: initial;
+  --grid-gap-sm: initial;
+  --grid-gap-md: initial;
+  --grid-gap-lg: initial;
+  --grid-gap-xl: initial;
+  --grid-min: initial;
+
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 1), minmax(0, 1fr));
+  gap: var(--grid-gap, 0);
+}
+
+.dl-grid.dl-grid-auto {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--grid-min, 16rem), 100%), 1fr));
+}
+
+.dl-grid-item {
+  --grid-span: initial;
+  --grid-span-sm: initial;
+  --grid-span-md: initial;
+  --grid-span-lg: initial;
+  --grid-span-xl: initial;
+
+  min-width: 0;
+  grid-column: var(--grid-span, auto);
+}
+
+@media (min-width: 640px) {
+  .dl-grid:not(.dl-grid-auto) {
+    grid-template-columns: repeat(var(--grid-cols-sm, var(--grid-cols, 1)), minmax(0, 1fr));
+  }
+  .dl-grid {
+    gap: var(--grid-gap-sm, var(--grid-gap, 0));
+  }
+  .dl-grid-item {
+    grid-column: var(--grid-span-sm, var(--grid-span, auto));
+  }
+}
+
+@media (min-width: 768px) {
+  .dl-grid:not(.dl-grid-auto) {
+    grid-template-columns: repeat(
+      var(--grid-cols-md, var(--grid-cols-sm, var(--grid-cols, 1))),
+      minmax(0, 1fr)
+    );
+  }
+  .dl-grid {
+    gap: var(--grid-gap-md, var(--grid-gap-sm, var(--grid-gap, 0)));
+  }
+  .dl-grid-item {
+    grid-column: var(--grid-span-md, var(--grid-span-sm, var(--grid-span, auto)));
+  }
+}
+
+@media (min-width: 1024px) {
+  .dl-grid:not(.dl-grid-auto) {
+    grid-template-columns: repeat(
+      var(--grid-cols-lg, var(--grid-cols-md, var(--grid-cols-sm, var(--grid-cols, 1)))),
+      minmax(0, 1fr)
+    );
+  }
+  .dl-grid {
+    gap: var(--grid-gap-lg, var(--grid-gap-md, var(--grid-gap-sm, var(--grid-gap, 0))));
+  }
+  .dl-grid-item {
+    grid-column: var(
+      --grid-span-lg,
+      var(--grid-span-md, var(--grid-span-sm, var(--grid-span, auto)))
+    );
+  }
+}
+
+@media (min-width: 1280px) {
+  .dl-grid:not(.dl-grid-auto) {
+    grid-template-columns: repeat(
+      var(
+        --grid-cols-xl,
+        var(--grid-cols-lg, var(--grid-cols-md, var(--grid-cols-sm, var(--grid-cols, 1))))
+      ),
+      minmax(0, 1fr)
+    );
+  }
+  .dl-grid {
+    gap: var(
+      --grid-gap-xl,
+      var(--grid-gap-lg, var(--grid-gap-md, var(--grid-gap-sm, var(--grid-gap, 0))))
+    );
+  }
+  .dl-grid-item {
+    grid-column: var(
+      --grid-span-xl,
+      var(--grid-span-lg, var(--grid-span-md, var(--grid-span-sm, var(--grid-span, auto))))
+    );
+  }
+}
+
+/* -------------------------------------------------------------- Columns */
+.dl-columns {
+  --columns-gap: initial;
+  --columns-align: initial;
+
+  display: flex;
+  flex-direction: row;
+  gap: var(--columns-gap, 1.5rem);
+  align-items: var(--columns-align, stretch);
+}
+
+.dl-column {
+  --column-flex: initial;
+
+  min-width: 0;
+  flex: var(--column-flex, 1 1 0%);
+}
+
+@media (max-width: 639.98px) {
+  .dl-columns[data-collapse='sm'] {
+    flex-direction: column;
+  }
+  .dl-columns[data-collapse='sm'][data-reverse] {
+    flex-direction: column-reverse;
+  }
+  .dl-columns[data-collapse='sm'] > .dl-column {
+    flex: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .dl-columns[data-collapse='md'] {
+    flex-direction: column;
+  }
+  .dl-columns[data-collapse='md'][data-reverse] {
+    flex-direction: column-reverse;
+  }
+  .dl-columns[data-collapse='md'] > .dl-column {
+    flex: none;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .dl-columns[data-collapse='lg'] {
+    flex-direction: column;
+  }
+  .dl-columns[data-collapse='lg'][data-reverse] {
+    flex-direction: column-reverse;
+  }
+  .dl-columns[data-collapse='lg'] > .dl-column {
+    flex: none;
+  }
+}
+
+/* -------------------------------------------------------- SidebarLayout */
+.dl-sidebar-layout {
+  display: grid;
+  gap: var(--sidebar-layout-gap, 2rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.dl-sidebar-layout[data-side='right'] > .dl-sidebar-layout-aside {
+  order: 2;
+}
+
+@media (min-width: 768px) {
+  .dl-sidebar-layout[data-collapse='md'] {
+    grid-template-columns: var(--sidebar-layout-width, 16rem) minmax(0, 1fr);
+  }
+  .dl-sidebar-layout[data-collapse='md'][data-side='right'] {
+    grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-width, 16rem);
+  }
+  .dl-sidebar-layout[data-collapse='md'] > .dl-sidebar-layout-sticky {
+    position: sticky;
+    top: var(--sidebar-layout-top, 5rem);
+    align-self: start;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dl-sidebar-layout[data-collapse='lg'] {
+    grid-template-columns: var(--sidebar-layout-width, 16rem) minmax(0, 1fr);
+  }
+  .dl-sidebar-layout[data-collapse='lg'][data-side='right'] {
+    grid-template-columns: minmax(0, 1fr) var(--sidebar-layout-width, 16rem);
+  }
+  .dl-sidebar-layout[data-collapse='lg'] > .dl-sidebar-layout-sticky {
+    position: sticky;
+    top: var(--sidebar-layout-top, 5rem);
+    align-self: start;
+  }
+}
+
+/* ----------------------------------------------------------- ScrollArea */
+.dl-scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 22%, transparent) transparent;
+  overscroll-behavior: contain;
+  border-radius: inherit;
+}
+
+.dl-scroll-area:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.dl-scroll-area[data-fade][data-orientation='vertical'] {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 1.25rem,
+    #000 calc(100% - 1.25rem),
+    transparent
+  );
+}
+
+.dl-scroll-area[data-fade][data-orientation='horizontal'] {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 1.25rem,
+    #000 calc(100% - 1.25rem),
+    transparent
+  );
+}

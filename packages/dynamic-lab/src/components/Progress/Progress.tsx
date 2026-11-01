@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { cn } from '../../lib/utils'
 
 export interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -35,7 +36,7 @@ export function Progress({
         <div className="flex items-center justify-between text-sm">
           {label && <span className="font-medium text-[var(--foreground)]">{label}</span>}
           {showValue && !indeterminate && (
-            <span className="tabular-nums text-[var(--muted-foreground)]">
+            <span className="text-[var(--muted-foreground)] tabular-nums">
               {Math.round(clamped)}%
             </span>
           )}

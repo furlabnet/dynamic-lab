@@ -1,5 +1,10 @@
-import React, { createContext, useContext, useState } from 'react'
+'use client'
+
+import React, { createContext, useContext, useId, useState } from 'react'
+
 import { ChevronDown } from 'lucide-react'
+
+import { useControllableState } from '../../lib/hooks'
 import { cn } from '../../lib/utils'
 
 interface AccordionContextValue {
@@ -87,7 +92,7 @@ export function AccordionItem({ value, className, children, ...props }: Accordio
   )
 }
 
-export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+export type AccordionTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 
 export function AccordionTrigger({ className, children, ...props }: AccordionTriggerProps) {
   const accordionContext = useContext(AccordionContext)
@@ -105,17 +110,17 @@ export function AccordionTrigger({ className, children, ...props }: AccordionTri
       aria-expanded={isExpanded}
       onClick={() => accordionContext.toggleItem(itemContext.id)}
       className={cn(
-        'flex flex-1 items-center justify-between py-3.5 px-2 text-left font-semibold text-sm transition-all hover:text-[var(--primary)] [&[aria-expanded=true]>svg]:rotate-180 w-full cursor-pointer select-none',
+        'flex w-full flex-1 cursor-pointer items-center justify-between px-2 py-3.5 text-left text-sm font-semibold transition-all select-none hover:text-[var(--primary)] [&[aria-expanded=true]>svg]:rotate-180',
         className
       )}
       {...props}>
       {children}
-      <ChevronDown className="size-4 shrink-0 transition-transform duration-200 opacity-60" />
+      <ChevronDown className="size-4 shrink-0 opacity-60 transition-transform duration-200" />
     </button>
   )
 }
 
-export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type AccordionContentProps = React.HTMLAttributes<HTMLDivElement>
 
 export function AccordionContent({ className, children, ...props }: AccordionContentProps) {
   const accordionContext = useContext(AccordionContext)
@@ -132,7 +137,7 @@ export function AccordionContent({ className, children, ...props }: AccordionCon
   return (
     <div
       className={cn(
-        'px-2 pb-4 pt-1 text-sm text-[var(--muted-foreground)] leading-relaxed animate-in fade-in-50 duration-150',
+        'animate-in fade-in-50 px-2 pt-1 pb-4 text-sm leading-relaxed text-[var(--muted-foreground)] duration-150',
         className
       )}
       {...props}>
@@ -145,9 +150,14 @@ export interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  /**
+   * What toggles the content. A button element gets the toggle handler and aria-expanded added;
+   * text or anything else is wrapped in a button, so it always works with the keyboard.
+   */
   trigger: React.ReactNode
 }
 
+/** One section that shows and hides its content, with a trigger you supply. */
 export function Collapsible({
   open: controlledOpen,
   defaultOpen = false,
@@ -157,24 +167,42 @@ export function Collapsible({
   className,
   ...props
 }: CollapsibleProps) {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen)
-  const isControlled = controlledOpen !== undefined
-  const isOpen = isControlled ? controlledOpen : internalOpen
+  const [isOpen, setOpen] = useControllableState(controlledOpen, defaultOpen, onOpenChange)
+  const contentId = useId()
 
-  const handleToggle = () => {
-    const next = !isOpen
-    if (!isControlled) setInternalOpen(next)
-    onOpenChange?.(next)
+  const toggleProps = {
+    'aria-expanded': isOpen,
+    'aria-controls': contentId,
   }
+
+  const isButton =
+    React.isValidElement<React.ButtonHTMLAttributes<HTMLButtonElement>>(trigger) &&
+    trigger.type === 'button'
+
+  const triggerNode = isButton ? (
+    React.cloneElement(trigger, {
+      ...toggleProps,
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+        trigger.props.onClick?.(e)
+        if (!e.defaultPrevented) setOpen(!isOpen)
+      },
+    })
+  ) : (
+    <button
+      type="button"
+      {...toggleProps}
+      onClick={() => setOpen(!isOpen)}
+      className="inline-flex items-center gap-1.5 self-start rounded-[var(--radius-sm)] text-left text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]">
+      {trigger}
+    </button>
+  )
 
   return (
     <div className={cn('flex flex-col gap-2', className)} {...props}>
-      <div onClick={handleToggle} className="cursor-pointer">
-        {trigger}
+      {triggerNode}
+      <div id={contentId} hidden={!isOpen} className={cn(isOpen && 'dl-animate-fade')}>
+        {children}
       </div>
-      {isOpen && (
-        <div className="animate-in fade-in slide-in-from-top-1 duration-150">{children}</div>
-      )}
     </div>
   )
 }

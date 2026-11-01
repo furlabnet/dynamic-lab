@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { X } from 'lucide-react'
+
 import { cn } from '../../lib/utils'
 
 export interface SiteBannerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -35,7 +37,7 @@ export function SiteBanner({
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss banner"
-          className="absolute right-3 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-md opacity-80 hover:bg-black/10 hover:opacity-100">
+          className="absolute top-1/2 right-3 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-md opacity-80 hover:bg-black/10 hover:opacity-100">
           <X className="size-3.5" />
         </button>
       )}

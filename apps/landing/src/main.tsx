@@ -1,6 +1,9 @@
 import React from 'react'
+
 import ReactDOM from 'react-dom/client'
+
 import { LandingApp } from './LandingApp'
+
 import '@furlab/the-lab-sans/the-lab-sans.css'
 import './landing.css'
 

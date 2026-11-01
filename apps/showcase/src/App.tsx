@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
+
 import { ThemeProvider, ToastProvider, useTheme } from '@furlab/dynamic-lab'
-import { ShowcaseProvider, useShowcase } from './state'
-import { LabApp } from './lab/LabApp'
+
 import { BackstageApp } from './backstage/BackstageApp'
+import { LabApp } from './lab/LabApp'
+import { ShowcaseProvider, useShowcase } from './state'
 
 /**
  * The showcase is two apps built from the same library:

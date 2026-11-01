@@ -1,7 +1,11 @@
+'use client'
+
 import React, { createContext, useContext } from 'react'
+
 import { Check } from 'lucide-react'
-import { cn } from '../../lib/utils'
+
 import { focusSibling } from '../../lib/hooks'
+import { cn } from '../../lib/utils'
 import { Popover } from '../Popover'
 
 /** Lets items inside a DropdownMenu close it after they run. */
@@ -36,7 +40,7 @@ export function Menu({ className, children, ...props }: MenuProps) {
     <div
       role="menu"
       onKeyDown={handleMenuKeyDown}
-      className={cn('ui-menu flex flex-col w-60', className)}
+      className={cn('ui-menu flex w-60 flex-col', className)}
       {...props}>
       {children}
     </div>
@@ -129,28 +133,6 @@ export function MenuItem({
       {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
       {content}
     </button>
-  )
-}
-
-export function MenuSeparator({ className }: { className?: string }) {
-  return <div className={cn('my-1 h-px bg-[var(--border)]', className)} role="separator" />
-}
-
-export function MenuLabel({
-  className,
-  children,
-}: {
-  className?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div
-      className={cn(
-        'px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]',
-        className
-      )}>
-      {children}
-    </div>
   )
 }
 

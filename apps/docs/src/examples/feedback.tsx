@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Search, Sparkles } from 'lucide-react'
+
 import {
   AgeGate,
   AgeRating,
@@ -16,6 +16,8 @@ import {
   Spinner,
   StatusBadge,
 } from '@furlab/dynamic-lab'
+
+import { Search, Sparkles } from 'lucide-react'
 
 export function StatusBadges() {
   return (

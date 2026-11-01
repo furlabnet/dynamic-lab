@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Bell, Copy, Home, Pencil, Plus, Settings, Share2, Trash2 } from 'lucide-react'
+
+import type { CommandItem } from '@furlab/dynamic-lab'
 import {
   Button,
   Checkbox,
@@ -17,8 +18,9 @@ import {
   Switch,
   TextField,
   useToast,
-  type CommandItem,
 } from '@furlab/dynamic-lab'
+
+import { Bell, Copy, Home, Pencil, Plus, Settings, Share2, Trash2 } from 'lucide-react'
 
 export function DropdownBasic() {
   const [sort, setSort] = useState('newest')

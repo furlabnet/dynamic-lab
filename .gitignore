@@ -5,6 +5,15 @@ node_modules
 .pnp
 .pnp.js
 
+# Yarn files
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Local env files
 .env
 .env.local
@@ -49,3 +58,6 @@ yarn-error.log*
 
 # Documentation build (GitLab Pages artifact)
 /public
+
+# Tool caches (Prettier, ESLint, tsc build info)
+.cache

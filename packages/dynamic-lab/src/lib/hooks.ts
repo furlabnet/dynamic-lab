@@ -1,4 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+'use client'
+
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+
+/**
+ * A ref that always holds the latest `value`, for reading in event handlers and effects without
+ * re-subscribing when it changes. It's updated after render, so don't read it during render.
+ */
+export function useLatestRef<T>(value: T) {
+  const ref = useRef(value)
+  useLayoutEffect(() => {
+    ref.current = value
+  })
+  return ref
+}
 
 /**
  * State that can be either controlled (value + onChange) or uncontrolled (defaultValue).
@@ -12,15 +26,14 @@ export function useControllableState<T>(
   const isControlled = value !== undefined
   const current = isControlled ? (value as T) : internal
 
-  const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
+  const onChangeRef = useLatestRef(onChange)
 
   const setValue = useCallback(
     (next: T) => {
       if (!isControlled) setInternal(next)
       onChangeRef.current?.(next)
     },
-    [isControlled]
+    [isControlled, onChangeRef]
   )
 
   return [current, setValue]
@@ -35,10 +48,8 @@ export function useDismiss(
   active: boolean,
   onDismiss: (reason: 'outside' | 'escape') => void
 ) {
-  const onDismissRef = useRef(onDismiss)
-  onDismissRef.current = onDismiss
-  const refsRef = useRef(refs)
-  refsRef.current = refs
+  const onDismissRef = useLatestRef(onDismiss)
+  const refsRef = useLatestRef(refs)
 
   useEffect(() => {
     if (!active) return
@@ -58,7 +69,7 @@ export function useDismiss(
       document.removeEventListener('mousedown', handlePointer)
       document.removeEventListener('keydown', handleKey)
     }
-  }, [active])
+  }, [active, onDismissRef, refsRef])
 }
 
 /**
@@ -90,7 +101,7 @@ export function focusSibling(
   )
   if (items.length === 0) return
   const index = items.indexOf(document.activeElement as HTMLElement)
-  let next = 0
+  let next: number
   if (direction === 'first') next = 0
   else if (direction === 'last') next = items.length - 1
   else if (direction === 'next') next = index < 0 ? 0 : (index + 1) % items.length

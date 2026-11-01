@@ -1,0 +1,235 @@
+/*
+ * Background and Glass.
+ *
+ * Both follow the transparency setting through tokens: --glow-strength fades glows, --glass-floor
+ * raises the minimum opacity of glass (0.94 when reduced, 1 when off) and --blur-scale shrinks blur.
+ */
+
+/* ----------------------------------------------------------- Background */
+.dl-background {
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dl-background[data-position='fixed'] {
+  position: fixed;
+}
+
+.dl-background[data-position='absolute'] {
+  position: absolute;
+  border-radius: inherit;
+}
+
+.dl-background-glows,
+.dl-background-pattern {
+  position: absolute;
+  inset: 0;
+}
+
+/* The classic look for each brand, same as .dynamic-lab-glow-bg. */
+.dl-background-brand {
+  background:
+    radial-gradient(
+      56rem 40rem at 100% 0%,
+      color-mix(
+        in srgb,
+        var(--glow-a) calc(var(--glow-strength) * var(--bg-intensity, 1) * 100%),
+        transparent
+      ),
+      transparent 70%
+    ),
+    radial-gradient(
+      48rem 36rem at 0% 100%,
+      color-mix(
+        in srgb,
+        var(--glow-b) calc(var(--glow-strength) * var(--bg-intensity, 1) * 75%),
+        transparent
+      ),
+      transparent 65%
+    );
+}
+
+[data-theme^='backstage'] .dl-background-brand {
+  background:
+    radial-gradient(
+      48rem 32rem at 18% -10%,
+      color-mix(
+        in srgb,
+        var(--glow-a) calc(var(--glow-strength) * var(--bg-intensity, 1) * 100%),
+        transparent
+      ),
+      transparent 70%
+    ),
+    radial-gradient(
+      40rem 30rem at 100% 100%,
+      color-mix(
+        in srgb,
+        var(--glow-b) calc(var(--glow-strength) * var(--bg-intensity, 1) * 60%),
+        transparent
+      ),
+      transparent 65%
+    );
+}
+
+.dl-background-glows[data-animate] {
+  inset: -15%;
+  animation: dl-bg-drift 32s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes dl-bg-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(4%, 3%, 0) scale(1.08) rotate(3deg);
+  }
+  100% {
+    transform: translate3d(-4%, 1%, 0) scale(1.03) rotate(-2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-background-glows[data-animate] {
+    animation: none;
+  }
+}
+
+.dl-background-pattern {
+  --bg-pattern-ink: var(--bg-pattern-color, color-mix(in srgb, var(--foreground) 9%, transparent));
+  --bg-pattern-step: var(--bg-pattern-size, 22px);
+}
+
+.dl-background-pattern[data-pattern='dots'] {
+  background: radial-gradient(var(--bg-pattern-ink) 1px, transparent 1.5px) 0 0 /
+    var(--bg-pattern-step) var(--bg-pattern-step);
+}
+
+.dl-background-pattern[data-pattern='grid'] {
+  background:
+    linear-gradient(var(--bg-pattern-ink) 1px, transparent 1px) 0 0 / var(--bg-pattern-step)
+      var(--bg-pattern-step),
+    linear-gradient(90deg, var(--bg-pattern-ink) 1px, transparent 1px) 0 0 / var(--bg-pattern-step)
+      var(--bg-pattern-step);
+}
+
+.dl-background-pattern[data-pattern='noise'] {
+  background-image: var(--noise);
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+}
+
+.dl-background-pattern[data-fade] {
+  mask-image: linear-gradient(to bottom, #000, transparent 75%);
+}
+
+/* ---------------------------------------------------------------- Glass */
+.dl-glass {
+  --glass-level: 0.55;
+  --glass-blur: 18px;
+
+  position: relative;
+  isolation: isolate;
+  background: color-mix(
+    in srgb,
+    var(--glass) calc(max(var(--glass-level), var(--glass-floor, 0)) * 100%),
+    transparent
+  );
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(calc(var(--glass-blur) * var(--blur-scale, 1)))
+    saturate(var(--glass-saturate, 1));
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    var(--glass-shadow);
+}
+
+.dl-glass[data-opacity='clear'] {
+  --glass-level: 0.32;
+}
+.dl-glass[data-opacity='frosted'] {
+  --glass-level: 0.8;
+}
+
+.dl-glass[data-blur='sm'] {
+  --glass-blur: 8px;
+}
+.dl-glass[data-blur='lg'] {
+  --glass-blur: 28px;
+}
+.dl-glass[data-blur='xl'] {
+  --glass-blur: 44px;
+}
+
+.dl-glass[data-tint='primary'] {
+  background: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--primary) 16%, var(--glass))
+      calc(max(var(--glass-level), var(--glass-floor, 0)) * 100%),
+    transparent
+  );
+  border-color: color-mix(in srgb, var(--primary) 28%, var(--glass-border));
+}
+
+.dl-glass[data-edge]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--glass-edge, none);
+  pointer-events: none;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+.dl-glass[data-grain]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: var(--noise);
+  opacity: 0.14;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.dl-glass[data-interactive] {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease;
+}
+
+.dl-glass[data-interactive]:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 18px 40px -18px color-mix(in srgb, var(--glow-a) 55%, transparent),
+    var(--glass-shadow);
+}
+
+/* --------------------------------------------------------- Glass button */
+.dl-btn-glass {
+  background: color-mix(
+    in srgb,
+    var(--glass) calc(max(0.42, var(--glass-floor, 0)) * 100%),
+    transparent
+  );
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(calc(14px * var(--blur-scale, 1))) saturate(var(--glass-saturate, 1));
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 6px 18px -10px hsl(230 30% 10% / 0.35);
+}
+
+.dl-btn-glass:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--glass) calc(max(0.62, var(--glass-floor, 0)) * 100%),
+    transparent
+  );
+}

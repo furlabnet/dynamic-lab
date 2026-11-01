@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+
 import type { ThemeMode } from './tokens'
 
 /**
@@ -36,10 +37,10 @@ export const PALETTES: Palette[] = [
     id: 'midnight-wolf',
     name: 'Midnight Wolf',
     species: 'Wolf',
-    description: 'The default. Clear blue on cool blue-grey.',
+    description: 'The default. Electric ultramarine with an orchid glow.',
     neutralHue: { light: 228, dark: 232 },
-    light: { primary: 'hsl(225 80% 52%)', glowA: 'hsl(225 90% 60%)', glowB: 'hsl(262 80% 64%)' },
-    dark: { primary: 'hsl(220 95% 68%)', glowA: 'hsl(225 90% 58%)', glowB: 'hsl(262 80% 60%)' },
+    light: { primary: 'hsl(238 76% 56%)', glowA: 'hsl(238 90% 64%)', glowB: 'hsl(286 78% 64%)' },
+    dark: { primary: 'hsl(234 100% 78%)', glowA: 'hsl(238 85% 58%)', glowB: 'hsl(286 70% 56%)' },
   },
   {
     id: 'fiery-fox',

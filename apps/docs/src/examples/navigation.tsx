@@ -1,19 +1,10 @@
 import React, { useState } from 'react'
-import {
-  BookOpen,
-  Grid3x3,
-  Home,
-  Layers,
-  LayoutDashboard,
-  List,
-  LogOut,
-  Settings,
-  User,
-} from 'lucide-react'
+
 import {
   AppSwitcher,
   Badge,
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -40,6 +31,18 @@ import {
   TabsTrigger,
   UserMenu,
 } from '@furlab/dynamic-lab'
+
+import {
+  BookOpen,
+  Grid3x3,
+  Home,
+  Layers,
+  LayoutDashboard,
+  List,
+  LogOut,
+  Settings,
+  User,
+} from 'lucide-react'
 
 export function AppSwitcherExample() {
   const [app, setApp] = useState('lab')
@@ -175,6 +178,10 @@ export function BreadcrumbExample() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="#">Browse</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbEllipsis />
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
