@@ -145,3 +145,60 @@
 .docs-prose ol {
   list-style: decimal;
 }
+
+/* ------------------------------------------------------- Component index */
+/* Each card links to a component's page; its thumbnail is the first example at half size. */
+.docs-index-card {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  background: var(--card);
+  transition: border-color var(--dur-short) var(--ease-out);
+}
+
+.docs-index-card:hover {
+  border-color: color-mix(in srgb, var(--foreground) 24%, var(--border));
+}
+
+.docs-index-card:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.docs-thumb {
+  position: relative;
+  height: 10rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+
+/* Laid out at twice the box's size, then scaled down by half, centred; a preview taller than the
+ * box keeps its top in view. */
+.docs-thumb-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 200%;
+  height: 200%;
+  align-items: safe center;
+  justify-content: safe center;
+  padding: var(--space-24);
+  transform: scale(0.5);
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.docs-thumb-stage > * {
+  max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-index-card {
+    transition: none;
+  }
+}
