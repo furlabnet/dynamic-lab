@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-beta.6
+
+### Patch Changes
+
+- - Changed the default container max size.
+  - Intoduces a component Index
+  - Another small fixes
+
 ## 0.1.0-beta.5
 
 ### Minor Changes
