@@ -42,9 +42,7 @@ export function List({
 
   return (
     <div className="flex min-w-0 flex-col gap-2">
-      <div
-        id={labelId}
-        className="px-1 text-xs font-semibold tracking-[0.06em] text-[var(--muted-foreground)] uppercase">
+      <div id={labelId} className="px-1 text-sm font-semibold text-[var(--muted-foreground)]">
         {label}
       </div>
       {list}

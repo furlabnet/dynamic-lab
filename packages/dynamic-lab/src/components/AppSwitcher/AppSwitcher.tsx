@@ -1,21 +1,11 @@
 'use client'
 
-import React from 'react'
-
 import { ChevronDown } from 'lucide-react'
 
+import type { AppItem } from './apps'
 import { useControllableState } from '../../lib/hooks'
 import { DropdownMenu, MenuItem, MenuLabel } from '../Menu'
-
-export interface AppItem {
-  id: string
-  name: string
-  description?: string
-  icon?: React.ReactNode
-  /** When set, choosing the app navigates here instead of only calling onValueChange. */
-  href?: string
-  onClick?: () => void
-}
+import { defaultApps } from './apps'
 
 export interface AppSwitcherProps {
   apps?: AppItem[]
@@ -28,19 +18,6 @@ export interface AppSwitcherProps {
   align?: 'start' | 'end'
   className?: string
 }
-
-export const defaultApps: AppItem[] = [
-  {
-    id: 'lab',
-    name: 'Dynamic Lab',
-    description: 'Public site and your dashboards',
-  },
-  {
-    id: 'backstage',
-    name: 'Backstage',
-    description: 'Staff administration',
-  },
-]
 
 function GridIcon() {
   return (

@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "changeset": "changeset",
     "dev": "turbo run dev",
     "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache && prettier --check --cache --cache-location .cache/.prettiercache '*.{js,cjs,mjs,ts,json}' scripts",
     "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache && prettier --write --cache --cache-location .cache/.prettiercache '*.{js,cjs,mjs,ts,json}' scripts",
@@ -19,14 +20,17 @@
     "prepare": "husky",
     "release": "yarn workspace @furlab/dynamic-lab release",
     "typecheck": "turbo run typecheck",
-    "updates": "updates -u -d && yarn install"
+    "updates": "updates -u -d && yarn install",
+    "version-packages": "changeset version && prettier --write packages/dynamic-lab/CHANGELOG.md packages/the-lab-sans/CHANGELOG.md"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
   },
   "prettier": "@vedla/prettier-config",
   "devDependencies": {
+    "@changesets/cli": "^3.0.3",
     "@vedla/prettier-config": "workspace:*",
+    "changesets-gitlab": "^0.17.1",
     "prettier": "^3.9.10",
     "turbo": "^2.11.10",
     "typescript": "^6.0.3",

@@ -105,7 +105,6 @@ function ComponentPage({ doc }: { doc: ComponentDoc }) {
   return (
     <article className="flex flex-col gap-10">
       <header className="flex flex-col gap-3">
-        <span className="page-eyebrow">{doc.group}</span>
         <h1 className="page-title">{doc.name}</h1>
         <p className="page-description text-[17px]">{doc.summary}</p>
         <CodeBlock
@@ -154,14 +153,14 @@ function ComponentPage({ doc }: { doc: ComponentDoc }) {
         className="flex flex-wrap justify-between gap-3 border-t border-[var(--border)] pt-6">
         {prev ? (
           <Button variant="secondary" onClick={() => go(`components/${prev.id}`)}>
-            ← {prev.name}
+            Previous: {prev.name}
           </Button>
         ) : (
           <span />
         )}
         {next && (
           <Button variant="secondary" onClick={() => go(`components/${next.id}`)}>
-            {next.name} →
+            Next: {next.name}
           </Button>
         )}
       </nav>
@@ -413,9 +412,10 @@ function Docs() {
         <SidebarNav
           aria-label="Documentation"
           title="Documentation"
+          variant="plain"
           collapsible
           currentLabel={currentLabel}
-          className="h-fit w-full lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+          className="docs-sidebar h-fit w-full lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
           {navItems}
         </SidebarNav>
 

@@ -12,6 +12,8 @@
  *   --dry-run               check everything and list the files, publish nothing
  *   --tag <name>            dist-tag; defaults to "next" for pre-releases (1.0.0-beta.1), else "latest"
  *   --allow-dirty           skip the clean working tree check (local only)
+ *   --skip-published        exit successfully, publishing nothing, when the version is already in
+ *                           the registry (the release pipeline uses this, so a retried job passes)
  *
  * GitLab credentials, in order of preference:
  *   CI_JOB_TOKEN   set automatically in GitLab CI
@@ -31,8 +33,9 @@
  *   locally        your `npm login` session (npm asks for 2FA as usual)
  *   NPM_REGISTRY_URL   default https://registry.npmjs.org/
  *
- * In CI, the tag being built (CI_COMMIT_TAG) must match the package version: v1.2.3 for
- * @furlab/dynamic-lab, the-lab-sans-v1.2.3 for @furlab/the-lab-sans (see releases.mjs).
+ * When CI builds a tag (CI_COMMIT_TAG), it must match the package version: v1.2.3 for
+ * @furlab/dynamic-lab, the-lab-sans-v1.2.3 for @furlab/the-lab-sans (see releases.mjs). The release
+ * pipeline on main has no tag yet; gitlab-release.mjs creates it after publishing.
  */
 import { execFileSync, spawnSync } from 'node:child_process'
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
@@ -48,6 +51,7 @@ const option = (name) => {
 }
 const dryRun = args.includes('--dry-run')
 const allowDirty = args.includes('--allow-dirty')
+const skipPublished = args.includes('--skip-published')
 const target = option('--registry') ?? 'gitlab'
 
 if (args.includes('--help') || args.includes('-h')) {
@@ -213,6 +217,12 @@ if (!inCi && !allowDirty) {
 if (settings.token || target === 'npm') {
   try {
     const published = await settings.isPublished()
+    if (published && skipPublished) {
+      console.log(
+        `\n✔ ${pkg.name}@${pkg.version} is already on ${settings.label}; nothing to do.\n`
+      )
+      process.exit(0)
+    }
     if (published)
       fail(`${pkg.name}@${pkg.version} is already on ${settings.label}. Bump "version" first.`)
     step(

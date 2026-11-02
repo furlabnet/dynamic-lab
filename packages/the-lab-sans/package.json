@@ -35,7 +35,7 @@
     },
     "./package.json": "./package.json",
     "./the-lab-sans.css": "./dist/the-lab-sans.css",
-    "./otf/*": "./src/fonts/*",
+    "./otf/*": "./dist/fonts/otf/*",
     "./fonts/*": "./dist/fonts/*"
   },
   "main": "./dist/index.cjs",

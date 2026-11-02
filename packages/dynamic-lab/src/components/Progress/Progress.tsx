@@ -54,7 +54,7 @@ export function Progress({
         )}>
         <div
           className={cn(
-            'h-full rounded-full transition-[width] duration-300 ease-out',
+            'h-full rounded-full',
             toneClasses[tone],
             indeterminate && 'dl-progress-indeterminate w-1/3'
           )}

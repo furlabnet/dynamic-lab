@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-beta.4
+
+The first releases, 0.1.0-beta.1 to 0.1.0-beta.4, are listed together.
 
 ### Fixed
 
@@ -11,8 +13,7 @@
 ### Added
 
 - First release: The Lab Sans in 8 weights (Thin 100 to Black 900), each with an italic.
-- WOFF2 web fonts in `fonts/`, generated from the OpenType files at build time, and the OpenType
-  originals in `otf/`.
+- WOFF2 web fonts in `fonts/woff2/` and the OpenType originals in `fonts/otf/`.
 - `@furlab/the-lab-sans/the-lab-sans.css`: an `@font-face` rule per style, plus a
   `--font-the-lab-sans` variable with the family and system fallbacks. Works with Next.js (App and
   Pages Router), Vite and Tailwind CSS v4.

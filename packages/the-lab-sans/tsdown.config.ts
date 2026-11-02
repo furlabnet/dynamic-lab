@@ -21,7 +21,7 @@ export default defineConfig({
         import: './dist/index.js',
         require: './dist/index.cjs',
       },
-      './otf/*': './src/fonts/*',
+      './otf/*': './dist/fonts/otf/*',
       './fonts/*': './dist/fonts/*',
     },
   },

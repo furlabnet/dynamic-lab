@@ -159,7 +159,6 @@ export function ComponentGallery() {
     <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-4">
         <PageHeading
-          eyebrow="Dynamic Lab design system"
           title="Component library"
           description="Every component, live and interactive. The same code renders in both apps: switch with the app switcher to compare the Dynamic and Backstage themes."
         />

@@ -5,7 +5,7 @@ The React component library for **The Furlab Project**: TypeScript, Tailwind CSS
 - Two brands: **Dynamic** for the public site and **Backstage** for the staff console
 - Eight named colour themes, each in light and dark (Midnight Wolf, Fiery Fox, Blue Dog, Snow Leopard, Deer Delight, Scalies, Otter Space, Purrple Rain)
 - Adjustable transparency (full, reduced or off), keyboard support and reduced motion
-- About 130 components: layout primitives (stacks, grids, columns, containers), buttons and dialogs, comboboxes, date pickers, chat, charts, a comic reader, a story reader, booru-style tags and content editors
+- More than 90 components: layout primitives (stacks, grids, columns, containers), buttons and dialogs, comboboxes, date pickers, chat, charts, a comic reader, a story reader, booru-style tags and content editors
 
 **Documentation:** https://furlab.gitlab.io/dynamic-lab/docs/ (guides, live examples, source and props for every component)
 **Showcase:** https://furlab.gitlab.io/dynamic-lab/showcase/
@@ -72,6 +72,39 @@ The stylesheet contains the tokens, component styles and every Tailwind utility 
 
 Set `--font-sans` and `--font-display` to load a font family; otherwise the system font is used. Inside this repository, apps can load The Lab Sans from `@furlab/the-lab-sans`.
 
+## Server rendering (Next.js)
+
+Components that need the browser are marked `'use client'`; everything else (layout, typography,
+cards, tables, badges and the helpers such as `cn` and `buttonVariants`) works in React Server
+Components and ships no JavaScript. Interactive components can be rendered from a Server Component
+as usual.
+
+Wrap `ThemeProvider` in a client component, and put `ThemeScript` in `<head>` with the same props
+so the saved theme is applied before the first paint:
+
+```tsx
+// app/layout.tsx
+import '@furlab/dynamic-lab/styles.css'
+import { ThemeScript } from '@furlab/dynamic-lab'
+import { Providers } from './providers' // 'use client', renders <ThemeProvider storageKey="my-app">
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript storageKey="my-app" />
+      </head>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  )
+}
+```
+
+The [server rendering guide](https://furlab.gitlab.io/dynamic-lab/docs/#/guide/server-rendering)
+lists which components are client components.
+
 ## Layout
 
 Build screens from the layout primitives instead of writing layout CSS. Responsive props take a
@@ -114,14 +147,14 @@ setTransparency('off') // 'system' | 'full' | 'reduced' | 'off'
 
 | Theme | Species | Look |
 | --- | --- | --- |
-| **Midnight Wolf** (default) | Wolf | Electric ultramarine with an orchid glow |
-| **Fiery Fox** | Fox | Burnt orange with an ember-pink glow |
+| **Midnight Wolf** (default) | Wolf | Deep night blue with a moonlit glow |
+| **Fiery Fox** | Fox | Burnt orange with an ember-red glow |
 | **Blue Dog** | Dog | Friendly turquoise |
 | **Snow Leopard** | Snow leopard | Quiet steel and frost, almost monochrome |
-| **Deer Delight** | Deer | Rose and peach |
-| **Scalies** | Dragons and reptiles | Emerald with a lime shimmer |
+| **Deer Delight** | Deer | Rose and coral |
+| **Scalies** | Dragons and reptiles | Emerald with a leaf-green shimmer |
 | **Otter Space** | Otter | Navy sky with golden starlight |
-| **Purrple Rain** | Cat | Royal purple with a magenta storm |
+| **Purrple Rain** | Cat | Royal purple with an orchid storm |
 
 Colour themes apply to the Dynamic brand; Backstage keeps its own look unless you pass `paletteBrands={['dynamic', 'backstage']}`. Add your own with `palettes={[...PALETTES, myPalette]}`. The [theming guide](https://furlab.gitlab.io/dynamic-lab/docs/#/guide/theming) covers brands, tokens and custom palettes.
 

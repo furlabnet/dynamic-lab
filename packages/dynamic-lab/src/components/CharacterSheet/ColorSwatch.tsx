@@ -40,9 +40,7 @@ export function ColorSwatch({
       </span>
       <span className="flex min-w-0 flex-col text-left">
         {name && <span className="truncate text-xs font-semibold">{name}</span>}
-        <span className="truncate font-mono text-[0.6875rem] text-[var(--muted-foreground)] uppercase">
-          {color}
-        </span>
+        <span className="truncate font-mono text-xs text-[var(--muted-foreground)]">{color}</span>
       </span>
     </>
   )

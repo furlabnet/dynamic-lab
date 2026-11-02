@@ -47,7 +47,7 @@ export function MessageThread({
   )
 }
 
-/* ------------------------------------------------------------- Bubble */
+/* ----------------------------------------------------------- Composer */
 
 export interface MessageComposerProps extends Omit<
   React.FormHTMLAttributes<HTMLFormElement>,
@@ -135,5 +135,3 @@ export function MessageComposer({
     </form>
   )
 }
-
-/* ----------------------------------------------------- Conversation list */

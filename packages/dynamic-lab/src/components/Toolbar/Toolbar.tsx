@@ -16,7 +16,7 @@ export function Toolbar({ className, label, children, ...props }: ToolbarProps) 
       )}
       {...props}>
       {label && (
-        <span className="ui-toolbar-label px-2 text-xs font-bold tracking-wider text-[var(--muted-foreground)] uppercase">
+        <span className="ui-toolbar-label px-2 text-xs font-semibold text-[var(--muted-foreground)]">
           {label}
         </span>
       )}

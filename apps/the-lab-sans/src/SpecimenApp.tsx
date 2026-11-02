@@ -29,7 +29,7 @@ import {
 import { cssVariable, faces, weights } from '@furlab/the-lab-sans'
 import pkg from '@furlab/the-lab-sans/package.json'
 
-import { ArrowLeft, ArrowRight, Check, Copy, Type } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Copy } from 'lucide-react'
 
 import { LANDING_URL, REPOSITORY_URL } from './links'
 import { GitLabLogo, NpmLogo } from './logos'
@@ -165,7 +165,7 @@ fontStack  // "'The Lab Sans', ui-sans-serif, system-ui, …"
 faces      // [{ name: 'Thin', weight: 100, style: 'normal', file: 'TheLabSans-Thin' }, …]`,
       },
     ],
-    note: 'For canvas, charts, emails or anything else that needs the family name or the list of faces. WOFF2 files are at fonts/*.woff2 and the OpenType originals at otf/*.otf.',
+    note: 'For canvas, charts, emails or anything else that needs the family name or the list of faces. WOFF2 files are at fonts/woff2/*.woff2 and the OpenType originals at fonts/otf/*.otf.',
   },
 ]
 
@@ -224,18 +224,15 @@ function InstallSnippet() {
 
 function SectionHeading({
   id,
-  eyebrow,
   title,
   children,
 }: {
   id: string
-  eyebrow: string
   title: string
   children?: React.ReactNode
 }) {
   return (
     <div className="flex max-w-2xl scroll-mt-24 flex-col gap-2" id={id}>
-      <span className="page-eyebrow">{eyebrow}</span>
       <h2 className="text-3xl font-extrabold tracking-tight">{title}</h2>
       {children && <p className="text-[var(--muted-foreground)]">{children}</p>}
     </div>
@@ -247,9 +244,9 @@ function SectionHeading({
 function Hero() {
   return (
     <section className="flex flex-col items-start gap-6">
-      <Badge icon={<Type className="size-3.5" />}>The Furlab typeface</Badge>
       <h1 className="specimen-type text-[clamp(3.5rem,13vw,10rem)] leading-[0.9] font-black tracking-tight">
-        The Lab <span className="font-thin italic">Sans</span>
+        The Lab
+        <span className="block font-thin italic">Sans</span>
       </h1>
       <p className="max-w-2xl text-lg text-pretty text-[var(--muted-foreground)]">
         A friendly, sturdy sans for The Furlab Project. Eight weights from Thin to Black, each with
@@ -278,7 +275,7 @@ function Weights() {
   return (
     <section className="flex flex-col gap-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <SectionHeading id="weights" eyebrow="Weights" title="Thin to Black, upright and italic" />
+        <SectionHeading id="weights" title="Thin to Black, upright and italic" />
         <Switch checked={italic} onCheckedChange={setItalic} label="Italic" />
       </div>
       <Card className="flex flex-col divide-y divide-[var(--border)] p-0">
@@ -312,7 +309,7 @@ function Tester() {
 
   return (
     <section className="flex flex-col gap-8">
-      <SectionHeading id="tester" eyebrow="Type tester" title="Try it with your own words">
+      <SectionHeading id="tester" title="Try it with your own words">
         Pick a style and size, and turn OpenType features on and off.
       </SectionHeading>
       <Card className="flex flex-col gap-5">
@@ -379,7 +376,7 @@ function Tester() {
 function Features() {
   return (
     <section className="flex flex-col gap-8">
-      <SectionHeading id="features" eyebrow="OpenType" title="Features that do the fiddly work">
+      <SectionHeading id="features" title="Features that do the fiddly work">
         Each sample is shown without the feature, then with it.
       </SectionHeading>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -403,7 +400,7 @@ function Features() {
 function Languages() {
   return (
     <section className="flex flex-col gap-8">
-      <SectionHeading id="languages" eyebrow="Languages" title="Four scripts, one voice" />
+      <SectionHeading id="languages" title="Four scripts, one voice" />
       <div className="grid gap-4 md:grid-cols-2">
         {SCRIPTS.map((s) => (
           <Card key={s.name} className="flex flex-col gap-2">
@@ -424,7 +421,7 @@ function Glyphs() {
   return (
     <section className="flex flex-col gap-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <SectionHeading id="glyphs" eyebrow="Glyphs" title="Character set" />
+        <SectionHeading id="glyphs" title="Character set" />
         <SegmentedControl
           aria-label="Glyph weight"
           size="sm"
@@ -463,7 +460,7 @@ function Glyphs() {
 function Usage() {
   return (
     <section className="flex flex-col gap-8">
-      <SectionHeading id="use" eyebrow="Use it" title="Install the package, import one stylesheet">
+      <SectionHeading id="use" title="Install the package, import one stylesheet">
         The package ships WOFF2 web fonts, a stylesheet with every @font-face rule and a{' '}
         <code className="rounded-[var(--radius-sm)] bg-[var(--muted)] px-1 text-[0.9em] whitespace-nowrap">
           {cssVariable}

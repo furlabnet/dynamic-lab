@@ -239,16 +239,16 @@ export function TierCards() {
 
 export function Likes() {
   const [reactions, setReactions] = useState<Reaction[]>([
-    { emoji: '❤️', count: 24, reacted: true, label: 'heart' },
-    { emoji: '😂', count: 3, label: 'laughing' },
-    { emoji: '🐾', count: 9, label: 'paw prints' },
+    { id: 'heart', count: 24, reacted: true },
+    { id: 'laugh', count: 3 },
+    { id: 'paw', count: 9 },
   ])
-  const toggle = (emoji: string) =>
+  const toggle = (id: string) =>
     setReactions((rs) => {
-      const found = rs.find((r) => r.emoji === emoji)
-      if (!found) return [...rs, { emoji, count: 1, reacted: true }]
+      const found = rs.find((r) => r.id === id)
+      if (!found) return [...rs, { id, count: 1, reacted: true }]
       return rs.map((r) =>
-        r.emoji === emoji ? { ...r, reacted: !r.reacted, count: r.count + (r.reacted ? -1 : 1) } : r
+        r.id === id ? { ...r, reacted: !r.reacted, count: r.count + (r.reacted ? -1 : 1) } : r
       )
     })
   return (

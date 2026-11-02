@@ -4,7 +4,7 @@
 
 ## How I tested it
 
-<!-- For example: the image builds locally, the smoke test passes, CI is green. -->
+<!-- For example: yarn typecheck, lint and build pass; checked in the showcase or docs in light and dark mode, in both brands. -->
 
 ## AI assistance
 

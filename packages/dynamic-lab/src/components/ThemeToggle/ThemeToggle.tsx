@@ -37,7 +37,7 @@ export function ThemeToggle({
         title={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`}
         aria-label={`Switch to ${mode === 'light' ? 'dark' : 'light'} mode`}
         className={cn(
-          'grid shrink-0 cursor-pointer place-items-center text-[var(--foreground)] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] active:scale-95',
+          'grid shrink-0 cursor-pointer place-items-center text-[var(--foreground)] transition-[color,background-color,transform] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] active:scale-95 motion-reduce:active:scale-100',
           variantClasses[variant],
           className
         )}
@@ -62,7 +62,7 @@ export function ThemeToggle({
           title={`Switch to ${brand === 'dynamic' ? 'backstage' : 'dynamic'} style`}
           aria-label="Toggle theme brand"
           className={cn(
-            'grid shrink-0 cursor-pointer place-items-center text-[var(--primary)] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] active:scale-95',
+            'grid shrink-0 cursor-pointer place-items-center text-[var(--primary)] transition-[color,background-color,transform] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] active:scale-95 motion-reduce:active:scale-100',
             variantClasses[variant]
           )}>
           <Palette className={iconSize} />

@@ -190,7 +190,7 @@ export function CommandPalette({
                 aria-label={group || undefined}
                 className="mb-1">
                 {group && (
-                  <div className="px-3 pt-2 pb-1 text-[11px] font-bold tracking-wider text-[var(--muted-foreground)] uppercase">
+                  <div className="px-3 pt-2 pb-1 text-xs font-semibold text-[var(--muted-foreground)]">
                     {group}
                   </div>
                 )}

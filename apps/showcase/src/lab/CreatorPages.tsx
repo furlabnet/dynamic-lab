@@ -469,11 +469,11 @@ export function LabPage({ slug }: { slug: string }) {
               <img
                 src={getDetails(hero).cover}
                 alt=""
-                className="aspect-[16/10] size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                className="aspect-[16/10] size-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-6 text-white">
-                <span className="text-xs font-bold tracking-wider text-white/80 uppercase">
+                <span className="text-sm font-semibold text-white/85">
                   {TYPE_LABELS[hero.type]}
                 </span>
                 <span className="text-2xl font-extrabold tracking-tight sm:text-3xl">
@@ -509,7 +509,7 @@ export function LabPage({ slug }: { slug: string }) {
                   key={p.id}
                   href={`#/lab/view/${p.id}`}
                   className="font-semibold text-[var(--primary)] hover:underline">
-                  {p.title} →
+                  {p.title}
                 </a>
               ))}
             </div>

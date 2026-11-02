@@ -111,7 +111,7 @@ export function AppearanceSettings({
             <a
               href={themesHref}
               className="text-xs font-semibold text-[var(--primary)] hover:underline">
-              See all themes →
+              See all themes
             </a>
           )}
         </div>

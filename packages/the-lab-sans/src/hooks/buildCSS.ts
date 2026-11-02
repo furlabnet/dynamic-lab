@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
- * Second half of the build, after tsc has compiled src/ into dist/:
- * - compresses every fonts/*.otf into dist/fonts/*.woff2
- * - writes dist/the-lab-sans.css with one @font-face per face, plus the --font-the-lab-sans variable
+ * Runs before tsdown bundles (the build:prepare hook in tsdown.config.ts): writes src/the-lab-sans.css
+ * with one @font-face per face, plus the --font-the-lab-sans variable. tsdown bundles it into
+ * dist/the-lab-sans.css and copies fonts/ (otf/ and woff2/, both kept in the repository) into
+ * dist/fonts/, where the url()s below point.
  */
 import { writeFile } from 'node:fs/promises'
 
@@ -27,7 +28,6 @@ ${rules.join('\n')}
   ${cssVariable}: ${fontStack};
 }
 `
-  // await writeFile(new URL('dist/the-lab-sans.css', root), css)
   await writeFile(new URL('the-lab-sans.css', root), css)
-  console.log(`✔ ${faces.length} faces → dist/fonts/*.woff2 and dist/the-lab-sans.css`)
+  console.log(`✔ ${faces.length} faces → src/the-lab-sans.css`)
 }

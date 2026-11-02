@@ -13,6 +13,7 @@ export const TOKENS = {
   },
   spacing: {
     2: '2px',
+    4: '4px',
     6: '6px',
     8: '8px',
     10: '10px',
@@ -27,30 +28,30 @@ export const TOKENS = {
   colors: {
     dynamic: {
       light: {
-        primary: '#3a3fe4',
+        primary: '#2148ca',
         primaryForeground: '#ffffff',
-        glowA: '#5156f6',
-        glowB: '#c95ceb',
+        glowA: '#476deb',
+        glowB: '#639fe3',
       },
       dark: {
-        primary: '#8f9aff',
+        primary: '#84aaf5',
         primaryForeground: '#0c0e17',
-        glowA: '#393fef',
-        glowB: '#b940dd',
+        glowA: '#2f5dda',
+        glowB: '#337acc',
       },
     },
     backstage: {
       light: {
-        primary: '#773eda',
+        primary: '#6442b3',
         primaryForeground: '#ffffff',
-        glowA: '#905aed',
-        glowB: '#3d6bf5',
+        glowA: '#8b6ecf',
+        glowB: '#ab8bd0',
       },
       dark: {
-        primary: '#b890f9',
+        primary: '#b9a5e9',
         primaryForeground: '#0c0e17',
-        glowA: '#8347eb',
-        glowB: '#3464f4',
+        glowA: '#6f4ebc',
+        glowB: '#774ca9',
       },
     },
   },

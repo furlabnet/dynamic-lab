@@ -162,7 +162,9 @@ function ContentHeading({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="page-eyebrow">{TYPE_LABELS[record.type]}</span>
+        <span className="text-sm font-semibold text-[var(--muted-foreground)]">
+          {TYPE_LABELS[record.type]}
+        </span>
         <AgeRating rating={record.rating} />
         {extra}
       </div>
@@ -287,7 +289,7 @@ export function ContentView({ id }: { id: string }) {
   const details = getDetails(record)
   const notPublished = record.status !== 'published' && (
     <NoticePanel tone="warning" title="Not published">
-      Only you and staff can see this. It's {record.status.replace('-', ' ')} right now.
+      Only you and staff can see this. It’s {record.status.replace('-', ' ')} right now.
     </NoticePanel>
   )
 
@@ -325,7 +327,6 @@ function PageView({ record, details, notice }: ViewProps) {
     <article className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-8">
       {notice}
       <div className="flex flex-col gap-4">
-        <span className="page-eyebrow">Page</span>
         <h1 className="page-title">{record.title}</h1>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Byline record={record} />
@@ -545,10 +546,10 @@ function StoryView({ record, details, notice }: ViewProps) {
             <header
               className="mb-8 flex flex-col gap-1 text-center"
               style={{ fontFamily: 'var(--font-sans)' }}>
-              <span className="page-eyebrow">Chapter {chapter + 1}</span>
               <h2 className="section-title">{current?.title}</h2>
               <span className="inline-flex items-center justify-center gap-1 text-xs text-[var(--muted-foreground)]">
-                <Clock className="size-3.5" /> {minutes} min · {words.toLocaleString()} words
+                <Clock className="size-3.5" /> Chapter {chapter + 1}, {minutes} min,{' '}
+                {words.toLocaleString()} words
               </span>
             </header>
             <div className="ui-prose">

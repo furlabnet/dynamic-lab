@@ -30,8 +30,8 @@ export function MetricCard({
     <Component
       href={href}
       className={cn(
-        'metric-card surface-card flex min-h-[140px] flex-col justify-between rounded-[var(--radius-3xl)] p-5 transition-all',
-        href && 'cursor-pointer hover:-translate-y-1 hover:shadow-lg',
+        'metric-card surface-card flex min-h-[140px] flex-col justify-between rounded-[var(--radius-3xl)] p-5',
+        href && 'cursor-pointer',
         className
       )}
       {...(props as React.HTMLAttributes<HTMLElement>)}>

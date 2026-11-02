@@ -16,7 +16,7 @@ export function MenuLabel({
   return (
     <div
       className={cn(
-        'px-3 pt-2 pb-1 text-[11px] font-bold tracking-wider text-[var(--muted-foreground)] uppercase',
+        'px-3 pt-2 pb-1 text-xs font-semibold text-[var(--muted-foreground)]',
         className
       )}>
       {children}

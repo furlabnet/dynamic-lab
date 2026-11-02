@@ -1,37 +1,64 @@
 # Contributing
 
-Thanks for taking the time to contribute. Contributions are welcome: bug fixes, new Node versions,
-documentation, CI improvements, and reports of anything that looks wrong. If you are planning a
-larger change, open an issue first so we can agree on the approach.
+Thanks for taking the time to contribute. Bug fixes, new components, documentation, accessibility
+fixes and reports of anything that looks wrong are all welcome. If you are planning a larger change
+(a new component family, a change to the tokens or to a component's props), open an issue first so
+we can agree on the approach.
 
 ## Getting started
 
-1. Fork or branch off `main`.
-2. Make your changes to the `Dockerfile`, `entrypoint.sh`, or CI configuration.
-3. Build the image locally for your platform before opening a merge request:
+You need Node 24 (see `.nvmrc`) and Yarn 4 through Corepack:
+
+```sh
+corepack enable
+yarn install
+yarn dev
+```
+
+`yarn dev` starts every app: the landing page on http://localhost:5170, the showcase on
+http://localhost:5173, the playground on http://localhost:5175, the docs on http://localhost:5180
+and The Lab Sans specimen on http://localhost:5190. The apps load the library from its source, so
+edits in `packages/dynamic-lab` show up everywhere with hot reload. The
+[README](./README.md#development) lists the other commands.
+
+## Making a change
+
+1. Branch off `main`.
+2. Make the change where it belongs:
+   - **A component:** its folder in `packages/dynamic-lab/src/components/`, exported from
+     `src/index.ts`. Styles go in the matching file in `src/styles/`, and every colour, font,
+     spacing and motion value comes from a token in `src/styles/tokens.css`. Add a `'use client'`
+     line only when the component needs the browser.
+   - **Its documentation:** a live example in `apps/docs/src/examples/` and an entry (summary,
+     examples, props) in `apps/docs/src/registry.ts`.
+   - **The design system:** read [`design.md`](./design.md) first. It records the decisions the
+     library and the sites share (solid surfaces, light frost only on floating chrome, one hue per
+     palette, sentence-case labels).
+3. Check it before you push. The merge request pipeline runs the same checks, but they're quicker
+   locally:
 
    ```sh
-   docker buildx build --load --build-arg NODE_VERSION=24.13.0-slim -t node-infisical:dev .
+   yarn typecheck
+   yarn lint
+   yarn format      # yarn format:fix writes the fixes
+   yarn build
    ```
 
-4. Smoke-test the entrypoint:
-
-   ```sh
-   docker run --rm \
-     -e INFISICAL_DOMAIN \
-     -e INFISICAL_CLIENT_ID \
-     -e INFISICAL_CLIENT_SECRET \
-     node-infisical:dev node --version
-   ```
+4. Look at the change in the showcase or the docs, in light and dark mode and in both brands
+   (Dynamic and Backstage).
 
 ## Submitting changes
 
-- Open a merge request against `main` with a clear description of the change and why it's needed.
-- Keep changes focused; avoid unrelated formatting or refactors in the same MR.
-- CI runs SAST and Secret Detection on every pipeline — make sure your MR passes both before
-  requesting review. Never commit real Infisical credentials, tokens, or `.env` files.
-- Update `README.md` and `CHANGELOG.md` when your change affects usage, build args, or required
-  environment variables.
+- Open a merge request against `main` on GitLab (the GitHub repository is a mirror) and fill in the
+  template: what changed, why, and how you tested it.
+- Keep changes focused; avoid unrelated formatting or refactors in the same merge request.
+- Add a changeset when the change affects anyone using `@furlab/dynamic-lab` or
+  `@furlab/the-lab-sans`: run `yarn changeset`, pick the package and the bump, and write the
+  changelog entry for someone using the package (start it with **Breaking:** when they'll need to
+  change their code). Commit the file it creates in `.changeset/`. Don't edit versions or the
+  changelogs' version headings by hand; the release process does that (see
+  [Releasing](./README.md#releasing)).
+- Update the READMEs when a change affects installation, usage, scripts or environment variables.
 
 ## AI policy
 
@@ -55,5 +82,9 @@ merge request and pull request templates have a section for this.
 
 ## Reporting issues
 
-Open an issue with steps to reproduce, the `NODE_VERSION` build arg used, and relevant logs
-(with any secrets redacted).
+Open an issue on GitLab with:
+
+- the package and version (`@furlab/dynamic-lab@0.1.0-beta.4`, say) and your React version
+- the component, its props, and what you expected to happen
+- the brand, mode and colour theme it happens in, if it's visual
+- the browser, and a screenshot or a short recording when it helps
