@@ -110,7 +110,7 @@ export function AccordionTrigger({ className, children, ...props }: AccordionTri
       aria-expanded={isExpanded}
       onClick={() => accordionContext.toggleItem(itemContext.id)}
       className={cn(
-        'flex w-full flex-1 cursor-pointer items-center justify-between px-2 py-3.5 text-left text-sm font-semibold transition-all select-none hover:text-[var(--primary)] [&[aria-expanded=true]>svg]:rotate-180',
+        'flex w-full flex-1 cursor-pointer items-center justify-between px-2 py-3.5 text-left text-sm font-semibold transition-colors select-none hover:text-[var(--primary)] [&[aria-expanded=true]>svg]:rotate-180',
         className
       )}
       {...props}>

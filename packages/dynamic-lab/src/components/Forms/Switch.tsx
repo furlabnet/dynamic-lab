@@ -125,7 +125,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           />
           <span
             className={cn(
-              'ui-checkbox grid size-5 place-items-center rounded-[var(--radius-sm)] border border-[var(--input)] bg-[var(--card)] transition-all peer-checked:border-[var(--primary)] peer-checked:bg-[var(--primary)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-data-[indeterminate]:border-[var(--primary)] peer-data-[indeterminate]:bg-[var(--primary)]',
+              'ui-checkbox grid size-5 place-items-center rounded-[var(--radius-sm)] border border-[var(--input)] bg-[var(--card)] transition-colors peer-checked:border-[var(--primary)] peer-checked:bg-[var(--primary)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--ring)] peer-data-[indeterminate]:border-[var(--primary)] peer-data-[indeterminate]:bg-[var(--primary)]',
               className
             )}>
             {indeterminate ? (

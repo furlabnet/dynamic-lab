@@ -93,10 +93,7 @@ export function ContentCard({
             src={cover}
             alt=""
             loading="lazy"
-            className={cn(
-              'size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]',
-              blurCover && 'scale-110 blur-xl saturate-50 group-hover:scale-110'
-            )}
+            className={cn('size-full object-cover', blurCover && 'scale-110 blur-xl saturate-50')}
           />
         ) : (
           (cover ?? <span className="ui-content-card-icon">{icon}</span>)
@@ -124,9 +121,7 @@ export function ContentCard({
       </div>
       <div className="flex flex-1 flex-col gap-1 p-5 text-left">
         {type && (
-          <span className="text-[11px] font-bold tracking-wider text-[var(--muted-foreground)] uppercase">
-            {type}
-          </span>
+          <span className="text-xs font-semibold text-[var(--muted-foreground)]">{type}</span>
         )}
         <span className="text-lg leading-snug font-bold tracking-tight text-[var(--foreground)]">
           {title}

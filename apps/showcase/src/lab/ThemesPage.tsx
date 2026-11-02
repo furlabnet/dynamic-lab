@@ -23,7 +23,6 @@ export function ThemesPage() {
     <div className="mx-auto flex max-w-[var(--container-max)] flex-col gap-10 px-4 py-10 sm:px-8">
       <div className="flex flex-col gap-5">
         <PageHeading
-          eyebrow="Make it yours"
           title="Themes"
           description="Each theme has a light and a dark version under the same name. Your choice is saved on this device and applies across the whole public site."
         />

@@ -4,12 +4,12 @@ import React, { useState } from 'react'
 
 import { Heart, SmilePlus } from 'lucide-react'
 
+import type { Reaction, ReactionChoice } from './reactionList'
 import { formatCount } from '../../lib/format'
 import { useControllableState } from '../../lib/hooks'
 import { cn } from '../../lib/utils'
 import { Popover } from '../Popover'
-
-/* --------------------------------------------------------- LikeButton */
+import { DEFAULT_REACTIONS } from './reactionList'
 
 export interface LikeButtonProps extends Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -77,41 +77,17 @@ export function LikeButton({
 
 /* ----------------------------------------------------------- Reactions */
 
-export interface Reaction {
-  emoji: string
-  count: number
-  /** The viewer has reacted with this one. */
-  reacted?: boolean
-  /** Name for screen readers, e.g. "heart eyes". */
-  label?: string
-}
-
 export interface ReactionBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onToggle'> {
   reactions: Reaction[]
-  /** Called when the viewer toggles a reaction, including one picked from the picker. */
-  onToggle: (emoji: string) => void
-  /** Emoji offered in the picker. */
-  choices?: string[]
+  /** Called with a reaction's id when the viewer toggles it, including one picked from the picker. */
+  onToggle: (id: string) => void
+  /** Reactions offered in the picker, and the icons and labels for the chips. */
+  choices?: ReactionChoice[]
   /** Hide the add-reaction button. */
   readOnly?: boolean
 }
 
-export const DEFAULT_REACTIONS = [
-  '❤️',
-  '😂',
-  '😮',
-  '😢',
-  '🔥',
-  '👏',
-  '🎉',
-  '🐾',
-  '✨',
-  '🥺',
-  '😍',
-  '🙏',
-]
-
-/** Emoji reactions under a work or comment: chips with counts, plus a picker to add one. */
+/** Reactions under a work or comment: icon chips with counts, plus a picker to add one. */
 export function ReactionBar({
   className,
   reactions,
@@ -124,35 +100,40 @@ export function ReactionBar({
     <div className={cn('flex flex-wrap items-center gap-1.5', className)} {...props}>
       {reactions
         .filter((r) => r.count > 0)
-        .map((r) => (
-          <button
-            key={r.emoji}
-            type="button"
-            aria-pressed={r.reacted || false}
-            aria-label={`${r.label ?? r.emoji}, ${r.count}`}
-            disabled={readOnly}
-            onClick={() => onToggle(r.emoji)}
-            data-reacted={r.reacted || undefined}
-            className="dl-reaction">
-            <span aria-hidden="true">{r.emoji}</span>
-            <span className="tabular-nums" aria-hidden="true">
-              {formatCount(r.count)}
-            </span>
-          </button>
-        ))}
+        .map((r) => {
+          const choice = choices.find((c) => c.id === r.id)
+          const Icon = choice?.icon
+          return (
+            <button
+              key={r.id}
+              type="button"
+              aria-pressed={r.reacted || false}
+              aria-label={`${r.label ?? choice?.label ?? r.id}, ${r.count}`}
+              disabled={readOnly}
+              onClick={() => onToggle(r.id)}
+              data-reacted={r.reacted || undefined}
+              className="dl-reaction">
+              {Icon ? <Icon className="size-4" aria-hidden="true" /> : null}
+              <span className="tabular-nums" aria-hidden="true">
+                {formatCount(r.count)}
+              </span>
+            </button>
+          )
+        })}
       {!readOnly && <ReactionPicker choices={choices} onPick={onToggle} />}
     </div>
   )
 }
 
 export interface ReactionPickerProps {
-  onPick: (emoji: string) => void
-  choices?: string[]
+  /** Called with the picked reaction's id. */
+  onPick: (id: string) => void
+  choices?: ReactionChoice[]
   /** Custom trigger; defaults to a small smiley-plus button. */
   trigger?: React.ReactElement<React.HTMLAttributes<HTMLElement>>
 }
 
-/** A grid of emoji in a popover. */
+/** A grid of reaction icons in a popover. */
 export function ReactionPicker({
   onPick,
   choices = DEFAULT_REACTIONS,
@@ -171,18 +152,19 @@ export function ReactionPicker({
       className="ui-menu p-2!"
       onOpenAutoFocus={(panel) => panel.querySelector<HTMLElement>('button')?.focus()}>
       {({ close }) => (
-        <div className="grid grid-cols-6 gap-0.5">
-          {choices.map((emoji) => (
+        <div className="grid grid-cols-5 gap-0.5">
+          {choices.map(({ id, label, icon: Icon }) => (
             <button
-              key={emoji}
+              key={id}
               type="button"
               className="dl-reaction-choice"
-              aria-label={emoji}
+              aria-label={label}
+              title={label}
               onClick={() => {
-                onPick(emoji)
+                onPick(id)
                 close()
               }}>
-              {emoji}
+              <Icon className="size-5" aria-hidden="true" />
             </button>
           ))}
         </div>

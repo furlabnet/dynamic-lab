@@ -126,7 +126,7 @@ export function CharacterSheet({
 
         {notes && (
           <section className="notice-panel flex-col gap-1!" data-tone="info">
-            <h3 className="text-xs font-bold tracking-[0.06em] uppercase">Notes for artists</h3>
+            <h3 className="text-sm font-semibold">Notes for artists</h3>
             <div className="text-sm text-[var(--foreground)]">{notes}</div>
           </section>
         )}

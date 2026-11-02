@@ -22,29 +22,31 @@ import {
   ThemeProvider,
   ToastProvider,
   Tooltip,
+  useTheme,
   useToast,
 } from '@furlab/dynamic-lab'
 import pkg from '@furlab/dynamic-lab/package.json'
 
-import {
-  ArrowRight,
-  BookOpen,
-  Check,
-  Copy,
-  Layers,
-  LayoutDashboard,
-  MousePointerClick,
-  Palette,
-  Sparkles,
-} from 'lucide-react'
+import { ArrowRight, Check, Copy, LayoutDashboard } from 'lucide-react'
 
 import { DOCS_URL, FONT_URL, REPOSITORY_URL, SHOWCASE_URL } from './links'
 import { GitLabLogo, NpmLogo } from './logos'
 
 const INSTALL = `yarn add ${pkg.name}`
 
+const SETUP = `import { ThemeProvider, ToastProvider } from '${pkg.name}'
+import '${pkg.name}/styles.css'
+
+export function App({ children }) {
+  return (
+    <ThemeProvider defaultBrand="dynamic">
+      <ToastProvider>{children}</ToastProvider>
+    </ThemeProvider>
+  )
+}`
+
 const FACTS = [
-  { value: '~70', label: 'components' },
+  { value: '90+', label: 'components' },
   { value: '8', label: 'colour themes' },
   { value: '2', label: 'brands' },
   { value: 'Light + dark', label: 'in every theme' },
@@ -62,24 +64,6 @@ const GROUPS = [
   { name: 'Content', items: 'ComicReader, Reader, ContentCard, MediaGallery, Comments' },
   { name: 'Layout', items: 'AdminShell, PageHeader, Panel, Card, Toolbar' },
   { name: 'Theming', items: 'ThemeProvider, PalettePicker, AppearanceSettings, ThemeToggle' },
-]
-
-const HIGHLIGHTS = [
-  {
-    icon: <Layers className="size-5" />,
-    title: 'Adaptable to your app',
-    text: 'Dynamic for the public site, Backstage for the staff console. Same components, each with its own look.',
-  },
-  {
-    icon: <Palette className="size-5" />,
-    title: 'Named colour themes',
-    text: 'Eight themes from Midnight Wolf to Purrple Rain, in light and dark, plus your own palettes.',
-  },
-  {
-    icon: <MousePointerClick className="size-5" />,
-    title: 'Built for everyone',
-    text: 'Keyboard support, reduced motion and adjustable transparency (full, reduced or off).',
-  },
 ]
 
 /* ------------------------------------------------------------------ Bits */
@@ -125,8 +109,8 @@ function InstallSnippet() {
   }
 
   return (
-    <div className="inline-flex max-w-full items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[color-mix(in_srgb,var(--card)_70%,transparent)] py-1 pr-1 pl-4 font-mono text-sm backdrop-blur-md">
-      <span className="text-[var(--muted-foreground)] select-none">$</span>
+    <div className="landing-install">
+      <span className="landing-install-prompt select-none">$</span>
       <code className="min-w-0 truncate">{INSTALL}</code>
       <IconButton
         aria-label="Copy install command"
@@ -144,7 +128,7 @@ function LivePreview() {
   const [notify, setNotify] = useState(true)
 
   return (
-    <Card variant="glass" className="landing-preview flex flex-col gap-5">
+    <Card className="landing-preview flex flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <SegmentedControl
           aria-label="Library section"
@@ -157,16 +141,12 @@ function LivePreview() {
             { value: 'art', label: 'Art' },
           ]}
         />
-        <StatusBadge tone="success" pulse>
-          Published
-        </StatusBadge>
+        <StatusBadge tone="success">Published</StatusBadge>
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-xs font-semibold tracking-wide text-[var(--muted-foreground)] uppercase">
-          Chapter 4 of 6
-        </span>
-        <h3 className="text-xl font-bold tracking-tight">The Otter Who Mapped the Stars</h3>
+        <span className="text-sm text-[var(--muted-foreground)]">Chapter 4 of 6</span>
+        <h3 className="text-2xl font-bold tracking-tight">The Otter Who Mapped the Stars</h3>
         <p className="body-sm text-[var(--muted-foreground)]">
           A navy sky, a golden river, and one very determined cartographer.
         </p>
@@ -195,12 +175,28 @@ function LivePreview() {
   )
 }
 
+function BrandSwitch() {
+  const { brand, setBrand } = useTheme()
+  return (
+    <SegmentedControl
+      aria-label="Brand"
+      value={brand}
+      onValueChange={(v) => setBrand(v as 'dynamic' | 'backstage')}
+      options={[
+        { value: 'dynamic', label: 'Dynamic' },
+        { value: 'backstage', label: 'Backstage' },
+      ]}
+    />
+  )
+}
+
 /* ------------------------------------------------------------------ Page */
 
 function Landing() {
   return (
     <div className="dynamic-lab-glow-bg flex min-h-screen flex-col">
       <SiteHeader
+        className="landing-nav"
         brand={
           <a href="./" className="flex items-center gap-2" aria-label="Dynamic Lab home">
             <BrandLockup name="Dynamic Lab" />
@@ -243,137 +239,161 @@ function Landing() {
         }
       />
 
-      <main className="mx-auto flex w-full max-w-[var(--container-max)] flex-1 flex-col gap-24 px-4 py-12 sm:px-8 sm:py-20">
-        {/* Hero */}
-        <section className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-          <div className="flex flex-col items-start gap-6">
-            <Badge icon={<Sparkles className="size-3.5" />}>React 19 · Tailwind CSS v4</Badge>
-            <h1 className="text-4xl font-extrabold tracking-tight text-balance sm:text-6xl">
-              The component library for The Furlab Project
-            </h1>
-            <p className="max-w-xl text-lg text-pretty text-[var(--muted-foreground)]">
-              Dynamic Lab is a set of React components, design tokens and themes: from buttons and
-              dialogs to a comic reader, a story reader and booru-style tags. Typed, accessible, and
-              themeable down to the last border.
+      <main className="flex-1">
+        {/* Hero: the library itself, running */}
+        <section className="landing-hero landing-container">
+          <div className="landing-hero-text">
+            <h1 className="landing-display">The component library for The Furlab Project</h1>
+            <p className="landing-lead">
+              React components, tokens and themes, from buttons to a comic reader.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col items-start gap-4">
+              <InstallSnippet />
               <LinkButton href={SHOWCASE_URL} variant="primary">
                 <LayoutDashboard className="size-5" />
                 See the showcase
               </LinkButton>
-              <LinkButton href={DOCS_URL} variant="secondary">
-                <BookOpen className="size-5" />
-                Read the docs
-              </LinkButton>
             </div>
-            <InstallSnippet />
           </div>
           <LivePreview />
         </section>
 
-        {/* Facts */}
-        <section aria-label="At a glance" className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {FACTS.map((f) => (
-            <Card key={f.label} className="flex flex-col gap-1 p-5">
-              <span className="text-3xl font-extrabold tracking-tight">{f.value}</span>
-              <span className="body-sm text-[var(--muted-foreground)]">{f.label}</span>
-            </Card>
-          ))}
-        </section>
-
-        {/* Highlights */}
-        <section className="grid gap-4 md:grid-cols-3">
-          {HIGHLIGHTS.map((h) => (
-            <Card key={h.title} className="flex flex-col gap-3">
-              <span className="grid size-10 place-items-center rounded-[var(--radius-lg)] bg-[color-mix(in_srgb,var(--primary)_14%,transparent)] text-[var(--primary)]">
-                {h.icon}
-              </span>
-              <h2 className="text-lg font-bold tracking-tight">{h.title}</h2>
-              <p className="body-sm text-[var(--muted-foreground)]">{h.text}</p>
-            </Card>
-          ))}
-        </section>
-
-        {/* What's inside */}
-        <section className="flex flex-col gap-8">
-          <div className="flex max-w-2xl flex-col gap-2">
-            <span className="page-eyebrow">What’s inside</span>
-            <h2 className="text-3xl font-extrabold tracking-tight">Everything an app needs</h2>
-            <p className="text-[var(--muted-foreground)]">
-              General-purpose building blocks, plus the pieces specific to a creative community:
-              readers, galleries, content cards, tagging and moderation workflows.
-            </p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {GROUPS.map((g) => (
-              <Card key={g.name} variant="panel" className="flex flex-col gap-2 p-5">
-                <h3 className="font-bold">{g.name}</h3>
-                <p className="body-sm text-[var(--muted-foreground)]">{g.items}</p>
-              </Card>
+        {/* The facts, set as figures */}
+        <section aria-label="At a glance" className="landing-container">
+          <dl className="landing-figures">
+            {FACTS.map((f) => (
+              <div key={f.label}>
+                <dt className="sr-only">{f.label}</dt>
+                <dd className="landing-figure">{f.value}</dd>
+                <dd className="text-sm text-[var(--muted-foreground)]">{f.label}</dd>
+              </div>
             ))}
-          </div>
+          </dl>
         </section>
 
-        {/* Themes */}
-        <section className="flex flex-col gap-8">
-          <div className="flex max-w-2xl flex-col gap-2">
-            <span className="page-eyebrow">Theming</span>
-            <h2 className="text-3xl font-extrabold tracking-tight">
-              Pick a theme. This page follows.
-            </h2>
-            <p className="text-[var(--muted-foreground)]">
-              Every colour on this page comes from the theme tokens. Choose one below, or switch
-              between light and dark from the header.
-            </p>
-          </div>
-          <PalettePicker />
-        </section>
+        {/* The workflow: four stages, each with its own object */}
+        <ol className="landing-stages landing-container">
+          <li className="landing-stage">
+            <div className="landing-stage-text">
+              <h2 className="landing-section-head">1. Install</h2>
+              <p className="landing-lead">
+                One package for React 19 and Tailwind CSS v4, typed throughout.
+              </p>
+            </div>
+            <dl className="landing-index landing-stage-object">
+              <div className="landing-index-row">
+                <dt className="font-semibold">Package</dt>
+                <dd className="font-mono text-sm">{pkg.name}</dd>
+              </div>
+              <div className="landing-index-row">
+                <dt className="font-semibold">Version</dt>
+                <dd className="tabular-nums">{pkg.version}</dd>
+              </div>
+              <div className="landing-index-row">
+                <dt className="font-semibold">Needs</dt>
+                <dd>React 19, Tailwind CSS v4</dd>
+              </div>
+              <div className="landing-index-row">
+                <dt className="font-semibold">Licence</dt>
+                <dd>{pkg.license}</dd>
+              </div>
+            </dl>
+          </li>
+
+          <li className="landing-stage">
+            <div className="landing-stage-text">
+              <h2 className="landing-section-head">2. Wrap your app</h2>
+              <p className="landing-lead">
+                Dynamic for the public site, Backstage for the staff console. Same components, each
+                with its own look.
+              </p>
+              <BrandSwitch />
+            </div>
+            <figure className="landing-stage-object">
+              <pre className="landing-code">
+                <code>{SETUP}</code>
+              </pre>
+              <figcaption className="text-sm text-[var(--muted-foreground)]">App.tsx</figcaption>
+            </figure>
+          </li>
+
+          <li className="landing-stage">
+            <div className="landing-stage-text">
+              <h2 className="landing-section-head">3. Build from the parts</h2>
+              <p className="landing-lead">
+                General-purpose building blocks, plus the pieces specific to a creative community:
+                readers, galleries, content cards, tagging and moderation workflows.
+              </p>
+              <p className="text-[var(--muted-foreground)]">
+                Keyboard support, reduced motion and adjustable transparency (full, reduced or off).
+              </p>
+            </div>
+            <dl className="landing-index landing-stage-object">
+              {GROUPS.map((g) => (
+                <div key={g.name} className="landing-index-row">
+                  <dt className="font-semibold">{g.name}</dt>
+                  <dd className="text-[var(--muted-foreground)]">{g.items}</dd>
+                </div>
+              ))}
+            </dl>
+          </li>
+
+          <li className="landing-stage">
+            <div className="landing-stage-text">
+              <h2 className="landing-section-head">4. Pick a theme</h2>
+              <p className="landing-lead">
+                Eight themes from Midnight Wolf to Purrple Rain, in light and dark, plus your own
+                palettes. This page follows.
+              </p>
+            </div>
+            <div className="landing-stage-object">
+              <PalettePicker />
+            </div>
+          </li>
+        </ol>
 
         {/* Where next */}
-        <section className="grid gap-4 md:grid-cols-2">
-          <Card className="flex flex-col items-start gap-4 p-8">
-            <LayoutDashboard className="size-8 text-[var(--primary)]" />
-            <h2 className="text-2xl font-extrabold tracking-tight">Showcase</h2>
-            <p className="text-[var(--muted-foreground)]">
-              Two working apps built only from the library: the Dynamic Lab public site and the
-              Backstage staff console. Click around to see the components together.
-            </p>
-            <LinkButton href={SHOWCASE_URL} variant="primary" size="md" className="mt-auto">
-              Open the showcase
-              <ArrowRight className="size-4" />
-            </LinkButton>
-          </Card>
-          <Card className="flex flex-col items-start gap-4 p-8">
-            <BookOpen className="size-8 text-[var(--primary)]" />
-            <h2 className="text-2xl font-extrabold tracking-tight">Documentation</h2>
-            <p className="text-[var(--muted-foreground)]">
-              Install and set-up guides, theming, and a page for every component with live examples,
-              their source and the full props table.
-            </p>
-            <LinkButton href={DOCS_URL} variant="secondary" size="md" className="mt-auto">
-              Read the docs
-              <ArrowRight className="size-4" />
-            </LinkButton>
-          </Card>
-          <Card className="flex flex-col items-start gap-4 p-8 md:col-span-2 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-2">
-              <span className="page-eyebrow">Typeface</span>
-              <h2 className="text-3xl font-black tracking-tight">The Lab Sans</h2>
-              <p className="max-w-xl text-[var(--muted-foreground)]">
+        <section className="landing-next landing-container" aria-labelledby="where-next">
+          <h2 id="where-next" className="landing-section-head">
+            Where next
+          </h2>
+          <div className="landing-next-rows">
+            <div className="landing-next-row">
+              <h3 className="landing-next-title">Showcase</h3>
+              <p className="text-[var(--muted-foreground)]">
+                Two working apps built only from the library: the Dynamic Lab public site and the
+                Backstage staff console. Click around to see the components together.
+              </p>
+              <LinkButton href={SHOWCASE_URL} variant="secondary" size="md">
+                Open the showcase
+              </LinkButton>
+            </div>
+            <div className="landing-next-row">
+              <h3 className="landing-next-title">Documentation</h3>
+              <p className="text-[var(--muted-foreground)]">
+                Install and set-up guides, theming, and a page for every component with live
+                examples, their source and the full props table.
+              </p>
+              <LinkButton href={DOCS_URL} variant="secondary" size="md">
+                Read the docs
+              </LinkButton>
+            </div>
+            <div className="landing-next-row">
+              <h3 className="landing-next-title landing-next-face">The Lab Sans</h3>
+              <p className="text-[var(--muted-foreground)]">
                 The typeface you’re reading: eight weights with italics, as its own package for any
                 web app, Next.js included.
               </p>
+              <LinkButton href={FONT_URL} variant="secondary" size="md">
+                See the specimen
+              </LinkButton>
             </div>
-            <LinkButton href={FONT_URL} variant="secondary" size="md" className="shrink-0">
-              See the specimen
-              <ArrowRight className="size-4" />
-            </LinkButton>
-          </Card>
+          </div>
         </section>
       </main>
 
       <SiteFooter
-        start={<span>© 2026 Vedla Creative &amp; The Furlab Project · MIT licence</span>}
+        start={<span>© 2026 Vedla Creative &amp; The Furlab Project. MIT licence.</span>}
         end={
           <a href={REPOSITORY_URL} className="hover:underline">
             {pkg.name}@{pkg.version}

@@ -1724,7 +1724,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'LikeButton & reactions',
     group: 'Content',
     summary:
-      'A like toggle with a count and a small burst, and emoji reaction chips with a picker. Counts are compact in the reader’s locale (1.2K).',
+      'A like toggle with a count and a small burst, and reaction chips (icons with counts) with a picker. Counts are compact in the reader’s locale (1.2K).',
     imports: ['LikeButton', 'ReactionBar', 'ReactionPicker', 'formatCount'],
     examples: [ex('social', social, 'Likes', 'Likes and reactions')],
     props: [
@@ -1740,9 +1740,14 @@ export const COMPONENTS: ComponentDoc[] = [
       {
         component: 'ReactionBar',
         rows: [
-          p('reactions', 'Array<{ emoji, count, reacted?, label? }>', undefined, 'Required.'),
-          p('onToggle', '(emoji: string) => void', undefined, 'Required.'),
-          p('choices', 'string[]', '12 defaults', 'Emoji in the picker.'),
+          p('reactions', 'Array<{ id, count, reacted?, label? }>', undefined, 'Required.'),
+          p('onToggle', '(id: string) => void', undefined, 'Required.'),
+          p(
+            'choices',
+            'Array<{ id, label, icon }>',
+            '10 defaults',
+            'Reactions in the picker; icon is a lucide-react icon.'
+          ),
           p('readOnly', 'boolean', 'false', 'No toggling or picker.'),
         ],
       },

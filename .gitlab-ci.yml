@@ -1,25 +1,30 @@
 # Dynamic Lab pipeline
 #
 # A Turborepo monorepo: packages/dynamic-lab (the library), packages/the-lab-sans (the font) and
-# apps/landing, apps/showcase, apps/docs, apps/the-lab-sans.
+# apps/landing, apps/showcase, apps/playground, apps/docs, apps/the-lab-sans.
 #
-# The pipeline only runs for release tags (see workflow below); pushes to branches and merge
-# requests don't start one. For each tag it:
+# Releases go through Changesets (see .changeset/README.md):
 #
-# - installs, typechecks and builds every workspace, on each Node version in the NODE_VERSION matrix
-# - publishes the package to this project's package registry and to npmjs.org, then creates a
-#   GitLab release with the changelog
-#     v1.2.3                 @furlab/dynamic-lab
-#     the-lab-sans-v1.2.3    @furlab/the-lab-sans
-# - builds the landing page, showcase, docs and The Lab Sans specimen into public/ and deploys them
-#   to GitLab Pages, so the published docs always match a release
+# 1. Every merge request that changes a published package adds a changeset (`yarn changeset`).
+# 2. On each push to main, version-mr gathers the changesets into a "Version Packages" merge request
+#    that bumps the versions and writes the changelogs (changesets-gitlab, with GITLAB_TOKEN).
+# 3. Merging that merge request changes the packages' versions, which starts the release jobs, once,
+#    for every package that moved:
+#    - plan lists the versions that have no tag yet (scripts/pending-releases.mjs)
+#    - typecheck and build every workspace on each Node version in the NODE_VERSION matrix
+#    - publish each pending package to this project's package registry and to npmjs.org
+#    - create a GitLab release, and with it the tag, for each one:
+#        v1.2.3                 @furlab/dynamic-lab
+#        the-lab-sans-v1.2.3    @furlab/the-lab-sans
+#    - build the landing page, showcase, playground, docs and The Lab Sans specimen into public/
+#      and deploy them to GitLab Pages, so the published docs match the release
 #
-# Releasing: bump "version" in the package's package.json, move its changelog's "Unreleased"
-# section under a heading for the version, commit, then tag and push:
-#   git tag v0.2.0 && git push origin v0.2.0
+# Tags don't start pipelines (the release creates them), so one release is one pipeline however
+# many packages it ships. Other pushes to main only run version-mr.
 #
-# A tag that looks like a release tag but isn't one (the-lab-sans-v1.2.3.beta.1, say) fails the
-# release-tag job instead of quietly skipping the publish jobs.
+# Merge requests get a pipeline of their own (the mr: jobs): typecheck, build, lint and format on
+# Node 24, a check that a change to a published package comes with a changeset, and a comment from
+# changesets-gitlab saying what the merge request will release.
 #
 # Publishing to npmjs.org uses trusted publishing (OIDC), not a token: each package needs a trusted
 # publisher on npmjs.com for this project and .gitlab-ci.yml (GitLab.com shared runners only). The
@@ -29,11 +34,12 @@
 #
 # Keep the NODE_VERSION matrix in sync with .github/workflows/release.yml.
 
-# Only tags that start like a release tag get a pipeline. Malformed ones (v1.2.3.beta.1) still
-# run, so the release-tag job can fail them.
 workflow:
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^(the-lab-sans-)?v\d/'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    # Run pipeline (Build > Pipelines > Run pipeline), e.g. to retry a release.
+    - if: '$CI_PIPELINE_SOURCE == "web"'
 
 default:
   image: node:${NODE_VERSION}
@@ -69,56 +75,143 @@ stages:
     matrix:
       - NODE_VERSION: ['22', '24', '26']
 
-.release-tag:
+# The release jobs run when a push to main changes a published package's version (merging the
+# "Version Packages" merge request), or when a pipeline is started by hand.
+.release:
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^(the-lab-sans-)?v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        - packages/dynamic-lab/package.json
+        - packages/the-lab-sans/package.json
 
-typecheck:
+# ---------------------------------------------------------- Merge requests
+
+.merge-request:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+mr:typecheck:
   stage: check
-  extends: .node-matrix
+  extends: .merge-request
   script:
     - yarn typecheck
 
-release-tag:
+mr:lint:
+  stage: check
+  extends: .merge-request
+  script:
+    - yarn lint
+
+mr:format:
+  stage: check
+  extends: .merge-request
+  script:
+    - yarn format
+
+mr:build:
+  stage: build
+  extends: .merge-request
+  script:
+    - yarn build
+
+# A change to a published package needs a changeset (yarn changeset). The Version Packages merge
+# request is exempt (it consumes them), and so is a merge request labelled "no changeset", for a
+# change that doesn't affect anyone using the package (tests, comments, internal tooling).
+mr:changeset:
   stage: check
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^(the-lab-sans-)?v\d/'
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^changeset-release\//'
+      when: never
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /(^|,)no changeset(,|$)/'
+      when: never
+    - when: on_success
+  variables:
+    GIT_DEPTH: '0'
+  script:
+    - git fetch --quiet origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - yarn changeset status --since="origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+
+# Comments on the merge request with what it will release, or how to add a changeset.
+mr:changeset-comment:
+  stage: check
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
+      when: never
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^changeset-release\//'
+      when: never
+    - when: on_success
+  variables:
+    GITLAB_COMMENT_TYPE: note
+  script:
+    - |
+      if [ -z "$GITLAB_TOKEN" ]; then
+        echo "GITLAB_TOKEN isn't available to this pipeline, so there's no changeset comment."
+        exit 78
+      fi
+    - yarn changesets-gitlab comment
+  allow_failure:
+    exit_codes: 78
+
+# ---------------------------------------------------------------- Version
+
+version-mr:
+  stage: check
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
+  variables:
+    INPUT_VERSION_SCRIPT: yarn version-packages
+    INPUT_REMOVE_SOURCE_BRANCH: 'true'
+  script:
+    - |
+      if [ -z "$GITLAB_TOKEN" ]; then
+        echo "GITLAB_TOKEN isn't set, so the Version Packages merge request can't be opened. Add a project access token (Developer, api and write_repository scopes) as a masked, protected CI/CD variable."
+        exit 78
+      fi
+    - yarn changesets-gitlab
+  # 78: no GITLAB_TOKEN yet. Any other failure still fails the job.
+  allow_failure:
+    exit_codes: 78
+
+# ---------------------------------------------------------------- Release
+
+plan:
+  stage: check
+  extends: .release
   before_script: []
   cache: []
   script:
-    - |
-      node --input-type=module -e "
-        import { readFileSync } from 'node:fs'
-        import { releaseForTag } from './scripts/releases.mjs'
-        const tag = process.env.CI_COMMIT_TAG
-        const release = releaseForTag(tag)
-        if (!release) {
-          console.error(tag + ' is not a release tag, so nothing will be published. Use v1.2.3 or the-lab-sans-v1.2.3, with a hyphen before any pre-release (v1.2.3-beta.1).')
-          process.exit(1)
-        }
-        const { version } = JSON.parse(readFileSync(release.dir + '/package.json', 'utf8'))
-        if (version !== release.version) {
-          console.error(release.name + ' is at ' + version + ' in package.json, but ' + tag + ' is for ' + release.version + '.')
-          process.exit(1)
-        }
-        console.log(tag + ' releases ' + release.name + ' ' + version)
-      "
+    - node scripts/pending-releases.mjs --dotenv release.env
+    - cat release.env
+  artifacts:
+    reports:
+      dotenv: release.env
+
+typecheck:
+  stage: check
+  extends: [.release, .node-matrix]
+  script:
+    - yarn typecheck
 
 format:
   stage: check
+  extends: .release
   script:
     - yarn format
   allow_failure: true
 
 lint:
   stage: check
+  extends: .release
   script:
     - yarn lint
   allow_failure: true
 
 build:
   stage: build
-  extends: .node-matrix
+  extends: [.release, .node-matrix]
   script:
     - yarn build
   artifacts:
@@ -127,16 +220,38 @@ build:
       - packages/the-lab-sans/dist/
     expire_in: 1 week
 
-# ------------------------------------------------------------------ Publish
-
+# Each publish job does nothing unless plan found its package's tag missing.
 .publish:
   stage: publish
-  # prepack builds the package, so these jobs don't need the build artifacts.
-  dependencies: []
+  extends: .release
+  # prepack builds the package, so these jobs only need plan's PENDING_TAGS.
+  dependencies: [plan]
   script:
-    - yarn workspace "$PACKAGE" release --registry "$REGISTRY"
+    - TAG="$TAG_PREFIX$(node -p "require('./$PACKAGE_DIR/package.json').version")"
+    - |
+      case " $PENDING_TAGS " in
+        *" $TAG "*) ;;
+        *) echo "$PACKAGE has nothing new to release ($TAG exists)."; exit 0 ;;
+      esac
+    - yarn workspace "$PACKAGE" release --registry "$REGISTRY" --skip-published
 
-.publish-npm:
+.dynamic-lab:
+  variables:
+    PACKAGE: '@furlab/dynamic-lab'
+    PACKAGE_DIR: packages/dynamic-lab
+    TAG_PREFIX: v
+
+.the-lab-sans:
+  variables:
+    PACKAGE: '@furlab/the-lab-sans'
+    PACKAGE_DIR: packages/the-lab-sans
+    TAG_PREFIX: the-lab-sans-v
+
+.gitlab-registry:
+  variables:
+    REGISTRY: gitlab
+
+.npm-registry:
   variables:
     REGISTRY: npm
   # Trusted publishing: npm exchanges NPM_ID_TOKEN for a short-lived publish token, and signs
@@ -151,70 +266,38 @@ build:
     exit_codes: 78
 
 publish:dynamic-lab:gitlab:
-  extends: .publish
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
-  variables:
-    PACKAGE: '@furlab/dynamic-lab'
-    REGISTRY: gitlab
+  extends: [.publish, .dynamic-lab, .gitlab-registry]
 
 publish:dynamic-lab:npm:
-  extends: [.publish, .publish-npm]
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
-  variables:
-    PACKAGE: '@furlab/dynamic-lab'
+  extends: [.publish, .dynamic-lab, .npm-registry]
 
 publish:the-lab-sans:gitlab:
-  extends: .publish
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^the-lab-sans-v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
-  variables:
-    PACKAGE: '@furlab/the-lab-sans'
-    REGISTRY: gitlab
+  extends: [.publish, .the-lab-sans, .gitlab-registry]
 
 publish:the-lab-sans:npm:
-  extends: [.publish, .publish-npm]
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^the-lab-sans-v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/'
-  variables:
-    PACKAGE: '@furlab/the-lab-sans'
+  extends: [.publish, .the-lab-sans, .npm-registry]
 
-release-notes:
-  stage: publish
-  extends: .release-tag
-  dependencies: []
-  before_script: []
-  cache: []
-  script:
-    - node scripts/release-notes.mjs "$CI_COMMIT_TAG" > release-notes.md
-    - cat release-notes.md
-  artifacts:
-    paths:
-      - release-notes.md
-    expire_in: 1 week
-
-# Runs once the publish stage is done, so a release only appears for a package that made it to the
-# GitLab registry. (A skipped npm publish doesn't hold it up.)
+# Runs once the publish stage is done, so a release (and its tag) only appears for a package that
+# made it to the GitLab registry. A skipped npm publish doesn't hold it up.
 gitlab-release:
   stage: release
-  extends: .release-tag
-  image: registry.gitlab.com/gitlab-org/cli:latest
-  dependencies: [release-notes]
+  extends: .release
+  dependencies: [plan]
   before_script: []
   cache: []
   script:
-    - echo "Creating the GitLab release for $CI_COMMIT_TAG"
-  release:
-    tag_name: $CI_COMMIT_TAG
-    name: $CI_COMMIT_TAG
-    description: ./release-notes.md
+    - |
+      if [ -z "$PENDING_TAGS" ]; then
+        echo "Nothing to release."
+        exit 0
+      fi
+    - node scripts/gitlab-release.mjs $PENDING_TAGS
 
 # -------------------------------------------------------------------- Pages
 
 pages:
   stage: deploy
-  extends: .release-tag
+  extends: .release
   dependencies: []
   variables:
     VITE_REGISTRY_URL: '$CI_API_V4_URL/packages/npm/'

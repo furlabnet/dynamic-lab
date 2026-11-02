@@ -256,7 +256,6 @@ function HomePage() {
     <div className="mx-auto flex max-w-[var(--container-max)] flex-col gap-14 px-4 py-14 sm:px-8">
       <section className="flex flex-col items-start gap-6">
         <PageHeading
-          eyebrow="Dynamic Lab"
           title="Stories worth staying up for"
           description="Comics, art and visual novels from independent creators, published from their own Creator Labs."
         />
@@ -267,15 +266,15 @@ function HomePage() {
             rightIcon={<Search className="size-4" />}>
             Browse creations
           </Button>
-          <Button size="lg" variant="secondary" onClick={() => navigate('lab/components')}>
-            See the component library
-          </Button>
           <Button
             size="lg"
             variant="secondary"
             leftIcon={<FilePlus2 className="size-4" />}
             onClick={() => navigate('lab/new')}>
             Create something
+          </Button>
+          <Button size="lg" variant="ghost" onClick={() => navigate('lab/components')}>
+            See the component library
           </Button>
         </div>
       </section>
@@ -307,9 +306,9 @@ function HomePage() {
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div className="flex flex-col gap-4">
           <h2 className="section-title">Creators</h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <ul className="lab-rows">
             {PROFILES.slice(0, 4).map((p) => (
-              <div key={p.handle} className="ui-panel flex items-center gap-3 p-4!">
+              <li key={p.handle} className="lab-row">
                 <ProfileAvatar src={p.avatar} initials={p.name.slice(0, 2)} size="lg" />
                 <div className="flex min-w-0 flex-1 flex-col">
                   <a
@@ -323,18 +322,15 @@ function HomePage() {
                     Links page
                   </a>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
         <div className="flex flex-col gap-4">
           <h2 className="section-title">Creator Labs</h2>
-          <div className="flex flex-col gap-3">
+          <div className="lab-rows">
             {LABS.map((lab) => (
-              <a
-                key={lab.slug}
-                href={`#/lab/labs/${lab.slug}`}
-                className="ui-panel flex items-center gap-4 p-4! transition-colors hover:border-[var(--primary)]">
+              <a key={lab.slug} href={`#/lab/labs/${lab.slug}`} className="lab-row lab-row-link">
                 <ProfileAvatar
                   src={lab.avatar}
                   initials={lab.name.slice(0, 2)}
@@ -419,16 +415,16 @@ function BrowsePage() {
 
   return (
     <div className="mx-auto flex max-w-[var(--container-max)] flex-col gap-6 px-4 py-10 sm:px-8">
-      <PageHeading eyebrow="Discover" title="Browse creations" />
+      <PageHeading title="Browse creations" />
 
       <form
-        className="ui-panel flex flex-col gap-4"
+        className="lab-filters"
         role="search"
         onSubmit={(e) => {
           e.preventDefault()
           setQuery(draftQuery.trim())
         }}>
-        <div className="flex gap-3">
+        <div className="lab-filters-search">
           <Input
             value={draftQuery}
             onChange={(e) => setDraftQuery(e.target.value)}
@@ -437,7 +433,7 @@ function BrowsePage() {
           />
           <Button type="submit">Search</Button>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="lab-filters-selects">
           <Select
             label="Category"
             value={type}
@@ -962,7 +958,7 @@ function Preferences() {
             <a
               href="#/lab/themes"
               className="text-xs font-semibold text-[var(--primary)] hover:underline">
-              Compare all themes →
+              Compare all themes
             </a>
           </span>
           <PalettePicker variant="compact" className="mt-1" />

@@ -37,7 +37,7 @@ export function WorkflowTimelineItem({
   return (
     <li
       className={cn(
-        'workflow-timeline-item ui-panel rounded-[var(--radius-xl)] p-4 transition-all',
+        'workflow-timeline-item ui-panel rounded-[var(--radius-xl)] p-4 transition-colors',
         className
       )}
       {...props}>

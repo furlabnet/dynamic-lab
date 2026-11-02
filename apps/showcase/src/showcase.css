@@ -1,3 +1,11 @@
+/* Hallmark · shape: app screen · genre: playful · theme: brand (design.md) · redesign: full
+ * screens: Backstage overview leads with the review queue, figures in one hairline strip; Lab pages
+ * lose their eyebrows; Browse filters sit in one toolbar row; the docs sidebar is a plain column
+ * signature: the review queue (Backstage), the creations grid (Lab) · states: loading, empty, full
+ * posture: Restrained · modes: light+dark · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V3 · weakest: V, the Lab keeps its page skeletons; the change is in what leads each screen and how much chrome surrounds it */
+/* Hallmark · answered F9 · the avatars demonstrate ProfileAvatar and profile pages, which need faces; avatar() in details.ts is the one place to point at Furlab profile pictures */
+/* Hallmark · dismissed 70 · the showcase has no backend by design; its toasts demonstrate the Toast component and the state every flow ends in */
 /*
  * Showcase stylesheet. Tailwind scans this app and the library source, so utilities used by either
  * end up in the build.
@@ -6,3 +14,129 @@
 @import '../../../packages/dynamic-lab/src/styles/base.css';
 
 @source '../../../packages/dynamic-lab/src';
+
+/* Backstage overview: the four figures as one strip, parted by hairlines, each a link. */
+.bs-figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  background: var(--card);
+}
+
+@media (min-width: 1280px) {
+  .bs-figures {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.bs-figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  border-color: var(--border);
+  padding: var(--space-16) var(--space-20);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+
+.bs-figure:nth-child(even) {
+  border-left: 1px solid var(--border);
+}
+
+.bs-figure:nth-child(-n + 2) {
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 1280px) {
+  .bs-figure + .bs-figure {
+    border-left: 1px solid var(--border);
+  }
+
+  .bs-figure:nth-child(-n + 2) {
+    border-bottom: 0;
+  }
+}
+
+.bs-figure:hover {
+  background: var(--muted);
+}
+
+.bs-figure:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.bs-figure-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lab home: creators and labs as rows parted by hairlines, not a stack of cards. */
+.lab-rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border-top: 1px solid var(--border);
+  padding: 0;
+  list-style: none;
+}
+
+.lab-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  border-bottom: 1px solid var(--border);
+  padding-block: var(--space-12);
+}
+
+.lab-row-link {
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+
+.lab-row-link:hover {
+  background: color-mix(in srgb, var(--muted) 60%, transparent);
+}
+
+.lab-row-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Browse: search and the three filters in one toolbar, no wrapping card. */
+.lab-filters {
+  display: grid;
+  align-items: end;
+  gap: var(--space-12);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-20);
+}
+
+.lab-filters-search {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.lab-filters-selects {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-12);
+}
+
+@media (min-width: 768px) {
+  .lab-filters-selects {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .lab-filters {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}

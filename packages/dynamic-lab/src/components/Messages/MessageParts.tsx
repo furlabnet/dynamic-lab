@@ -79,7 +79,7 @@ export function MessageDivider({ children }: { children: React.ReactNode }) {
   )
 }
 
-/* ----------------------------------------------------------- Composer */
+/* -------------------------------------------------- Conversation list */
 
 export interface ConversationItemProps extends Omit<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,

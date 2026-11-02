@@ -8,10 +8,10 @@ as small caps, old-style and tabular figures, fractions and a slashed zero.
 
 The package contains:
 
-- `fonts/*.woff2`: web fonts, compressed from the OpenType files at build time
+- `fonts/woff2/*.woff2`: the web fonts
 - `the-lab-sans.css`: one `@font-face` rule per style, plus a `--font-the-lab-sans` variable
   holding the family with system fallbacks
-- `otf/*.otf`: the OpenType originals, for desktop apps
+- `fonts/otf/*.otf`: the OpenType originals, for desktop apps
 - a little JavaScript: the family name, font stack and list of faces
 
 ## Install
@@ -91,13 +91,15 @@ faces // [{ name: 'Thin', weight: 100, style: 'normal', file: 'TheLabSans-Thin' 
 ```
 
 Use these for canvas, charts, emails or anything else that needs the family name or the list of
-faces. A face's web font is at `@furlab/the-lab-sans/fonts/<file>.woff2` and its OpenType file at
-`@furlab/the-lab-sans/otf/<file>.otf`.
+faces. A face's web font is at `@furlab/the-lab-sans/fonts/woff2/<file>.woff2` and its OpenType
+file at `@furlab/the-lab-sans/fonts/otf/<file>.otf`.
 
 ## Development
 
-`yarn build` compiles `src/` with `tsc`, then `scripts/build-css.mjs` compresses `fonts/*.otf` to
-`dist/fonts/*.woff2` and writes `dist/the-lab-sans.css` from the list of faces in `src/index.ts`.
+`yarn build` runs tsdown. Before it bundles, `src/hooks/buildCSS.ts` writes `src/the-lab-sans.css`
+(one `@font-face` per face in `src/hooks/font.ts`); tsdown then compiles `src/` to ESM and CJS,
+bundles the stylesheet into `dist/the-lab-sans.css` and copies `fonts/` (the OpenType and WOFF2
+files, both kept in the repository) into `dist/fonts/`.
 Releases are tagged `the-lab-sans-v<version>`; see the repository README.
 
 ## Licence

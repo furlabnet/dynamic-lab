@@ -17,5 +17,9 @@ follow it too:
 ## Working in this repository
 
 - Keep the `NODE_VERSION` matrix in `.gitlab-ci.yml` and `.github/workflows/release.yml` in sync.
-- Update `README.md` and `CHANGELOG.md` when a change affects usage, tags, build args, or
+- Add a changeset (`.changeset/<name>.md`, or `yarn changeset`) for any change to a published
+  package, written for someone using it. Never bump versions or edit the changelogs' version
+  headings by hand; the Version Packages merge request does that.
+- Update the READMEs when a change affects usage, components, tokens, scripts, release tags or
   environment variables.
+- Read `design.md` before changing the library's look or the sites' layouts.

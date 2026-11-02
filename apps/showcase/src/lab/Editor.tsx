@@ -425,19 +425,22 @@ export function NewContentPicker() {
         title="Create something"
         description="Pick what you're making. You can save a draft at any point."
       />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <ul className="lab-rows max-w-3xl">
         {(Object.keys(TYPE_LABELS) as ContentType[]).map((type) => (
-          <button
-            key={type}
-            type="button"
-            onClick={() => navigate(`lab/new/${type}`)}
-            className="ui-panel flex flex-col items-start gap-3 text-left transition-colors hover:border-[var(--primary)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]">
-            <span className="ui-hero-icon size-12! [&>svg]:size-5">{TYPE_ICONS[type]}</span>
-            <span className="text-base font-bold">{TYPE_LABELS[type]}</span>
-            <span className="body-sm text-[var(--muted-foreground)]">{TYPE_BLURBS[type]}</span>
-          </button>
+          <li key={type}>
+            <button
+              type="button"
+              onClick={() => navigate(`lab/new/${type}`)}
+              className="lab-row lab-row-link w-full text-left">
+              <span className="shrink-0 text-[var(--primary)] [&>svg]:size-5">
+                {TYPE_ICONS[type]}
+              </span>
+              <span className="w-32 shrink-0 text-lg font-bold">{TYPE_LABELS[type]}</span>
+              <span className="min-w-0 text-[var(--muted-foreground)]">{TYPE_BLURBS[type]}</span>
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   )
 }

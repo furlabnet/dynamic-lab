@@ -1,8 +1,9 @@
 /* ========================================================================
  * Brand-specific backgrounds
- * Dynamic: two soft glows (top-right blue, bottom-left violet).
- * Backstage: one fainter violet glow top-left, a magenta one bottom-right,
- * over a faint dot grid that reads as "console".
+ * Dynamic: two faint glows in the palette's own hue (top-right, bottom-left).
+ * Backstage: one fainter glow top-left, a second in the same hue bottom-right,
+ * over a faint dot grid that reads as "console". Both stay under 10% strength:
+ * the page is a solid surface with a hint of colour, never a wash.
  * ===================================================================== */
 [data-theme^='backstage'] .dynamic-lab-glow-bg::before {
   background:
@@ -142,7 +143,7 @@
 }
 
 [data-theme$='dark'] .ui-overlay {
-  background: rgb(0 0 0 / 0.5);
+  background: var(--scrim);
 }
 
 .ui-menu,
@@ -162,7 +163,7 @@
   padding: var(--space-6);
   box-shadow:
     inset 0 1px 0 var(--glass-highlight),
-    0 18px 40px -16px rgb(0 0 0 / 0.35);
+    var(--shadow-pop);
 }
 
 .ui-dialog {
@@ -170,11 +171,11 @@
   padding: var(--space-24);
   box-shadow:
     inset 0 1px 0 var(--glass-highlight),
-    0 24px 64px -24px rgb(0 0 0 / 0.45);
+    var(--shadow-modal);
 }
 
 .ui-drawer {
-  box-shadow: 0 24px 64px -16px rgb(0 0 0 / 0.45);
+  box-shadow: var(--shadow-modal);
 }
 
 .ui-menu-item {
@@ -192,7 +193,7 @@
   cursor: pointer;
   user-select: none;
   outline: none;
-  transition: background-color 120ms ease;
+  transition: background-color 120ms var(--ease-out);
 }
 
 .ui-menu-item:hover,
@@ -241,7 +242,7 @@
   border-bottom-width: 2px;
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--card) 80%, transparent);
-  padding: 0 0.375rem;
+  padding: 0 var(--space-6);
   color: var(--muted-foreground);
   font-family: var(--font-sans);
   font-size: 11px;
@@ -253,9 +254,9 @@
 .ui-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--space-4);
   border-radius: var(--radius-full);
-  padding: 0.1875rem 0.5rem;
+  padding: var(--space-4) var(--space-8);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -264,7 +265,7 @@
 }
 
 .ui-badge-sm {
-  padding: 0.0625rem 0.4375rem;
+  padding: 0.0625rem var(--space-8);
   font-size: 11px;
 }
 .ui-badge-primary {
@@ -307,18 +308,20 @@
   white-space: nowrap;
 }
 
-/* Checkbox and radio */
+/* Checkbox and radio. The tick is drawn by default and hidden only while the input is unchecked,
+   so the checked state never depends on anything but the input itself. */
 .ui-checkbox .ui-checkbox-check {
-  opacity: 0;
-  transform: scale(0.6);
-  transition:
-    opacity 120ms ease,
-    transform 120ms ease;
+  transition: transform var(--dur-micro) var(--ease-out);
 }
 
-input:checked + .ui-checkbox .ui-checkbox-check {
-  opacity: 1;
-  transform: none;
+input:not(:checked) + .ui-checkbox .ui-checkbox-check {
+  transform: scale(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-checkbox .ui-checkbox-check {
+    transition: none;
+  }
 }
 
 .ui-radio {
@@ -331,8 +334,8 @@ input:checked + .ui-checkbox .ui-checkbox-check {
   border-radius: 50%;
   background: var(--card);
   transition:
-    border-color 120ms ease,
-    box-shadow 120ms ease;
+    border-color 120ms var(--ease-out),
+    box-shadow 120ms var(--ease-out);
 }
 
 .ui-radio::after {
@@ -342,7 +345,7 @@ input:checked + .ui-checkbox .ui-checkbox-check {
   border-radius: 50%;
   background: var(--primary);
   transform: scale(0);
-  transition: transform 140ms ease;
+  transition: transform 140ms var(--ease-out);
 }
 
 input:checked + .ui-radio {
@@ -363,8 +366,8 @@ input:focus-visible + .ui-radio {
   background: color-mix(in srgb, var(--card) 70%, transparent);
   padding: var(--space-12) var(--space-16);
   transition:
-    border-color 120ms ease,
-    background-color 120ms ease;
+    border-color 120ms var(--ease-out),
+    background-color 120ms var(--ease-out);
 }
 
 .ui-radio-card:hover {
@@ -379,11 +382,11 @@ input:focus-visible + .ui-radio {
 /* Segmented control */
 .ui-segmented {
   display: inline-flex;
-  gap: 2px;
+  gap: var(--space-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-control);
   background: var(--muted);
-  padding: 3px;
+  padding: var(--space-4);
 }
 
 .ui-segmented-item {
@@ -399,9 +402,9 @@ input:focus-visible + .ui-radio {
   font-weight: 600;
   cursor: pointer;
   transition:
-    background-color 120ms ease,
-    color 120ms ease,
-    box-shadow 120ms ease;
+    background-color 120ms var(--ease-out),
+    color 120ms var(--ease-out),
+    box-shadow 120ms var(--ease-out);
 }
 
 .ui-segmented-sm .ui-segmented-item {
@@ -418,7 +421,7 @@ input:focus-visible + .ui-radio {
   background: var(--card);
   color: var(--foreground);
   box-shadow:
-    0 1px 2px rgb(0 0 0 / 0.08),
+    var(--shadow-control),
     0 0 0 1px var(--border);
 }
 
@@ -445,7 +448,7 @@ input:focus-visible + .ui-radio {
   font: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: background-color 150ms var(--ease-out);
 }
 
 .ui-file-input::file-selector-button:hover {
@@ -464,8 +467,8 @@ input:focus-visible + .ui-radio {
   text-align: center;
   cursor: pointer;
   transition:
-    border-color 150ms ease,
-    background-color 150ms ease;
+    border-color 150ms var(--ease-out),
+    background-color 150ms var(--ease-out);
 }
 
 .ui-dropzone:hover,
@@ -530,7 +533,7 @@ input:focus-visible + .ui-radio {
  * ===================================================================== */
 .ui-site-banner {
   position: relative;
-  padding: 0.5rem 2.5rem;
+  padding: var(--space-8) var(--space-40);
   font-size: 0.8125rem;
   font-weight: 600;
   text-align: center;
@@ -563,15 +566,15 @@ input:focus-visible + .ui-radio {
   align-items: center;
   gap: var(--space-6);
   border-radius: var(--radius-control);
-  padding: 0 0.875rem;
+  padding: 0 var(--space-16);
   color: var(--muted-foreground);
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
   transition:
-    background-color 150ms ease,
-    color 150ms ease;
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out);
 }
 
 .ui-site-nav-link:hover {
@@ -611,7 +614,7 @@ input:focus-visible + .ui-radio {
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: background-color 150ms var(--ease-out);
 }
 
 .ui-app-switcher-trigger:hover,
@@ -627,8 +630,8 @@ input:focus-visible + .ui-radio {
 
 .ui-user-avatar {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--glow-b), var(--primary));
-  color: white;
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 /* Content card */
@@ -640,9 +643,9 @@ input:focus-visible + .ui-radio {
   text-decoration: none;
   color: inherit;
   transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
+    transform 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
 }
 
 .ui-content-card-interactive {
@@ -650,11 +653,7 @@ input:focus-visible + .ui-radio {
 }
 
 .ui-content-card-interactive:hover {
-  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
-  box-shadow:
-    inset 0 1px 0 var(--glass-highlight),
-    0 16px 36px -18px color-mix(in srgb, var(--primary) 45%, transparent);
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
 }
 
 .ui-content-card-interactive:focus-visible {
@@ -667,17 +666,7 @@ input:focus-visible + .ui-radio {
   display: grid;
   overflow: hidden;
   place-items: center;
-  background:
-    radial-gradient(
-      120% 90% at 0% 0%,
-      color-mix(in srgb, var(--primary) 22%, transparent),
-      transparent 60%
-    ),
-    linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--primary) 18%, var(--card)),
-      color-mix(in srgb, var(--glow-b) 10%, var(--card))
-    );
+  background: color-mix(in srgb, var(--primary) 10%, var(--card));
 }
 
 .ui-content-card-icon {
@@ -694,13 +683,11 @@ input:focus-visible + .ui-radio {
  * Navigation (shared)
  * ===================================================================== */
 .ui-nav-label {
-  margin: 1.25rem 0 var(--space-6);
+  margin: var(--space-20) 0 var(--space-4);
   padding-inline: var(--space-10);
-  color: color-mix(in srgb, var(--muted-foreground) 85%, transparent);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
 .ui-nav-group:first-child .ui-nav-label {
@@ -710,7 +697,7 @@ input:focus-visible + .ui-radio {
 .ui-nav-badge {
   border-radius: var(--radius-full);
   background: var(--muted);
-  padding: 0 0.4375rem;
+  padding: 0 var(--space-8);
   color: var(--muted-foreground);
   font-size: 11px;
   font-weight: 700;
@@ -741,14 +728,12 @@ input:focus-visible + .ui-radio {
   background: var(--sidebar);
   backdrop-filter: blur(var(--blur-chrome));
   transform: translateX(-100%);
-  transition:
-    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    width 200ms ease;
+  transition: transform var(--dur-short) var(--ease-out);
 }
 
 .ui-admin-shell[data-mobile-open] .ui-admin-sidebar {
   transform: none;
-  box-shadow: 0 24px 64px -16px rgb(0 0 0 / 0.5);
+  box-shadow: var(--shadow-modal);
 }
 
 .ui-admin-main {
@@ -760,7 +745,9 @@ input:focus-visible + .ui-radio {
 
 .ui-admin-topbar {
   position: sticky;
-  top: 0;
+  /* Sits under a site banner when the page has one (--banner-height), never under the sidebar,
+     which is sticky in its own column. */
+  top: var(--banner-height, 0px);
   z-index: 30;
   display: flex;
   min-height: 4rem;
@@ -773,21 +760,21 @@ input:focus-visible + .ui-radio {
     transparent
   );
   backdrop-filter: blur(var(--blur-chrome)) saturate(1.4);
-  padding: var(--space-12) clamp(1rem, 3vw, 2.5rem);
+  padding: var(--space-12) clamp(var(--space-16), 3vw, var(--space-40));
 }
 
 .ui-admin-content {
   width: 100%;
   max-width: 76rem;
   margin-inline: auto;
-  padding: var(--space-8) clamp(1rem, 3vw, 2.5rem) var(--space-40);
+  padding: var(--space-8) clamp(var(--space-16), 3vw, var(--space-40)) var(--space-40);
 }
 
 @media (min-width: 1024px) {
   .ui-admin-sidebar {
     position: sticky;
-    top: 0;
-    height: 100vh;
+    top: var(--banner-height, 0px);
+    height: calc(100dvh - var(--banner-height, 0px));
     flex-shrink: 0;
     transform: none;
   }
@@ -853,8 +840,8 @@ input:focus-visible + .ui-radio {
   color: var(--muted-foreground);
   cursor: pointer;
   transition:
-    background-color 150ms ease,
-    color 150ms ease;
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out);
 }
 
 .ui-sidebar-toggle:hover {
@@ -876,8 +863,8 @@ input:focus-visible + .ui-radio {
   font-size: 0.875rem;
   cursor: pointer;
   transition:
-    border-color 150ms ease,
-    color 150ms ease;
+    border-color 150ms var(--ease-out),
+    color 150ms var(--ease-out);
 }
 
 .ui-command-trigger:hover {
@@ -923,7 +910,7 @@ input:focus-visible + .ui-radio {
 
 /* Denser data tables and headings in the console */
 [data-theme^='backstage'] .ui-table td {
-  padding-block: 0.625rem;
+  padding-block: var(--space-10);
 }
 
 [data-theme^='backstage'] .ui-table th {
@@ -942,18 +929,18 @@ html[data-transparency='off'] .dynamic-lab-glow-bg::before {
 }
 
 html[data-transparency='off'] .ui-overlay {
-  background: color-mix(in srgb, var(--background) 88%, black);
+  background: color-mix(in srgb, var(--background) 88%, var(--shade));
 }
 
 html[data-transparency='off'][data-mode='dark'] .ui-overlay {
-  background: rgb(0 0 0 / 0.82);
+  background: var(--scrim-strong);
 }
 
 /* Collapsible SidebarNav: a disclosure button below lg, always open from lg up. */
 .ui-nav-body {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-4);
 }
 
 .ui-nav-toggle {
@@ -974,7 +961,7 @@ html[data-transparency='off'][data-mode='dark'] .ui-overlay {
 }
 
 .ui-nav-toggle-icon {
-  transition: transform 180ms ease;
+  transition: transform 180ms var(--ease-out);
 }
 
 nav[data-open] .ui-nav-toggle-icon {
@@ -1006,12 +993,12 @@ nav[data-open] .ui-nav-toggle-icon {
 /* Content card overlays */
 .ui-content-card-rating {
   border-color: transparent;
-  background: rgb(255 255 255 / 0.92);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  background: color-mix(in srgb, var(--shade-ink) 92%, transparent);
+  box-shadow: var(--shadow-control);
 }
 
 [data-mode='dark'] .ui-content-card-rating {
-  background: rgb(0 0 0 / 0.65);
+  background: var(--scrim);
 }
 
 .ui-content-card-saved {
@@ -1025,7 +1012,7 @@ nav[data-open] .ui-nav-toggle-icon {
   border-radius: var(--radius-full);
   background: var(--primary);
   color: var(--primary-foreground);
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+  box-shadow: var(--shadow-control);
 }
 
 .ui-content-card-meta {
@@ -1033,9 +1020,9 @@ nav[data-open] .ui-nav-toggle-icon {
   right: 0.75rem;
   bottom: 0.75rem;
   border-radius: var(--radius-sm);
-  background: rgb(0 0 0 / 0.6);
-  padding: 0.125rem 0.5rem;
-  color: white;
+  background: var(--scrim);
+  padding: var(--space-2) var(--space-8);
+  color: var(--shade-ink);
   font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
@@ -1044,7 +1031,7 @@ nav[data-open] .ui-nav-toggle-icon {
 .ui-content-card-tag {
   border-radius: var(--radius-sm);
   background: var(--muted);
-  padding: 0.0625rem 0.375rem;
+  padding: 0.0625rem var(--space-6);
   color: var(--muted-foreground);
   font-size: 11px;
   font-weight: 600;

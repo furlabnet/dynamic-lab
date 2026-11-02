@@ -50,7 +50,7 @@ export function NoticePanel({
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss alert"
-          className="-mt-1 -mr-1 inline-flex size-6 items-center justify-center rounded-md opacity-60 transition-all hover:bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)] hover:opacity-100">
+          className="-mt-1 -mr-1 inline-flex size-6 items-center justify-center rounded-md opacity-60 transition-colors hover:bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)] hover:opacity-100">
           <X className="size-4" />
         </button>
       )}

@@ -1,6 +1,7 @@
 /**
  * The packages this repository releases, and how a git tag maps to each. Used by release.mjs (to
- * check the tag in CI) and release-notes.mjs (to find the changelog), in GitLab CI and GitHub Actions.
+ * check the tag), release-notes.mjs (to find the changelog), pending-releases.mjs and
+ * gitlab-release.mjs, in GitLab CI and GitHub Actions.
  *
  *   v1.2.3               @furlab/dynamic-lab 1.2.3
  *   the-lab-sans-v1.2.3  @furlab/the-lab-sans 1.2.3
@@ -16,7 +17,7 @@ export const RELEASES = [
     name: '@furlab/dynamic-lab',
     dir: 'packages/dynamic-lab',
     tagPrefix: 'v',
-    changelog: 'CHANGELOG.md',
+    changelog: 'packages/dynamic-lab/CHANGELOG.md',
   },
 ]
 

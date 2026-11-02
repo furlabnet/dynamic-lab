@@ -4,6 +4,7 @@
  *
  *   public/            apps/landing/dist
  *   public/showcase/   apps/showcase/dist
+ *   public/playground/ apps/playground/dist
  *   public/docs/       apps/docs/dist
  *   public/the-lab-sans/  apps/the-lab-sans/dist
  *
@@ -17,6 +18,7 @@ const out = new URL('public/', root)
 const apps = [
   ['apps/landing/dist/', ''],
   ['apps/showcase/dist/', 'showcase/'],
+  ['apps/playground/dist/', 'playground/'],
   ['apps/docs/dist/', 'docs/'],
   ['apps/the-lab-sans/dist/', 'the-lab-sans/'],
 ]

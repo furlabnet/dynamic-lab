@@ -54,9 +54,11 @@ export function ProfileHeader({
   ...props
 }: ProfileHeaderProps) {
   return (
-    <header className={cn('ui-profile-header surface-card', className)} {...props}>
-      <div className="ui-profile-banner">{bannerSrc && <img src={bannerSrc} alt="" />}</div>
-      <div className="flex flex-col gap-4 px-5 pb-6 sm:px-8">
+    <header className={cn('ui-profile-header', className)} {...props}>
+      <div className="ui-profile-banner" data-empty={bannerSrc ? undefined : ''}>
+        {bannerSrc && <img src={bannerSrc} alt="" />}
+      </div>
+      <div className="flex flex-col gap-4 px-2 pb-2 sm:px-6">
         <div className="-mt-14 flex flex-wrap items-end justify-between gap-4">
           <ProfileAvatar
             src={avatarSrc}

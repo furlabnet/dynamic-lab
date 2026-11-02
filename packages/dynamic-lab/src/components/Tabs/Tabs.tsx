@@ -90,7 +90,7 @@ export function TabsTrigger({ className, value, icon, children, ...props }: Tabs
       aria-selected={isSelected}
       onClick={() => context.onValueChange(value)}
       className={cn(
-        'inline-flex cursor-pointer items-center justify-center gap-2 text-sm font-semibold transition-all select-none',
+        'inline-flex cursor-pointer items-center justify-center gap-2 text-sm font-semibold transition-colors select-none',
         variant === 'pill' && [
           'rounded-[var(--radius-full)] px-4 py-1.5',
           isSelected

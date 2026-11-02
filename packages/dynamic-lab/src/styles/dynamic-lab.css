@@ -1,3 +1,7 @@
+/* Hallmark · shape: app screen · genre: playful · theme: brand · redesign: full
+ * paper: hsl(228 33% 97%) · accent: hsl(226 72% 46%) · display: The Lab Sans · body: The Lab Sans
+ * nav: kept · signature: kept, The Lab Sans and one hue per palette · states: each component's own
+ * axes: light/grotesk-sans/cool · posture: Restrained · modes: light+dark · contrast: pass · v2.0.0 */
 /*
  * Published stylesheet (dist/styles.css). Tailwind only scans the library source, so the output
  * holds just the utilities the components use. Import it once: import '@furlab/dynamic-lab/styles.css'

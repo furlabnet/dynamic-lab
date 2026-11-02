@@ -86,14 +86,14 @@ const CREATORS = ['Rook', 'Moth', 'Lark', 'Fen', 'Tide', 'Ember', 'Wren'].map((n
 function Hero() {
   return (
     <ZStack className="overflow-hidden rounded-[var(--radius-3xl)]">
-      <AspectRatio ratio={21 / 9} className="min-h-72">
-        <div className="size-full bg-[linear-gradient(120deg,var(--glow-a),var(--glow-b))]" />
+      <AspectRatio ratio={3 / 1} className="min-h-64">
+        <div className="size-full bg-[var(--primary)]" />
       </AspectRatio>
       <ZStackItem position="top-left" inset="1rem">
         <Badge variant="solid">Featured</Badge>
       </ZStackItem>
       <ZStackItem position="bottom-left" inset="clamp(1rem, 4vw, 2.5rem)">
-        <VStack gap={3} className="max-w-xl text-white">
+        <VStack gap={3} className="max-w-xl text-[var(--primary-foreground)]">
           <Text size="sm" weight="semibold" className="opacity-85">
             New chapter · Rook Fernsby
           </Text>
@@ -101,8 +101,10 @@ function Hero() {
             The lighthouse keeper
           </Heading>
           <HStack gap={2}>
-            <Button leftIcon={<Play className="size-4" />}>Start reading</Button>
-            <Button variant="glass" className="text-white">
+            <Button variant="secondary" leftIcon={<Play className="size-4" />}>
+              Start reading
+            </Button>
+            <Button variant="ghost" className="text-[var(--primary-foreground)]">
               Save
             </Button>
           </HStack>

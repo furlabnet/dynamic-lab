@@ -1,9 +1,10 @@
 # GitHub mirror of the Dynamic Lab repository.
 #
-# The canonical repository is on GitLab, and only its pipeline publishes packages. Like that
-# pipeline, this workflow only runs for release tags (or by hand). It checks the tag on each Node
-# version in the NODE_VERSION matrix, creates the matching GitHub release and deploys the
-# documentation to GitHub Pages:
+# The canonical repository is on GitLab, and only its pipeline publishes packages; its release job
+# creates the tags, and the mirror brings them here. This workflow runs for those release tags (or by
+# hand). It checks the tag on each Node version in the NODE_VERSION matrix, creates the matching
+# GitHub release and deploys the documentation to GitHub Pages. Pull requests get the same checks
+# (typecheck and build on each Node version, lint and formatting on Node 24) and nothing else:
 #
 #   v1.2.3                 @furlab/dynamic-lab
 #   the-lab-sans-v1.2.3    @furlab/the-lab-sans
@@ -18,6 +19,8 @@ name: CI
 on:
   push:
     tags: ['v*', 'the-lab-sans-v*']
+  # Pull requests on the mirror get the same checks; the release and Pages jobs only run for tags.
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -43,6 +46,11 @@ jobs:
       - run: yarn install --immutable
       - run: yarn typecheck
       - run: yarn build
+      - name: Lint and formatting
+        if: matrix.NODE_VERSION == '24'
+        run: |
+          yarn lint
+          yarn format
 
   release:
     name: GitHub release
@@ -116,9 +124,10 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [check, release]
     runs-on: ubuntu-latest
+    # A release that ships both packages brings two tags for one commit; deploy the site once.
     concurrency:
       group: pages
-      cancel-in-progress: false
+      cancel-in-progress: true
     permissions:
       contents: read
       pages: write

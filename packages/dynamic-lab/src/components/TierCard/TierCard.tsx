@@ -110,7 +110,7 @@ export function TierCard({
               aria-valuenow={slotsLeft}
               className="h-1.5 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--foreground)_10%,transparent)]">
               <div
-                className="h-full rounded-full bg-[var(--primary)] transition-[width]"
+                className="h-full rounded-full bg-[var(--primary)]"
                 style={{ width: `${(Math.max(0, slotsLeft) / slotsTotal) * 100}%` }}
               />
             </div>

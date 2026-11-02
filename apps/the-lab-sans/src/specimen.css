@@ -1,3 +1,6 @@
+/* Hallmark · checked: 2026-11-01 · genre: playful · theme: brand (design.md)
+ * floor: fixed the italic word in the h1, the eyebrows, the dotted preview wash · structural: none
+ * built: the project · redesign: polish · v2.0.0 */
 /*
  * Specimen stylesheet. Tailwind is pointed at the library source too, so the components' utilities
  * end up in the build.
@@ -8,15 +11,17 @@
 @source '../../../packages/dynamic-lab/src';
 @source '.';
 
+html,
+body {
+  overflow-x: clip;
+}
+
 .specimen-type {
   font-family: var(--font-the-lab-sans);
 }
 
 .specimen-preview {
-  background:
-    radial-gradient(color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px) 0
-      0 / 18px 18px,
-    color-mix(in srgb, var(--card) 55%, transparent);
+  background: var(--card);
 }
 
 .specimen-code {
@@ -29,8 +34,8 @@
 .specimen-code pre {
   margin: 0;
   overflow-x: auto;
-  padding: 1rem 1.125rem;
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  padding: var(--space-16) var(--space-20);
+  font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.65;
   tab-size: 2;

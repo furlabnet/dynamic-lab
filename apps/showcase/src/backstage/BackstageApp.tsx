@@ -29,7 +29,6 @@ import {
   MenuItem,
   MenuLabel,
   MenuSeparator,
-  MetricCard,
   NoticePanel,
   PageHeader,
   Pagination,
@@ -318,58 +317,132 @@ export function BackstageApp() {
 
 /* ------------------------------------------------------------ Overview */
 
+function Figure({
+  label,
+  value,
+  delta,
+  href,
+}: {
+  label: string
+  value: number
+  delta?: string
+  href: string
+}) {
+  return (
+    <a href={href} className="bs-figure">
+      <span className="text-sm text-[var(--muted-foreground)]">{label}</span>
+      <span className="flex items-baseline gap-2">
+        <span className="bs-figure-value">{value}</span>
+        {delta && (
+          <span className="text-sm font-semibold text-[var(--status-success-ink)]">{delta}</span>
+        )}
+      </span>
+    </a>
+  )
+}
+
 function OverviewPage() {
-  const { content, users, reports, activity } = useShowcase()
+  const { content, users, reports, activity, navigate } = useShowcase()
   const live = content.filter((c) => !c.trashed)
+  const queue = live.filter((c) => c.status === 'in-review')
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title="Overview" description="Site-wide health across every Creator Lab." />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
-          label="Waiting for review"
-          value={live.filter((c) => c.status === 'in-review').length}
-          href="#/backstage/content"
-        />
-        <MetricCard
+
+      <div className="bs-figures">
+        <Figure label="Waiting for review" value={queue.length} href="#/backstage/content" />
+        <Figure
           label="Published"
           value={live.filter((c) => c.status === 'published').length}
-          delta={{ value: '+3', direction: 'up' }}
+          delta="+3"
           href="#/backstage/content"
         />
-        <MetricCard
+        <Figure
           label="Active users"
           value={users.filter((u) => u.status === 'active').length}
           href="#/backstage/users"
         />
-        <MetricCard label="Open reports" value={reports.length} href="#/backstage/moderation" />
+        <Figure label="Open reports" value={reports.length} href="#/backstage/moderation" />
       </div>
+
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <Panel title="Recent activity" description="Everything you do in this demo is logged here.">
-          <WorkflowTimeline>
-            {activity.slice(0, 6).map((a) => (
-              <WorkflowTimelineItem
-                key={a.id}
-                title={a.text}
-                time={timeAgo(a.at)}
-                completed={a.tone === 'success'}
-                active={a.tone !== 'neutral'}
-                className="py-3!"
-              />
-            ))}
-          </WorkflowTimeline>
+        <Panel
+          title="Waiting for review"
+          description="Oldest first. Open one to publish it or send it back.">
+          {queue.length === 0 ? (
+            <EmptyState
+              title="Nothing to review"
+              description="New submissions from every Creator Lab land here."
+            />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Creator</TableHead>
+                  <TableHead>Lab</TableHead>
+                  <TableHead className="text-right">
+                    <span className="sr-only">Actions</span>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {[...queue]
+                  .sort((a, b) => a.updated.localeCompare(b.updated))
+                  .map((c) => (
+                    <TableRow key={c.id}>
+                      <TableCell className="font-semibold">{c.title}</TableCell>
+                      <TableCell>{TYPE_LABELS[c.type]}</TableCell>
+                      <TableCell>{c.creator}</TableCell>
+                      <TableCell>{c.lab}</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => navigate('backstage/content')}>
+                          Review
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          )}
         </Panel>
-        <Panel title="Labs">
-          <ul className="flex flex-col gap-3 text-sm">
-            {Array.from(new Set(content.map((c) => c.lab))).map((lab) => (
-              <li key={lab} className="flex items-center justify-between gap-3">
-                <span className="font-medium">{lab}</span>
-                <Badge variant="neutral">
-                  {content.filter((c) => c.lab === lab && !c.trashed).length}
-                </Badge>
-              </li>
-            ))}
-          </ul>
-        </Panel>
+
+        <div className="flex flex-col gap-6">
+          <Panel
+            title="Recent activity"
+            description="Everything you do in this demo is logged here.">
+            <WorkflowTimeline>
+              {activity.slice(0, 6).map((a) => (
+                <WorkflowTimelineItem
+                  key={a.id}
+                  title={a.text}
+                  time={timeAgo(a.at)}
+                  completed={a.tone === 'success'}
+                  active={a.tone !== 'neutral'}
+                  className="py-3!"
+                />
+              ))}
+            </WorkflowTimeline>
+          </Panel>
+          <Panel title="Labs">
+            <ul className="flex flex-col text-sm">
+              {Array.from(new Set(content.map((c) => c.lab))).map((lab) => (
+                <li
+                  key={lab}
+                  className="flex items-center justify-between gap-3 border-b border-[var(--border)] py-2 last:border-b-0">
+                  <span className="font-medium">{lab}</span>
+                  <span className="text-[var(--muted-foreground)] tabular-nums">
+                    {content.filter((c) => c.lab === lab && !c.trashed).length}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Panel>
+        </div>
       </div>
     </div>
   )
