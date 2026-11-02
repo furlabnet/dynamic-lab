@@ -24,7 +24,7 @@ A [Turborepo](https://turborepo.com) monorepo with Yarn workspaces.
 | `packages/the-lab-sans` | `@furlab/the-lab-sans` | The Lab Sans typeface: WOFF2 web fonts built from the OpenType files, an `@font-face` stylesheet and a little JavaScript. Loaded by every app |
 | `apps/landing` | `@furlab/landing` | The landing page: what the library is, with links to the showcase and docs |
 | `apps/showcase` | `@furlab/showcase` | Two working apps (the Dynamic Lab public site and the Backstage console) built from the library |
-| `apps/docs` | `@furlab/docs` | The documentation site: guides, live examples, source and props for every component |
+| `apps/docs` | `@furlab/docs` | The documentation site: guides, an index of every component, and live examples, source and props for each |
 | `apps/playground` | `@furlab/playground` | A Furlab-style home feed built only from library components, for trying layouts at every screen size |
 | `apps/the-lab-sans` | `@furlab/the-lab-sans-site` | The Lab Sans specimen: every weight, a type tester, OpenType features, glyphs and set-up guides |
 | `tools/eslint` | `@vedla/eslint-config` | Shared ESLint flat configs: `base`, `react-internal` (React libraries) and `next-js`. TypeScript goes through typescript-eslint, and every rule is a warning |

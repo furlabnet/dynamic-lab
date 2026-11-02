@@ -36,6 +36,7 @@ import { BookOpen, Box, Building2, Globe, Search } from 'lucide-react'
 import type { ComponentDoc } from './registry'
 import { pageIcon } from './icons'
 import { GitLabLogo, NpmLogo } from './logos'
+import { ComponentIndex } from './pages/ComponentIndex'
 import { GUIDE } from './pages/Guide'
 import { COMPONENTS, exampleSource, GROUPS } from './registry'
 import { CodeBlock, PropsTable } from './ui'
@@ -178,8 +179,9 @@ function Docs() {
 
   const guide = section === 'guide' ? GUIDE.find((g) => g.id === id) : undefined
   const component = section === 'components' ? COMPONENTS.find((c) => c.id === id) : undefined
-  const page = guide ?? (component ? undefined : GUIDE[0])
-  const currentLabel = guide?.title ?? component?.name ?? GUIDE[0].title
+  const isIndex = section === 'components' && !component
+  const page = guide ?? (component || isIndex ? undefined : GUIDE[0])
+  const currentLabel = guide?.title ?? component?.name ?? (isIndex ? 'Components' : GUIDE[0].title)
 
   const q = filter.trim().toLowerCase()
   const matches = (c: ComponentDoc) =>
@@ -194,6 +196,13 @@ function Docs() {
         icon: <BookOpen />,
         onSelect: () => go(`guide/${g.id}`),
       })),
+      {
+        id: 'components',
+        label: 'All components',
+        group: 'Guide',
+        icon: <Box />,
+        onSelect: () => go('components'),
+      },
       ...COMPONENTS.map((c) => ({
         id: `c-${c.id}`,
         label: c.name,
@@ -267,11 +276,19 @@ function Docs() {
           <SidebarNavItem
             key={g.id}
             icon={railIcons && pageIcon(g.id)}
-            active={guide?.id === g.id || (!guide && !component && g === GUIDE[0])}
+            active={guide?.id === g.id || (!guide && !component && !isIndex && g === GUIDE[0])}
             onClick={() => go(`guide/${g.id}`)}>
             {g.title}
           </SidebarNavItem>
         ))}
+      </SidebarNavGroup>
+      <SidebarNavGroup label="Components">
+        <SidebarNavItem
+          icon={railIcons && pageIcon('components')}
+          active={isIndex}
+          onClick={() => go('components')}>
+          All components
+        </SidebarNavItem>
       </SidebarNavGroup>
       <div className="ui-nav-text px-1 pt-2 pb-2">
         <Input
@@ -309,6 +326,8 @@ function Docs() {
 
   const content = component ? (
     <ComponentPage key={component.id} doc={component} />
+  ) : isIndex ? (
+    <ComponentIndex filter={filter} onFilterChange={setFilter} matches={matches} />
   ) : (
     page && <page.render key={page.id} />
   )
@@ -346,7 +365,7 @@ function Docs() {
                   href="#/guide/getting-started"
                   className="flex items-center"
                   aria-label="Dynamic Lab documentation home">
-                  <BrandLockup name="Dynamic Lab" product="Docs" size="sm" />
+                  <BrandLockup name="Dynamic Lab" product="Docs" size="md" />
                 </a>
               }
               search={<CommandTrigger label="Search docs…" onClick={() => setPaletteOpen(true)} />}>
@@ -356,7 +375,7 @@ function Docs() {
           topbar={
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <span className="truncate text-sm text-[var(--muted-foreground)]">
-                {component ? component.group : 'Guide'}
+                {component ? component.group : isIndex ? 'Components' : 'Guide'}
                 <span aria-hidden="true"> / </span>
                 <span className="font-semibold text-[var(--foreground)]">{currentLabel}</span>
               </span>
@@ -393,9 +412,7 @@ function Docs() {
               onClick={() => go('guide/getting-started')}>
               Guide
             </SiteNavLink>
-            <SiteNavLink
-              active={section === 'components'}
-              onClick={() => go(`components/${COMPONENTS[0].id}`)}>
+            <SiteNavLink active={section === 'components'} onClick={() => go('components')}>
               Components
             </SiteNavLink>
             <SiteNavLink

@@ -581,7 +581,8 @@
 }
 
 .ui-profile-banner[data-empty] {
-  height: 6rem;
+  /* height: 6rem; */
+  height: clamp(9rem, 22vw, 16rem);
 }
 
 .ui-profile-banner img {

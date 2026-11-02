@@ -1,0 +1,11 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      // The build also writes src/the-lab-sans.css, which apps that load the package from source
+      // import. Cache it with dist so a cache hit restores it too.
+      "outputs": ["dist/**", "src/the-lab-sans.css"]
+    }
+  }
+}
