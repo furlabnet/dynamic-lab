@@ -4,6 +4,7 @@
  * with the notes from the package's changelog. Run in GitLab CI after the packages are published:
  *
  *   node scripts/gitlab-release.mjs v1.2.3 the-lab-sans-v1.2.3
+ *   node scripts/gitlab-release.mjs "$PENDING_TAGS"     (comma-separated, as plan writes it)
  *
  * Uses the job token (CI_JOB_TOKEN) and the CI_API_V4_URL, CI_PROJECT_ID and CI_COMMIT_SHA that
  * GitLab sets. A release that already exists is left alone, so a retried job doesn't fail.
@@ -12,7 +13,17 @@ import { execFileSync } from 'node:child_process'
 
 import { releaseForTag } from './releases.mjs'
 
-const tags = process.argv.slice(2).filter(Boolean)
+// Accept tags as separate arguments or comma-separated, and ignore stray quotes and blanks.
+const tags = process.argv
+  .slice(2)
+  .flatMap((arg) => arg.split(','))
+  .map((tag) => tag.trim().replace(/^["']+|["']+$/g, ''))
+  .filter(Boolean)
+
+if (tags.length === 0) {
+  console.log('Nothing to release.')
+  process.exit(0)
+}
 const {
   CI_API_V4_URL: api,
   CI_PROJECT_ID: project,

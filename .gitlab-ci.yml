@@ -229,8 +229,8 @@ build:
   script:
     - TAG="$TAG_PREFIX$(node -p "require('./$PACKAGE_DIR/package.json').version")"
     - |
-      case " $PENDING_TAGS " in
-        *" $TAG "*) ;;
+      case ",$PENDING_TAGS," in
+        *",$TAG,"*) ;;
         *) echo "$PACKAGE has nothing new to release ($TAG exists)."; exit 0 ;;
       esac
     - yarn workspace "$PACKAGE" release --registry "$REGISTRY" --skip-published
@@ -291,7 +291,7 @@ gitlab-release:
         echo "Nothing to release."
         exit 0
       fi
-    - node scripts/gitlab-release.mjs $PENDING_TAGS
+    - node scripts/gitlab-release.mjs "$PENDING_TAGS"
 
 # -------------------------------------------------------------------- Pages
 
