@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-beta.5
+
+### Patch Changes
+
+- `@furlab/the-lab-sans/otf/*` resolves again: it pointed at a folder the package doesn't ship. The
+  OpenType files are at `fonts/otf/` (also reachable as `otf/`) and the web fonts at `fonts/woff2/`.
+- Prepare for release bump using the cli
+
 ## 0.1.0-beta.4
 
 The first releases, 0.1.0-beta.1 to 0.1.0-beta.4, are listed together.
