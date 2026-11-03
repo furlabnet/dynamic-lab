@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-beta.7
+
+### Patch Changes
+
+- HoverCard no longer clones its trigger, so it works when the trigger comes from a React Server
+  Component. Before, a production build rendered it as an element with an undefined type and the
+  page failed with "Element type is invalid". `children` now accepts any `ReactNode`.
+
 ## 0.1.0-beta.6
 
 ### Patch Changes
