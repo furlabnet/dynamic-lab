@@ -173,7 +173,7 @@ export const COMPONENTS: ComponentDoc[] = [
       {
         component: 'HoverCard',
         rows: [
-          p('children', 'ReactElement', undefined, 'The trigger, ideally a link.'),
+          p('children', 'ReactNode', undefined, 'The trigger, ideally a link.'),
           p('content', 'ReactNode', undefined, 'What the card shows.'),
           p('openDelay / closeDelay', 'number', '450 / 200', 'Milliseconds.'),
           p(

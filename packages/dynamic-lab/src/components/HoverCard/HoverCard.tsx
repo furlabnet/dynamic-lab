@@ -9,7 +9,7 @@ import { cn } from '../../lib/utils'
 
 export interface HoverCardProps {
   /** The link or name that shows the card. Keep it a real link so the card is only a preview. */
-  children: React.ReactElement<React.HTMLAttributes<HTMLElement>>
+  children: React.ReactNode
   /** What the card shows. */
   content: React.ReactNode
   /** Milliseconds before it opens on hover. */
@@ -59,6 +59,22 @@ export function HoverCard({
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
+  // The trigger isn't cloned: children sent from a Server Component arrive as a lazy reference,
+  // not an element. So the open card is announced through the trigger's DOM node instead.
+  useEffect(() => {
+    if (!open) return
+    const trigger =
+      anchorRef.current?.querySelector<HTMLElement>('a, button, [tabindex]') ??
+      anchorRef.current?.querySelector<HTMLElement>('*')
+    if (!trigger) return
+    const previous = trigger.getAttribute('aria-describedby')
+    trigger.setAttribute('aria-describedby', previous ? `${previous} ${id}` : id)
+    return () => {
+      if (previous) trigger.setAttribute('aria-describedby', previous)
+      else trigger.removeAttribute('aria-describedby')
+    }
+  }, [open, id])
+
   const hoverHandlers = {
     onPointerEnter: (e: React.PointerEvent) =>
       e.pointerType === 'mouse' && schedule(true, openDelay),
@@ -66,21 +82,15 @@ export function HoverCard({
       e.pointerType === 'mouse' && schedule(false, closeDelay),
   }
 
-  const child = React.cloneElement(children, {
-    'aria-describedby': open ? id : undefined,
-    onFocus: (e: React.FocusEvent<HTMLElement>) => {
-      children.props.onFocus?.(e)
-      schedule(true, 0)
-    },
-    onBlur: (e: React.FocusEvent<HTMLElement>) => {
-      children.props.onBlur?.(e)
-      schedule(false, closeDelay)
-    },
-  } as React.HTMLAttributes<HTMLElement>)
-
   return (
-    <span ref={anchorRef} className="inline-flex" {...hoverHandlers}>
-      {child}
+    // Focus events bubble in React, so the trigger's own onFocus/onBlur still run first.
+    <span
+      ref={anchorRef}
+      className="inline-flex"
+      {...hoverHandlers}
+      onFocus={() => schedule(true, 0)}
+      onBlur={() => schedule(false, closeDelay)}>
+      {children}
       {open &&
         createPortal(
           <div
