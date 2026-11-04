@@ -307,7 +307,10 @@
     border-color: var(--destructive);
   }
 
-  .icon-button {
+  /* Defaults for a bare .icon-button. :where() gives them no specificity, so IconButton's variant
+     (the primary or danger fill above, or a utility) always wins: otherwise this card background
+     covered the primary fill and left its light icon on a light button. */
+  :where(.icon-button) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -324,7 +327,7 @@
       color var(--dur-micro) var(--ease-out);
   }
 
-  .icon-button:hover:not(:disabled) {
+  :where(.icon-button:hover:not(:disabled)) {
     background-color: var(--muted);
   }
 
