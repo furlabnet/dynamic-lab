@@ -36,6 +36,9 @@ tint and two glows in one hue family.
   menus, dialogs), never below 70% opacity.
 - Glows stay under 10% strength, one hue per palette. No washes behind text.
 - A card has a 1px border; depth reads from lightness. One containment layer.
+- Content cards come in two styles. Detailed (the default) carries type, title, byline, tags and
+  counts, and sheds the tags under 16rem wide. Compact is the cover with a title and one quiet line,
+  for dense grids and small spaces. Ratings over covers are solid chips in their tone.
 
 ## Controls
 

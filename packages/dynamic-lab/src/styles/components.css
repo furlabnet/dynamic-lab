@@ -634,7 +634,10 @@ input:focus-visible + .ui-radio {
   color: var(--primary-foreground);
 }
 
-/* Content card */
+/* Content card
+ * Two styles. `detailed` (the default) shows type, title, byline, tags and counts, and adapts to
+ * its own width: under 16rem the tags step aside and the padding tightens. `compact` is the cover
+ * with a title and one quiet line, for dense grids. Hover is one border step; nothing lifts. */
 .ui-content-card {
   display: flex;
   flex-direction: column;
@@ -642,10 +645,8 @@ input:focus-visible + .ui-radio {
   padding: 0;
   text-decoration: none;
   color: inherit;
-  transition:
-    transform 180ms var(--ease-out),
-    box-shadow 180ms var(--ease-out),
-    border-color 180ms var(--ease-out);
+  container: content-card / inline-size;
+  transition: border-color 180ms var(--ease-out);
 }
 
 .ui-content-card-interactive {
@@ -677,6 +678,100 @@ input:focus-visible + .ui-radio {
   width: 2.5rem;
   height: 2.5rem;
   stroke-width: 1.5;
+}
+
+.ui-content-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-20);
+  text-align: left;
+}
+
+.ui-content-card-type {
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.ui-content-card-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--foreground);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+
+.ui-content-card-byline {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-8);
+  margin-top: var(--space-2);
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+}
+
+.ui-content-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.ui-content-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-12);
+  margin-top: auto;
+  padding-top: var(--space-12);
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-content-card {
+    transition: none;
+  }
+}
+
+/* A detailed card in a narrow column: fewer extras, tighter padding. */
+@container content-card (max-width: 16rem) {
+  .ui-content-card-body {
+    padding: var(--space-12) var(--space-16) var(--space-16);
+  }
+  .ui-content-card-tags {
+    display: none;
+  }
+  .ui-content-card-title {
+    font-size: 1rem;
+  }
+}
+
+/* Compact: the cover carries the card; a title and one quiet line under it. */
+.ui-content-card-compact .ui-content-card-body {
+  gap: var(--space-2);
+  padding: var(--space-10) var(--space-12) var(--space-12);
+}
+
+.ui-content-card-compact .ui-content-card-title {
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.ui-content-card-compact .ui-content-card-byline {
+  display: block;
+  overflow: hidden;
+  margin-top: 0;
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ========================================================================
@@ -992,21 +1087,56 @@ nav[data-open] .ui-nav-toggle-icon {
   }
 }
 
-/* Content card overlays */
-.ui-content-card-rating {
-  border-color: transparent;
-  background: color-mix(in srgb, var(--shade-ink) 92%, transparent);
-  box-shadow: var(--shadow-control);
+/* Content card overlays
+ * The rating is a solid chip in its own tone with that tone's paired foreground (AA in light and
+ * dark), ringed in the shade colour so it holds its edge on any cover. */
+.ui-content-card-badges {
+  position: absolute;
+  top: var(--space-12);
+  left: var(--space-12);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
 }
 
-[data-mode='dark'] .ui-content-card-rating {
-  background: var(--scrim);
+.ui-age-rating.ui-content-card-rating {
+  --rating-fill: var(--success);
+  --rating-ink: var(--success-foreground);
+  border-color: transparent;
+  background: var(--rating-fill);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--shade) 60%, transparent);
+  padding: var(--space-2) var(--space-8);
+  color: var(--rating-ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.ui-age-rating.ui-content-card-rating[data-rating='suggestive'] {
+  --rating-fill: var(--warning);
+  --rating-ink: var(--warning-foreground);
+}
+
+.ui-age-rating.ui-content-card-rating[data-rating='mature'] {
+  --rating-fill: var(--destructive);
+  --rating-ink: var(--destructive-foreground);
+}
+
+.ui-content-card-hidden {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  border-radius: var(--radius-full);
+  background: var(--scrim-strong);
+  padding: var(--space-4) var(--space-12);
+  color: var(--shade-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .ui-content-card-saved {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: var(--space-12);
+  right: var(--space-12);
   display: grid;
   width: 1.75rem;
   height: 1.75rem;
@@ -1019,15 +1149,35 @@ nav[data-open] .ui-nav-toggle-icon {
 
 .ui-content-card-meta {
   position: absolute;
-  right: 0.75rem;
-  bottom: 0.75rem;
+  right: var(--space-12);
+  bottom: var(--space-12);
   border-radius: var(--radius-sm);
-  background: var(--scrim);
+  background: var(--scrim-strong);
   padding: var(--space-2) var(--space-8);
   color: var(--shade-ink);
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 700;
   white-space: nowrap;
+}
+
+/* Compact overlays sit closer to the edge and read a step smaller. */
+.ui-content-card-compact .ui-content-card-badges {
+  top: var(--space-8);
+  left: var(--space-8);
+}
+.ui-content-card-compact .ui-content-card-saved {
+  top: var(--space-8);
+  right: var(--space-8);
+}
+.ui-content-card-compact .ui-content-card-meta {
+  right: var(--space-8);
+  bottom: var(--space-8);
+}
+.ui-content-card-compact .ui-age-rating.ui-content-card-rating {
+  font-size: 0.75rem;
+}
+.ui-content-card-compact .ui-content-card-hidden {
+  padding: var(--space-6);
 }
 
 .ui-content-card-tag {
@@ -1035,6 +1185,6 @@ nav[data-open] .ui-nav-toggle-icon {
   background: var(--muted);
   padding: 0.0625rem var(--space-6);
   color: var(--muted-foreground);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 500;
 }

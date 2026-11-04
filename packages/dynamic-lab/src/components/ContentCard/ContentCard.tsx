@@ -16,7 +16,14 @@ export interface ContentCardStat {
 
 export interface ContentCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
   title: React.ReactNode
-  /** Content type shown as an eyebrow above the title, e.g. "Story". */
+  /**
+   * `detailed` (the default) shows everything the card is given. `compact` is for dense grids and
+   * small spaces: the cover, then the title and one quiet line (the byline, or the type when there
+   * is none). The rating, cover fact and saved mark stay on the cover; the type label, byline
+   * avatar, tags, stats and footer are left out.
+   */
+  variant?: 'detailed' | 'compact'
+  /** Content type shown above the title, e.g. "Story". */
   type?: string
   byline?: React.ReactNode
   /** Small avatar image next to the byline. */
@@ -51,10 +58,17 @@ const aspectClasses = {
   landscape: 'aspect-[4/3]',
 }
 
-/** A browsable card for a creation: cover, rating, type, title, byline and key counts. */
+/**
+ * A browsable card for a creation: cover, rating, type, title, byline and key counts.
+ *
+ * The detailed card adapts to its own width: in a narrow column (under about 16rem) the tags step
+ * aside and the padding tightens, so a crowded grid stays readable. Use `variant="compact"` when
+ * every card in a grid should be small and quiet.
+ */
 export function ContentCard({
   className,
   title,
+  variant = 'detailed',
   type,
   byline,
   bylineAvatar,
@@ -74,6 +88,7 @@ export function ContentCard({
   ...props
 }: ContentCardProps) {
   const interactive = Boolean(href || onClick)
+  const compact = variant === 'compact'
   const Component = (href ? 'a' : onClick ? 'button' : 'article') as React.ElementType
 
   return (
@@ -81,8 +96,10 @@ export function ContentCard({
       href={href}
       onClick={onClick}
       type={Component === 'button' ? 'button' : undefined}
+      data-variant={variant}
       className={cn(
         'ui-content-card surface-card group',
+        compact && 'ui-content-card-compact',
         interactive && 'ui-content-card-interactive',
         className
       )}
@@ -100,13 +117,18 @@ export function ContentCard({
         )}
         {blurCover && (
           <span className="absolute inset-0 grid place-items-center">
-            <span className="flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white">
-              <EyeOff className="size-3.5" aria-hidden /> Hidden by your preferences
+            <span className="ui-content-card-hidden">
+              <EyeOff className="size-3.5" aria-hidden />
+              {compact ? (
+                <span className="sr-only">Hidden by your preferences</span>
+              ) : (
+                'Hidden by your preferences'
+              )}
             </span>
           </span>
         )}
         {(rating || coverBadge) && (
-          <span className="absolute top-3 left-3 flex items-center gap-1.5">
+          <span className="ui-content-card-badges">
             {rating && <AgeRating rating={rating} className="ui-content-card-rating" />}
             {coverBadge}
           </span>
@@ -119,53 +141,57 @@ export function ContentCard({
         )}
         {coverMeta && <span className="ui-content-card-meta">{coverMeta}</span>}
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-5 text-left">
-        {type && (
-          <span className="text-xs font-semibold text-[var(--muted-foreground)]">{type}</span>
-        )}
-        <span className="text-lg leading-snug font-bold tracking-tight text-[var(--foreground)]">
-          {title}
-        </span>
-        {byline && (
-          <span className="mt-1 flex items-center gap-2 text-xs text-[var(--muted-foreground)]">
-            {bylineAvatar && (
-              <img
-                src={bylineAvatar}
-                alt=""
-                loading="lazy"
-                className="size-5 rounded-full object-cover"
-              />
-            )}
-            <span className="truncate">{byline}</span>
-          </span>
-        )}
-        {tags && tags.length > 0 && (
-          <span className="mt-2 flex flex-wrap gap-1">
-            {tags.map((t) => (
-              <span key={t} className="ui-content-card-tag">
-                {t.replace(/_/g, ' ')}
-              </span>
-            ))}
-          </span>
-        )}
-        {(stats?.length || footer) && (
-          <span className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-3 text-xs text-[var(--muted-foreground)]">
-            {stats?.map((s) => (
-              <span
-                key={s.label}
-                className="inline-flex items-center gap-1 tabular-nums"
-                title={`${s.value} ${s.label}`}>
-                <span className="inline-flex [&>svg]:size-3.5" aria-hidden>
-                  {s.icon}
+
+      {compact ? (
+        <div className="ui-content-card-body">
+          <span className="ui-content-card-title">{title}</span>
+          {(byline || type) && <span className="ui-content-card-byline">{byline ?? type}</span>}
+        </div>
+      ) : (
+        <div className="ui-content-card-body">
+          {type && <span className="ui-content-card-type">{type}</span>}
+          <span className="ui-content-card-title">{title}</span>
+          {byline && (
+            <span className="ui-content-card-byline">
+              {bylineAvatar && (
+                <img
+                  src={bylineAvatar}
+                  alt=""
+                  loading="lazy"
+                  className="size-5 shrink-0 rounded-full object-cover"
+                />
+              )}
+              <span className="truncate">{byline}</span>
+            </span>
+          )}
+          {tags && tags.length > 0 && (
+            <span className="ui-content-card-tags">
+              {tags.map((t) => (
+                <span key={t} className="ui-content-card-tag">
+                  {t.replace(/_/g, ' ')}
                 </span>
-                {s.value}
-                <span className="sr-only">{s.label}</span>
-              </span>
-            ))}
-            {footer && <span className="ml-auto inline-flex items-center gap-1.5">{footer}</span>}
-          </span>
-        )}
-      </div>
+              ))}
+            </span>
+          )}
+          {(stats?.length || footer) && (
+            <span className="ui-content-card-stats">
+              {stats?.map((s) => (
+                <span
+                  key={s.label}
+                  className="inline-flex items-center gap-1 tabular-nums"
+                  title={`${s.value} ${s.label}`}>
+                  <span className="inline-flex [&>svg]:size-3.5" aria-hidden>
+                    {s.icon}
+                  </span>
+                  {s.value}
+                  <span className="sr-only">{s.label}</span>
+                </span>
+              ))}
+              {footer && <span className="ml-auto inline-flex items-center gap-1.5">{footer}</span>}
+            </span>
+          )}
+        </div>
+      )}
     </Component>
   )
 }
