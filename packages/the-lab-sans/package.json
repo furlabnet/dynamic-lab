@@ -1,6 +1,6 @@
 {
   "name": "@furlab/the-lab-sans",
-  "version": "0.1.0-beta.5",
+  "version": "0.1.0",
   "description": "The Lab Sans, the Furlab typeface: 8 weights with italics, as WOFF2 web fonts with a ready-made @font-face stylesheet, and OpenType files.",
   "keywords": [
     "font",
