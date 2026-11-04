@@ -6,20 +6,17 @@ export interface DynamicLabMarkProps extends React.SVGProps<SVGSVGElement> {
   size?: number | string
 }
 
-/** The Furlab mark: a fox called FleskyFox. Also exported under that name. */
-export function DynamicLabMark({ size = 28, className, ...props }: DynamicLabMarkProps) {
+/** Tight bounds of the mark's artwork. */
+export const MARK_VIEWBOX = '0 26 711 667'
+
+/** The liquid inside the mark's flask, for artwork that colours it apart from the outline. */
+export const MARK_LIQUID_PATH =
+  'M653.35,634.7c-4.64,6.64-12.64,10.6-21.4,10.6h-314.76c-8.76,0-16.76-3.96-21.41-10.6-4.64-6.64-5.12-14.81-1.28-21.85h0l91.42-167.8c72.63-35.13,118.71,38.67,177.32,0l91.41,167.8c3.84,7.04,3.36,15.21-1.29,21.85Z'
+
+/** The mark's artwork, with no sizing or class, for other drawings (such as the 404) to reuse. */
+export function MarkPaths() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 26 711 667"
-      fill="currentColor"
-      role="img"
-      aria-label="Dynamic Lab mark"
-      width={size}
-      height={size}
-      className={cn('ui-brand-mark shrink-0', className)}
-      {...props}>
-      <title>FoxyFlask</title>
+    <>
       <path
         fill-rule="evenodd"
         d="M302.73,489.76l-.65,1.19c.54-.2,1.07-.42,1.58-.67-.32-.16-.63-.33-.93-.52Z"
@@ -45,7 +42,26 @@ export function DynamicLabMark({ size = 28, className, ...props }: DynamicLabMar
         d="M136.39,378.55c-5.36-16.28-11.53-32.17-19.6-46.86-.81-1.46-1.62-2.91-2.43-4.34.51.79,1.01,1.57,1.5,2.35s.97,1.55,1.43,2.32c.03.04.06.09.09.14.43.72.86,1.43,1.28,2.15.3.51.6,1.03.88,1.53.33.57.66,1.14.97,1.71,1.39,2.48,2.66,4.89,3.82,7.21.16.33.33.67.49,1,.86,1.73,1.64,3.42,2.38,5.05.27.62.54,1.22.8,1.82.19.44.37.87.56,1.31.23.54.46,1.07.67,1.6.36.87.7,1.73,1.03,2.57.54,1.39,1.04,2.72,1.49,4,.2.53.38,1.05.55,1.55.23.65.44,1.29.64,1.91.11.34.22.67.33,1,.32.99.6,1.94.87,2.83.12.43.25.86.36,1.27.12.41.23.8.33,1.19.1.38.2.76.3,1.12.14.53.27,1.05.38,1.53.08.32.15.63.22.92.31,1.32.52,2.37.66,3.12Z"
       />
       <path d="M569.77,131.94c1.62.49,3.04.94,4.24,1.37-1.32-.62-2.75-1.08-4.24-1.37Z" />
-      <path d="M653.35,634.7c-4.64,6.64-12.64,10.6-21.4,10.6h-314.76c-8.76,0-16.76-3.96-21.41-10.6-4.64-6.64-5.12-14.81-1.28-21.85h0l91.42-167.8c72.63-35.13,118.71,38.67,177.32,0l91.41,167.8c3.84,7.04,3.36,15.21-1.29,21.85Z" />
+      <path d={MARK_LIQUID_PATH} />
+    </>
+  )
+}
+
+/** The Furlab mark: a fox called FleskyFox. Also exported under that name. */
+export function DynamicLabMark({ size = 28, className, ...props }: DynamicLabMarkProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={MARK_VIEWBOX}
+      fill="currentColor"
+      role="img"
+      aria-label="Dynamic Lab mark"
+      width={size}
+      height={size}
+      className={cn('ui-brand-mark shrink-0', className)}
+      {...props}>
+      <title>FoxyFlask</title>
+      <MarkPaths />
     </svg>
   )
 }
