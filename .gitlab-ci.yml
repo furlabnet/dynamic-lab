@@ -42,6 +42,9 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "web"'
 
 default:
+  # Jobs run on the project's own runners (the `furlab` tag), except npm publishing (.npm-registry).
+  tags:
+    - furlab
   image: node:${NODE_VERSION}
   before_script:
     - npm install -g corepack
@@ -264,6 +267,11 @@ build:
   # 78: no NPM_ID_TOKEN, or npm refused it (see scripts/release.mjs). Any other failure still fails the pipeline.
   allow_failure:
     exit_codes: 78
+  # npm only trusts tokens from GitLab.com shared runners, so these jobs skip the default `furlab`
+  # tag (keeping the other defaults). On a self-hosted runner npm would refuse the token and the
+  # job would exit 78, which is allowed to fail: npm releases would stop without a red pipeline.
+  inherit:
+    default: [image, before_script, cache]
 
 publish:dynamic-lab:gitlab:
   extends: [.publish, .dynamic-lab, .gitlab-registry]
