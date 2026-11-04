@@ -151,6 +151,37 @@ export function Cards() {
   )
 }
 
+export function CompactCards() {
+  const works = [
+    { seed: 'saltwater', title: 'Saltwater Letters', by: 'Sam Okafor', meta: '3 ch · 4 min' },
+    { seed: 'ember-wolves', title: 'Ember Wolves', by: 'Priya Natarajan', meta: '6 images' },
+    {
+      seed: 'tidewater',
+      title: 'Tidewater and the Long Drowned City',
+      by: 'Oak Ren',
+      meta: '24 pages',
+    },
+    { seed: 'lanternfall', title: 'Lanternfall', by: 'Juniper Sol', meta: 'v1.2' },
+  ]
+  return (
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      {works.map((work) => (
+        <ContentCard
+          key={work.seed}
+          variant="compact"
+          title={work.title}
+          byline={`By ${work.by}`}
+          cover={`https://picsum.photos/seed/${work.seed}/600/800`}
+          aspect="portrait"
+          rating="general"
+          coverMeta={work.meta}
+          onClick={() => {}}
+        />
+      ))}
+    </div>
+  )
+}
+
 export function Avatars() {
   return (
     <div className="flex flex-wrap items-end gap-4">

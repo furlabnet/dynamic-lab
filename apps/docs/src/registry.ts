@@ -1452,14 +1452,28 @@ export const COMPONENTS: ComponentDoc[] = [
     name: 'ContentCard',
     group: 'Data display',
     summary:
-      'A browsable card for a creation: cover, rating, type, title, byline, tags and counts. Mature covers can be blurred while the details stay readable.',
+      'A browsable card for a creation, in two styles. Detailed shows cover, rating, type, title, byline, tags and counts, and drops the tags in a narrow column. Compact is the cover with a title and one quiet line, for dense grids. Mature covers can be blurred while the details stay readable.',
     imports: ['ContentCard'],
-    examples: [ex('data', data, 'Cards', 'Story, gated artwork and a page')],
+    examples: [
+      ex('data', data, 'Cards', 'Story, gated artwork and a page'),
+      ex('data', data, 'CompactCards', 'Compact cards in a dense grid'),
+    ],
     props: [
       {
         component: 'ContentCard',
         rows: [
-          p('title / type / byline', 'ReactNode / string / ReactNode', undefined, 'Text.'),
+          p(
+            'variant',
+            "'detailed' | 'compact'",
+            "'detailed'",
+            'Compact keeps the cover, title and one line (byline, else type); no tags, stats or footer.'
+          ),
+          p(
+            'title / type / byline',
+            'ReactNode / string / ReactNode',
+            undefined,
+            'Text. Titles clamp to two lines.'
+          ),
           p(
             'cover',
             'string | ReactNode',
