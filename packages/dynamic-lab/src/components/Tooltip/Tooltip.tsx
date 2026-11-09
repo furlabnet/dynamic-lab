@@ -19,17 +19,32 @@ export function Tooltip({
   delayDuration = 200,
   className,
 }: TooltipProps) {
-  const [isVisible, setIsVisible] = useState(false)
+  // Two independent reasons to show: the pointer resting on the trigger (after the delay) and
+  // keyboard focus (at once). Losing one doesn't hide a tooltip the other still holds open, and
+  // Escape hides it until the next hover or focus.
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const [dismissed, setDismissed] = useState(false)
+  const isVisible = (hovered || focused) && !dismissed
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleMouseEnter = () => {
-    timerRef.current = setTimeout(() => setIsVisible(true), delayDuration)
+    if (timerRef.current) clearTimeout(timerRef.current)
+    setDismissed(false)
+    timerRef.current = setTimeout(() => setHovered(true), delayDuration)
   }
 
   const handleMouseLeave = () => {
     if (timerRef.current) clearTimeout(timerRef.current)
-    setIsVisible(false)
+    setHovered(false)
   }
+
+  useEffect(() => {
+    if (!isVisible) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setDismissed(true)
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isVisible])
 
   useEffect(() => {
     return () => {
@@ -49,8 +64,11 @@ export function Tooltip({
       className="relative inline-flex"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onFocus={() => setIsVisible(true)}
-      onBlur={() => setIsVisible(false)}>
+      onFocus={() => {
+        setDismissed(false)
+        setFocused(true)
+      }}
+      onBlur={() => setFocused(false)}>
       {children}
       {isVisible && (
         <div

@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react'
 
-import { Bookmark, Check, Flag, Link2 } from 'lucide-react'
+import { Bookmark, Check, Flag, Link2, X } from 'lucide-react'
 
-import { useControllableState } from '../../lib/hooks'
+import { useAsyncAction, useControllableState, useCopyToClipboard } from '../../lib/hooks'
 import { cn } from '../../lib/utils'
 import { Button } from '../Button'
 import { Dialog } from '../Dialog'
@@ -20,8 +20,12 @@ export interface ContentActionsProps {
   saveCount?: number
   /** Link copied by the Share button. Defaults to the current page. */
   shareUrl?: string
-  /** Called when a report is submitted. Omit to hide the Report button. */
-  onReport?: (report: { reason: string; details: string }) => void
+  /**
+   * Called when a report is submitted. Omit to hide the Report button. Return a promise and the
+   * dialog shows progress, thanks the reader only once it resolves, and offers a retry if it
+   * rejects, keeping what they wrote.
+   */
+  onReport?: (report: { reason: string; details: string }) => void | Promise<unknown>
   reportReasons?: Array<{ value: string; label: string; description?: string }>
   /** Extra buttons, e.g. a Download or Follow action. */
   children?: React.ReactNode
@@ -43,31 +47,32 @@ export function ContentActions({
   className,
 }: ContentActionsProps) {
   const [saved, setSaved] = useControllableState(savedProp, defaultSaved, onSavedChange)
-  const [copied, setCopied] = useState(false)
+  const share = useCopyToClipboard(1800)
   const [reportOpen, setReportOpen] = useState(false)
   const [reason, setReason] = useState('')
   const [details, setDetails] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  // Editing (idle or error) → sending (pending) → thanks (success). It starts over each time the
+  // dialog opens, so closing never has to wait for the exit animation to clear the form.
+  const report = useAsyncAction((r: { reason: string; details: string }) => onReport?.(r))
+  const submitted = report.status === 'success'
 
-  const share = async () => {
-    const url = shareUrl ?? window.location.href
-    try {
-      await navigator.clipboard.writeText(url)
-    } catch {
-      // Clipboard can be blocked (insecure origin, permissions); the visual confirmation still helps.
-    }
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1800)
+  const openReport = () => {
+    report.reset()
+    setReason('')
+    setDetails('')
+    setReportOpen(true)
   }
-
   const closeReport = () => {
-    setReportOpen(false)
-    setTimeout(() => {
-      setSubmitted(false)
-      setReason('')
-      setDetails('')
-    }, 200)
+    if (!report.isPending) setReportOpen(false)
   }
+  const sendReport = () =>
+    report.run({
+      reason: reportReasons.find((r) => r.value === reason)?.label ?? reason,
+      details: details.trim(),
+    })
+
+  const shareIcon = { idle: Link2, copied: Check, failed: X }[share.status]
+  const shareLabel = { idle: 'Share', copied: 'Link copied', failed: 'Couldn’t copy' }[share.status]
 
   const count = saveCount !== undefined ? saveCount + (saved ? 1 : 0) : undefined
 
@@ -85,10 +90,11 @@ export function ContentActions({
       <Button
         size={size}
         variant="secondary"
-        leftIcon={copied ? <Check className="size-4" /> : <Link2 className="size-4" />}
-        onClick={share}
+        leftIcon={React.createElement(shareIcon, { className: 'size-4' })}
+        onClick={() => share.copy(shareUrl ?? window.location.href)}
+        data-status={share.status}
         aria-live="polite">
-        {copied ? 'Link copied' : 'Share'}
+        {shareLabel}
       </Button>
       {children}
       {onReport && (
@@ -96,7 +102,7 @@ export function ContentActions({
           size={size}
           variant="ghost"
           leftIcon={<Flag className="size-4" />}
-          onClick={() => setReportOpen(true)}>
+          onClick={openReport}>
           Report
         </Button>
       )}
@@ -116,26 +122,26 @@ export function ContentActions({
               <Button onClick={closeReport}>Done</Button>
             ) : (
               <>
-                <Button variant="secondary" onClick={closeReport}>
+                <Button variant="secondary" onClick={closeReport} disabled={report.isPending}>
                   Cancel
                 </Button>
                 <Button
                   variant="danger"
                   disabled={!reason}
-                  onClick={() => {
-                    onReport({
-                      reason: reportReasons.find((r) => r.value === reason)?.label ?? reason,
-                      details: details.trim(),
-                    })
-                    setSubmitted(true)
-                  }}>
-                  Send report
+                  loading={report.isPending}
+                  onClick={sendReport}>
+                  {report.status === 'error' ? 'Try again' : 'Send report'}
                 </Button>
               </>
             )
           }>
           {!submitted && (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4" aria-busy={report.isPending || undefined}>
+              {report.status === 'error' && (
+                <p role="alert" className="text-sm text-[var(--status-danger-ink)]">
+                  The report didn’t go through. Your answers are still here; try again.
+                </p>
+              )}
               <RadioGroup label="What's wrong?" value={reason} onValueChange={setReason}>
                 {reportReasons.map((r) => (
                   <RadioGroupItem

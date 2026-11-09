@@ -113,3 +113,115 @@ export function isMacPlatform() {
   if (typeof navigator === 'undefined') return false
   return /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)
 }
+
+/* --------------------------------------------------------- Async actions */
+
+/**
+ * The life of one async action, such as posting a comment or sending a report:
+ * `idle` → `pending` → `success` or `error`, and back to `idle` with `reset` (or a new run).
+ */
+export type AsyncStatus = 'idle' | 'pending' | 'success' | 'error'
+
+export interface AsyncActionState<Args extends unknown[]> {
+  status: AsyncStatus
+  /** What the last run threw or rejected with, while `status` is `error`. */
+  error: unknown
+  isPending: boolean
+  /**
+   * Runs the action and resolves to `true` when it succeeded, so callers can clear a field only
+   * once the server has the text. A run while one is pending is ignored and resolves to `false`.
+   */
+  run: (...args: Args) => Promise<boolean>
+  reset: () => void
+}
+
+/**
+ * Tracks an action that may return a promise. Synchronous actions succeed at once, so components
+ * that accept `() => void | Promise<void>` keep working for callers that don't return anything.
+ * Results that arrive after unmount, or after `reset`, are dropped.
+ */
+export function useAsyncAction<Args extends unknown[]>(
+  action: (...args: Args) => unknown
+): AsyncActionState<Args> {
+  const [state, setState] = useState<{ status: AsyncStatus; error: unknown }>({
+    status: 'idle',
+    error: undefined,
+  })
+  const actionRef = useLatestRef(action)
+  const runId = useRef(0)
+  const pending = useRef(false)
+
+  useEffect(
+    () => () => {
+      runId.current += 1
+    },
+    []
+  )
+
+  const run = useCallback(
+    async (...args: Args) => {
+      if (pending.current) return false
+      const id = ++runId.current
+      pending.current = true
+      setState({ status: 'pending', error: undefined })
+      try {
+        await actionRef.current(...args)
+        if (id === runId.current) setState({ status: 'success', error: undefined })
+        return id === runId.current
+      } catch (error) {
+        if (id === runId.current) setState({ status: 'error', error })
+        return false
+      } finally {
+        if (id === runId.current) pending.current = false
+      }
+    },
+    [actionRef]
+  )
+
+  const reset = useCallback(() => {
+    runId.current += 1
+    pending.current = false
+    setState({ status: 'idle', error: undefined })
+  }, [])
+
+  return { ...state, isPending: state.status === 'pending', run, reset }
+}
+
+/* --------------------------------------------------------- Clipboard */
+
+export type CopyStatus = 'idle' | 'copied' | 'failed'
+
+/**
+ * Copies text and reports honestly whether it worked: `copied` or `failed` (the clipboard is
+ * blocked on insecure origins and by some permission settings), then back to `idle` after
+ * `resetAfter` milliseconds. Copying again restarts the timer.
+ */
+export function useCopyToClipboard(resetAfter = 1600) {
+  const [status, setStatus] = useState<CopyStatus>('idle')
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current)
+    },
+    []
+  )
+
+  const copy = useCallback(
+    async (text: string) => {
+      let next: CopyStatus = 'copied'
+      try {
+        await navigator.clipboard.writeText(text)
+      } catch {
+        next = 'failed'
+      }
+      if (timer.current) clearTimeout(timer.current)
+      setStatus(next)
+      timer.current = setTimeout(() => setStatus('idle'), resetAfter)
+      return next === 'copied'
+    },
+    [resetAfter]
+  )
+
+  return { status, copy }
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useCallback, useContext, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from 'lucide-react'
 
@@ -29,9 +29,42 @@ const ToastContext = createContext<ToastContextValue | undefined>(undefined)
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastOptions[]>([])
+  // Each toast is shown → (paused while hovered or focused) → dismissed. Its timer lives here so
+  // dismissing early, pausing or unmounting never leaves one running.
+  const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
 
-  const dismiss = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id))
+  const stopTimer = useCallback((id: string) => {
+    const timer = timers.current.get(id)
+    if (timer) clearTimeout(timer)
+    timers.current.delete(id)
+  }, [])
+
+  const dismiss = useCallback(
+    (id: string) => {
+      stopTimer(id)
+      setToasts((prev) => prev.filter((t) => t.id !== id))
+    },
+    [stopTimer]
+  )
+
+  const startTimer = useCallback(
+    (id: string, duration: number) => {
+      stopTimer(id)
+      if (duration > 0)
+        timers.current.set(
+          id,
+          setTimeout(() => dismiss(id), duration)
+        )
+    },
+    [dismiss, stopTimer]
+  )
+
+  useEffect(() => {
+    const map = timers.current
+    return () => {
+      map.forEach(clearTimeout)
+      map.clear()
+    }
   }, [])
 
   const toast = useCallback(
@@ -39,16 +72,16 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       const id = options.id || Math.random().toString(36).substring(2, 9)
       const newToast: ToastOptions = { ...options, id, duration }
 
-      setToasts((prev) => [...prev, newToast])
-
-      if (duration > 0) {
-        setTimeout(() => {
-          dismiss(id)
-        }, duration)
-      }
+      // Showing a toast with an id already on screen replaces it rather than stacking a copy.
+      setToasts((prev) => [...prev.filter((t) => t.id !== id), newToast])
+      startTimer(id, duration)
     },
-    [dismiss]
+    [startTimer]
   )
+
+  // Leaving restarts the full duration: someone who stopped to read gets the whole time again.
+  const pause = (t: ToastOptions) => t.id && stopTimer(t.id)
+  const resume = (t: ToastOptions) => t.id && startTimer(t.id, t.duration ?? 4000)
 
   const toneIcons: Record<ToastTone, React.ReactNode> = {
     default: null,
@@ -67,6 +100,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             role="status"
+            onPointerEnter={() => pause(t)}
+            onPointerLeave={(e) => {
+              if (!e.currentTarget.contains(document.activeElement)) resume(t)
+            }}
+            onFocus={() => pause(t)}
+            onBlur={(e) => {
+              const to = e.relatedTarget as Node | null
+              if (!e.currentTarget.contains(to) && !e.currentTarget.matches(':hover')) resume(t)
+            }}
             className={cn(
               'dl-animate-toast pointer-events-auto flex items-start justify-between gap-3 rounded-[var(--radius-xl)] border border-[var(--glass-border)] bg-[color-mix(in_srgb,var(--card)_92%,transparent)] p-4 shadow-2xl backdrop-blur-[var(--blur-chrome)] select-none'
             )}>
@@ -97,6 +139,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => t.id && dismiss(t.id)}
+              aria-label="Dismiss notification"
               className="inline-flex size-5 items-center justify-center rounded-md opacity-50 transition-opacity hover:bg-[var(--muted)] hover:opacity-100">
               <X className="size-3.5" />
             </button>

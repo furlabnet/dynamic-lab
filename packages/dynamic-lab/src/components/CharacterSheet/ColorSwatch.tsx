@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { Check, Copy, X } from 'lucide-react'
 
-import { Check, Copy } from 'lucide-react'
-
+import { useCopyToClipboard } from '../../lib/hooks'
 import { cn } from '../../lib/utils'
 
 export interface Swatch {
@@ -28,13 +27,14 @@ export function ColorSwatch({
   copyable = true,
   className,
 }: ColorSwatchProps) {
-  const [copied, setCopied] = useState(false)
+  const { status, copy } = useCopyToClipboard(1400)
+  const Icon = { idle: Copy, copied: Check, failed: X }[status]
   const content = (
     <>
       <span className="dl-swatch-chip" data-size={size} style={{ background: color }}>
         {copyable && (
           <span className="dl-swatch-copy" aria-hidden="true">
-            {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+            <Icon className="size-3.5" />
           </span>
         )}
       </span>
@@ -51,16 +51,9 @@ export function ColorSwatch({
     <button
       type="button"
       className={cn('dl-swatch', className)}
-      aria-label={`${name ? `${name}, ` : ''}${color}. ${copied ? 'Copied' : 'Copy'}`}
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(color)
-          setCopied(true)
-          setTimeout(() => setCopied(false), 1400)
-        } catch {
-          // Clipboard can be blocked (insecure context, permissions); the value is still visible.
-        }
-      }}>
+      data-status={status}
+      aria-label={`${name ? `${name}, ` : ''}${color}. ${{ idle: 'Copy', copied: 'Copied', failed: 'Couldn’t copy; the value is shown' }[status]}`}
+      onClick={() => copy(color)}>
       {content}
     </button>
   )

@@ -217,6 +217,35 @@ function Sidebar() {
   )
 }
 
+/** Static pages in public/errors/, built beside the playground for a web server's error_page. */
+const ERROR_PAGES = [
+  { code: 404, name: 'Not found' },
+  { code: 403, name: 'Forbidden' },
+  { code: 500, name: 'Internal server error' },
+  { code: 503, name: 'Service unavailable' },
+]
+
+function ErrorPages() {
+  return (
+    <VStack gap={4} className="mx-auto w-full max-w-xl">
+      <List variant="inset" label="Error pages">
+        {ERROR_PAGES.map((p) => (
+          <ListItem
+            key={p.code}
+            leading={<Badge variant="neutral">{p.code}</Badge>}
+            title={p.name}
+            description={`errors/${p.code}.html`}
+            href={`./errors/${p.code}.html`}
+          />
+        ))}
+      </List>
+      <Center>
+        <Link href="./errors/">All 13 error pages</Link>
+      </Center>
+    </VStack>
+  )
+}
+
 function Playground() {
   const [nav, setNav] = useState('home')
   return (
@@ -290,6 +319,14 @@ function Playground() {
               </Column>
             </Columns>
           </Center>
+        </Section>
+
+        <Section
+          eyebrow="Static HTML"
+          title="Error pages"
+          description="Standalone 4xx and 5xx pages for your web server, styled with the library from the CDN. No build step and no JavaScript framework."
+          centered>
+          <ErrorPages />
         </Section>
       </Stack>
 

@@ -270,6 +270,7 @@
 
 .dl-composer {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   gap: var(--space-6);
   padding: var(--space-6);
@@ -326,6 +327,24 @@
 .dl-composer-send:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Sending: the button stays solid with a spinner, so it reads as busy rather than unavailable. */
+.dl-composer[data-status='pending'] .dl-composer-send:disabled {
+  opacity: 1;
+  cursor: progress;
+}
+
+.dl-composer[data-status='error'] {
+  border-color: var(--destructive);
+}
+
+.dl-composer-error {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 0 var(--space-8) var(--space-2);
+  color: var(--status-danger-ink);
+  font-size: 0.8125rem;
 }
 
 .dl-conversation {

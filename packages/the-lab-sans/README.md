@@ -24,6 +24,19 @@ yarn add @furlab/the-lab-sans
 The package is on [npm](https://www.npmjs.com/package/@furlab/the-lab-sans), and every release is
 also in the GitLab package registry.
 
+### From a CDN
+
+Without a bundler, link the stylesheet from
+[jsDelivr](https://www.jsdelivr.com/package/npm/@furlab/the-lab-sans?path=dist). The WOFF2 files
+load from the CDN beside it. Pin an exact version:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@furlab/the-lab-sans@0.1.0/dist/the-lab-sans.min.css" />
+<style>
+  body { font-family: 'The Lab Sans', system-ui, sans-serif; }
+</style>
+```
+
 ## Next.js
 
 Import the stylesheet once in the root layout. Next.js copies the WOFF2 files into
