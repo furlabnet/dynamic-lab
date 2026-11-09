@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useId, useState } from 'react'
 
 import { Heart, Lock, MessageCircle } from 'lucide-react'
 
 import { relativeTime } from '../../lib/format'
+import { useAsyncAction } from '../../lib/hooks'
 import { cn } from '../../lib/utils'
 import { Button } from '../Button'
 import { Textarea } from '../Input'
@@ -38,7 +39,13 @@ function initials(name: string) {
 }
 
 export interface CommentComposerProps {
-  onSubmit: (body: string) => void
+  /**
+   * Called with the trimmed text. Return a promise to keep the text until it resolves: the field
+   * clears only on success, and on a rejection the text stays with an error to try again.
+   */
+  onSubmit: (body: string) => void | Promise<unknown>
+  /** Shown when `onSubmit` rejects. */
+  errorText?: React.ReactNode
   onCancel?: () => void
   placeholder?: string
   submitLabel?: string
@@ -53,37 +60,53 @@ export function CommentComposer({
   submitLabel = 'Post',
   autoFocus,
   user,
+  errorText = 'Couldn’t post that. Your text is still here; try again.',
 }: CommentComposerProps) {
   const [body, setBody] = useState('')
+  const submit = useAsyncAction(onSubmit)
+  const errorId = `${useId()}-error`
   return (
     <form
       className="flex items-start gap-3"
-      onSubmit={(e) => {
+      data-status={submit.status}
+      aria-busy={submit.isPending || undefined}
+      onSubmit={async (e) => {
         e.preventDefault()
-        if (!body.trim()) return
-        onSubmit(body.trim())
-        setBody('')
+        const text = body.trim()
+        if (!text) return
+        if (await submit.run(text)) setBody('')
       }}>
       {user && <ProfileAvatar src={user.avatarSrc} initials={initials(user.name)} size="md" />}
       <div className="flex flex-1 flex-col gap-2">
         <Textarea
           rows={2}
           value={body}
-          onChange={(e) => setBody(e.target.value)}
+          onChange={(e) => {
+            setBody(e.target.value)
+            if (submit.status === 'error') submit.reset()
+          }}
+          readOnly={submit.isPending}
           placeholder={placeholder}
           aria-label={placeholder}
+          aria-invalid={submit.status === 'error' || undefined}
+          aria-describedby={submit.status === 'error' ? errorId : undefined}
           autoFocus={autoFocus}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) e.currentTarget.form?.requestSubmit()
           }}
         />
+        {submit.status === 'error' && (
+          <p id={errorId} role="alert" className="text-xs text-[var(--status-danger-ink)]">
+            {errorText}
+          </p>
+        )}
         <div className="flex justify-end gap-2">
           {onCancel && (
-            <Button size="sm" variant="ghost" onClick={onCancel}>
+            <Button size="sm" variant="ghost" onClick={onCancel} disabled={submit.isPending}>
               Cancel
             </Button>
           )}
-          <Button size="sm" type="submit" disabled={!body.trim()}>
+          <Button size="sm" type="submit" disabled={!body.trim()} loading={submit.isPending}>
             {submitLabel}
           </Button>
         </div>
@@ -95,7 +118,7 @@ export function CommentComposer({
 interface CommentItemProps {
   comment: CommentData
   depth: number
-  onReply?: (parentId: string, body: string) => void
+  onReply?: (parentId: string, body: string) => void | Promise<unknown>
   onLike?: (id: string) => void
   user?: CommentAuthor
 }
@@ -150,8 +173,8 @@ function CommentItem({ comment, depth, onReply, onLike, user }: CommentItemProps
               placeholder={`Reply to ${comment.author.name}…`}
               submitLabel="Reply"
               onCancel={() => setReplying(false)}
-              onSubmit={(body) => {
-                onReply(comment.id, body)
+              onSubmit={async (body) => {
+                await onReply(comment.id, body)
                 setReplying(false)
               }}
             />
@@ -177,8 +200,11 @@ function CommentItem({ comment, depth, onReply, onLike, user }: CommentItemProps
 
 export interface CommentThreadProps {
   comments: CommentData[]
-  /** Called with the new comment body, and the parent id for replies. */
-  onAdd?: (body: string, parentId?: string) => void
+  /**
+   * Called with the new comment body, and the parent id for replies. Return a promise and the
+   * composer keeps the text, shows progress and offers a retry until it resolves.
+   */
+  onAdd?: (body: string, parentId?: string) => void | Promise<unknown>
   onLike?: (id: string) => void
   /** The signed-in user, shown next to the composer. */
   user?: CommentAuthor

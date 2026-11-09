@@ -10,11 +10,15 @@ import {
   useTheme,
 } from '@furlab/dynamic-lab'
 import pkg from '@furlab/dynamic-lab/package.json'
+import fontPkg from '@furlab/the-lab-sans/package.json'
 
 import { Code, CodeBlock, PropsTable, Prose } from '../ui'
 
 const REGISTRY = import.meta.env.VITE_REGISTRY_URL ?? 'https://gitlab.com/api/v4/packages/npm/'
-const REGISTRY_HOST = REGISTRY.replace(/^https?:/, '')
+const CDN = 'https://cdn.jsdelivr.net/npm'
+const ERROR_PAGES_URL = import.meta.env.DEV
+  ? 'http://localhost:5175/errors/'
+  : '../playground/errors/'
 const REPO = import.meta.env.VITE_REPOSITORY_URL ?? pkg.repository.url
 
 export interface GuidePage {
@@ -105,31 +109,19 @@ function Installation() {
         </p>
         <h2>2. Or install from GitLab</h2>
         <p>
-          Every release is also in the GitLab package registry. To use it, point the{' '}
-          <Code>@furlab</Code> scope at the instance-level endpoint, which serves every project in
-          the <Code>furlab</Code> group, then add the package as above.
+          Every release is also in the GitLab package registry. The project is public, so no token
+          is needed: point the <Code>@furlab</Code> scope at the instance-level endpoint, which
+          serves every project in the <Code>furlab</Code> group, then add the package as above.
         </p>
         <h3>Yarn (Berry)</h3>
         <CodeBlock
           language=".yarnrc.yml"
           code={`npmScopes:
   furlab:
-    npmRegistryServer: "${REGISTRY}"
-    # Only needed while the project is private:
-    npmAuthToken: "\${GITLAB_TOKEN-}"`}
+    npmRegistryServer: "${REGISTRY}"`}
         />
         <h3>npm and pnpm</h3>
-        <CodeBlock
-          language=".npmrc"
-          code={`@furlab:registry=${REGISTRY}
-# Only needed while the project is private:
-${REGISTRY_HOST}:_authToken=\${GITLAB_TOKEN}`}
-        />
-        <p>
-          For a private project, create a personal or group access token with the{' '}
-          <Code>read_api</Code> scope and export it as <Code>GITLAB_TOKEN</Code>. Never commit the
-          token itself. In GitLab CI you can use <Code>CI_JOB_TOKEN</Code> instead.
-        </p>
+        <CodeBlock language=".npmrc" code={`@furlab:registry=${REGISTRY}`} />
         <h2>3. Import the styles</h2>
         <CodeBlock code={`import '${pkg.name}/styles.css'`} />
         <p>
@@ -147,6 +139,54 @@ ${REGISTRY_HOST}:_authToken=\${GITLAB_TOKEN}`}
         <p>
           To use a different family, set <Code>--font-sans</Code> and <Code>--font-display</Code> on{' '}
           <Code>:root</Code>.
+        </p>
+        <h2>Without a build step: the CDN</h2>
+        <p>
+          For a static page (an error page, a status page, a prototype), link the stylesheet from{' '}
+          <a
+            href={`https://www.jsdelivr.com/package/npm/${pkg.name}?path=dist`}
+            target="_blank"
+            rel="noreferrer">
+            jsDelivr
+          </a>{' '}
+          instead of installing anything. Pin an exact version so a release never changes a live
+          page.
+        </p>
+        <CodeBlock
+          language="html"
+          code={`<link rel="stylesheet" href="${CDN}/${fontPkg.name}@${fontPkg.version}/dist/the-lab-sans.min.css" />
+<link rel="stylesheet" href="${CDN}/${pkg.name}@${pkg.version}/dist/styles.css" />
+<style>
+  body {
+    font-family: 'The Lab Sans', system-ui, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+  }
+</style>`}
+        />
+        <p>
+          You get the tokens (<Code>var(--primary)</Code>, <Code>var(--card)</Code>,{' '}
+          <Code>var(--radius-3xl)</Code>…), the component classes and the utilities the components
+          use. Without <Code>ThemeProvider</Code>, pick the mode with <Code>data-theme</Code> on{' '}
+          <Code>&lt;html&gt;</Code>:
+        </p>
+        <CodeBlock
+          language="html"
+          code={`<html data-theme="light">
+<script>
+  // Follow the system's dark mode.
+  const dark = matchMedia('(prefers-color-scheme: dark)')
+  const apply = () => (document.documentElement.dataset.theme = dark.matches ? 'dark' : 'light')
+  apply()
+  dark.addEventListener('change', apply)
+</script>`}
+        />
+        <p>
+          The playground's{' '}
+          <a href={ERROR_PAGES_URL} target="_blank" rel="noreferrer">
+            error pages
+          </a>{' '}
+          (400 to 504) are built exactly this way; view their source for a complete example.
         </p>
       </Prose>
     </>

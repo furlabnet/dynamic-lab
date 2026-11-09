@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 
-import { Paperclip, SendHorizontal } from 'lucide-react'
+import { Loader2, Paperclip, SendHorizontal } from 'lucide-react'
 
+import { useAsyncAction } from '../../lib/hooks'
 import { cn } from '../../lib/utils'
 
 export interface MessageThreadProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -53,8 +54,13 @@ export interface MessageComposerProps extends Omit<
   React.FormHTMLAttributes<HTMLFormElement>,
   'onSubmit'
 > {
-  /** Called with the trimmed text. Clears the field afterwards. */
-  onSend: (text: string) => void
+  /**
+   * Called with the trimmed text. The field clears once it succeeds: at once for a plain function,
+   * or when a returned promise resolves. On a rejection the text stays and an error shows.
+   */
+  onSend: (text: string) => void | Promise<unknown>
+  /** Shown when `onSend` rejects. */
+  errorText?: React.ReactNode
   placeholder?: string
   /** Show an attach button. */
   onAttach?: () => void
@@ -71,10 +77,13 @@ export function MessageComposer({
   onAttach,
   disabled = false,
   maxRows = 6,
+  errorText = 'Not sent. Your message is still here; try again.',
   ...props
 }: MessageComposerProps) {
   const [text, setText] = useState('')
   const ref = useRef<HTMLTextAreaElement>(null)
+  const sending = useAsyncAction(onSend)
+  const errorId = `${useId()}-error`
 
   useEffect(() => {
     const el = ref.current
@@ -84,16 +93,17 @@ export function MessageComposer({
     el.style.height = `${Math.min(el.scrollHeight, line * maxRows + 16)}px`
   }, [text, maxRows])
 
-  const send = () => {
+  const send = async () => {
     const t = text.trim()
     if (!t || disabled) return
-    onSend(t)
-    setText('')
+    if (await sending.run(t)) setText('')
   }
 
   return (
     <form
       className={cn('dl-composer', className)}
+      data-status={sending.status}
+      aria-busy={sending.isPending || undefined}
       onSubmit={(e) => {
         e.preventDefault()
         send()
@@ -116,7 +126,13 @@ export function MessageComposer({
         disabled={disabled}
         placeholder={placeholder}
         aria-label={placeholder}
-        onChange={(e) => setText(e.target.value)}
+        readOnly={sending.isPending}
+        aria-invalid={sending.status === 'error' || undefined}
+        aria-describedby={sending.status === 'error' ? errorId : undefined}
+        onChange={(e) => {
+          setText(e.target.value)
+          if (sending.status === 'error') sending.reset()
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
             e.preventDefault()
@@ -127,11 +143,20 @@ export function MessageComposer({
       />
       <button
         type="submit"
-        aria-label="Send"
-        disabled={disabled || !text.trim()}
+        aria-label={sending.isPending ? 'Sending' : 'Send'}
+        disabled={disabled || sending.isPending || !text.trim()}
         className="dl-composer-send">
-        <SendHorizontal className="size-4" />
+        {sending.isPending ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : (
+          <SendHorizontal className="size-4" />
+        )}
       </button>
+      {sending.status === 'error' && (
+        <p id={errorId} role="alert" className="dl-composer-error">
+          {errorText}
+        </p>
+      )}
     </form>
   )
 }

@@ -27,7 +27,8 @@ React 19 is a peer dependency. `lucide-react`, `clsx`, `tailwind-merge` and `cla
 
 ### From the GitLab package registry
 
-Every release is also published to GitLab. To install from there, point the `@furlab` scope at it.
+Every release is also published to GitLab. The project is public, so no token is needed: point
+the `@furlab` scope at it.
 
 **Yarn (Berry)**, in `.yarnrc.yml`:
 
@@ -35,16 +36,31 @@ Every release is also published to GitLab. To install from there, point the `@fu
 npmScopes:
   furlab:
     npmRegistryServer: 'https://gitlab.com/api/v4/packages/npm/'
-    # Only while the project is private: a token with the read_api scope
-    npmAuthToken: '${GITLAB_TOKEN-}'
 ```
 
 **npm / pnpm**, in `.npmrc`:
 
 ```ini
 @furlab:registry=https://gitlab.com/api/v4/packages/npm/
-//gitlab.com/api/v4/packages/npm/:_authToken=${GITLAB_TOKEN}
 ```
+
+### From a CDN
+
+For a static page with no build step (an error page, a status page, an email preview), link the
+stylesheet from [jsDelivr](https://www.jsdelivr.com/package/npm/@furlab/dynamic-lab?path=dist).
+Pin an exact version so a release never changes a live page:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@furlab/the-lab-sans@0.1.0/dist/the-lab-sans.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@furlab/dynamic-lab@0.1.1/dist/styles.css" />
+```
+
+That gives you the tokens (`var(--primary)`, `var(--card)`, `var(--radius-3xl)`…), the component
+classes and the Tailwind utilities the components use. Set the body font yourself
+(`font-family: 'The Lab Sans', system-ui, sans-serif`). Without `ThemeProvider`, choose the mode
+with an attribute on `<html>`: `data-theme="dark"` or `data-theme="light"`. The playground's
+[error pages](https://furlab.gitlab.io/dynamic-lab/playground/errors/) are built this way; view
+their source for a complete example, including following the system's dark mode.
 
 ## Set up
 
