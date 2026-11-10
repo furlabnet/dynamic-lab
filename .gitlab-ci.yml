@@ -67,7 +67,7 @@ variables:
   TURBO_CACHE_DIR: .turbo/cache
 
 stages:
-  - preflight
+  - test
   - secret-detection
   - check
   - build
