@@ -67,11 +67,22 @@ variables:
   TURBO_CACHE_DIR: .turbo/cache
 
 stages:
+  - preflight
+  - secret-detection
   - check
   - build
   - publish
   - release
   - deploy
+
+sast:
+  stage: test
+include:
+- template: Security/SAST.gitlab-ci.yml
+- template: Security/Secret-Detection.gitlab-ci.yml
+secret_detection:
+  stage: secret-detection
+
 
 .node-matrix:
   parallel:
