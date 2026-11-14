@@ -1068,6 +1068,46 @@ export const COMPONENTS: ComponentDoc[] = [
     ],
   },
   {
+    id: 'account-badge',
+    name: 'AccountBadge',
+    group: 'Feedback',
+    summary:
+      'A mark next to a name that says who someone is to the platform: official, staff, verified or supporter.',
+    imports: ['AccountBadge', 'AccountBadges'],
+    examples: [ex('feedback', feedback, 'AccountBadgeTones', 'Tones, labels and a byline row')],
+    props: [
+      {
+        component: 'AccountBadge',
+        rows: [
+          p(
+            'label',
+            'string',
+            undefined,
+            'Required. Always announced; shown with display="label".'
+          ),
+          p(
+            'tone',
+            "'official' | 'staff' | 'verified' | 'supporter' | 'neutral'",
+            "'neutral'",
+            'Colour and default icon.'
+          ),
+          p('description', 'string', undefined, 'Longer explanation shown on hover.'),
+          p('icon', 'ReactNode', undefined, "Replaces the tone's icon."),
+          p('display', "'icon' | 'label'", "'icon'", 'Icon only, or icon and name.'),
+          p('size', "'sm' | 'md'", "'md'", 'Size.'),
+        ],
+      },
+      {
+        component: 'AccountBadges',
+        rows: [
+          p('badges', 'AccountBadgeItem[]', undefined, 'Required. Most important first.'),
+          p('max', 'number', undefined, 'Folds the rest into a "+N" count.'),
+          p('display / size', '', undefined, 'Passed to every badge.'),
+        ],
+      },
+    ],
+  },
+  {
     id: 'notice-panel',
     name: 'NoticePanel',
     group: 'Feedback',

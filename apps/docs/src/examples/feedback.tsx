@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 import {
+  AccountBadge,
+  AccountBadges,
   AgeGate,
   AgeRating,
   Badge,
@@ -29,6 +31,37 @@ export function StatusBadges() {
       </StatusBadge>
       <StatusBadge tone="danger">Archived</StatusBadge>
       <StatusBadge tone="info">Syncing</StatusBadge>
+    </div>
+  )
+}
+
+export function AccountBadgeTones() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <AccountBadge display="label" tone="official" label="Official" />
+        <AccountBadge display="label" tone="staff" label="Staff" />
+        <AccountBadge display="label" tone="verified" label="Verified" />
+        <AccountBadge display="label" tone="supporter" label="Supporter" />
+        <AccountBadge display="label" tone="neutral" label="Beta tester" />
+      </div>
+      <p className="flex items-center gap-1 text-sm font-semibold">
+        Furlab
+        <AccountBadges
+          size="sm"
+          badges={[
+            {
+              key: 'official',
+              tone: 'official',
+              label: 'Official',
+              description: 'Run by the team',
+            },
+            { key: 'staff', tone: 'staff', label: 'Staff' },
+            { key: 'supporter', tone: 'supporter', label: 'Supporter' },
+          ]}
+          max={2}
+        />
+      </p>
     </div>
   )
 }
