@@ -297,6 +297,74 @@
   color: var(--status-danger-ink);
 }
 
+/* Account badges: who someone is to the platform (official, staff, verified, supporter). */
+.ui-account-badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  vertical-align: middle;
+}
+.ui-account-badge {
+  --account-badge-ink: var(--muted-foreground);
+  --account-badge-bg: var(--muted);
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--account-badge-ink);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: default;
+}
+.ui-account-badge[data-display='label'] {
+  border-radius: var(--radius-full);
+  background: var(--account-badge-bg);
+  padding: var(--space-4) var(--space-8);
+}
+.ui-account-badge[data-display='label'][data-size='sm'] {
+  padding: 0.0625rem var(--space-6);
+  font-size: 11px;
+}
+.ui-account-badge-icon {
+  display: inline-flex;
+}
+.ui-account-badge-icon > svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 2.25;
+}
+.ui-account-badge[data-size='sm'] .ui-account-badge-icon > svg,
+.ui-account-badge[data-display='label'] .ui-account-badge-icon > svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.ui-account-badge[data-tone='official'] {
+  --account-badge-ink: var(--primary);
+  --account-badge-bg: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+.ui-account-badge[data-tone='staff'] {
+  --account-badge-ink: var(--foreground);
+  --account-badge-bg: var(--muted);
+}
+.ui-account-badge[data-tone='verified'] {
+  --account-badge-ink: var(--info);
+  --account-badge-bg: color-mix(in srgb, var(--info) 14%, transparent);
+}
+.ui-account-badge[data-tone='supporter'] {
+  --account-badge-ink: var(--status-warning-ink);
+  --account-badge-bg: var(--status-warning-bg);
+}
+/* The official mark is filled so it reads apart from verified at a glance. */
+.ui-account-badge[data-tone='official'][data-display='icon'] .ui-account-badge-icon > svg {
+  fill: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
 .ui-brand-product {
   border-radius: var(--radius-full);
   background: color-mix(in srgb, var(--primary) 14%, transparent);
