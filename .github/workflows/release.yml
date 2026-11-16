@@ -64,6 +64,9 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
+          # Yarn's cache lives in .yarn/cache (actions/cache in .github/actions/setup); setup-node's
+          # own Yarn cache would point at the global cache folder, which stays empty, and fail.
+          package-manager-cache: false
       - id: plan
         run: |
           node scripts/pending-releases.mjs --dotenv release.env

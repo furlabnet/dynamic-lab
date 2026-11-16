@@ -15,6 +15,9 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
         node-version-file: ${{ inputs.node-version == '' && '.nvmrc' || '' }}
+        # Yarn's cache lives in .yarn/cache (actions/cache in .github/actions/setup); setup-node's
+        # own Yarn cache would point at the global cache folder, which stays empty, and fail.
+        package-manager-cache: false
     - name: Enable Corepack
       shell: bash
       run: |
