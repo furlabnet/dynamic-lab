@@ -10,13 +10,13 @@
     "typescript",
     "furlab"
   ],
-  "homepage": "https://furlabnet.github.io/dynamic-lab/",
+  "homepage": "https://itsfurlab.github.io/dynamic-lab/",
   "bugs": {
-    "url": "https://github.com/furlabnet/dynamic-lab/issues"
+    "url": "https://github.com/itsfurlab/dynamic-lab/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/furlabnet/dynamic-lab",
+    "url": "https://github.com/itsfurlab/dynamic-lab",
     "directory": "packages/dynamic-lab"
   },
   "license": "MIT",

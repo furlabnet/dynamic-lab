@@ -8,13 +8,13 @@
     "woff2",
     "furlab"
   ],
-  "homepage": "https://furlabnet.github.io/dynamic-lab/the-lab-sans/",
+  "homepage": "https://itsfurlab.github.io/dynamic-lab/the-lab-sans/",
   "bugs": {
-    "url": "https://github.com/furlabnet/dynamic-lab/issues"
+    "url": "https://github.com/itsfurlab/dynamic-lab/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/furlabnet/dynamic-lab",
+    "url": "https://github.com/itsfurlab/dynamic-lab",
     "directory": "packages/the-lab-sans"
   },
   "license": "MIT",

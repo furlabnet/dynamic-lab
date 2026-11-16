@@ -6,7 +6,7 @@ The React component library for **The Furlab Project**: TypeScript, Tailwind CSS
 - Eight named colour themes, each in light and dark
 - More than 90 components: from layout primitives, buttons and dialogs to a comic reader, a story reader and booru-style tags
 
-**Site:** https://furlabnet.github.io/dynamic-lab/ (landing page) · [showcase](https://furlabnet.github.io/dynamic-lab/showcase/) · [docs](https://furlabnet.github.io/dynamic-lab/docs/) · [The Lab Sans](https://furlabnet.github.io/dynamic-lab/the-lab-sans/)
+**Site:** https://itsfurlab.github.io/dynamic-lab/ (landing page) · [showcase](https://itsfurlab.github.io/dynamic-lab/showcase/) · [docs](https://itsfurlab.github.io/dynamic-lab/docs/) · [The Lab Sans](https://itsfurlab.github.io/dynamic-lab/the-lab-sans/)
 
 Install from npm: [`@furlab/dynamic-lab`](https://www.npmjs.com/package/@furlab/dynamic-lab) and [`@furlab/the-lab-sans`](https://www.npmjs.com/package/@furlab/the-lab-sans).
 
@@ -130,7 +130,7 @@ Tags created by the workflow start no other workflows, so a release that ships b
 
 #### Setting up trusted publishing
 
-npm only lets you add a trusted publisher to a package that exists, so publish each package's first version by hand (see below). Then, on npmjs.com, open the package's **Settings → Trusted publishing**, choose **GitHub Actions** and enter organization `furlabnet`, repository `dynamic-lab` and workflow `release.yml` (leave the environment empty). Once it works, set **Publishing access** to require 2FA and disallow tokens. npm checks that each package's `repository.url` names this repository before it accepts the provenance.
+npm only lets you add a trusted publisher to a package that exists, so publish each package's first version by hand (see below). Then, on npmjs.com, open the package's **Settings → Trusted publishing**, choose **GitHub Actions** and enter organization `itsfurlab`, repository `dynamic-lab` and workflow `release.yml` (leave the environment empty). Once it works, set **Publishing access** to require 2FA and disallow tokens. npm checks that each package's `repository.url` names this repository before it accepts the provenance.
 
 ### Publishing by hand
 

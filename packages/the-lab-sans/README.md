@@ -4,7 +4,7 @@ The Lab Sans, the Furlab typeface: 8 weights from Thin 100 to Black 900, each wi
 It covers 1,034 characters (Latin, Greek, Cyrillic and Vietnamese) and has OpenType features such
 as small caps, old-style and tabular figures, fractions and a slashed zero.
 
-**Specimen:** https://furlabnet.github.io/dynamic-lab/the-lab-sans/
+**Specimen:** https://itsfurlab.github.io/dynamic-lab/the-lab-sans/
 
 The package contains:
 

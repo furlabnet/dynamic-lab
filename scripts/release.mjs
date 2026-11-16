@@ -117,7 +117,7 @@ async function npmSettings() {
       const token = res.ok ? (await res.json()).token : undefined
       if (!token)
         fail(
-          `npmjs.org refused the OIDC token (${res.status}), so nothing was published there. Add a trusted publisher for ${pkg.name} on npmjs.com (GitHub Actions, furlabnet/dynamic-lab, release.yml).`,
+          `npmjs.org refused the OIDC token (${res.status}), so nothing was published there. Add a trusted publisher for ${pkg.name} on npmjs.com (GitHub Actions, itsfurlab/dynamic-lab, release.yml).`,
           NOT_CONFIGURED
         )
       step('Exchanged the OIDC token for an npm publish token')

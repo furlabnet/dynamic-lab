@@ -3,8 +3,8 @@
 '@furlab/the-lab-sans': patch
 ---
 
-The source, issues and releases moved to GitHub (`furlabnet/dynamic-lab`), and the docs to
-https://furlabnet.github.io/dynamic-lab/. Packages are published to npmjs.org only; the GitLab
+The source, issues and releases moved to GitHub (`itsfurlab/dynamic-lab`), and the docs to
+https://itsfurlab.github.io/dynamic-lab/. Packages are published to npmjs.org only; the GitLab
 package registry gets no new versions.
 
 `@furlab/the-lab-sans` now lists `next`, `react` and `react-dom` as optional peer dependencies

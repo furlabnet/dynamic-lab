@@ -85,7 +85,7 @@ jobs:
       - run: yarn typecheck
       - run: yarn build
 
-  # npm trusts the OIDC token of this workflow (release.yml in furlabnet/dynamic-lab) once each
+  # npm trusts the OIDC token of this workflow (release.yml in itsfurlab/dynamic-lab) once each
   # package has it as a trusted publisher on npmjs.com. Until then release.mjs exits with 78, which
   # is reported as a warning: the GitHub release and Pages still go out.
   publish:

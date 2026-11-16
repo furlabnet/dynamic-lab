@@ -7,8 +7,8 @@ The React component library for **The Furlab Project**: TypeScript, Tailwind CSS
 - Adjustable transparency (full, reduced or off), keyboard support and reduced motion
 - More than 90 components: layout primitives (stacks, grids, columns, containers), buttons and dialogs, comboboxes, date pickers, chat, charts, a comic reader, a story reader, booru-style tags and content editors
 
-**Documentation:** https://furlabnet.github.io/dynamic-lab/docs/ (guides, live examples, source and props for every component)
-**Showcase:** https://furlabnet.github.io/dynamic-lab/showcase/
+**Documentation:** https://itsfurlab.github.io/dynamic-lab/docs/ (guides, live examples, source and props for every component)
+**Showcase:** https://itsfurlab.github.io/dynamic-lab/showcase/
 **npm:** https://www.npmjs.com/package/@furlab/dynamic-lab
 
 ---
@@ -40,7 +40,7 @@ That gives you the tokens (`var(--primary)`, `var(--card)`, `var(--radius-3xl)`â
 classes and the Tailwind utilities the components use. Set the body font yourself
 (`font-family: 'The Lab Sans', system-ui, sans-serif`). Without `ThemeProvider`, choose the mode
 with an attribute on `<html>`: `data-theme="dark"` or `data-theme="light"`. The playground's
-[error pages](https://furlabnet.github.io/dynamic-lab/playground/errors/) are built this way; view
+[error pages](https://itsfurlab.github.io/dynamic-lab/playground/errors/) are built this way; view
 their source for a complete example, including following the system's dark mode.
 
 ## Set up
@@ -99,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-The [server rendering guide](https://furlabnet.github.io/dynamic-lab/docs/#/guide/server-rendering)
+The [server rendering guide](https://itsfurlab.github.io/dynamic-lab/docs/#/guide/server-rendering)
 lists which components are client components.
 
 ## Layout
@@ -153,7 +153,7 @@ setTransparency('off') // 'system' | 'full' | 'reduced' | 'off'
 | **Otter Space** | Otter | Navy sky with golden starlight |
 | **Purrple Rain** | Cat | Royal purple with an orchid storm |
 
-Colour themes apply to the Dynamic brand; Backstage keeps its own look unless you pass `paletteBrands={['dynamic', 'backstage']}`. Add your own with `palettes={[...PALETTES, myPalette]}`. The [theming guide](https://furlabnet.github.io/dynamic-lab/docs/#/guide/theming) covers brands, tokens and custom palettes.
+Colour themes apply to the Dynamic brand; Backstage keeps its own look unless you pass `paletteBrands={['dynamic', 'backstage']}`. Add your own with `palettes={[...PALETTES, myPalette]}`. The [theming guide](https://itsfurlab.github.io/dynamic-lab/docs/#/guide/theming) covers brands, tokens and custom palettes.
 
 ## The mark
 

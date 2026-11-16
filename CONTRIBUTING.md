@@ -49,7 +49,7 @@ edits in `packages/dynamic-lab` show up everywhere with hot reload. The
 
 ## Submitting changes
 
-- Open a pull request against `main` on [GitHub](https://github.com/furlabnet/dynamic-lab) and
+- Open a pull request against `main` on [GitHub](https://github.com/itsfurlab/dynamic-lab) and
   fill in the template: what changed, why, and how you tested it.
 - Keep changes focused; avoid unrelated formatting or refactors in the same pull request.
 - Add a changeset when the change affects anyone using `@furlab/dynamic-lab` or
@@ -82,7 +82,7 @@ pull request template has a section for this.
 
 ## Reporting issues
 
-Open an [issue on GitHub](https://github.com/furlabnet/dynamic-lab/issues) with:
+Open an [issue on GitHub](https://github.com/itsfurlab/dynamic-lab/issues) with:
 
 - the package and version (`@furlab/dynamic-lab@0.1.0-beta.4`, say) and your React version
 - the component, its props, and what you expected to happen
