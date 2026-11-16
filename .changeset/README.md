@@ -13,9 +13,9 @@ Write the entry for someone using the package, in the changelog's voice, and sta
 `pre.json`), any bump gives the next beta; use `minor` for features and breaking changes and
 `patch` for fixes.
 
-Merge requests that change a published package without a changeset fail the `mr:changeset` check.
+Pull requests that change a published package without a changeset fail the **Changeset** check.
 If the change doesn't need a release (a test, a comment, internal tooling), add an empty one with
-`yarn changeset --empty`, or label the merge request **no changeset**.
+`yarn changeset --empty`, or label the pull request **no changeset**.
 
-On `main`, the pipeline gathers the changesets into a "Version Packages" merge request that bumps
+On `main`, the release workflow gathers the changesets into a "Version Packages" pull request that bumps
 the versions and writes the changelogs. Merging it releases. The repository README has the details.

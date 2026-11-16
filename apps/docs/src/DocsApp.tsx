@@ -35,7 +35,7 @@ import { BookOpen, Box, Building2, Globe, Search } from 'lucide-react'
 
 import type { ComponentDoc } from './registry'
 import { pageIcon } from './icons'
-import { GitLabLogo, NpmLogo } from './logos'
+import { GitHubLogo, NpmLogo } from './logos'
 import { ComponentIndex } from './pages/ComponentIndex'
 import { GUIDE } from './pages/Guide'
 import { COMPONENTS, exampleSource, GROUPS } from './registry'
@@ -243,14 +243,14 @@ function Docs() {
       <AppearanceSettings themesHref="#/guide/theming" />
       {/* On phones the repository link is in the footer. */}
       <div className="contents max-sm:hidden">
-        <Tooltip content="Source on GitLab" side="bottom">
+        <Tooltip content="Source on GitHub" side="bottom">
           <a
             href={REPO}
             target="_blank"
             rel="noreferrer"
             className="icon-button border-0! bg-transparent!"
-            aria-label="Source on GitLab">
-            <GitLabLogo className="size-4" />
+            aria-label="Source on GitHub">
+            <GitHubLogo className="size-4" />
           </a>
         </Tooltip>
         <Tooltip content="Package on npm" side="bottom">

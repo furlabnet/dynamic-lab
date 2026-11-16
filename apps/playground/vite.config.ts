@@ -4,7 +4,7 @@ import { defaultClientConditions, defineConfig } from 'vite'
 
 /**
  * Landing page: what Dynamic Lab is, with a way into the showcase and the docs. Served at the root
- * of the GitLab Pages site; the showcase and docs sit beside it in showcase/ and docs/.
+ * of the GitHub Pages site; the showcase and docs sit beside it in showcase/ and docs/.
  * Asset paths are relative ("./") so the build works at any URL; PAGES_BASE overrides that.
  */
 export default defineConfig({

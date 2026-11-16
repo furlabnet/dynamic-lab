@@ -4,7 +4,7 @@ The Lab Sans, the Furlab typeface: 8 weights from Thin 100 to Black 900, each wi
 It covers 1,034 characters (Latin, Greek, Cyrillic and Vietnamese) and has OpenType features such
 as small caps, old-style and tabular figures, fractions and a slashed zero.
 
-**Specimen:** https://furlab.gitlab.io/dynamic-lab/the-lab-sans/
+**Specimen:** https://itsfurlab.github.io/dynamic-lab/the-lab-sans/
 
 The package contains:
 
@@ -21,8 +21,8 @@ yarn add @furlab/the-lab-sans
 # or: npm install @furlab/the-lab-sans
 ```
 
-The package is on [npm](https://www.npmjs.com/package/@furlab/the-lab-sans), and every release is
-also in the GitLab package registry.
+The package is on [npm](https://www.npmjs.com/package/@furlab/the-lab-sans). Its Next.js helper
+(`@furlab/the-lab-sans/next`) uses the app's own `next`, an optional peer dependency.
 
 ### From a CDN
 

@@ -14,7 +14,6 @@ import fontPkg from '@furlab/the-lab-sans/package.json'
 
 import { Code, CodeBlock, PropsTable, Prose } from '../ui'
 
-const REGISTRY = import.meta.env.VITE_REGISTRY_URL ?? 'https://gitlab.com/api/v4/packages/npm/'
 const CDN = 'https://cdn.jsdelivr.net/npm'
 const ERROR_PAGES_URL = import.meta.env.DEV
   ? 'http://localhost:5175/errors/'
@@ -37,8 +36,8 @@ function GettingStarted() {
       <Prose>
         <h2>Install</h2>
         <p>
-          The package is on npm (and mirrored in the GitLab package registry, see{' '}
-          <a href="#/guide/installation">Installation</a>). Add it with React 19:
+          The package is on npm (see <a href="#/guide/installation">Installation</a>). Add it with
+          React 19:
         </p>
         <CodeBlock language="sh" code={`yarn add ${pkg.name} react react-dom`} />
         <h2>Set up</h2>
@@ -84,10 +83,7 @@ function Publish() {
 function Installation() {
   return (
     <>
-      <PageHeading
-        title="Installation"
-        description={`${pkg.name} is on npm, with a mirror in the GitLab package registry.`}
-      />
+      <PageHeading title="Installation" description={`${pkg.name} is on npm.`} />
       <Prose>
         <h2>1. Add the package</h2>
         <p>
@@ -107,22 +103,7 @@ function Installation() {
           React and React DOM 19 are peer dependencies. <Code>lucide-react</Code>, <Code>clsx</Code>
           , <Code>tailwind-merge</Code> and <Code>class-variance-authority</Code> install with it.
         </p>
-        <h2>2. Or install from GitLab</h2>
-        <p>
-          Every release is also in the GitLab package registry. The project is public, so no token
-          is needed: point the <Code>@furlab</Code> scope at the instance-level endpoint, which
-          serves every project in the <Code>furlab</Code> group, then add the package as above.
-        </p>
-        <h3>Yarn (Berry)</h3>
-        <CodeBlock
-          language=".yarnrc.yml"
-          code={`npmScopes:
-  furlab:
-    npmRegistryServer: "${REGISTRY}"`}
-        />
-        <h3>npm and pnpm</h3>
-        <CodeBlock language=".npmrc" code={`@furlab:registry=${REGISTRY}`} />
-        <h2>3. Import the styles</h2>
+        <h2>2. Import the styles</h2>
         <CodeBlock code={`import '${pkg.name}/styles.css'`} />
         <p>
           The stylesheet holds the design tokens, component styles and the Tailwind utilities the
@@ -409,7 +390,7 @@ function Publishing() {
     <>
       <PageHeading
         title="Releasing"
-        description="How new versions get to npm and the GitLab package registry, and how these docs are deployed."
+        description="How new versions get to npm and GitHub, and how these docs are deployed."
       />
       <Prose>
         <h2>Build</h2>
@@ -428,23 +409,18 @@ function Publishing() {
             <Code>.changeset/</Code>.
           </li>
           <li>
-            On every push to <Code>main</Code>, the pipeline gathers the changesets into a{' '}
-            <strong>Version Packages</strong> merge request that bumps the versions and writes the
+            On every push to <Code>main</Code>, the release workflow gathers the changesets into a{' '}
+            <strong>Version Packages</strong> pull request that bumps the versions and writes the
             changelogs.
           </li>
           <li>
-            Merging it releases: one pipeline type-checks and builds, publishes each package whose
-            version moved to the project’s package registry and to npmjs.org (with trusted
-            publishing, no token), creates the GitLab release and its tag (<Code>v0.2.0</Code> for
-            this library, <Code>the-lab-sans-v0.2.0</Code> for the font) and deploys these docs.
-            Pre-releases such as <Code>1.0.0-beta.1</Code> publish under the <Code>next</Code>{' '}
-            dist-tag.
+            Merging it releases: one workflow run type-checks and builds, publishes each package
+            whose version moved to npmjs.org (with trusted publishing and provenance, no token),
+            creates the GitHub release and its tag (<Code>v0.2.0</Code> for this library,{' '}
+            <Code>the-lab-sans-v0.2.0</Code> for the font) and deploys these docs. Pre-releases such
+            as <Code>1.0.0-beta.1</Code> publish under the <Code>next</Code> dist-tag.
           </li>
         </ol>
-        <p>
-          The GitHub mirror’s workflow creates a matching GitHub release when the tags arrive, but
-          never publishes.
-        </p>
         <h2>The release CLI</h2>
         <p>
           <Code>scripts/release.mjs</Code> works locally too, through each package’s{' '}
@@ -457,47 +433,21 @@ function Publishing() {
           code={`# Check everything and list the package contents, publish nothing
 yarn release --dry-run
 
-# Publish to the GitLab package registry (token needs the api scope)
-GITLAB_TOKEN=glpat-… yarn release
-
-# Publish to npmjs.org
-NPM_TOKEN=npm_… yarn release --registry npm`}
+# Publish to npmjs.org with your \`npm login\` session
+yarn release`}
         />
         <PropsTable
           rows={[
             {
-              name: 'CI_JOB_TOKEN / GITLAB_TOKEN',
+              name: 'NPM_REGISTRY_URL',
               type: 'env',
-              description: 'GitLab credentials. The job token is used automatically in CI.',
-            },
-            {
-              name: 'NPM_TOKEN',
-              type: 'env',
-              description:
-                'npmjs.org credentials. Without it, --registry npm exits with code 78, which CI allows to fail.',
-            },
-            {
-              name: 'GITLAB_API_URL',
-              type: 'env',
-              default: 'https://gitlab.com/api/v4',
-              description: 'For self-managed GitLab.',
-            },
-            {
-              name: 'GITLAB_PROJECT',
-              type: 'env',
-              default: 'from package.json repository',
-              description: 'Numeric id or group/project.',
+              default: 'https://registry.npmjs.org/',
+              description: 'Where to publish.',
             },
             {
               name: '--dry-run',
               type: 'flag',
               description: 'Build and list files without publishing.',
-            },
-            {
-              name: '--registry <name>',
-              type: 'flag',
-              default: 'gitlab',
-              description: 'gitlab or npm.',
             },
             {
               name: '--tag <name>',
@@ -516,10 +466,10 @@ NPM_TOKEN=npm_… yarn release --registry npm`}
         <p>
           These docs are a Vite app in <Code>apps/docs</Code>, next to the landing page (
           <Code>apps/landing</Code>), the showcase (<Code>apps/showcase</Code>) and The Lab Sans
-          specimen (<Code>apps/the-lab-sans</Code>). <Code>yarn dev</Code> runs them all locally. On
-          the default branch the <Code>pages</Code> job runs <Code>yarn pages</Code>, which builds
+          specimen (<Code>apps/the-lab-sans</Code>). <Code>yarn dev</Code> runs them all locally.
+          With each release the <Code>pages</Code> job runs <Code>yarn pages</Code>, which builds
           them into <Code>public/</Code> (landing at the root, then <Code>showcase/</Code>,{' '}
-          <Code>docs/</Code> and <Code>the-lab-sans/</Code>) for GitLab Pages. Examples live in{' '}
+          <Code>docs/</Code> and <Code>the-lab-sans/</Code>) for GitHub Pages. Examples live in{' '}
           <Code>apps/docs/src/examples</Code> and each page shows that file’s source, so the code
           shown is always the code running.
         </p>

@@ -6,7 +6,7 @@ The React component library for **The Furlab Project**: TypeScript, Tailwind CSS
 - Eight named colour themes, each in light and dark
 - More than 90 components: from layout primitives, buttons and dialogs to a comic reader, a story reader and booru-style tags
 
-**Site:** https://furlab.gitlab.io/dynamic-lab/ (landing page) · [showcase](https://furlab.gitlab.io/dynamic-lab/showcase/) · [docs](https://furlab.gitlab.io/dynamic-lab/docs/) · [The Lab Sans](https://furlab.gitlab.io/dynamic-lab/the-lab-sans/)
+**Site:** https://itsfurlab.github.io/dynamic-lab/ (landing page) · [showcase](https://itsfurlab.github.io/dynamic-lab/showcase/) · [docs](https://itsfurlab.github.io/dynamic-lab/docs/) · [The Lab Sans](https://itsfurlab.github.io/dynamic-lab/the-lab-sans/)
 
 Install from npm: [`@furlab/dynamic-lab`](https://www.npmjs.com/package/@furlab/dynamic-lab) and [`@furlab/the-lab-sans`](https://www.npmjs.com/package/@furlab/the-lab-sans).
 
@@ -32,7 +32,7 @@ A [Turborepo](https://turborepo.com) monorepo with Yarn workspaces.
 | `tools/tailwind` | `@vedla/tailwind-config` | A Tailwind v4 theme stylesheet and PostCSS config. Not used by the apps yet, which take their tokens from the library |
 | `tools/typescript-config` | `@vedla/tsconfig` | Shared tsconfig presets (`base`, `react-library`, `compiled-package`, `nextjs`). The tool packages extend them; the apps and packages still use `tsconfig.base.json` |
 
-Both packages are published to this project's GitLab package registry and to npmjs.org (see [Releasing](#releasing)), and served from [jsDelivr](https://www.jsdelivr.com/package/npm/@furlab/dynamic-lab?path=dist) for pages without a build step (see [From a CDN](packages/dynamic-lab/README.md#from-a-cdn)).
+Both packages are published to npmjs.org (see [Releasing](#releasing)), and served from [jsDelivr](https://www.jsdelivr.com/package/npm/@furlab/dynamic-lab?path=dist) for pages without a build step (see [From a CDN](packages/dynamic-lab/README.md#from-a-cdn)).
 
 ```
 packages/
@@ -54,11 +54,10 @@ logos/                the Furlab logo and mark (the fox is FleskyFox), in ink an
 design.md             the design system the library and the sites share
 scripts/
   assemble-pages.mjs  puts the built apps together in public/
-  release.mjs         publishes a package to the GitLab registry or npmjs.org
+  release.mjs         publishes a package to npmjs.org
   release-notes.mjs   a release's notes, from the package's changelog
   releases.mjs        which tag releases which package
-  pending-releases.mjs  which package versions have no tag yet, for the release pipeline
-  gitlab-release.mjs  creates the GitLab release and tag for each one
+  pending-releases.mjs  which package versions have no tag yet, for the release workflow
 .changeset/           pending changesets, the Changesets config and pre-release state
 ```
 
@@ -90,7 +89,6 @@ Turborepo caches `build`, `typecheck` and `lint`, so unchanged workspaces are sk
 | `VITE_SHOWCASE_URL`, `VITE_DOCS_URL`, `VITE_FONT_URL` | landing | Where the landing page links. Default: `./showcase/`, `./docs/` and `./the-lab-sans/` in a build, the local dev servers in `yarn dev` |
 | `VITE_LANDING_URL` | the-lab-sans | The specimen's link back to the landing page. Default: `../` in a build |
 | `VITE_REPOSITORY_URL` | landing, docs, the-lab-sans | Source link. Default: the repository URL in the package's `package.json` |
-| `VITE_REGISTRY_URL` | docs | Registry shown in the install guide. Default: `https://gitlab.com/api/v4/packages/npm/` |
 | `PAGES_BASE` | every app | Absolute base path, if relative asset paths (`./`) won't do |
 
 The showcase's sample images come from [Lorem Picsum](https://picsum.photos) and avatars from [pravatar.cc](https://pravatar.cc).
@@ -105,52 +103,49 @@ Releases go through [Changesets](https://github.com/changesets/changesets). Each
 | `the-lab-sans-v1.2.3` | `@furlab/the-lab-sans` | [`packages/the-lab-sans/CHANGELOG.md`](./packages/the-lab-sans/CHANGELOG.md) |
 
 1. **With each change,** run `yarn changeset`: pick the package, the size of the bump, and write the changelog entry. Commit the file it adds in `.changeset/` with the change.
-2. **On every push to `main`,** the `version-mr` job gathers the changesets into a **Version Packages** merge request: it bumps the versions in `package.json` and moves the entries into the changelogs under the new version. New changesets update the same merge request.
-3. **To release, merge that merge request.** One pipeline then releases every package whose version moved: it type-checks and builds on each Node version, publishes, creates the GitLab release (which creates the tag) and deploys Pages.
+2. **On every push to `main`,** the `version-pr` job gathers the changesets into a **Version Packages** pull request: it bumps the versions in `package.json` and moves the entries into the changelogs under the new version. New changesets update the same pull request.
+3. **To release, merge that pull request.** One run of the release workflow then releases every package whose version moved: it type-checks and builds on each Node version, publishes, creates the GitHub release (which creates the tag) and deploys Pages.
 
-The packages are in pre-release mode (`.changeset/pre.json`, tag `beta`), so every release is the next beta: `0.1.0-beta.5`, then `0.1.0-beta.6`. When you're ready for `0.1.0`, run `yarn changeset pre exit` in a merge request; `yarn changeset pre enter beta` starts a new pre-release line.
+The packages are in pre-release mode (`.changeset/pre.json`, tag `beta`), so every release is the next beta: `0.1.0-beta.5`, then `0.1.0-beta.6`. When you're ready for `0.1.0`, run `yarn changeset pre exit` in a pull request; `yarn changeset pre enter beta` starts a new pre-release line.
 
 `yarn version-packages` does step 2 locally if you want to see the result. Don't bump versions or edit the version headings by hand: the release jobs run when a package's version changes on `main`, and `scripts/pending-releases.mjs` decides what's new by looking for the version's tag.
 
-In the release pipeline:
+In the release workflow (`.github/workflows/release.yml`):
 
 - `plan` lists the versions that have no tag yet (`scripts/pending-releases.mjs`); the other jobs only act on those
-- each package goes to this project's **GitLab package registry** (with the CI job token)
-- and to **npmjs.org** with [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, with provenance), so there's no npm token to store. Until the package has a trusted publisher, npm refuses the job's OIDC token and the job exits with code 78 and is allowed to fail, so the rest of the release goes ahead
-- `gitlab-release` creates a **GitLab release** and its tag on the release commit, with the changelog section as its description (`scripts/gitlab-release.mjs`)
-- `pages` deploys the landing page, showcase, playground, docs and specimen to **GitLab Pages**
+- `check` type-checks and builds on each Node version in the `NODE_VERSION` matrix (keep it in sync with `ci.yml`)
+- `publish` puts each package on **npmjs.org** with [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, with provenance), so there's no npm token to store. Until the package has a trusted publisher, npm refuses the workflow's OIDC token: the script exits with code 78, the job reports a warning, and the rest of the release goes ahead
+- `github-release` creates a **GitHub release** and its tag on the release commit, with the changelog section as its notes (`scripts/release-notes.mjs`) and the packed package attached
+- `pages` deploys the landing page, showcase, playground, docs and specimen to **GitHub Pages**
 
-Tags don't start pipelines, so a release that ships both packages runs one pipeline. Pre-release versions (`1.0.0-beta.1`) go out under the `next` dist-tag. A failed release can be retried with **Build → Pipelines → Run pipeline** on `main`: versions already in a registry are skipped, and so are releases that exist.
+Tags created by the workflow start no other workflows, so a release that ships both packages is one run. Pre-release versions (`1.0.0-beta.1`) go out under the `next` dist-tag. A failed release can be retried with **Actions → Release → Run workflow** on `main`: versions already on npm are skipped, and so are releases that exist. Running it by hand with nothing pending redeploys Pages.
 
-#### Setting up the Version Packages merge request
+#### Setting up the repository
 
-The `version-mr` job pushes a branch and opens a merge request, which the CI job token can't do. Create a **project access token** (Settings → Access tokens) with the **Developer** role and the `api` and `write_repository` scopes, and add it as a CI/CD variable named `GITLAB_TOKEN`, **masked** and **protected**. Until it exists, the job exits with code 78 and is allowed to fail. Protect `main`, so only maintainers' merges release, and protect the `v*` and `the-lab-sans-v*` tags.
+- **Settings → Actions → General → Workflow permissions:** allow GitHub Actions to create and approve pull requests, so `version-pr` can open the Version Packages pull request.
+- **A `CHANGESETS_TOKEN` secret:** a fine-grained personal access token for this repository with Contents and Pull requests read and write. GitHub starts no workflows for a pull request opened with the default `GITHUB_TOKEN`, so without it the Version Packages pull request gets no checks. Until it exists the workflow falls back to `GITHUB_TOKEN`; close and reopen the pull request to run its checks.
+- **Settings → Pages:** source **GitHub Actions**.
+- **Branch protection on `main`:** require the CI and Changesets checks, so only reviewed merges release, and protect the `v*` and `the-lab-sans-v*` tags.
+- To have pull requests commented with what they will release, install the [changeset bot](https://github.com/apps/changeset-bot).
 
 #### Setting up trusted publishing
 
-npm only lets you add a trusted publisher to a package that exists, so publish each package's first version by hand (see below). Then, on npmjs.com, open the package's **Settings → Trusted publishing**, choose **GitLab CI/CD** and enter namespace `furlab`, project `dynamic-lab` and top-level CI file `.gitlab-ci.yml` (leave the environment empty). The first publish through it must happen within two days, or npm drops the configuration. Once it works, set **Publishing access** to require 2FA and disallow tokens. Trusted publishing only runs on GitLab.com shared runners.
-
-### GitHub mirror
-
-The repository is mirrored to GitHub. `.github/workflows/release.yml` runs when a release tag arrives from GitLab (or by hand): it type-checks and builds the tag, creates a **GitHub release** with the same notes and the packed package attached, and deploys to **GitHub Pages**. It never publishes to a registry. The `github-pages` environment must allow deployments from tags (**Settings → Environments → github-pages → Deployment branches and tags**).
-
-Both pipelines test on the same Node versions: keep the `NODE_VERSION` matrix in `.gitlab-ci.yml` and `.github/workflows/release.yml` in sync.
+npm only lets you add a trusted publisher to a package that exists, so publish each package's first version by hand (see below). Then, on npmjs.com, open the package's **Settings → Trusted publishing**, choose **GitHub Actions** and enter organization `itsfurlab`, repository `dynamic-lab` and workflow `release.yml` (leave the environment empty). Once it works, set **Publishing access** to require 2FA and disallow tokens. npm checks that each package's `repository.url` names this repository before it accepts the provenance.
 
 ### Publishing by hand
 
 `scripts/release.mjs` works locally too, through each package's `release` script:
 
 ```bash
-yarn workspace @furlab/dynamic-lab release --dry-run                        # check, list the contents, publish nothing
-GITLAB_TOKEN=glpat-… yarn workspace @furlab/dynamic-lab release              # GitLab registry (token needs the api scope)
-npm login && yarn workspace @furlab/the-lab-sans release --registry npm      # npmjs.org
+yarn workspace @furlab/dynamic-lab release --dry-run          # check, list the contents, publish nothing
+npm login && yarn workspace @furlab/the-lab-sans release      # npmjs.org
 ```
 
-For npmjs.org the script packs the package with Yarn and publishes the tarball with the npm CLI (11.5.1 or later), so it uses your `npm login` session locally and the job's OIDC token in CI.
+The script packs the package with Yarn and publishes the tarball with the npm CLI (11.5.1 or later), so it uses your `npm login` session locally and the workflow's OIDC token in GitHub Actions.
 
-`yarn release` at the root is short for the first package. The script refuses to publish when the working tree has uncommitted changes or the version is already in the registry (`--skip-published` makes that a success, as the pipeline uses it). Set `GITLAB_API_URL` and `GITLAB_PROJECT` for a self-managed GitLab or another project; in CI they come from GitLab. `node scripts/release-notes.mjs v0.2.0` prints a release's notes.
+`yarn release` at the root is short for the first package. The script refuses to publish when the working tree has uncommitted changes or the version is already in the registry (`--skip-published` makes that a success, as the workflow uses it). `node scripts/release-notes.mjs v0.2.0` prints a release's notes.
 
-Merge requests get their own pipeline: `yarn typecheck`, `yarn lint`, `yarn format` and `yarn build` on Node 24, plus `mr:changeset`, which fails when a published package changed without a changeset (`yarn changeset status`). For a change nobody using the package would notice, add an empty changeset (`yarn changeset --empty`) or the **no changeset** label. When `GITLAB_TOKEN` is available to the pipeline, changesets-gitlab also comments with what the merge request will release. Pull requests on the GitHub mirror run the same typecheck, build, lint and formatting checks. After a release publishes, the `pages` job runs `yarn pages` and deploys `public/` to GitLab Pages (and GitHub Pages on the mirror), so the live docs always match a release.
+Pull requests run `.github/workflows/ci.yml`: `yarn typecheck` and `yarn build` on Node 22, 24 and 26, and `yarn lint` and `yarn format` on Node 24. `changesets.yml` fails when a published package changed without a changeset (`yarn changeset status`). For a change nobody using the package would notice, add an empty changeset (`yarn changeset --empty`) or the **no changeset** label. After a release publishes, the `pages` job runs `yarn pages` and deploys `public/` to GitHub Pages, so the live docs always match a release.
 
 ## Licence
 

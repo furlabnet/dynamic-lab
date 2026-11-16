@@ -34,7 +34,7 @@ edits in `packages/dynamic-lab` show up everywhere with hot reload. The
    - **The design system:** read [`design.md`](./design.md) first. It records the decisions the
      library and the sites share (solid surfaces, light frost only on floating chrome, one hue per
      palette, sentence-case labels).
-3. Check it before you push. The merge request pipeline runs the same checks, but they're quicker
+3. Check it before you push. The pull request checks run the same commands, but they're quicker
    locally:
 
    ```sh
@@ -49,9 +49,9 @@ edits in `packages/dynamic-lab` show up everywhere with hot reload. The
 
 ## Submitting changes
 
-- Open a merge request against `main` on GitLab (the GitHub repository is a mirror) and fill in the
-  template: what changed, why, and how you tested it.
-- Keep changes focused; avoid unrelated formatting or refactors in the same merge request.
+- Open a pull request against `main` on [GitHub](https://github.com/itsfurlab/dynamic-lab) and
+  fill in the template: what changed, why, and how you tested it.
+- Keep changes focused; avoid unrelated formatting or refactors in the same pull request.
 - Add a changeset when the change affects anyone using `@furlab/dynamic-lab` or
   `@furlab/the-lab-sans`: run `yarn changeset`, pick the package and the bump, and write the
   changelog entry for someone using the package (start it with **Breaking:** when they'll need to
@@ -65,7 +65,7 @@ edits in `packages/dynamic-lab` show up everywhere with hot reload. The
 AI-assisted contributions are allowed. You are still the author, so you are responsible for every
 line you submit.
 
-- **Disclose it.** In the merge request (or pull request on the GitHub mirror), say which tool you
+- **Disclose it.** In the pull request, say which tool you
   used (for example Claude Code, GitHub Copilot, or Cursor), which model (for example Claude Opus
   5.5 or GPT-5), and what you used it for.
 - **Review and understand it.** Read every change before you submit it, and be ready to explain
@@ -78,11 +78,11 @@ line you submit.
   show that you understand the change.
 
 Requests that skip the disclosure, or whose author cannot explain the change, may be closed. The
-merge request and pull request templates have a section for this.
+pull request template has a section for this.
 
 ## Reporting issues
 
-Open an issue on GitLab with:
+Open an [issue on GitHub](https://github.com/itsfurlab/dynamic-lab/issues) with:
 
 - the package and version (`@furlab/dynamic-lab@0.1.0-beta.4`, say) and your React version
 - the component, its props, and what you expected to happen

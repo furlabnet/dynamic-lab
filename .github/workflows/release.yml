@@ -1,133 +1,171 @@
-# GitHub mirror of the Dynamic Lab repository.
+# Releases go through Changesets (see .changeset/README.md):
 #
-# The canonical repository is on GitLab, and only its pipeline publishes packages; its release job
-# creates the tags, and the mirror brings them here. This workflow runs for those release tags (or by
-# hand). It checks the tag on each Node version in the NODE_VERSION matrix, creates the matching
-# GitHub release and deploys the documentation to GitHub Pages. Pull requests get the same checks
-# (typecheck and build on each Node version, lint and formatting on Node 24) and nothing else:
+# 1. Every pull request that changes a published package adds a changeset (`yarn changeset`).
+# 2. On each push to main, version-pr gathers the changesets into a "Version Packages" pull request
+#    that bumps the versions and writes the changelogs.
+# 3. Merging it changes the packages' versions. plan then lists every version that has no tag yet
+#    (scripts/pending-releases.mjs), and for those:
+#    - check typechecks and builds every workspace on each Node version in the NODE_VERSION matrix
+#    - publish puts each pending package on npmjs.org (trusted publishing with provenance)
+#    - github-release creates the GitHub release, and with it the tag, with the changelog section
+#      as notes and the packed package attached:
+#        v1.2.3                 @furlab/dynamic-lab
+#        the-lab-sans-v1.2.3    @furlab/the-lab-sans
+#    - pages builds the landing page, showcase, playground, docs and The Lab Sans specimen and
+#      deploys them to GitHub Pages, so the published docs match the release
 #
-#   v1.2.3                 @furlab/dynamic-lab
-#   the-lab-sans-v1.2.3    @furlab/the-lab-sans
+# Other pushes to main only update the Version Packages pull request. Running the workflow by hand
+# (Actions > Release > Run workflow) retries whatever is still pending and redeploys Pages.
 #
-# The release notes come from the package's changelog (scripts/release-notes.mjs) and the packed
-# package is attached. Nothing is published to a registry from here.
-#
-# Keep the NODE_VERSION matrix in sync with .gitlab-ci.yml.
-
-name: CI
+# Keep the NODE_VERSION matrix in sync with ci.yml.
+name: Release
 
 on:
   push:
-    tags: ['v*', 'the-lab-sans-v*']
-  # Pull requests on the mirror get the same checks; the release and Pages jobs only run for tags.
-  pull_request:
+    branches: [main]
   workflow_dispatch:
+
+# One release at a time; a newer push waits rather than cancelling a publish halfway.
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 permissions:
   contents: read
 
 jobs:
-  check:
-    name: Typecheck and build (Node ${{ matrix.NODE_VERSION }})
+  version-pr:
+    name: Version Packages pull request
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        NODE_VERSION: ['22', '24', '26']
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup
+      - uses: changesets/action@v1
+        with:
+          version: yarn version-packages
+          title: Version Packages
+          commit: Version Packages
+        env:
+          # Pull requests opened with the default GITHUB_TOKEN start no workflows, so the Version
+          # Packages pull request would get no checks. CHANGESETS_TOKEN (a fine-grained token with
+          # Contents and Pull requests write access) avoids that; see CONTRIBUTING.md.
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN || secrets.GITHUB_TOKEN }}
+
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      pending: ${{ steps.plan.outputs.PENDING_TAGS }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ matrix.NODE_VERSION }}
-      - name: Install and Enable Corepack
+          node-version-file: .nvmrc
+      - id: plan
         run: |
-          npm install -g corepack
-          corepack enable
-      - run: yarn install --immutable
+          node scripts/pending-releases.mjs --dotenv release.env
+          cat release.env >> "$GITHUB_OUTPUT"
+
+  check:
+    name: Typecheck and build (Node ${{ matrix.NODE_VERSION }})
+    needs: plan
+    if: needs.plan.outputs.pending != '' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        NODE_VERSION: ['22', '24', '26']
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.NODE_VERSION }}
       - run: yarn typecheck
       - run: yarn build
-      - name: Lint and formatting
-        if: matrix.NODE_VERSION == '24'
-        run: |
-          yarn lint
-          yarn format
 
-  release:
+  # npm trusts the OIDC token of this workflow (release.yml in itsfurlab/dynamic-lab) once each
+  # package has it as a trusted publisher on npmjs.com. Until then release.mjs exits with 78, which
+  # is reported as a warning: the GitHub release and Pages still go out.
+  publish:
+    needs: [plan, check]
+    if: needs.plan.outputs.pending != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup
+      # Trusted publishing needs npm 11.5.1 or later.
+      - run: npm install --global npm@11
+      - name: Publish the pending packages to npm
+        env:
+          PENDING_TAGS: ${{ needs.plan.outputs.pending }}
+        run: |
+          set -u
+          for tag in $(echo "$PENDING_TAGS" | tr ',' ' '); do
+            name=$(node --input-type=module -e "
+              import { releaseForTag } from './scripts/releases.mjs'
+              console.log(releaseForTag(process.argv[1])?.name ?? '')
+            " "$tag")
+            if [ -z "$name" ]; then echo "::error::Not a release tag: $tag"; exit 1; fi
+            status=0
+            yarn workspace "$name" release --skip-published || status=$?
+            if [ "$status" = 78 ]; then
+              echo "::warning::$name was not published to npm: no trusted publisher yet (see the log above)."
+            elif [ "$status" != 0 ]; then
+              exit "$status"
+            fi
+          done
+
+  github-release:
     name: GitHub release
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: check
+    needs: [plan, publish]
+    if: needs.plan.outputs.pending != ''
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-      - name: Install and Enable Corepack
-        run: |
-          npm install -g corepack
-          corepack enable
-      - run: yarn install --immutable
-
-      - name: Work out the package
-        id: package
-        env:
-          TAG: ${{ github.ref_name }}
-        run: |
-          node --input-type=module -e "
-            import { releaseForTag } from './scripts/releases.mjs'
-            const release = releaseForTag(process.env.TAG)
-            if (!release) { console.error('Not a release tag: ' + process.env.TAG); process.exit(1) }
-            console.log('name=' + release.name)
-            console.log('dir=' + release.dir)
-            console.log('version=' + release.version)
-            console.log('prerelease=' + release.version.includes('-'))
-          " >> "$GITHUB_OUTPUT"
-
-      - name: Check the version matches the tag
-        env:
-          NAME: ${{ steps.package.outputs.name }}
-          DIR: ${{ steps.package.outputs.dir }}
-          VERSION: ${{ steps.package.outputs.version }}
-        run: |
-          actual=$(node -p "require('./$DIR/package.json').version")
-          if [ "$actual" != "$VERSION" ]; then
-            echo "::error::$NAME is at $actual in package.json, but the tag is for $VERSION."
-            exit 1
-          fi
-
-      - name: Pack
-        env:
-          NAME: ${{ steps.package.outputs.name }}
-        run: yarn workspace "$NAME" pack --out "$GITHUB_WORKSPACE/%s-%v.tgz"
-
-      - name: Release notes
-        run: node scripts/release-notes.mjs "${{ github.ref_name }}" > release-notes.md
-
-      - name: Create the release
+      - uses: ./.github/actions/setup
+      - name: Create the releases and tags
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
-          PRERELEASE: ${{ steps.package.outputs.prerelease }}
+          PENDING_TAGS: ${{ needs.plan.outputs.pending }}
         run: |
-          flags=()
-          if [ "$PRERELEASE" = "true" ]; then flags+=(--prerelease); fi
-          gh release create "$TAG" ./*.tgz \
-            --title "$TAG" \
-            --notes-file release-notes.md \
-            --verify-tag \
-            "${flags[@]}"
+          set -eu
+          for tag in $(echo "$PENDING_TAGS" | tr ',' ' '); do
+            if gh release view "$tag" >/dev/null 2>&1; then
+              echo "$tag is already released"
+              continue
+            fi
+            # A separate assignment, so `set -e` stops on a tag that isn't a release tag.
+            info=$(node --input-type=module -e "
+              import { releaseForTag } from './scripts/releases.mjs'
+              const r = releaseForTag(process.argv[1])
+              if (!r) process.exit(1)
+              console.log('name=' + r.name + ' prerelease=' + r.version.includes('-'))
+            " "$tag")
+            eval "$info"
+            rm -f ./*.tgz
+            yarn workspace "$name" pack --out "$GITHUB_WORKSPACE/%s-%v.tgz"
+            node scripts/release-notes.mjs "$tag" > release-notes.md
+            flags=""
+            if [ "$prerelease" = true ]; then flags="--prerelease"; fi
+            # Tags created with GITHUB_TOKEN start no workflows.
+            gh release create "$tag" ./*.tgz --target "$GITHUB_SHA" --title "$tag" \
+              --notes-file release-notes.md $flags
+          done
 
   pages:
     name: GitHub Pages
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: [check, release]
+    needs: [plan, check, github-release]
+    if: >-
+      always() && needs.check.result == 'success' &&
+      (needs.github-release.result == 'success' || needs.github-release.result == 'skipped')
     runs-on: ubuntu-latest
-    # A release that ships both packages brings two tags for one commit; deploy the site once.
-    concurrency:
-      group: pages
-      cancel-in-progress: true
     permissions:
       contents: read
       pages: write
@@ -137,26 +175,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-      - name: Install and Enable Corepack
-        run: |
-          npm install -g corepack
-          corepack enable
-      - run: yarn install --immutable
-
+      - uses: ./.github/actions/setup
       - name: Build site
         env:
-          VITE_REGISTRY_URL: 'https://gitlab.com/api/v4/packages/npm/'
           VITE_REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
         run: yarn pages
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: public
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
