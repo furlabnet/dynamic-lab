@@ -32,7 +32,7 @@ import pkg from '@furlab/the-lab-sans/package.json'
 import { ArrowLeft, ArrowRight, Check, Copy } from 'lucide-react'
 
 import { LANDING_URL, REPOSITORY_URL } from './links'
-import { GitLabLogo, NpmLogo } from './logos'
+import { GitHubLogo, NpmLogo } from './logos'
 
 const INSTALL = `yarn add ${pkg.name}`
 const PANGRAM = 'The quick brown fox jumps over the lazy dog'
@@ -521,14 +521,14 @@ function Specimen() {
               v{pkg.version}
             </Badge>
             <AppearanceSettings />
-            <Tooltip content="Source on GitLab" side="bottom">
+            <Tooltip content="Source on GitHub" side="bottom">
               <a
                 href={REPOSITORY_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="icon-button border-0! bg-transparent!"
-                aria-label="Source on GitLab">
-                <GitLabLogo className="size-4" />
+                aria-label="Source on GitHub">
+                <GitHubLogo className="size-4" />
               </a>
             </Tooltip>
             <Tooltip content="Package on npm" side="bottom">

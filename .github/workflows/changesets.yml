@@ -1,0 +1,26 @@
+# A pull request that changes a published package needs a changeset (`yarn changeset`, see
+# .changeset/README.md). The Version Packages pull request is exempt (it consumes them), and so is a
+# pull request labelled "no changeset", for a change that doesn't affect anyone using the packages
+# (tests, comments, internal tooling).
+name: Changesets
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Changeset
+    if: >-
+      !startsWith(github.head_ref, 'changeset-release/') &&
+      !contains(github.event.pull_request.labels.*.name, 'no changeset')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - run: yarn changeset status --since="origin/${{ github.base_ref }}"

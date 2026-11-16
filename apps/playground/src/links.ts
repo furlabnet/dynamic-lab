@@ -1,7 +1,7 @@
 import pkg from '@furlab/dynamic-lab/package.json'
 
 /**
- * Where the landing page sends people. On GitLab Pages the showcase and docs are built into
+ * Where the landing page sends people. On GitHub Pages the showcase and docs are built into
  * showcase/, docs/ and the-lab-sans/ beside this page; in development each app runs on its own port.
  * VITE_SHOWCASE_URL, VITE_DOCS_URL, VITE_FONT_URL and VITE_REPOSITORY_URL override them.
  */

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Put the built apps together into public/ for GitLab Pages:
+ * Put the built apps together into public/ for GitHub Pages:
  *
  *   public/            apps/landing/dist
  *   public/showcase/   apps/showcase/dist

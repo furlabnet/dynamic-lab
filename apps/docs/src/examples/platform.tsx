@@ -35,7 +35,7 @@ export function TypographyExample() {
       </Heading>
       <Text>
         Body text at the default size. Read the <Link href="#/guide/theming">theming guide</Link> or
-        visit <Link href="https://gitlab.com/furlab">GitLab</Link>.
+        visit <Link href="https://github.com/furlabnet">GitHub</Link>.
       </Text>
       <Text size="sm" tone="muted" lines={2}>
         Text can be clamped to a number of lines, which is handy on cards where descriptions vary in

@@ -56,7 +56,7 @@ yarn-error.log*
 *.pem
 !AGENTS.md
 
-# Documentation build (GitLab Pages artifact)
+# Documentation build (GitHub Pages artifact)
 /public
 
 # Tool caches (Prettier, ESLint, tsc build info)

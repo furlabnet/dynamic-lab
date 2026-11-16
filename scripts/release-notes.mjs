@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Print the release notes for a git tag, as Markdown: the package's changelog section for that
- * version, plus how to install it. GitLab CI and GitHub Actions use it for the release description.
+ * version, plus how to install it. The release workflow uses it for the GitHub release description.
  *
  *   node scripts/release-notes.mjs v0.2.0
  *   node scripts/release-notes.mjs the-lab-sans-v0.2.0 > release-notes.md

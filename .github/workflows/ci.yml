@@ -1,0 +1,41 @@
+# Checks for every pull request and every push to main: typecheck and build on each Node version
+# the packages support, lint and formatting on the Node version in .nvmrc. Keep the NODE_VERSION
+# matrix in sync with release.yml.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Typecheck and build (Node ${{ matrix.NODE_VERSION }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        NODE_VERSION: ['22', '24', '26']
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.NODE_VERSION }}
+      - run: yarn typecheck
+      - run: yarn build
+
+  lint:
+    name: Lint and formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup
+      - run: yarn lint
+      - run: yarn format

@@ -2,13 +2,12 @@
 /**
  * Which packages are ready to release: those whose package.json version has no git tag yet on the
  * remote (v1.2.3 for @furlab/dynamic-lab, the-lab-sans-v1.2.3 for @furlab/the-lab-sans). Merging
- * the "Version Packages" merge request bumps the versions, so the pipeline on main finds them here.
+ * the "Version Packages" pull request bumps the versions, so the release workflow on main finds them here.
  *
  *   node scripts/pending-releases.mjs                     print the pending tags, one per line
  *   node scripts/pending-releases.mjs --dotenv rel.env    also write PENDING_TAGS=v1.2.3,… for CI
  *
- * The dotenv value is comma-separated and unquoted: GitLab keeps quotes in dotenv values, so
- * PENDING_TAGS="" would arrive as two quote characters, not as empty.
+ * The value is comma-separated and unquoted, so the file can be appended to $GITHUB_OUTPUT as is.
  *   node scripts/pending-releases.mjs --remote upstream   check another remote (default origin)
  */
 import { spawnSync } from 'node:child_process'

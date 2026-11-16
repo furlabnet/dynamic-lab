@@ -30,7 +30,7 @@ import pkg from '@furlab/dynamic-lab/package.json'
 import { ArrowRight, Check, Copy, LayoutDashboard } from 'lucide-react'
 
 import { DOCS_URL, FONT_URL, REPOSITORY_URL, SHOWCASE_URL } from './links'
-import { GitLabLogo, NpmLogo } from './logos'
+import { GitHubLogo, NpmLogo } from './logos'
 
 const INSTALL = `yarn add ${pkg.name}`
 
@@ -215,14 +215,14 @@ function Landing() {
               v{pkg.version}
             </Badge>
             <AppearanceSettings />
-            <Tooltip content="Source on GitLab" side="bottom">
+            <Tooltip content="Source on GitHub" side="bottom">
               <a
                 href={REPOSITORY_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="icon-button border-0! bg-transparent!"
-                aria-label="Source on GitLab">
-                <GitLabLogo className="size-4" />
+                aria-label="Source on GitHub">
+                <GitHubLogo className="size-4" />
               </a>
             </Tooltip>
             <Tooltip content="Package on npm" side="bottom">
